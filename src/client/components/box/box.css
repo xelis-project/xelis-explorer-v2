@@ -1,0 +1,24 @@
+.xe-box {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.xe-box-loading {
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: xe-box-loading-animation .5s infinite alternate;
+}
+
+.xe-box-loading > * {
+    visibility: hidden;
+}
+
+@keyframes xe-box-loading-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

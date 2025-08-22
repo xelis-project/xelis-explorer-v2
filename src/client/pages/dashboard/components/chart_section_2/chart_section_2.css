@@ -1,0 +1,26 @@
+.xe-dashboard-chart-section-2 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    animation: xe-dashboard-chart-section-1-appear-animation .7s;
+}
+
+@keyframes xe-dashboard-chart-section-1-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-dashboard-chart-section-2>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-dashboard-chart-section-2>:nth-child(2)>div {
+    flex: 1;
+}

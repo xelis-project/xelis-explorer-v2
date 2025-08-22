@@ -1,0 +1,18 @@
+.xe-dashboard-blocks {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    overflow-y: scroll;
+    animation: xe-dashboard-blocks-appear-animation .7s;
+    height: 50rem;
+}
+
+@keyframes xe-dashboard-blocks-appear-animation {
+    0% {
+        translate: 25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}

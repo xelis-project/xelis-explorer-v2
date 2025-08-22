@@ -1,0 +1,22 @@
+.xe-dashboard-top-stats {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    overflow-x: scroll;
+    animation: xe-dashboard-top-stats-appear-animation .65s;
+}
+
+@keyframes xe-dashboard-top-stats-appear-animation {
+    0% {
+        translate: 0 -25%;
+    }
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-dashboard-top-stats > div {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}

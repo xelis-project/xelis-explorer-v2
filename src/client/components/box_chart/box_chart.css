@@ -1,0 +1,26 @@
+.xe-box-chart {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-box-chart > :nth-child(1) {
+    font-size: .8rem;
+}
+
+.xe-box-chart > :nth-child(2) {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-box-chart-value {
+    color: #02FFCF;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.xe-box-chart-content {
+    margin-top: 1rem;
+}

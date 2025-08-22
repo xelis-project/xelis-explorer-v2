@@ -1,0 +1,9 @@
+.xe-text-input {
+    background-color: rgba(0, 0, 0, .2);
+    color: #AFAFAF;
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 1rem;
+}

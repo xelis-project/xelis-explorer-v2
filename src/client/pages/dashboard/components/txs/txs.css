@@ -1,0 +1,7 @@
+.xe-dashboard-txs {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 50rem;
+}

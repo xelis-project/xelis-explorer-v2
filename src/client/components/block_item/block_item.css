@@ -1,0 +1,68 @@
+.xe-block-item {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 6rem;
+}
+
+.xe-block-item>div {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.xe-block-item>:nth-child(1)>div {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.xe-block-item>:nth-child(2)>div {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    align-items: end;
+}
+
+.xe-block-item-miner {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-block-item-type {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+}
+
+.xe-block-item-type-sync {
+    background-color: green;
+    width: 1rem;
+    height: 1rem;
+    border-radius: .2rem;
+}
+
+.xe-block-item-type-orphaned {
+    background-color: red;
+    width: 1rem;
+    height: 1rem;
+    border-radius: .2rem;
+}
+
+.xe-block-item-type-side {
+    background-color: blue;
+    width: 1rem;
+    height: 1rem;
+    border-radius: .2rem;
+}
+
+.xe-block-item-type-normal {
+    background-color: yellow;
+    width: 1rem;
+    height: 1rem;
+    border-radius: .2rem;
+}

@@ -1,0 +1,40 @@
+.xe-tx-item {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 6rem;
+}
+
+.xe-tx-item>div {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.xe-tx-item>:nth-child(1)>div {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.xe-tx-item>:nth-child(2)>div {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    align-items: end;
+}
+
+.xe-tx-item-signer {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-tx-item-type {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+}

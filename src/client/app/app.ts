@@ -1,0 +1,74 @@
+import { Page } from "../pages/page";
+import { match_route } from "./router";
+import { Singleton } from "../utils/singleton";
+import { EventEmitter } from "../utils/event_emitter";
+
+import "reset-css";
+import "urlpattern-polyfill"; // URLPattern is a new web API we use polyfill for now
+
+import './app.css';
+import './scrollbars.css';
+import './fonts.css';
+
+interface AppEventMap {
+    page_load: void;
+}
+
+export class App extends Singleton<App> {
+    events: EventEmitter<AppEventMap>;
+    root!: HTMLElement;
+    current_page?: Page;
+
+    constructor() {
+        super();
+        this.events = new EventEmitter();
+    }
+
+    load(root: HTMLElement) {
+        this.root = root;
+        this.root.classList.add(`xe-app`);
+
+        this.load_page();
+        this.register_events();
+    }
+
+    go_to(url: string) {
+        window.history.pushState(null, ``, url);
+        this.load_page();
+    }
+
+    set_window_title(title: string) {
+        document.title = title;
+    }
+
+    load_page() {
+        const url = new URL(window.location.href);
+        const page_type = match_route(url);
+        if (this.current_page) this.current_page.unload();
+        this.current_page = page_type.instance();
+        this.current_page.load(this.root);
+        this.intercept_links();
+        this.events.emit("page_load");
+    }
+
+    on_pop_state = (_e: PopStateEvent) => {
+        this.load_page();
+    }
+
+    register_events() {
+        window.addEventListener(`popstate`, this.on_pop_state);
+    }
+
+    intercept_links() {
+        const links = this.root.querySelectorAll(`a`);
+        links.forEach((link) => {
+            if (!link.hasAttribute("attached")) {
+                link.setAttribute(`attached`, ``);
+                link.addEventListener(`click`, (e) => {
+                    e.preventDefault();
+                    this.go_to(link.href);
+                });
+            }
+        });
+    }
+}
