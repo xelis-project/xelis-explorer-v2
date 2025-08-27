@@ -4,6 +4,13 @@
     flex-direction: row;
     justify-content: space-between;
     min-height: 6rem;
+    transition: scale .25s, background-color .25s;
+}
+
+.xe-block-item:hover {
+    cursor: pointer;
+    scale: .98;
+    background-color: rgba(2, 255, 209, 0.07);
 }
 
 .xe-block-item>div {

@@ -8,9 +8,11 @@ import { Box } from "../box/box";
 import hashicon from "hashicon";
 
 import "./block_item.css";
+import { Localization } from "../../app/localization/localization";
 
 export class BlockItem {
     box: Box;
+    data?: Block;
     element_height: HTMLDivElement;
     element_txs: HTMLDivElement;
     element_age: HTMLDivElement;
@@ -71,13 +73,14 @@ export class BlockItem {
     }
 
     set(block: Block) {
+        this.data = block;
         this.set_height(block.height);
         this.set_tx_count((block.txs_hashes || []).length, 0);
         this.set_miner(block.miner);
         this.set_type(block.block_type);
         this.set_age(block.timestamp);
         this.set_size(block.total_size_in_bytes);
-        this.set_reward(block.reward || 0);
+        this.set_reward(block.reward);
     }
 
     set_height(height: number) {
@@ -85,13 +88,14 @@ export class BlockItem {
     }
 
     set_tx_count(tx_count: number, tx_max: number) {
-        this.element_txs.innerHTML = `${tx_count} transaction`;
+        const localization = Localization.instance();
+        this.element_txs.innerHTML = localization.get_text(`{} transactions`, [tx_count.toLocaleString()]);
     }
 
     set_miner(miner: string) {
-        const icon = hashicon(miner, 25);
+        const miner_icon = hashicon(miner, 25) as HTMLCanvasElement;
         this.element_miner.replaceChildren();
-        this.element_miner.appendChild(icon);
+        this.element_miner.appendChild(miner_icon);
         const miner_text = document.createElement(`div`);
         miner_text.innerHTML = format_address(miner);
         this.element_miner.appendChild(miner_text);
@@ -102,16 +106,38 @@ export class BlockItem {
     }
 
     set_age(timestamp: number) {
-        window.setInterval(() => {
+        const set_age = () => {
             this.element_age.innerHTML = prettyMilliseconds(Date.now() - timestamp, { compact: true });
-        }, 1000);
+        }
+
+        set_age();
+        window.setInterval(set_age, 1000);
     }
 
     set_size(size_in_bytes: number) {
         this.element_size.innerHTML = prettyBytes(size_in_bytes);
     }
 
-    set_reward(reward: number) {
-        this.element_reward.innerHTML = format_xel(reward, true);
+    set_reward(reward?: number) {
+        this.element_reward.innerHTML = reward ? format_xel(reward, true) : `--`;
+    }
+
+    async animate_prepend() {
+        const { animate, utils } = await import("animejs");
+        animate(this.box.element, {
+            translateX: [`100%`, 0],
+            duration: 500,
+            onComplete: utils.cleanInlineStyles
+        });
+    }
+
+    async animate_update() {
+        const { animate, eases, utils } = await import("animejs");
+        animate(this.box.element, {
+            scale: [`100%`, `95%`, `100%`],
+            duration: 1000,
+            ease: eases.inBack(3),
+            onComplete: utils.cleanInlineStyles
+        });
     }
 }
