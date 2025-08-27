@@ -1,0 +1,13 @@
+.xe-dashboard-search {
+    animation: xe-dashboard-search-appear-animation .5s;
+}
+
+@keyframes xe-dashboard-search-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
