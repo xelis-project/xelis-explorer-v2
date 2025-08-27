@@ -6,18 +6,23 @@ export class XelisNode extends Singleton<XelisNode> {
     rpc: DaemonRPC;
     ws: DaemonWS;
 
-    static endpoint: string = `https://node.xelis.io/json_rpc`;
+    static rpc_node_endpoint: string = `https://node.xelis.io/json_rpc`;
+    static ws_node_endpoint: string = `wss://node.xelis.io/json_rpc`;
 
     constructor() {
         super();
-        this.rpc = new DaemonRPC(XelisNode.endpoint);
-        this.ws = new DaemonWS();
+        this.rpc = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        this.ws = new DaemonWS(XelisNode.ws_node_endpoint);
     }
 
-    set_endpoint(endpoint: string) {
-        XelisNode.endpoint = endpoint;
-        this.rpc = new DaemonRPC(XelisNode.endpoint);
-        this.ws = new DaemonWS();
-        this.ws.connect(endpoint);
+    set_rpc_endpoint(endpoint: string) {
+        XelisNode.rpc_node_endpoint = endpoint;
+        this.rpc = new DaemonRPC(XelisNode.rpc_node_endpoint);
+    }
+
+    set_ws_endpoint(endpoint: string) {
+        XelisNode.ws_node_endpoint = endpoint;
+        this.ws.socket.close();
+        this.ws = new DaemonWS(XelisNode.ws_node_endpoint);
     }
 }
