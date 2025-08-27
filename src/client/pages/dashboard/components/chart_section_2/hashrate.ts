@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block } from '@xelis/sdk/daemon/types';
+import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
+import { format_hashrate } from '../../../../utils/format_hashrate';
+import { DashboardPage } from '../../dashboards';
 
 interface DataPoint {
     x: number;
@@ -9,35 +11,39 @@ interface DataPoint {
 
 export class DashboardHashRate {
     box_chart: BoxChart;
-    blocks: Block[];
 
     constructor() {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `HASHRATE`;
-        this.box_chart.element_value.innerHTML = `5.5Gh/s`;
-        this.blocks = [];
 
         window.addEventListener(`resize`, () => {
-            this.build_chart();
+            //this.build_chart();
         });
     }
 
-    build_chart() {
-        const data = this.blocks.map((block) => {
-            return { x: block.height, y: parseInt(block.difficulty) };
-        });
+    set_hashrate(info: GetInfoResult) {
+        const hashrate = format_hashrate(parseInt(info.difficulty), info.block_time_target);
+        this.box_chart.element_value.innerHTML = hashrate;
+    }
 
-        const rect = this.box_chart.box.element.getBoundingClientRect();
+    build_chart(blocks: Block[]) {
+        const data = blocks
+            //.filter((item, i) => blocks.indexOf(item) === i)
+            .map((block) => {
+                return { x: block.height, y: parseInt(block.difficulty) };
+            });
+
+        const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width;
-        const height = 150;
+        const height = 300;
 
         this.box_chart.element_content.replaceChildren();
         const svg = d3
             .select(this.box_chart.element_content)
             .append("svg")
             .attr("width", `100%`)
-            .attr("height", `5rem`)
-            .append("g")
+            .attr("height", `100%`)
+            .append("g");
 
         const xScale = d3.scaleLinear()
             .domain(d3.extent(data, d => d.x) as [number, number])
@@ -59,10 +65,20 @@ export class DashboardHashRate {
             .attr('stroke', 'white')
             .attr('stroke-width', 5)
             .attr('d', line);
+
+        svg.selectAll(`circle`)
+            .data(data)
+            .join(`circle`)
+            .attr('cx', d => xScale(d.x))
+            .attr('cy', d => yScale(d.y))
+            .attr('r', 6)
+            .attr('fill', 'white')
+            .attr('stroke', 'none');
     }
 
-    load(blocks: Block[]) {
-        this.blocks = blocks;
-        this.build_chart();
+    update() {
+        const { info, blocks } = DashboardPage.instance().page_data;
+        if (info) this.set_hashrate(info);
+        this.build_chart(blocks);
     }
 }
