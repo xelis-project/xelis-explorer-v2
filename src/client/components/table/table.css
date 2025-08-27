@@ -1,0 +1,17 @@
+.xe-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 .5em;
+}
+
+.xe-table thead tr th {
+    font-weight: bold;
+    padding-bottom: .5rem;
+    color: #afafaf;
+    text-align: left;
+}
+
+.xe-table tbody tr td {
+    padding: .75rem 0;
+    vertical-align: middle;
+}
