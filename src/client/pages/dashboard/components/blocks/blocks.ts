@@ -1,6 +1,8 @@
 import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { BlockItem } from "../../../../components/block_item/block_item";
+import { DashboardPage } from "../../dashboards";
+import { App } from "../../../../app/app";
 
 import "./blocks.css";
 
@@ -15,9 +17,10 @@ export class DashboardBlocks {
         this.container.element.classList.add(`xe-dashboard-blocks`, `scrollbar-1`, `scrollbar-1-right`);
     }
 
-    load(blocks: Block[]) {
+    update() {
         this.container.element.replaceChildren();
-        blocks.forEach(block => this.add_block(block));
+        const blocks = DashboardPage.instance().page_data.blocks;
+        blocks.forEach(block => this.prepend_block(block));
     }
 
     set_loading() {
@@ -32,10 +35,21 @@ export class DashboardBlocks {
         this.container.element.appendChild(block_item.box.element);
     }
 
-    add_block(block: Block) {
+    prepend_block(block: Block) {
         const block_item = new BlockItem();
         block_item.set(block);
-        this.block_items.push(block_item);
-        this.container.element.appendChild(block_item.box.element);
+        block_item.box.element.addEventListener(`click`, () => {
+            App.instance().go_to(`/block/${block.hash}`);
+        });
+
+        this.block_items.unshift(block_item);
+        this.container.element.insertBefore(block_item.box.element, this.container.element.firstChild);
+        return block_item;
+    }
+
+    remove_last_block() {
+        const last_block_item = this.block_items[this.block_items.length - 1];
+        last_block_item.box.element.remove();
+        this.block_items.pop();
     }
 }

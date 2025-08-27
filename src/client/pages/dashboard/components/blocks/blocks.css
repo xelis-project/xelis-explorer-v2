@@ -5,6 +5,7 @@
     overflow-y: scroll;
     animation: xe-dashboard-blocks-appear-animation .7s;
     height: 50rem;
+    overflow-x: hidden;
 }
 
 @keyframes xe-dashboard-blocks-appear-animation {

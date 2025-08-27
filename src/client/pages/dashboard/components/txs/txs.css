@@ -4,4 +4,5 @@
     flex-direction: column;
     overflow-y: scroll;
     height: 50rem;
+    overflow-x: hidden;
 }

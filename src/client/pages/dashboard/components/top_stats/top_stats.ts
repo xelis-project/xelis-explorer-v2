@@ -22,6 +22,8 @@ export interface DashboardTopStatsData {
 export class DashboardTopStats {
     container: Container
 
+    last_update_element: HTMLDivElement;
+
     box_1: Box;
     item_max_supply: StatsItem;
     item_circ_supply: StatsItem;
@@ -46,6 +48,10 @@ export class DashboardTopStats {
     constructor() {
         this.container = new Container();
         this.container.element.classList.add(`xe-dashboard-top-stats`, `scrollbar-1`, `scrollbar-1-bottom`);
+
+        this.last_update_element = document.createElement(`div`);
+        this.last_update_element.classList.add(`xe-dashboard-top-stats-last-update`);
+        this.container.element.appendChild(this.last_update_element);
 
         this.box_1 = new Box();
         this.container.element.appendChild(this.box_1.element);
@@ -152,7 +158,7 @@ export class DashboardTopStats {
         this.item_db_size.element_value.innerHTML = `${prettyBytes(size_in_bytes)}`;
     }
 
-    set_info(info: GetInfoResult)  {
+    set_info(info: GetInfoResult) {
         this.set_max_supply(info.maximum_supply);
         this.set_circ_supply(info.circulating_supply);
         this.set_mined(info.circulating_supply, info.maximum_supply);
@@ -169,7 +175,22 @@ export class DashboardTopStats {
         this.set_mempool(info.mempool_size);
     }
 
+    last_update_interval_id: any;
+    last_update_timestamp: any;
+    start_last_update() {
+        this.last_update_timestamp = Date.now();
+        if (this.last_update_interval_id) window.clearInterval(this.last_update_interval_id);
+
+        const set_timer = () => {
+         this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
+        }
+
+        set_timer();
+        this.last_update_interval_id = window.setInterval(set_timer, 1000);
+    }
+
     async load(data: DashboardTopStatsData) {
+        this.start_last_update();
         this.set_loading(false);
         this.set_info(data.info);
         this.set_db_size(data.size.size_bytes);

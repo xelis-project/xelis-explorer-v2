@@ -10,13 +10,14 @@ import { format_address } from '../../utils/format_address';
 import { format_xel } from '../../utils/format_xel';
 import { format_asset } from '../../utils/format_asset';
 
-export interface TxItemData {
+export interface TxBlock {
     block: Block;
     tx: Transaction;
 }
 
 export class TxItem {
     box: Box;
+    data?: TxBlock;
     element_hash: HTMLDivElement;
     element_type: HTMLDivElement;
     element_age: HTMLDivElement;
@@ -81,9 +82,12 @@ export class TxItem {
     }
 
     set_age(timestamp: number) {
-        window.setInterval(() => {
+        const set_age = () => {
             this.element_age.innerHTML = `${prettyMilliseconds(Date.now() - timestamp, { compact: true })}`;
-        }, 1000);
+        }
+
+        set_age();
+        window.setInterval(set_age, 1000);
     }
 
     set_size(size_in_bytes: number) {
@@ -91,9 +95,9 @@ export class TxItem {
     }
 
     set_signer(signer: string) {
-        const icon = hashicon(signer, 25);
+        const signer_icon = hashicon(signer, 25) as HTMLCanvasElement;
         this.element_signer.replaceChildren();
-        this.element_signer.appendChild(icon);
+        this.element_signer.appendChild(signer_icon);
         const miner_text = document.createElement(`div`);
         miner_text.innerHTML = format_address(signer);
         this.element_signer.appendChild(miner_text);
@@ -124,7 +128,8 @@ export class TxItem {
         this.element_type.innerHTML = value;
     }
 
-    set(data: TxItemData) {
+    set(data: TxBlock) {
+        this.data = data;
         const { tx } = data;
         this.set_hash(tx.hash);
         this.set_age(data.block.timestamp);

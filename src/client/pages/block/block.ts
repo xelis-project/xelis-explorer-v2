@@ -7,12 +7,14 @@ import { NotFoundPage } from "../not_found/not_found";
 import { Master } from "../../components/master/master";
 import { XelisNode } from "../../app/xelis_node";
 
+import './block.css';
+
 interface BlockPageServerData {
     block: Block;
 }
 
 export class BlockPage extends Page {
-    static pathname = "/block/:id"
+    static pathname = "/block/:id";
 
     static get_pattern_id = (href: string) => {
         const pattern_result = this.exec_pattern(href);
@@ -32,7 +34,7 @@ export class BlockPage extends Page {
             return;
         }
 
-        const daemon = new DaemonRPC(XelisNode.endpoint);
+        const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
 
         try {
             const block = await daemon.getBlockByHash({
