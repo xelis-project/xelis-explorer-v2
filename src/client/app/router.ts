@@ -1,10 +1,16 @@
 import { BlockPage } from "../pages/block/block";
 import { BlocksPage } from "../pages/blocks/blocks";
 import { DashboardPage } from "../pages/dashboard/dashboards";
+import { MempoolPage } from "../pages/mempool/mempool";
 import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
 
-export const pages = [DashboardPage, BlockPage, BlocksPage];
+export const pages = [
+    DashboardPage,
+    BlockPage,
+    BlocksPage,
+    MempoolPage
+];
 
 export const match_route = (url: URL): typeof Page => {
     const page_type = pages.find(page => {
