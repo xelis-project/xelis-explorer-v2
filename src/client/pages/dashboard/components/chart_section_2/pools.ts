@@ -3,19 +3,9 @@ import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { DashboardPage } from '../../dashboards';
 import { format_address } from '../../../../utils/format_address';
 
-/*
-const colors = [
-    "#7ffff0", "#40ffe8", "#1affdf", "#02ffcf", "#02bfa1", "#028f73", "#016e55",
-    "#86d8c9", "#5fbfaf", "#3fab9f", "#1b705f", "#16584b", "#113f38", "#0c2c28",
-    "#cff5ef", "#a3e5d8", "#8ed5c9", "#6db5a7", "#558f84", "#3c6a60", "#284a42",
-    "#ffffff", "#e7fafa", "#d0f4ef", "#bff0e7", "#99cbb8", "#73978a", "#4c6560"
-];
-*/
-
 interface DataItem {
     label: string;
     value: number;
-    //color: string;
 }
 
 export class DashboardPools {
@@ -35,7 +25,6 @@ export class DashboardPools {
             return {
                 label: format_address(miner),
                 value: miners[miner],
-                //color: colors[i] || `white`
             };
         });
 
@@ -49,10 +38,10 @@ export class DashboardPools {
         const svg = d3
             .select(this.box_chart.element_content)
             .append('svg')
-            .attr('width', width)
+            .attr('width', `100%`)
             .attr('height', height)
             .append('g')
-            
+
             .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
         const pieGenerator = d3.pie<DataItem>()
@@ -65,7 +54,7 @@ export class DashboardPools {
             .innerRadius(radius - donutInnerOffset)  // Creates the hole
             .outerRadius(radius);
 
-        const color = d3.scaleOrdinal()
+        const color = d3.scaleOrdinal<string>()
             .domain(data.map(d => d.label))
             .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
 
@@ -79,6 +68,35 @@ export class DashboardPools {
             .append('path')
             .attr('d', arcGenerator)
             .attr('fill', d => color(d.data.label));
+
+        const legend_radius = 8;
+        const legendSpacing = 15;
+
+        const legend = svg
+            .selectAll('.legend')
+            .data(color.domain())
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', (d, i) => {
+                var height = legend_radius + legendSpacing
+                var offset = height * color.domain().length / 2
+                var x = 125;
+                var y = (i * height) - offset
+                return `translate(${x}, ${y})`
+            });
+
+        legend
+            .append('circle')
+            .attr('r', legend_radius)
+            .style('fill', color);
+
+        legend
+            .append('text')
+            .attr('x', 5 + legend_radius)
+            .attr('y', legend_radius / 2)
+            .style(`fill`, color)
+            .text((d) => d);
     }
 
     update() {
