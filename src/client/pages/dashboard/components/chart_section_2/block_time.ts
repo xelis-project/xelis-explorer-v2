@@ -33,8 +33,6 @@ export class DashboardBlockTime {
             }
         }
 
-        console.log(data)
-
         this.box_chart.element_content.replaceChildren();
         const svg = d3
             .select(this.box_chart.element_content)
@@ -75,6 +73,7 @@ export class DashboardBlockTime {
             .attr("class", "bar")
             .attr("x", (d) => x(d.x)!)
             .attr("y", (d) => y(d.y))
+            .attr("rx", 3)
             .attr("width", x.bandwidth())
             .attr("height", (d) => height - y(d.y))
             .attr("fill", "white");
