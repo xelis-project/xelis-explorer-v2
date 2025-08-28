@@ -26,37 +26,40 @@ export class DashboardHashRate {
         this.box_chart.element_value.innerHTML = hashrate;
     }
 
-    build_chart(blocks: Block[]) {
+    build_chart(blocks: Block[], info: GetInfoResult) {
         const data = blocks
             //.filter((item, i) => blocks.indexOf(item) === i)
             .map((block) => {
                 return { x: block.height, y: parseInt(block.difficulty) };
             });
 
+        const margin = { top: 10, right: 10, bottom: 10, left: 10 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
-        const width = rect.width;
-        const height = 300;
+        const width = rect.width - margin.left - margin.right;
+        const height = 250 - margin.top - margin.bottom;
 
         this.box_chart.element_content.replaceChildren();
         const svg = d3
             .select(this.box_chart.element_content)
             .append("svg")
-            .attr("width", `100%`)
-            .attr("height", `100%`)
-            .append("g");
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
 
-        const xScale = d3.scaleLinear()
+        const x_scale = d3.scaleLinear()
             .domain(d3.extent(data, d => d.x) as [number, number])
             .range([0, width]);
 
-        const yScale = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.y)!])
+        const y_scale = d3.scaleLinear()
+            .domain([d3.min(data, d => d.y)!, d3.max(data, d => d.y)!])
             .nice()
             .range([height, 0]);
 
         const line = d3.line<DataPoint>()
-            .x(d => xScale(d.x))
-            .y(d => yScale(d.y))
+            .x(d => x_scale(d.x))
+            .y(d => y_scale(d.y))
             .curve(d3.curveMonotoneX);
 
         svg.append('path')
@@ -66,19 +69,27 @@ export class DashboardHashRate {
             .attr('stroke-width', 5)
             .attr('d', line);
 
+        /*svg.append("g")
+            .call(d3.axisLeft(y_scale).tickFormat(function (d) {
+                return format_hashrate(d as number, info.block_time_target);
+            })
+                .ticks(10));*/
+
         svg.selectAll(`circle`)
             .data(data)
             .join(`circle`)
-            .attr('cx', d => xScale(d.x))
-            .attr('cy', d => yScale(d.y))
-            .attr('r', 6)
+            .attr('cx', d => x_scale(d.x))
+            .attr('cy', d => y_scale(d.y))
+            .attr('r', 5)
             .attr('fill', 'white')
             .attr('stroke', 'none');
     }
 
     update() {
         const { info, blocks } = DashboardPage.instance().page_data;
-        if (info) this.set_hashrate(info);
-        this.build_chart(blocks);
+        if (info) {
+            this.set_hashrate(info);
+            this.build_chart(blocks, info);
+        }
     }
 }
