@@ -113,12 +113,14 @@ export class BlockRow {
         this.cell_9_element.innerHTML = format_hashrate(difficulty, block_time_target);
     }
 
+    age_interval_id?: number;
     set_age(timestamp: number) {
         const set_age = () => {
             this.cell_10_element.innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true, secondsDecimalDigits: 0 });
         }
 
         set_age();
-        window.setInterval(set_age, 1000);
+        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
+        this.age_interval_id = window.setInterval(set_age, 1000);
     }
 }

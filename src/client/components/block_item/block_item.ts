@@ -105,13 +105,15 @@ export class BlockItem {
         this.element_type.innerHTML = `<div class="xe-block-item-type-${block_type.toLowerCase()}"></div>${block_type.toUpperCase()} BLOCK`;
     }
 
+    age_interval_id?: number;
     set_age(timestamp: number) {
         const set_age = () => {
             this.element_age.innerHTML = prettyMilliseconds(Date.now() - timestamp, { compact: true });
         }
 
         set_age();
-        window.setInterval(set_age, 1000);
+        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
+        this.age_interval_id = window.setInterval(set_age, 1000);
     }
 
     set_size(size_in_bytes: number) {

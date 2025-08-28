@@ -179,13 +179,13 @@ export class DashboardTopStats {
     last_update_timestamp: any;
     start_last_update() {
         this.last_update_timestamp = Date.now();
-        if (this.last_update_interval_id) window.clearInterval(this.last_update_interval_id);
 
         const set_timer = () => {
-         this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
+            this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
         }
 
         set_timer();
+        if (this.last_update_interval_id) window.clearInterval(this.last_update_interval_id);
         this.last_update_interval_id = window.setInterval(set_timer, 1000);
     }
 
