@@ -98,7 +98,7 @@ export class BlockRow {
     }
 
     set_tx_count(tx_count: number) {
-        this.cell_6_element.innerHTML = tx_count.toLocaleString();
+        this.cell_6_element.innerHTML = tx_count.toLocaleString(undefined, { minimumIntegerDigits: 4, notation: "compact" });
     }
 
     set_hash(hash: string) {
