@@ -1,0 +1,46 @@
+.xe-not-found {
+    padding: 1rem;
+    box-sizing: border-box;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-not-found-back-404 {
+    font-size: 25rem;
+    font-weight: bold;
+    position: absolute;
+    opacity: .05;
+    z-index: -1;
+    filter: blur(5px);
+}
+
+.xe-not-found-container {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem 0;
+}
+
+.xe-not-found-container img {
+    max-width: 20rem;
+}
+
+.xe-not-found-container>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    max-width: 30rem;
+}
+
+.xe-not-found-container>:nth-child(2)> :nth-child(1) {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.xe-not-found-container>:nth-child(2)> :nth-child(2) {
+    font-size: 1.5rem;
+    color: #afafaf;
+}
