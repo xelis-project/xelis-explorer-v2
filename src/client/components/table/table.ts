@@ -30,4 +30,26 @@ export class Table {
     prepend_row(row: HTMLTableRowElement) {
         this.body_element.insertBefore(row, this.body_element.firstChild);
     }
+
+    set_empty_row(value: string, colspan: number) {
+        const row = document.createElement(`tr`);
+        const cell = document.createElement(`td`);
+        cell.colSpan = colspan;
+        cell.innerHTML = value;
+        row.appendChild(cell);
+        this.body_element.replaceChildren();
+        this.body_element.appendChild(row);
+    }
+
+    set_row_loading(row: HTMLTableRowElement, loading: boolean) {
+        if (loading) {
+            row.classList.add(`xe-table-loading`);
+        } else {
+            row.classList.remove(`xe-table-loading`);
+        }
+    }
+
+    set_clickable() {
+        this.element.classList.add(`xe-table-clickable`);
+    }
 }

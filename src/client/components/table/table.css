@@ -15,3 +15,38 @@
     padding: .75rem 0;
     vertical-align: middle;
 }
+
+.xe-table-clickable tbody tr:hover td {
+    background-color: rgba(2, 255, 209, 0.1);
+    cursor: pointer;
+}
+
+.xe-table-clickable td:first-child {
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+}
+
+.xe-table-clickable tbody tr:hover td:first-child {
+    padding-left: 1rem;
+}
+
+.xe-table-clickable td:last-child {
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+}
+
+.xe-table-loading>td {
+    height: 1rem;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: xe-table-loading-animation .5s infinite alternate;
+}
+
+@keyframes xe-table-loading-animation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

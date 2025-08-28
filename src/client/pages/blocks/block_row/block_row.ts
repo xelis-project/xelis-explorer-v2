@@ -25,7 +25,6 @@ export class BlockRow {
 
     constructor() {
         this.element = document.createElement(`tr`);
-        this.element.classList.add(`xe-blocks-block-row`);
 
         this.cell_1_element = document.createElement(`td`);
         this.element.appendChild(this.cell_1_element);
@@ -47,14 +46,6 @@ export class BlockRow {
         this.element.appendChild(this.cell_9_element);
         this.cell_10_element = document.createElement(`td`);
         this.element.appendChild(this.cell_10_element);
-    }
-
-    set_loading(loading: boolean) {
-        if (loading) {
-            this.element.classList.add(`xe-blocks-block-row-loading`);
-        } else {
-            this.element.classList.remove(`xe-blocks-block-row-loading`);
-        }
     }
 
     set(block: Block, info: GetInfoResult) {

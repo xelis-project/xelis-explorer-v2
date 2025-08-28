@@ -29,6 +29,7 @@ export class BlocksPage extends Page {
         this.master.content.appendChild(this.container_table.element);
 
         this.table = new Table();
+        this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
 
         const titles = ["TOPO HEIGHT", "HEIGHT", "BLOCK", "POOL / MINER", "SIZE", "TX COUNT", "HASH", "REWARD", "DIFF", "AGE"];
@@ -42,7 +43,7 @@ export class BlocksPage extends Page {
 
         for (let i = 0; i < 50; i++) {
             const block_row = new BlockRow();
-            block_row.set_loading(true);
+            this.table.set_row_loading(block_row.element, true);
             this.table.prepend_row(block_row.element);
         }
 
