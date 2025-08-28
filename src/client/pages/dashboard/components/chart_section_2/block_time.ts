@@ -17,7 +17,7 @@ export class DashboardBlockTime {
     }
 
     build_chart(blocks: Block[]) {
-        const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+        const margin = { top: 10, right: 0, bottom: 10, left: 30 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 150 - margin.top - margin.bottom;
@@ -42,41 +42,34 @@ export class DashboardBlockTime {
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        /*
-               .append("svg")
-        .attr("width", '100%')
-        .attr("height", '100%')
-        .attr('viewBox', '0 0 ' + Math.min(width, height) + ' ' + Math.min(width, height))
-        .attr('preserveAspectRatio', 'xMinYMin')
-        .append("g")
-        */
-
-        const x = d3
+        const x_scale = d3
             .scaleBand<number>()
             .domain(data.map((d) => d.x))
             .range([0, width])
-            .padding(0.1);
+            .padding(0.2);
 
-        const y = d3
+        const y_scale = d3
             .scaleLinear()
             .domain([0, d3.max(data, (d) => d.y)!])
             .range([height, 0]);
-
-        // Add axes
-        //svg.append("g").attr("transform", `translate(0,${height})`).call(d3.axisBottom(x));
-        //svg.append("g").call(d3.axisLeft(y));
 
         svg
             .selectAll(".bar")
             .data(data)
             .join("rect")
             .attr("class", "bar")
-            .attr("x", (d) => x(d.x)!)
-            .attr("y", (d) => y(d.y))
+            .attr("x", (d) => x_scale(d.x)!)
+            .attr("y", (d) => y_scale(d.y))
             .attr("rx", 3)
-            .attr("width", x.bandwidth())
-            .attr("height", (d) => height - y(d.y))
+            .attr("width", x_scale.bandwidth())
+            .attr("height", (d) => height - y_scale(d.y))
             .attr("fill", "white");
+
+        svg.append("g")
+            .call(d3.axisLeft(y_scale).tickFormat(function (d) {
+                return prettyMilliseconds(d as number, { colonNotation: true });
+            })
+                .ticks(10));
     }
 
     update() {
