@@ -4,12 +4,14 @@ import { DashboardPage } from "../pages/dashboard/dashboards";
 import { MempoolPage } from "../pages/mempool/mempool";
 import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
+import { PeersPage } from "../pages/peers/peers";
 
 export const pages = [
     DashboardPage,
     BlockPage,
     BlocksPage,
-    MempoolPage
+    MempoolPage,
+    PeersPage
 ];
 
 export const match_route = (url: URL): typeof Page => {
