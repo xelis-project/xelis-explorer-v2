@@ -1,0 +1,24 @@
+.xe-block {
+    padding: 1rem;
+    box-sizing: border-box;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-block-container-1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-block-sub-container-1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    flex: 1;
+}
+
+.xe-block-sub-container-2 {
+    flex: 2;
+}

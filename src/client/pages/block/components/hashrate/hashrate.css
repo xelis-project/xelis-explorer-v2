@@ -1,0 +1,10 @@
+.xe-block-hashrate {
+    display: flex;
+    justify-content: space-between;
+}
+
+.xe-block-hashrate >div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}

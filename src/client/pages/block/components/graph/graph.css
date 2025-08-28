@@ -1,0 +1,16 @@
+.xe-block-graph {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.xe-block-graph-container-2 {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-block-graph-container-2 > div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}

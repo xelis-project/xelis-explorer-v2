@@ -1,13 +1,19 @@
 import { Context } from "hono";
 import { App } from "../../../server";
 import { Page } from "../page";
-import { Block } from "@xelis/sdk/daemon/types";
+import { Block, GetInfoResult } from "@xelis/sdk/daemon/types";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { NotFoundPage } from "../not_found/not_found";
 import { Master } from "../../components/master/master";
 import { XelisNode } from "../../app/xelis_node";
 
 import './block.css';
+import { BlockInfo } from "./components/info/info";
+import { BlockMiner } from "./components/miner/miner";
+import { BlockHashrate } from "./components/hashrate/hashrate";
+import { BlockExtra } from "./components/extra/extra";
+import { BlockTxs } from "./components/txs/txs";
+import { BlockGraph } from "./components/graph/graph";
 
 interface BlockPageServerData {
     block: Block;
@@ -46,40 +52,97 @@ export class BlockPage extends Page {
         }
     }
 
-    block?: Block;
+    page_data: {
+        info?: GetInfoResult;
+        block?: Block;
+    }
     master: Master;
+    block_info: BlockInfo;
+    block_miner: BlockMiner;
+    block_hashrate: BlockHashrate;
+    block_extra: BlockExtra;
+    block_graph: BlockGraph;
+    block_txs: BlockTxs;
 
     constructor() {
         super();
+        this.page_data = {};
         this.master = new Master();
+        this.master.content.classList.add(`xe-block`);
         this.element.appendChild(this.master.element);
+
+        const container_1 = document.createElement(`div`);
+        container_1.classList.add(`xe-block-container-1`);
+        this.master.content.appendChild(container_1);
+
+        const sub_container_1 = document.createElement(`div`);
+        sub_container_1.classList.add(`xe-block-sub-container-1`);
+        container_1.appendChild(sub_container_1);
+
+        this.block_info = new BlockInfo();
+        sub_container_1.appendChild(this.block_info.container.element);
+        this.block_miner = new BlockMiner();
+        sub_container_1.appendChild(this.block_miner.container.element);
+        this.block_hashrate = new BlockHashrate();
+        sub_container_1.appendChild(this.block_hashrate.container.element);
+        this.block_extra = new BlockExtra();
+        sub_container_1.appendChild(this.block_extra.container.element);
+
+        const sub_container_2 = document.createElement(`div`);
+        sub_container_2.classList.add(`xe-block-sub-container-2`);
+        container_1.appendChild(sub_container_2);
+
+        this.block_graph = new BlockGraph();
+        sub_container_2.appendChild(this.block_graph.container.element);
+
+        this.block_txs = new BlockTxs();
+        this.master.content.appendChild(this.block_txs.container.element);
     }
 
-    async load(parent: HTMLElement) {
+    async load_block() {
         const server_data = BlockPage.consume_server_data<BlockPageServerData>();
         const block_hash = BlockPage.get_pattern_id(window.location.href);
         this.set_window_title(`Block ${block_hash}`);
 
+        this.page_data = {};
+
         if (server_data) {
-            this.block = server_data.block;
-        } else {
-            try {
-                if (block_hash) {
-                    const node = XelisNode.instance();
-                    this.block = await node.rpc.getBlockByHash({
+            this.page_data.block = server_data.block;
+        }
+
+        try {
+            if (block_hash) {
+                const node = XelisNode.instance();
+
+                if (!this.page_data.block) {
+                    this.page_data.block = await node.rpc.getBlockByHash({
                         hash: block_hash
                     });
                 }
-            } catch {
 
+                this.page_data.info = await node.rpc.getInfo();
             }
+        } catch {
 
-            if (!this.block) {
-                const not_found_page = new NotFoundPage();
-                this.element = not_found_page.element;
-            }
         }
 
+        if (!this.page_data.block) {
+            const not_found_page = new NotFoundPage();
+            this.element = not_found_page.element;
+        }
+    }
+
+    async load(parent: HTMLElement) {
         super.load(parent);
+        await this.load_block();
+        if (this.page_data.block && this.page_data.info) {
+            const { block, info } = this.page_data;
+            this.block_info.set(block, info);
+            this.block_miner.set(block);
+            this.block_hashrate.set(block, info);
+            this.block_extra.set(block);
+            this.block_graph.set(block);
+            this.block_txs.load(block);
+        }
     }
 }

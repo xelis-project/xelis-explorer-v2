@@ -1,0 +1,25 @@
+.xe-block-miner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.xe-block-miner-miner {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-block-miner-miner> :nth-child(2) {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-block-reward {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}

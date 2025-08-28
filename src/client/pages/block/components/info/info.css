@@ -1,0 +1,37 @@
+.xe-block-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.xe-block-info > :nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-block-info > :nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: right;
+}
+
+.xe-block-height-type {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-block-height-type > :nth-child(1) {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .5rem;
+}
+
+.xe-block-height-type > :nth-child(2) {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
