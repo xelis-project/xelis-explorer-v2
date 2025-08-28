@@ -88,18 +88,18 @@ export class BlockRow {
     }
 
     set_miner(miner: string) {
-        const miner_div = document.createElement(`div`);
-        miner_div.classList.add(`xe-blocks-table-miner`);
+        const container = document.createElement(`div`);
+        container.classList.add(`xe-blocks-table-miner`);
 
         const miner_icon = hashicon(miner, 25) as HTMLCanvasElement;
-        miner_div.appendChild(miner_icon);
+        container.appendChild(miner_icon);
 
         const miner_addr = document.createElement(`div`);
         miner_addr.innerHTML = format_address(miner);
-        miner_div.appendChild(miner_addr);
+        container.appendChild(miner_addr);
 
         this.cell_4_element.replaceChildren();
-        this.cell_4_element.appendChild(miner_div);
+        this.cell_4_element.appendChild(container);
     }
 
     set_size(size_in_bytes: number) {
