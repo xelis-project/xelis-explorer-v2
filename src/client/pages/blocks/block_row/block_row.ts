@@ -115,7 +115,7 @@ export class BlockRow {
 
     set_age(timestamp: number) {
         const set_age = () => {
-            this.cell_10_element.innerHTML = prettyMilliseconds(Date.now() - timestamp, { compact: true });
+            this.cell_10_element.innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true, secondsDecimalDigits: 0 });
         }
 
         set_age();
