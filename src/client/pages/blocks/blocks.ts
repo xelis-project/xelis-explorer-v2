@@ -38,7 +38,7 @@ export class BlocksPage extends Page {
 
     async load(parent: HTMLElement) {
         super.load(parent);
-
+        this.set_window_title(BlocksPage.title);
         const node = XelisNode.instance();
 
         for (let i = 0; i < 50; i++) {
