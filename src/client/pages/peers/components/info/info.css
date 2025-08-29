@@ -1,0 +1,12 @@
+.xe-peers-info {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.xe-peers-info>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
