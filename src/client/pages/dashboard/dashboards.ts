@@ -60,7 +60,6 @@ export class DashboardPage extends Page {
         this.master.content.appendChild(container_1);
 
         const sub_container_1 = document.createElement(`div`);
-        sub_container_1.classList.add(`xe-dashboard-sub-container-1`);
         container_1.appendChild(sub_container_1);
 
         this.dashboard_search = new DashboardSearch();
@@ -79,7 +78,6 @@ export class DashboardPage extends Page {
         sub_container_1.appendChild(this.dashboard_dag.container.element);
 
         const sub_container_2 = document.createElement(`div`);
-        sub_container_2.classList.add(`xe-dashboard-sub-container-2`);
         container_1.appendChild(sub_container_2);
 
         this.dashboard_blocks = new DashboardBlocks();

@@ -76,7 +76,6 @@ export class BlockPage extends Page {
         this.master.content.appendChild(container_1);
 
         const sub_container_1 = document.createElement(`div`);
-        sub_container_1.classList.add(`xe-block-sub-container-1`);
         container_1.appendChild(sub_container_1);
 
         this.block_info = new BlockInfo();
@@ -89,7 +88,6 @@ export class BlockPage extends Page {
         sub_container_1.appendChild(this.block_extra.container.element);
 
         const sub_container_2 = document.createElement(`div`);
-        sub_container_2.classList.add(`xe-block-sub-container-2`);
         container_1.appendChild(sub_container_2);
 
         this.block_graph = new BlockGraph();

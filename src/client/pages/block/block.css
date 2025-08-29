@@ -1,6 +1,4 @@
-.xe-block {
-
-}
+.xe-block {}
 
 .xe-block-container-1 {
     display: flex;
@@ -8,13 +6,13 @@
     flex-direction: row;
 }
 
-.xe-block-sub-container-1 {
+.xe-block-container-1>:nth-child(1) {
     display: flex;
     gap: 1rem;
     flex-direction: column;
     flex: 1;
 }
 
-.xe-block-sub-container-2 {
+.xe-block-container-1>:nth-child(2) {
     flex: 2;
 }
