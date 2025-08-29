@@ -14,6 +14,7 @@ import { RPCRequest } from "@xelis/sdk/rpc/types";
 
 import './dashboard.css';
 import { DashboardPeers } from "./components/peers/peers";
+import { DashboardDAG } from "./components/dag/dag";
 
 export class DashboardPage extends Page {
     static pathname = "/";
@@ -26,6 +27,7 @@ export class DashboardPage extends Page {
     dashboard_chart_section_1: DashboardChartSection1;
     dashboard_chart_section_2: DashboardChartSection2;
     dashboard_peers: DashboardPeers;
+    dashboard_dag: DashboardDAG;
 
     page_data: {
         info?: GetInfoResult;
@@ -72,6 +74,9 @@ export class DashboardPage extends Page {
 
         this.dashboard_peers = new DashboardPeers();
         sub_container_1.appendChild(this.dashboard_peers.container.element);
+
+        this.dashboard_dag = new DashboardDAG();
+        sub_container_1.appendChild(this.dashboard_dag.container.element);
 
         const sub_container_2 = document.createElement(`div`);
         sub_container_2.classList.add(`xe-dashboard-sub-container-2`);

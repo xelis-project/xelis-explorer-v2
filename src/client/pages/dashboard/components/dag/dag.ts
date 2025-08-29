@@ -1,0 +1,18 @@
+import { Container } from "../../../../components/container/container";
+import { DAG } from "../../../../components/dag/dag";
+
+import './dag.css';
+
+export class DashboardDAG {
+    container: Container;
+    dag: DAG;
+
+    constructor() {
+        this.container = new Container();
+        this.dag = new DAG();
+        this.dag.element.classList.add(`xe-dashboard-dag-dag`);
+        this.container.element.appendChild(this.dag.element);
+        setTimeout(() => this.dag.update_size());
+        this.dag.load(100);
+    }
+}
