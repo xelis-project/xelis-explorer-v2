@@ -16,6 +16,7 @@ export class PeersMap {
     async setup_map() {
         const leaflet = await import("leaflet");
         this.map = leaflet.map(this.element).setView([20, 0], 2);
+        this.map.setMinZoom(2);
         leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }).addTo(this.map);
