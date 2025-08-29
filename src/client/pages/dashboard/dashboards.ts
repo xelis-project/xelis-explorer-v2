@@ -13,6 +13,7 @@ import { XelisNode } from "../../app/xelis_node";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 
 import './dashboard.css';
+import { DashboardPeers } from "./components/peers/peers";
 
 export class DashboardPage extends Page {
     static pathname = "/";
@@ -24,6 +25,7 @@ export class DashboardPage extends Page {
     dashboard_search: DashboardSearch;
     dashboard_chart_section_1: DashboardChartSection1;
     dashboard_chart_section_2: DashboardChartSection2;
+    dashboard_peers: DashboardPeers;
 
     page_data: {
         info?: GetInfoResult;
@@ -67,6 +69,9 @@ export class DashboardPage extends Page {
 
         this.dashboard_chart_section_2 = new DashboardChartSection2();
         sub_container_1.appendChild(this.dashboard_chart_section_2.container.element);
+
+        this.dashboard_peers = new DashboardPeers();
+        sub_container_1.appendChild(this.dashboard_peers.container.element);
 
         const sub_container_2 = document.createElement(`div`);
         sub_container_2.classList.add(`xe-dashboard-sub-container-2`);
@@ -271,6 +276,12 @@ export class DashboardPage extends Page {
         this.dashboard_txs.update();
     }
 
+    async load_peers() {
+        const node = XelisNode.instance();
+        const peers_result = await node.rpc.getPeers();
+        this.dashboard_peers.peers_map.set(peers_result.peers);
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(DashboardPage.title);
@@ -280,6 +291,8 @@ export class DashboardPage extends Page {
         this.dashboard_top_stats.set_loading(true);
         this.dashboard_blocks.set_loading();
         this.dashboard_txs.set_loading();
+
+        this.load_peers();
 
         await this.load_top_stats()
         await this.load_blocks();
