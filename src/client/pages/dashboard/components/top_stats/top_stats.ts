@@ -177,7 +177,7 @@ export class DashboardTopStats {
 
     last_update_interval_id: any;
     last_update_timestamp: any;
-    start_last_update() {
+    set_last_update() {
         this.last_update_timestamp = Date.now();
 
         const set_timer = () => {
@@ -190,7 +190,7 @@ export class DashboardTopStats {
     }
 
     async load(data: DashboardTopStatsData) {
-        this.start_last_update();
+        this.set_last_update();
         this.set_info(data.info);
         this.set_db_size(data.size.size_bytes);
         this.set_peers(data.p2p_status.peer_count);
