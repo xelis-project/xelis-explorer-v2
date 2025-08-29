@@ -5,6 +5,7 @@ import { EventEmitter } from "../utils/event_emitter";
 
 import "reset-css";
 import "urlpattern-polyfill"; // URLPattern is a new web API we use polyfill for now
+import 'flag-icons/css/flag-icons.css';
 
 import './app.css';
 import './scrollbars.css';
