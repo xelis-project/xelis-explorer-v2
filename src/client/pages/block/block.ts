@@ -6,14 +6,14 @@ import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { NotFoundPage } from "../not_found/not_found";
 import { Master } from "../../components/master/master";
 import { XelisNode } from "../../app/xelis_node";
-
-import './block.css';
 import { BlockInfo } from "./components/info/info";
 import { BlockMiner } from "./components/miner/miner";
 import { BlockHashrate } from "./components/hashrate/hashrate";
 import { BlockExtra } from "./components/extra/extra";
 import { BlockTxs } from "./components/txs/txs";
 import { BlockGraph } from "./components/graph/graph";
+
+import './block.css';
 
 interface BlockPageServerData {
     block: Block;
