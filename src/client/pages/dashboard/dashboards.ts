@@ -196,10 +196,12 @@ export class DashboardPage extends Page {
         const info = await node.rpc.getInfo();
         const size = await node.rpc.getSizeOnDisk();
         const p2p_status = await node.rpc.p2pStatus();
+
         this.dashboard_top_stats.load({ info, size, p2p_status });
         this.page_data.info = info;
         this.page_data.size = size;
         this.page_data.p2p_status = p2p_status;
+
         this.dashboard_chart_section_2.hashrate.set_hashrate(info);
     }
 
@@ -296,12 +298,19 @@ export class DashboardPage extends Page {
         this.dashboard_top_stats.set_loading(true);
         this.dashboard_blocks.set_loading();
         this.dashboard_txs.set_loading();
+        this.dashboard_chart_section_2.set_loading(true);
 
         this.load_peers();
 
+
         await this.load_top_stats()
+
+        this.dashboard_top_stats.set_loading(false);
+
         await this.load_blocks();
         this.load_blocks_txs();
+
+        this.dashboard_chart_section_2.set_loading(false);
     }
 
     unload() {

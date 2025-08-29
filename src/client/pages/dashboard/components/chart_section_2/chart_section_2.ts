@@ -27,4 +27,10 @@ export class DashboardChartSection2 {
         this.block_time = new DashboardBlockTime();
         container_1.appendChild(this.block_time.box_chart.box.element);
     }
+
+    set_loading(loading: boolean) {
+        this.hashrate.box_chart.box.set_loading(loading);
+        this.block_time.box_chart.box.set_loading(loading);
+        this.pools.box_chart.box.set_loading(loading);
+    }
 }

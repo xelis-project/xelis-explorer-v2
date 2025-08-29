@@ -191,7 +191,6 @@ export class DashboardTopStats {
 
     async load(data: DashboardTopStatsData) {
         this.start_last_update();
-        this.set_loading(false);
         this.set_info(data.info);
         this.set_db_size(data.size.size_bytes);
         this.set_peers(data.p2p_status.peer_count);
