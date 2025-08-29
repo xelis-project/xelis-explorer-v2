@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { App } from "../../../server";
 import { Page } from "../page";
-import { Block, GetInfoResult } from "@xelis/sdk/daemon/types";
+import { Block, GetInfoResult, RPCEvent as DaemonRPCEvent } from "@xelis/sdk/daemon/types";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { NotFoundPage } from "../not_found/not_found";
 import { Master } from "../../components/master/master";
@@ -132,8 +132,45 @@ export class BlockPage extends Page {
         }
     }
 
+    on_new_block = async (new_block?: Block, err?: Error) => {
+        console.log("new_block", new_block);
+
+        const node = XelisNode.instance();
+
+        const { block } = this.page_data;
+        if (block && new_block) {
+            this.block_info.set_confirmations(block.height, new_block.height);
+
+            const stable_height = await node.ws.methods.getStableHeight();
+
+            if (block.height >= stable_height) {
+                this.page_data.block = await node.ws.methods.getBlockByHash({
+                    hash: block.hash
+                });
+
+                const info = await node.ws.methods.getInfo();
+                this.block_info.set(this.page_data.block, info);
+            }
+        }
+    }
+
+    clear_node_events() {
+        const node = XelisNode.instance();
+        node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
+    }
+
+    async listen_node_events() {
+        const node = XelisNode.instance();
+        node.ws.socket.addEventListener(`open`, () => {
+            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+        });
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
+
+        this.listen_node_events();
+
         await this.load_block();
         if (this.page_data.block && this.page_data.info) {
             const { block, info } = this.page_data;
@@ -144,5 +181,10 @@ export class BlockPage extends Page {
             this.block_graph.set(block);
             this.block_txs.load(block);
         }
+    }
+
+    unload(): void {
+        super.unload();
+        this.clear_node_events();
     }
 }
