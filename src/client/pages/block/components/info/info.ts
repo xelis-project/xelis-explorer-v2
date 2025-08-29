@@ -8,6 +8,8 @@ import './info.css';
 export class BlockInfo {
     container: Container
 
+    last_update_element: HTMLDivElement;
+
     height_type_element: HTMLDivElement;
     age_element: HTMLDivElement;
 
@@ -48,6 +50,10 @@ export class BlockInfo {
         sub_container_2.appendChild(this.size_element);
         this.tx_count_element = document.createElement(`div`);
         sub_container_2.appendChild(this.tx_count_element);
+
+        this.last_update_element = document.createElement(`div`);
+        this.last_update_element.classList.add(`xe-block-info-last-update`);
+        this.container.element.appendChild(this.last_update_element);
     }
 
     set(block: Block, info: GetInfoResult) {
@@ -58,6 +64,7 @@ export class BlockInfo {
         this.set_confirmations(block.height, info.height);
         this.set_version(block.version);
         this.set_topo(block.topoheight);
+        this.set_last_update();
     }
 
     set_height_type(height: number, block_type: BlockType) {
@@ -109,5 +116,19 @@ export class BlockInfo {
 
     set_tx_count(tx_count: number) {
         this.tx_count_element.innerHTML = `${tx_count.toLocaleString()} txs`;
+    }
+
+    last_update_interval_id: any;
+    last_update_timestamp: any;
+    set_last_update() {
+        this.last_update_timestamp = Date.now();
+
+        const set_timer = () => {
+            this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
+        }
+
+        set_timer();
+        if (this.last_update_interval_id) window.clearInterval(this.last_update_interval_id);
+        this.last_update_interval_id = window.setInterval(set_timer, 1000);
     }
 }

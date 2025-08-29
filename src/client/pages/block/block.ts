@@ -140,6 +140,7 @@ export class BlockPage extends Page {
         const { block } = this.page_data;
         if (block && new_block) {
             this.block_info.set_confirmations(block.height, new_block.height);
+            this.block_info.set_last_update();
 
             const stable_height = await node.ws.methods.getStableHeight();
 
