@@ -28,6 +28,7 @@ export class DashboardSearch {
     }
 
     async search() {
+
         const node = XelisNode.instance();
         const app = App.instance();
 
@@ -39,22 +40,42 @@ export class DashboardSearch {
             }
 
             if (search_value.length === 64) {
-                const tx = await node.rpc.getTransaction(search_value);
-                if (tx) {
-                    app.go_to(`/tx/${search_value}`);
-                    return;
+                try {
+                    const tx = await node.rpc.getTransaction(search_value);
+                    if (tx) {
+                        app.go_to(`/tx/${search_value}`);
+                        return;
+                    }
+                } catch {
+
+                }
+
+                try {
+                    const block = await node.rpc.getBlockByHash({
+                        hash: search_value
+                    });
+                    if (block) {
+                        app.go_to(`/block/${search_value}`);
+                        return;
+                    }
+                } catch {
+
                 }
             }
 
             if (search_value.startsWith(`xel:`)) { // TODO: xet
-                const addr = await node.rpc.validateAddress({
-                    address: search_value,
-                    allow_integrated: false
-                });
+                try {
+                    const addr = await node.rpc.validateAddress({
+                        address: search_value,
+                        allow_integrated: false
+                    });
 
-                if (addr.is_valid) {
-                    app.go_to(`/addr/${search_value}`);
-                    return;
+                    if (addr.is_valid) {
+                        app.go_to(`/addr/${search_value}`);
+                        return;
+                    }
+                } catch {
+
                 }
             }
         }
