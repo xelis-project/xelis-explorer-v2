@@ -1,6 +1,9 @@
 .xe-block-graph {
     height: 100%;
     box-sizing: border-box;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
 }
 
 .xe-block-graph-container-2 {
@@ -13,4 +16,12 @@
     display: flex;
     gap: .25rem;
     flex-direction: column;
+}
+
+.xe-block-graph-dag {
+    height: 15rem;
+}
+
+.xe-block-graph-dag canvas {
+    border-radius: 1rem;
 }
