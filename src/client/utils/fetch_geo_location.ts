@@ -1,4 +1,4 @@
-interface GeoLocationData {
+export interface GeoLocationData {
     ip: string;
     success: boolean;
     type: string;
