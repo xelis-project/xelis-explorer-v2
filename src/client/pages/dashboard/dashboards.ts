@@ -11,10 +11,10 @@ import { Block, MempoolTransactionSummary, Transaction } from "@xelis/sdk/daemon
 import { TxBlock } from "../../components/tx_item/tx_item";
 import { XelisNode } from "../../app/xelis_node";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
-
-import './dashboard.css';
 import { DashboardPeers } from "./components/peers/peers";
 import { DashboardDAG } from "./components/dag/dag";
+
+import './dashboard.css';
 
 export class DashboardPage extends Page {
     static pathname = "/";
