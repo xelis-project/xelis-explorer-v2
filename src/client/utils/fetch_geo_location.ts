@@ -41,5 +41,5 @@ export const fetch_geo_location = async (ips: string[]) => {
     ips.sort();
     const query = `?ips=${ips.join(`,`)}`;
     const res = await fetch(`https://geoip.xelis.io${query}`);
-    return await res.json<GeoLocationData>();
+    return await res.json<GeoLocationData[]>();
 }
