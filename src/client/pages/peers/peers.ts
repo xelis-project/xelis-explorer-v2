@@ -28,7 +28,10 @@ export class PeersPage extends Page {
         this.set_window_title(PeersPage.title);
 
         const node = XelisNode.instance();
+
+        this.peers_map.set_loading(true);
         const peers_result = await node.rpc.getPeers();
-        this.peers_map.set(peers_result.peers);
+        await this.peers_map.load(peers_result.peers);
+        this.peers_map.set_loading(false);
     }
 }

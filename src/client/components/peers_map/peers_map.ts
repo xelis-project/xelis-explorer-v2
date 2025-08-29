@@ -4,9 +4,12 @@ import 'leaflet/dist/leaflet.css';
 import { fetch_geo_location } from "../../utils/fetch_geo_location";
 import { parse_addr } from "../../utils/parse_addr";
 
+import './peers_map.css';
+
 export class PeersMap {
     element: HTMLDivElement;
     map!: leaflet.Map;
+    loading_element?: HTMLDivElement;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -22,7 +25,7 @@ export class PeersMap {
         }).addTo(this.map);
     }
 
-    async set(peers: Peer[]) {
+    async load(peers: Peer[]) {
         const leaflet = await import("leaflet");
         const peers_addr = peers.map(peer => {
             const addr = parse_addr(peer.addr);
@@ -46,6 +49,23 @@ export class PeersMap {
                     </div>
                 </div>`);
         });
+    }
+
+    set_loading(loading: boolean) {
+        if (loading) {
+            this.loading_element = document.createElement(`div`);
+            this.loading_element.classList.add(`xe-peers-map-loading`);
+            this.loading_element.innerHTML = `
+                <div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            `;
+            this.element.appendChild(this.loading_element);
+        } else {
+            if (this.loading_element) this.loading_element.remove();
+        }
     }
 
     add(peer: Peer) {

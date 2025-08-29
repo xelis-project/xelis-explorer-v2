@@ -1,0 +1,55 @@
+.xe-peers-map-loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    z-index: 999;
+}
+
+.xe-peers-map-loading>div {
+    background-color: black;
+    padding: .5rem;
+    border-radius: .5rem;
+    display: flex;
+    gap: .25em;
+}
+
+.xe-peers-map-loading>div>div {
+    width: .5rem;
+    height: 1.5rem;
+    background-color: white;
+    border-radius: .5rem;
+    animation-name: xe-peers-map-loading-animation;
+    animation-duration: .75s;
+    animation-iteration-count: infinite;
+}
+
+.xe-peers-map-loading>div> :nth-child(1) {
+    animation-delay: 0;
+}
+
+.xe-peers-map-loading>div> :nth-child(2) {
+    animation-delay: .25s;
+}
+
+.xe-peers-map-loading>div> :nth-child(3) {
+    animation-delay: .5s;
+}
+
+@keyframes xe-peers-map-loading-animation {
+    0% {
+        transform: scaleY(1);
+    }
+
+    20% {
+        transform: scaleY(.8);
+    }
+
+    40% {
+        transform: scaleY(1);
+    }
+}
