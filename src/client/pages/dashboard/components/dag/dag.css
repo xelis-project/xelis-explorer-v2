@@ -1,3 +1,7 @@
 .xe-dashboard-dag-dag {
     height: 25rem;
 }
+
+.xe-dashboard-dag-dag canvas {
+    border-radius: 1rem;
+}
