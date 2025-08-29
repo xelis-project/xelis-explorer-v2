@@ -21,7 +21,6 @@ export const match_route = (url: URL): typeof Page => {
         const pattern = page.get_pattern();
         return pattern.test(url);
     });
-
     if (page_type) return page_type;
     return NotFoundPage;
 }
