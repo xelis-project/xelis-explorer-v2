@@ -39,8 +39,13 @@ export class PeersMap {
             if (!peer_addr) return;
 
             const location = geo_locations[key];
-            leaflet.marker([location.latitude, location.longitude])
-                .addTo(this.map)
+            leaflet.circleMarker([location.latitude, location.longitude], {
+                radius: 5,
+                weight: 0,
+                color: '#02FFCF',
+                fillColor: '#02FFCF',
+                fillOpacity: 1
+            }).addTo(this.map)
                 .bindPopup(`<div>
                     <div>
                         <div>${peer_addr.peer.version}</div>
