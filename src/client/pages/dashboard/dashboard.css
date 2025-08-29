@@ -1,9 +1,5 @@
 .xe-dashboard {
-    padding: 1rem;
-    box-sizing: border-box;
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
+
 }
 
 .xe-dashboard-container {}

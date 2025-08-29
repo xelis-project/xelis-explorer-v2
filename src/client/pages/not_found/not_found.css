@@ -1,9 +1,5 @@
 .xe-not-found {
-    padding: 1rem;
-    box-sizing: border-box;
-    display: flex;
-    gap: 1rem;
-    flex-direction: column;
+
 }
 
 .xe-not-found-back-404 {
