@@ -1,6 +1,4 @@
-.xe-not-found {
-
-}
+.xe-not-found {}
 
 .xe-not-found-back-404 {
     font-size: 25rem;
@@ -9,6 +7,23 @@
     opacity: .05;
     z-index: -1;
     filter: blur(5px);
+    animation: xe-not-found-404-animation .6s ease-in-out;
+}
+
+@keyframes xe-not-found-404-animation {
+    0% {
+        opacity: 0;
+        translate: 0 -10%;
+    }
+
+    50% {
+        translate: 0 5%;
+    }
+
+    100% {
+        opacity: .05;
+        translate: 0 0;
+    }
 }
 
 .xe-not-found-container {
@@ -22,6 +37,25 @@
 
 .xe-not-found-container img {
     max-width: 20rem;
+    animation: xe-not-found-mascot-animation .6s ease-in-out;
+}
+
+@keyframes xe-not-found-mascot-animation {
+    0% {
+        scale: .5;
+    }
+
+    50% {
+        scale: 1.1;
+    }
+
+    75% {
+        scale: 0.9;
+    }
+
+    100% {
+        scale: 1;
+    }
 }
 
 .xe-not-found-container>:nth-child(2) {
@@ -32,11 +66,33 @@
 }
 
 .xe-not-found-container>:nth-child(2)> :nth-child(1) {
-    font-size: 2.5rem;
+    font-size: 2.6rem;
     font-weight: bold;
+    animation: xe-not-found-title-animation .5s;
+}
+
+@keyframes xe-not-found-title-animation {
+    0% {
+        translate: 40% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }
 
 .xe-not-found-container>:nth-child(2)> :nth-child(2) {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: #afafaf;
+    animation: xe-not-found-title-animation .7s;
+}
+
+@keyframes xe-not-found-description-animation {
+    0% {
+        translate: 40% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }
