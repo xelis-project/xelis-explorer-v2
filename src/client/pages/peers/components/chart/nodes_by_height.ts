@@ -73,7 +73,7 @@ export class PeersChartNodesByHeight {
             .attr('fill', d => color(d.data.label));
 
         const legend_radius = 8;
-        const legendSpacing = 15;
+        const legend_spacing = 15;
 
         const legend = svg
             .selectAll('.legend')
@@ -82,11 +82,11 @@ export class PeersChartNodesByHeight {
             .append('g')
             .attr('class', 'legend')
             .attr('transform', (d, i) => {
-                var height = legend_radius + legendSpacing
-                var offset = height * color.domain().length / 2
+                var height = legend_radius + legend_spacing;
+                var offset = height * color.domain().length / 2;
                 var x = 125;
-                var y = (i * height) - offset
-                return `translate(${x}, ${y})`
+                var y = (i * height) - offset;
+                return `translate(${x}, ${y})`;
             });
 
         legend
