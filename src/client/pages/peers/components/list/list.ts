@@ -3,6 +3,7 @@ import { Container } from "../../../../components/container/container";
 import { PeerItem } from "../../../../components/peer_item/peer_item";
 
 import './list.css';
+import { PeersPage } from "../../peers";
 
 export class PeersList {
     container: Container;
@@ -29,6 +30,13 @@ export class PeersList {
         peers.forEach((peer) => {
             const peer_item = new PeerItem();
             peer_item.set(peer);
+
+            peer_item.box.element.addEventListener(`click`, () => {
+                const { peers_map } = PeersPage.instance();
+                const { geo_location } = peer;
+                peers_map.map.map.flyTo([geo_location.latitude, geo_location.longitude], 6);
+            });
+
             this.container.element.appendChild(peer_item.box.element);
         });
     }
