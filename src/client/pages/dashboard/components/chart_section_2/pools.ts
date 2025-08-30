@@ -21,12 +21,14 @@ export class DashboardPools {
     }
 
     build_chart(miners: Record<string, number>) {
-        const data = Object.keys(miners).map((miner, i) => {
+        let data = Object.keys(miners).map((miner, i) => {
             return {
                 label: format_address(miner),
                 value: miners[miner],
             };
         });
+
+        data = data.sort((a, b) => b.value - a.value).slice(0, 6);
 
         const width = 150;
         const height = 150;
@@ -70,33 +72,33 @@ export class DashboardPools {
             .attr('fill', d => color(d.data.label));
 
         const legend_radius = 8;
-        const legendSpacing = 15;
+        const legend_spacing = 15;
 
         const legend = svg
             .selectAll('.legend')
-            .data(color.domain())
+            .data(data)
             .enter()
             .append('g')
             .attr('class', 'legend')
             .attr('transform', (d, i) => {
-                var height = legend_radius + legendSpacing
-                var offset = height * color.domain().length / 2
-                var x = 125;
-                var y = (i * height) - offset
-                return `translate(${x}, ${y})`
+                var height = legend_radius + legend_spacing;
+                var offset = height * color.domain().length / 2;
+                var x = 100;
+                var y = (i * height) - offset;
+                return `translate(${x}, ${y})`;
             });
 
         legend
             .append('circle')
             .attr('r', legend_radius)
-            .style('fill', color);
+            .style('fill', d => color(d.label));
 
         legend
             .append('text')
             .attr('x', 5 + legend_radius)
             .attr('y', legend_radius / 2)
-            .style(`fill`, color)
-            .text((d) => d);
+            .style(`fill`, d => color(d.label))
+            .text((d) => `${d.label} (${d.value})`);
     }
 
     update() {
