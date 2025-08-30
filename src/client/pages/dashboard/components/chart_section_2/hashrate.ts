@@ -83,6 +83,30 @@ export class DashboardHashRate {
             .attr('r', 5)
             .attr('fill', 'white')
             .attr('stroke', 'none');
+
+        const min_data = data.reduce((a, b) => (a.y < b.y ? a : b));
+
+        svg
+            .append(`text`)
+            .attr("x", x_scale(min_data.x))
+            .attr("y", y_scale(min_data.y))
+            .text(format_hashrate(min_data.y, info.block_time_target))
+            .style('font-size', '1rem')
+            .style("text-anchor", "middle")
+            .style('font-weight', `bold`)
+            .style('fill', 'white');
+
+        const max_data = data.reduce((a, b) => (a.y > b.y ? a : b));
+
+        svg
+            .append(`text`)
+            .attr("x", x_scale(max_data.x))
+            .attr("y", y_scale(max_data.y))
+            .text(format_hashrate(max_data.y, info.block_time_target))
+            .style('font-size', '1rem')
+            .style("text-anchor", "middle")
+            .style('font-weight', `bold`)
+            .style('fill', 'white');
     }
 
     update() {
