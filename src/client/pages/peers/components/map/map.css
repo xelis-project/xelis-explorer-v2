@@ -1,4 +1,15 @@
 .xe-peers-map {
     height: 25rem;
     border-radius: 1rem;
+    animation: xe-peers-map-animation .5s;
+}
+
+@keyframes xe-peers-map-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }

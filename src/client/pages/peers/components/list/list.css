@@ -5,4 +5,15 @@
     display: flex;
     gap: 1rem;
     flex-direction: column;
+    animation: xe-peers-list-animation .65s;
+}
+
+@keyframes xe-peers-list-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }

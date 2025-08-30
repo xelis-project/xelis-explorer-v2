@@ -3,7 +3,19 @@
     gap: 1rem;
     justify-content: space-between;
     flex-direction: row;
+    animation: xe-peers-info-animation .55s;
 }
+
+@keyframes xe-peers-info-animation {
+    0% {
+        translate: 0 -25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
 
 .xe-peers-info>div {
     display: flex;

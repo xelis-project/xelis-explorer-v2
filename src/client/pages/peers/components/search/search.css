@@ -1,5 +1,5 @@
 .xe-peers-search {
-    animation: xe-peers-search-appear-animation .5s;
+    animation: xe-peers-search-appear-animation .8s;
 }
 
 @keyframes xe-peers-search-appear-animation {
