@@ -55,20 +55,38 @@ export class PeersMap {
 
     async set(peers_locations: PeerLocation[]) {
         const leaflet = await import("leaflet");
+
+        const markers = {} as Record<string, PeerLocation[]>;
+
         peers_locations.forEach((peer_location) => {
-            const { peer, geo_location } = peer_location;
+            const { geo_location } = peer_location;
+            const key = `${geo_location.latitude},${geo_location.longitude}`;
+            if (markers[key]) {
+                markers[key].push(peer_location);
+            } else {
+                markers[key] = [peer_location];
+            }
+        });
+
+        Object.keys(markers).forEach((key) => {
+            const peers_locations = markers[key];
+            const first_peer_location = peers_locations[0];
+            const { geo_location } = first_peer_location;
+
             leaflet.circleMarker([geo_location.latitude, geo_location.longitude], {
-                radius: 5,
+                radius: 4 + peers_locations.length,
                 weight: 0,
                 color: '#02FFCF',
                 fillColor: '#02FFCF',
-                fillOpacity: 1
+                fillOpacity: 0.5
             }).addTo(this.map)
                 .bindPopup(`<div>
+                    <div>${geo_location.city}, ${geo_location.country}</div>
                     <div>
-                        <div>${peer.version}</div>
-                        <div>${geo_location.city}, ${geo_location.country}</div>
-                        <div>${geo_location.region}</div>
+                        ${peers_locations.map((peer_location) => {
+                    const { peer } = peer_location;
+                    return `<div>${peer.addr} (${peer.version})</div>`;
+                }).join(``)}
                     </div>
                 </div>`);
         });
