@@ -19,13 +19,17 @@ export class PeersSearch {
         this.text_input.element.placeholder = `Search ip, country, or tag`;
         form.appendChild(this.text_input.element);
 
-        form.addEventListener(`submit`, (e) => {
-            e.preventDefault();
-            this.search();
+        let search_timeout_id: number | undefined;
+        form.addEventListener(`input`, (e) => {
+            if (search_timeout_id) window.clearTimeout(search_timeout_id)
+
+            search_timeout_id = window.setTimeout(() => {
+                this.search();
+            }, 500);
         });
     }
 
     async search() {
-        
+        const value = this.text_input.element.value;
     }
 }
