@@ -42,6 +42,10 @@ export class DashboardBlockTime {
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
+        const color = d3.scaleLinear<string>()
+            .domain(data.map(d => d.y))
+            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
+
         const x_scale = d3
             .scaleBand<number>()
             .domain(data.map((d) => d.x))
@@ -63,13 +67,13 @@ export class DashboardBlockTime {
             .attr("rx", 3)
             .attr("width", x_scale.bandwidth())
             .attr("height", (d) => height - y_scale(d.y))
-            .attr("fill", "white");
+            .attr("fill", d => color(d.y));
 
         svg.append("g")
             .call(d3.axisLeft(y_scale).tickFormat(function (d) {
                 return prettyMilliseconds(d as number, { colonNotation: true });
-            })
-                .ticks(10));
+            }).ticks(10))
+            .attr(`stroke`, `rgba(2, 255, 209, 0.3)`);
     }
 
     update() {

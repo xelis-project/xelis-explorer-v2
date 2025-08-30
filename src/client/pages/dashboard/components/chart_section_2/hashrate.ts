@@ -7,6 +7,7 @@ import { DashboardPage } from '../../dashboards';
 interface DataPoint {
     x: number;
     y: number;
+    box?: DOMRect;
 }
 
 export class DashboardHashRate {
@@ -62,51 +63,65 @@ export class DashboardHashRate {
             .y(d => y_scale(d.y))
             .curve(d3.curveMonotoneX);
 
-        svg.append('path')
+        const color = d3.scaleLinear<string>()
+            .domain(data.map(d => d.y))
+            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
+
+        svg
+            .append('path')
             .datum(data)
-            .attr('fill', 'none')
-            .attr('stroke', 'white')
+            .attr('fill', `none`)
+            .attr('stroke', d => `rgba(2, 255, 209, 0.3)`)
+            //.attr('stroke', d => color(d.y))
             .attr('stroke-width', 5)
             .attr('d', line);
 
-        /*svg.append("g")
-            .call(d3.axisLeft(y_scale).tickFormat(function (d) {
-                return format_hashrate(d as number, info.block_time_target);
-            })
-                .ticks(10));*/
-
-        svg.selectAll(`circle`)
+        svg
+            .selectAll(`circle`)
             .data(data)
             .join(`circle`)
             .attr('cx', d => x_scale(d.x))
             .attr('cy', d => y_scale(d.y))
             .attr('r', 5)
-            .attr('fill', 'white')
+            .attr('fill', d => color(d.y))
             .attr('stroke', 'none');
 
         const min_data = data.reduce((a, b) => (a.y < b.y ? a : b));
-
-        svg
-            .append(`text`)
-            .attr("x", x_scale(min_data.x))
-            .attr("y", y_scale(min_data.y))
-            .text(format_hashrate(min_data.y, info.block_time_target))
-            .style('font-size', '1rem')
-            .style("text-anchor", "middle")
-            .style('font-weight', `bold`)
-            .style('fill', 'white');
-
         const max_data = data.reduce((a, b) => (a.y > b.y ? a : b));
 
-        svg
+        const text = svg
+            .selectAll(`g`)
+            .data<DataPoint>([min_data, max_data])
+            .enter()
+            .append(`g`);
+
+        text
             .append(`text`)
-            .attr("x", x_scale(max_data.x))
-            .attr("y", y_scale(max_data.y))
-            .text(format_hashrate(max_data.y, info.block_time_target))
+            .attr("x", d => x_scale(d.x))
+            .attr("y", d => y_scale(d.y))
+            .text(d => format_hashrate(d.y, info.block_time_target))
+            .each(function (d) {
+                const self = this as SVGTextElement;
+                const box = self.getBBox();
+                const margin = { top: 2, left: 10, bot: 2, right: 10 };
+                box.x = box.x - box.width / 2 - margin.left;
+                box.y = box.y - margin.top;
+                box.width = box.width + margin.left + margin.right;
+                box.height = box.height + margin.top + margin.bot;
+
+                d.box = box;
+            })
             .style('font-size', '1rem')
             .style("text-anchor", "middle")
             .style('font-weight', `bold`)
-            .style('fill', 'white');
+            .style('fill', 'rgba(0, 0, 0, 1)');
+
+        text.insert(`rect`, ":first-child")
+            .attr("x", d => d.box ? d.box.x : 0)
+            .attr("y", d => d.box ? d.box.y : 0)
+            .attr("width", d => d.box ? d.box.width : 0)
+            .attr("height", d => d.box ? d.box.height : 0)
+            .style('fill', 'rgba(2, 255, 209, 0.8)');
     }
 
     update() {
