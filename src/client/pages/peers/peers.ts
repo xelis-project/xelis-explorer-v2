@@ -1,5 +1,5 @@
 import { XelisNode } from "../../app/xelis_node";
-import { RPCEvent as DaemonRPCEvent } from "@xelis/sdk/daemon/types";
+import { RPCEvent as DaemonRPCEvent, Peer } from "@xelis/sdk/daemon/types";
 import { Master } from "../../components/master/master";
 import { PeersMap } from "./components/map/map";
 import { Page } from "../page";
@@ -55,11 +55,11 @@ export class PeersPage extends Page {
         sub_container_2.appendChild(this.peers_list.container.element);
     }
 
-    on_peer_connected = () => {
+    on_peer_connected = (data?: Peer, err?: Error) => {
         console.log("peer_connected");
     }
 
-    on_peer_disconnected = () => {
+    on_peer_disconnected = (data?: number, err?: Error) => {
         console.log("peer_disconnected")
     }
 
