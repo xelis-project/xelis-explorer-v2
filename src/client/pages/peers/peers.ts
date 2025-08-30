@@ -86,6 +86,10 @@ export class PeersPage extends Page {
         this.listen_node_events();
 
         this.peers_map.map.set_loading(true);
+        this.peers_chart.set_loading(true);
+        this.peers_list.set_loading();
+        this.peers_info.set_loading(true);
+
         const info = await node.rpc.getInfo();
 
         const peers_result = await node.rpc.getPeers();
@@ -94,12 +98,14 @@ export class PeersPage extends Page {
         const peers_locations = await this.peers_map.map.fetch_peers_locations(peers);
         this.peers_map.map.set(peers_locations);
         this.peers_map.map.set_loading(false);
+        this.peers_chart.set_loading(false);
+        this.peers_info.set_loading(false);
 
         this.peers_info.set(peers, info.height);
         this.peers_list.set(peers_locations);
 
         this.peers_chart.nodes_by_version.build_chart(peers);
         this.peers_chart.nodes_by_height.build_chart(peers);
-        this.peers_chart.nodes_by_counrty.build_chart(peers_locations);
+        this.peers_chart.nodes_by_country.build_chart(peers_locations);
     }
 }

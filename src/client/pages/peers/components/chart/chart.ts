@@ -10,7 +10,7 @@ export class PeersChart {
 
     nodes_by_version: PeersChartNodesByVersion;
     nodes_by_height: PeersChartNodesByHeight;
-    nodes_by_counrty: PeersChartNodesByCountry;
+    nodes_by_country: PeersChartNodesByCountry;
 
     constructor() {
         this.container = new Container();
@@ -26,7 +26,19 @@ export class PeersChart {
         this.nodes_by_height = new PeersChartNodesByHeight();
         container_1.appendChild(this.nodes_by_height.box_chart.box.element);
 
-        this.nodes_by_counrty = new PeersChartNodesByCountry();
-        this.container.element.appendChild(this.nodes_by_counrty.box_chart.box.element);
+        this.nodes_by_country = new PeersChartNodesByCountry();
+        this.container.element.appendChild(this.nodes_by_country.box_chart.box.element);
+    }
+
+    set_loading(loading: boolean) {
+        if (loading) {
+            this.nodes_by_version.box_chart.box.set_loading(true);
+            this.nodes_by_country.box_chart.box.set_loading(true);
+            this.nodes_by_height.box_chart.box.set_loading(true);
+        } else {
+            this.nodes_by_version.box_chart.box.set_loading(false);
+            this.nodes_by_country.box_chart.box.set_loading(false);
+            this.nodes_by_height.box_chart.box.set_loading(false);
+        }
     }
 }
