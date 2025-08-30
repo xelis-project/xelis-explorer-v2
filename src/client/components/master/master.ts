@@ -11,13 +11,13 @@ export class Master {
 
     constructor() {
         this.element = document.createElement(`div`);
-        this.element.style.position = `relative`;
+        this.element.classList.add(`xe-master`);
 
         this.background = new Background();
         this.element.appendChild(this.background.element);
 
         this.content = document.createElement(`div`);
-        this.content.classList.add(`xe-master`);
+        this.content.classList.add(`xe-master-content`);
         this.element.appendChild(this.content);
 
         this.header = new Header();

@@ -1,8 +1,12 @@
 .xe-master {
+    position: relative;
+    min-height: 100vh;
+}
+
+.xe-master-content {
     max-width: 80rem;
     width: 100%;
     margin: 0 auto;
-
     padding: 1rem;
     box-sizing: border-box;
     display: flex;
