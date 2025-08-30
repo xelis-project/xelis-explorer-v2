@@ -53,3 +53,31 @@
         transform: scaleY(1);
     }
 }
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: rgb(0, 0, 0, .5);
+    color: white;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+}
+
+.xe-peers-map-tooltip {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-peers-map-tooltip>:nth-child(1) {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.xe-peers-map-tooltip>:nth-child(2) {
+    max-height: 10rem;
+    overflow: auto;
+    white-space: nowrap;
+    display: flex;
+    gap: .1rem;
+    flex-direction: column;
+}

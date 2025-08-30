@@ -80,7 +80,7 @@ export class PeersMap {
                 fillColor: '#02FFCF',
                 fillOpacity: 0.5
             }).addTo(this.map)
-                .bindPopup(`<div>
+                .bindPopup(`<div class="xe-peers-map-tooltip">
                     <div>${geo_location.city}, ${geo_location.country}</div>
                     <div>
                         ${peers_locations.map((peer_location) => {
