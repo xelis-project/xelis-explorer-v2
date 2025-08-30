@@ -1,0 +1,19 @@
+.xe-peers-chart {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-peers-chart-container-1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-peers-chart-container-1 > :nth-child(1) {
+    flex: 1;
+}
+
+.xe-peers-chart-container-1 > :nth-child(2) {
+    flex: 1;
+}

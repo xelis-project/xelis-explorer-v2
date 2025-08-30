@@ -89,11 +89,17 @@ export class PeersPage extends Page {
         const info = await node.rpc.getInfo();
 
         const peers_result = await node.rpc.getPeers();
-        const peers_locations = await this.peers_map.map.fetch_peers_locations(peers_result.peers);
+        const { peers } = peers_result;
+
+        const peers_locations = await this.peers_map.map.fetch_peers_locations(peers);
         this.peers_map.map.set(peers_locations);
         this.peers_map.map.set_loading(false);
 
-        this.peers_info.set(peers_result.peers, info.height);
+        this.peers_info.set(peers, info.height);
         this.peers_list.set(peers_locations);
+
+        this.peers_chart.nodes_by_version.build_chart(peers);
+        this.peers_chart.nodes_by_height.build_chart(peers);
+        this.peers_chart.nodes_by_counrty.build_chart(peers_locations);
     }
 }
