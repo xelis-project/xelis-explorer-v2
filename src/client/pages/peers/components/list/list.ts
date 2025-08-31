@@ -1,15 +1,17 @@
 import { PeerLocation } from "../../../../components/peers_map/peers_map";
 import { Container } from "../../../../components/container/container";
 import { PeerItem } from "../../../../components/peer_item/peer_item";
+import { PeersPage } from "../../peers";
 
 import './list.css';
-import { PeersPage } from "../../peers";
 
 export class PeersList {
     container: Container;
+    peer_items: PeerItem[];
 
     constructor() {
         this.container = new Container();
+        this.peer_items = [];
         this.container.element.classList.add(`xe-peers-list`, `scrollbar-1`, `scrollbar-1-right`);
     }
 
@@ -25,19 +27,36 @@ export class PeersList {
         this.container.element.appendChild(peer_item.box.element);
     }
 
-    set(peers: PeerLocation[]) {
+    prepend_peer(peer_location: PeerLocation) {
+        const peer_item = new PeerItem();
+        peer_item.set(peer_location);
+
+        peer_item.box.element.addEventListener(`click`, () => {
+            const { peers_map } = PeersPage.instance();
+            const { geo_location } = peer_location;
+            peers_map.map.map.flyTo([geo_location.latitude, geo_location.longitude], 6);
+        });
+
+        this.peer_items.push(peer_item);
+        this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
+        return peer_item;
+    }
+
+    remove_peer(peer_id: string) {
+        for (let i = 0; i < this.peer_items.length; i++) {
+            const peer_item = this.peer_items[i];
+            if (peer_item.data && peer_item.data.peer.id === peer_id) {
+                this.peer_items.splice(i, 1);
+                peer_item.box.element.remove();
+                break;
+            }
+        }
+    }
+
+    set(peers_locations: PeerLocation[]) {
         this.container.element.replaceChildren();
-        peers.forEach((peer) => {
-            const peer_item = new PeerItem();
-            peer_item.set(peer);
-
-            peer_item.box.element.addEventListener(`click`, () => {
-                const { peers_map } = PeersPage.instance();
-                const { geo_location } = peer;
-                peers_map.map.map.flyTo([geo_location.latitude, geo_location.longitude], 6);
-            });
-
-            this.container.element.appendChild(peer_item.box.element);
+        peers_locations.forEach((peer_location) => {
+            this.prepend_peer(peer_location);
         });
     }
 }

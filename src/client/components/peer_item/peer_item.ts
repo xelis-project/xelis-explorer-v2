@@ -7,7 +7,7 @@ import { PeerLocation } from '../peers_map/peers_map';
 
 export class PeerItem {
     box: Box;
-
+    data?: PeerLocation;
     element_addr: HTMLDivElement;
     element_peer_count: HTMLDivElement;
     element_version: HTMLDivElement;
@@ -101,5 +101,6 @@ export class PeerItem {
         this.set_pruned(peer.pruned_topoheight);
         this.set_peer_count(Object.keys(peer.peers).length);
         this.set_version(peer.version);
+        this.data = peer_location;
     }
 }

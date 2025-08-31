@@ -5,10 +5,13 @@ import { PeersMap } from "./components/map/map";
 import { Page } from "../page";
 import { PeersInfo } from "./components/info/info";
 import { PeersSearch } from "./components/search/search";
-
-import './peers.css';
 import { PeersList } from "./components/list/list";
 import { PeersChart } from "./components/chart/chart";
+import { fetch_geo_location } from "../../utils/fetch_geo_location";
+import { parse_addr } from "../../utils/parse_addr";
+import { PeerLocation } from "../../components/peers_map/peers_map";
+
+import './peers.css';
 
 export class PeersPage extends Page {
     static pathname = "/peers";
@@ -55,12 +58,26 @@ export class PeersPage extends Page {
         sub_container_2.appendChild(this.peers_list.container.element);
     }
 
-    on_peer_connected = (data?: Peer, err?: Error) => {
+    on_peer_connected = async (new_peer?: Peer, err?: Error) => {
         console.log("peer_connected");
+
+        if (new_peer) {
+            const addr = parse_addr(new_peer.addr);
+            const res = await fetch_geo_location([addr.ip]);
+            const geo_location = res[addr.ip];
+
+            const peer_location = { peer: new_peer, geo_location } as PeerLocation;
+            this.peers_map.map.add_peer_marker(peer_location);
+            this.peers_list.prepend_peer(peer_location);
+        }
     }
 
-    on_peer_disconnected = (data?: number, err?: Error) => {
+    on_peer_disconnected = (peer_id?: string, err?: Error) => {
         console.log("peer_disconnected")
+        if (peer_id) {
+            this.peers_map.map.remove_peer_marker(peer_id);
+            this.peers_list.remove_peer(peer_id);
+        }
     }
 
     clear_node_events() {
