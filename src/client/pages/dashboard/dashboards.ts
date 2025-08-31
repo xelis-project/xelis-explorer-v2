@@ -14,6 +14,9 @@ import { DashboardPeers } from "./components/peers/peers";
 import { DashboardDAG } from "./components/dag/dag";
 import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
 import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
+import { parse_addr } from "../../utils/parse_addr";
+import { fetch_geo_location } from "../../utils/fetch_geo_location";
+import { PeerLocation } from "../../components/peers_map/peers_map";
 
 import './dashboard.css';
 
@@ -130,7 +133,7 @@ export class DashboardPage extends Page {
     }
 
     on_block_ordered = (block_ordered?: BlockOrdered | undefined, err?: Error) => {
-        console.log("block_ordered", block_ordered)
+        console.log("block_ordered", block_ordered);
         if (block_ordered) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === block_ordered.block_hash);
             if (block_item && block_item.data && block_item.data.hash === block_ordered.block_hash) {
@@ -144,7 +147,7 @@ export class DashboardPage extends Page {
     }
 
     on_block_orphaned = (block_orphaned?: BlockOrphaned | undefined, err?: Error) => {
-        console.log("block_orphaned", block_orphaned)
+        console.log("block_orphaned", block_orphaned);
         if (block_orphaned) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === block_orphaned.block_hash);
             if (block_item && block_item.data && block_item.data.hash === block_orphaned.block_hash) {
@@ -156,21 +159,34 @@ export class DashboardPage extends Page {
         }
     }
 
-    on_peer_connected = (new_peer?: Peer, err?: Error) => {
+    on_peer_connected = async (new_peer?: Peer, err?: Error) => {
         console.log("peer_connected");
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
             p2p_status.peer_count += 1;
             this.dashboard_top_stats.set_peers(p2p_status.peer_count);
         }
+
+        if (new_peer) {
+            const addr = parse_addr(new_peer.addr);
+            const res = await fetch_geo_location([addr.ip]);
+            const geo_location = res[addr.ip];
+
+            const peer_location = { peer: new_peer, geo_location } as PeerLocation;
+            this.dashboard_peers.peers_map.add_peer_marker(peer_location);
+        }
     }
 
     on_peer_disconnected = (peer_id?: string, err?: Error) => {
-        console.log("peer_disconnected")
+        console.log("peer_disconnected");
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
             p2p_status.peer_count -= 1;
             this.dashboard_top_stats.set_peers(p2p_status.peer_count);
+        }
+
+        if (peer_id) {
+            this.dashboard_peers.peers_map.remove_peer_marker(peer_id);
         }
     }
 
