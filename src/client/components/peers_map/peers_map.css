@@ -1,3 +1,7 @@
+.leaflet-container {
+    background-color: #090909;
+}
+
 .xe-peers-map-loading {
     position: absolute;
     width: 100%;
