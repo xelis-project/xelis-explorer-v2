@@ -1,0 +1,34 @@
+.xe-block-type-box {
+    position: relative;
+    overflow: hidden;
+}
+
+.xe-block-type-box::after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    filter: blur(5px);
+    height: 100%;
+    rotate: 45deg;
+    scale: 1 1.5;
+    translate: 25% 25%;
+    border-radius: 100%;
+}
+
+.xe-block-type-box-sync {
+    background-color: #A3C293; /* Soft sage green */
+}
+
+.xe-block-type-box-orphaned {
+    background-color: #E07A5F; /* Muted coral/red */
+}
+
+.xe-block-type-box-side {
+    background-color: #6A8DAD; /* Dusty blue */
+}
+
+.xe-block-type-box-normal {
+    background-color: #F4D35E; /* Buttery yellow */
+}
