@@ -6,13 +6,14 @@ import { DashboardTopStats } from "./components/top_stats/top_stats";
 import { DashboardChartSection1 } from "./components/chart_section_1/chart_section_1";
 import { DashboardChartSection2 } from "./components/chart_section_2/chart_section_2";
 import { DashboardTxs } from "./components/txs/txs";
-import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult, RPCMethod, TopoheightRangeParams } from '@xelis/sdk/daemon/types';
-import { Block, MempoolTransactionSummary, Transaction } from "@xelis/sdk/daemon/types";
+import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult } from '@xelis/sdk/daemon/types';
+import { Block, MempoolTransactionSummary } from "@xelis/sdk/daemon/types";
 import { TxBlock } from "../../components/tx_item/tx_item";
 import { XelisNode } from "../../app/xelis_node";
-import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { DashboardPeers } from "./components/peers/peers";
 import { DashboardDAG } from "./components/dag/dag";
+import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
+import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 
 import './dashboard.css';
 
@@ -98,10 +99,17 @@ export class DashboardPage extends Page {
                 this.dashboard_blocks.remove_last_block();
                 this.dashboard_txs.remove_block_txs(new_block.hash);
 
-                const tx_items = await this.build_txs_block(new_block);
-                tx_items.forEach((tx_item) => {
-                    this.dashboard_txs.prepend_tx(tx_item);
-                });
+                const update_txs = async () => {
+                    // we don't need to fetch txs, new_block should already have them
+                    // await fetch_block_txs(new_block);
+                    if (new_block.transactions) {
+                        new_block.transactions.forEach((tx) => {
+                            this.dashboard_txs.prepend_tx({ block: new_block, tx });
+                        });
+                    }
+                }
+
+                update_txs();
 
                 const blocks = this.dashboard_blocks.block_items.map(x => x.data!);
                 this.dashboard_chart_section_2.hashrate.update();
@@ -204,39 +212,10 @@ export class DashboardPage extends Page {
     }
 
     async load_blocks() {
-        const node = XelisNode.instance();
-
         const info = this.page_data.info;
         if (!info) return;
 
-        const requests = [] as RPCRequest[];
-        for (let i = 0; i < 2; i++) {
-            requests.push({
-                method: RPCMethod.GetBlocksRangeByTopoheight,
-                params: {
-                    start_topoheight: info.topoheight - (i * 20 + 20),
-                    end_topoheight: info.topoheight - (i * 20)
-                } as TopoheightRangeParams
-            });
-        }
-
-        let blocks = [] as Block[];
-        const res = await node.rpc.batchRequest(requests);
-        res.forEach(result => {
-            if (result instanceof Error) {
-                console.log(result)
-            } else {
-                blocks = [...blocks, ...result as Block[]];
-            }
-        });
-        blocks.sort((a, b) => a.height - b.height);
-
-        /*const blocks = await node.rpc.getBlocksRangeByHeight({
-            start_height: info.height - 20,
-            end_height: info.height
-        });*/
-
-        //blocks.sort((a, b) => b.height - a.height);
+        const blocks = await fetch_blocks(info.height, 100);
 
         this.page_data.blocks = blocks;
         this.dashboard_chart_section_2.hashrate.update();
@@ -245,39 +224,22 @@ export class DashboardPage extends Page {
         this.dashboard_blocks.update();
     }
 
-    async build_txs_block(block: Block) {
-        const node = XelisNode.instance();
-        const txs_block: TxBlock[] = [];
-
-        const tx_count = block.txs_hashes.length;
-        for (let i = 0; i < tx_count; i += 20) {
-            const tx_hashes = block.txs_hashes.slice(i, 20);
-            const txs = await node.rpc.getTransactions(tx_hashes);
-            txs.forEach(tx => txs_block.push({ block, tx }));
-        }
-        return txs_block;
-    }
-
     async load_blocks_txs() {
-        const node = XelisNode.instance();
         const blocks = this.page_data.blocks;
         if (!blocks) return;
 
-        let tx_hashes: { block: Block, tx_hash: string, tx?: Transaction }[] = [];
-        blocks.map(block => {
-            block.txs_hashes.forEach(tx_hash => {
-                tx_hashes.push({ block, tx_hash });
-            });
-        });
+        await fetch_blocks_txs(blocks);
 
         const txs_block: TxBlock[] = [];
-        const txs = await node.rpc.getTransactions(tx_hashes.map(x => x.tx_hash).slice(0, 20));
-        txs.forEach(tx => {
-            const tx_block = tx_hashes.find(x => tx.hash === x.tx_hash);
-            if (tx_block) txs_block.push({ block: tx_block.block, tx });
+        blocks.forEach((block) => {
+            if (block.transactions) {
+                block.transactions.forEach((tx) => {
+                    txs_block.push({ block, tx });
+                });
+            }
         });
-        this.page_data.txs_block = txs_block;
 
+        this.page_data.txs_block = txs_block;
         this.dashboard_txs.update();
     }
 
