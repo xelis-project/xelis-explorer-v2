@@ -33,7 +33,7 @@ export class PeersMap {
     async fetch_peers_locations(peers: Peer[]) {
         const peers_addr = peers.map(peer => {
             const addr = parse_addr(peer.addr);
-            if (addr) return { peer, addr };
+            return { peer, addr };
         }).filter(p => p !== undefined);
         const ips = peers_addr.map(p => p.addr.ip);
 
