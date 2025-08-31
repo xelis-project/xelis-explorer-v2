@@ -1,13 +1,12 @@
 import { Page } from "../page";
 import { Master } from "../../components/master/master";
 import { XelisNode } from "../../app/xelis_node";
-import { Block } from "@xelis/sdk/daemon/types";
 import { Table } from "../../components/table/table";
 import { Container } from "../../components/container/container";
 import { BlockRow } from "./block_row/block_row";
+import { App } from "../../app/app";
 
 import './blocks.css';
-import { App } from "../../app/app";
 
 export class BlocksPage extends Page {
     static pathname = "/blocks";
