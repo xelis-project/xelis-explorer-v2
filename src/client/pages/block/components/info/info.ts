@@ -2,6 +2,7 @@ import prettyBytes from "pretty-bytes";
 import { Container } from "../../../../components/container/container"
 import { Block, BlockType, GetInfoResult } from "@xelis/sdk/daemon/types";
 import prettyMilliseconds from "pretty-ms";
+import { BlockTypeBox } from "../../../../components/block_type_box/block_type_box";
 
 import './info.css';
 
@@ -70,9 +71,9 @@ export class BlockInfo {
     set_height_type(height: number, block_type: BlockType) {
         this.height_type_element.replaceChildren();
 
-        const block_element = document.createElement(`div`);
-        block_element.classList.add(`xe-block-item-type-${block_type.toLowerCase()}`);
-        this.height_type_element.appendChild(block_element);
+        const block_type_box = new BlockTypeBox();
+        block_type_box.set(2.5, block_type);
+        this.height_type_element.appendChild(block_type_box.element);
 
         const sub_container = document.createElement(`div`);
         this.height_type_element.appendChild(sub_container);

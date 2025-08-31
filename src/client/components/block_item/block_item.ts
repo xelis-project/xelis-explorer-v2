@@ -6,9 +6,10 @@ import { format_address } from "../../utils/format_address";
 import { Box } from "../box/box";
 //@ts-ignore
 import hashicon from "hashicon";
+import { Localization } from "../../app/localization/localization";
+import { BlockTypeBox } from "../block_type_box/block_type_box";
 
 import "./block_item.css";
-import { Localization } from "../../app/localization/localization";
 
 export class BlockItem {
     box: Box;
@@ -102,7 +103,19 @@ export class BlockItem {
     }
 
     set_type(block_type: BlockType) {
-        this.element_type.innerHTML = `<div class="xe-block-item-type-${block_type.toLowerCase()}"></div>${block_type.toUpperCase()} BLOCK`;
+        const container = document.createElement(`div`);
+        container.classList.add(`xe-block-item-type`);
+
+        const block_box_type = new BlockTypeBox();
+        block_box_type.set(1, block_type);
+        container.appendChild(block_box_type.element);
+
+        const text = document.createElement(`div`);
+        text.innerHTML = `${block_type.toUpperCase()} BLOCK`;
+        container.appendChild(text);
+
+        this.element_type.replaceChildren();
+        this.element_type.appendChild(container);
     }
 
     age_interval_id?: number;

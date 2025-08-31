@@ -7,6 +7,7 @@ import { reduce_text } from "../../../utils/reduce_text";
 import { format_xel } from "../../../utils/format_xel";
 import { format_hashrate } from "../../../utils/format_hashrate";
 import prettyMilliseconds from "pretty-ms";
+import { BlockTypeBox } from "../../../components/block_type_box/block_type_box";
 
 import './block_row.css';
 
@@ -70,12 +71,19 @@ export class BlockRow {
     }
 
     set_type(type: BlockType) {
-        this.cell_3_element.innerHTML = `
-            <div class="xe-blocks-table-block">
-                <div class="xe-block-item-type-${type.toLowerCase()}"></div>
-                ${type.toUpperCase()}
-            </div>
-        `;
+        const container = document.createElement(`div`);
+        container.classList.add(`xe-blocks-table-block`);
+
+        const block_box_type = new BlockTypeBox();
+        block_box_type.set(1.5, type);
+        container.appendChild(block_box_type.element);
+
+        const text = document.createElement(`div`);
+        text.innerHTML = type.toUpperCase();
+        container.appendChild(text);
+
+        this.cell_3_element.replaceChildren();
+        this.cell_3_element.appendChild(container);
     }
 
     set_miner(miner: string) {
