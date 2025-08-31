@@ -6,7 +6,7 @@ import { DashboardTopStats } from "./components/top_stats/top_stats";
 import { DashboardChartSection1 } from "./components/chart_section_1/chart_section_1";
 import { DashboardChartSection2 } from "./components/chart_section_2/chart_section_2";
 import { DashboardTxs } from "./components/txs/txs";
-import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult } from '@xelis/sdk/daemon/types';
+import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult, Peer } from '@xelis/sdk/daemon/types';
 import { Block, MempoolTransactionSummary } from "@xelis/sdk/daemon/types";
 import { TxBlock } from "../../components/tx_item/tx_item";
 import { XelisNode } from "../../app/xelis_node";
@@ -156,7 +156,7 @@ export class DashboardPage extends Page {
         }
     }
 
-    on_peer_connected = () => {
+    on_peer_connected = (new_peer?: Peer, err?: Error) => {
         console.log("peer_connected");
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
@@ -165,7 +165,7 @@ export class DashboardPage extends Page {
         }
     }
 
-    on_peer_disconnected = () => {
+    on_peer_disconnected = (peer_id?: string, err?: Error) => {
         console.log("peer_disconnected")
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
