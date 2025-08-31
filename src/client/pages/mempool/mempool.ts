@@ -1,5 +1,8 @@
 import { XelisNode } from "../../app/xelis_node";
 import { Master } from "../../components/master/master";
+import { TxBlock } from "../../components/tx_item/tx_item";
+import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
+import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 // import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
 // import { fetch_txs_blocks } from "../../fetch_helpers/fetch_blocks_txs";
 import { Page } from "../page";
@@ -61,11 +64,18 @@ export class MempoolPage extends Page {
 
         const info = await node.rpc.getInfo();
 
-      //  const blocks = await fetch_blocks(info.height, 5);
-       // console.log(blocks)
-      //  const txs_blocks = await fetch_txs_blocks(blocks);
-      //console.log(txs_blocks)
-       // this.mempool_txs_list.set(txs_blocks);
+        const blocks = await fetch_blocks(info.height, 100);
+        await fetch_blocks_txs(blocks);
+
+        const txs_block: TxBlock[] = [];
+        blocks.forEach((block) => {
+            if (block.transactions) {
+                block.transactions.forEach((tx) => {
+                    txs_block.push({ block, tx });
+                });
+            }
+        });
+        this.mempool_txs_list.set(txs_block);
         //this.mempool_chart.txs_transfers.build_chart(txs_blocks);
     }
 }
