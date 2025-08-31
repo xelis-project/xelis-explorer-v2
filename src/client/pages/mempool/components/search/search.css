@@ -1,0 +1,13 @@
+.xe-mempool-search {
+    animation: xe-mempool-search-appear-animation .8s;
+}
+
+@keyframes xe-mempool-search-appear-animation {
+    0% {
+        translate: 25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}

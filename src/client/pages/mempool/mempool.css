@@ -1,0 +1,21 @@
+.xe-mempool {}
+
+.xe-mempool-container-1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-mempool-container-1>:nth-child(1) {
+    flex: 2;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-mempool-container-1>:nth-child(2) {
+    flex: 1;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}

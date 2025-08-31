@@ -1,0 +1,19 @@
+.xe-mempool-list {
+    max-height: 50rem;
+    overflow-y: visible;
+    overflow-x: hidden;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    animation: xe-mempool-list-animation .65s;
+}
+
+@keyframes xe-mempool-list-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}

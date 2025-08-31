@@ -1,0 +1,16 @@
+.xe-mempool-chart {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    animation: xe-mempool-chart-animation .75s;
+}
+
+@keyframes xe-mempool-chart-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
