@@ -17,7 +17,7 @@ export const fetch_blocks_txs = async (blocks: Block[]) => {
 
     let requests = [] as RPCRequest[];
     const batch_size = 20;
-    for (let i = 0; i < txs_hashes.length; i + batch_size) {
+    for (let i = 0; i < txs_hashes.length; i += batch_size) {
         requests.push({
             method: DaemonRPCMethod.GetTransactions,
             params: { tx_hashes: txs_hashes.slice(i, i + batch_size) }
