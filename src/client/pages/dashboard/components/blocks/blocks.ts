@@ -47,8 +47,9 @@ export class DashboardBlocks {
     }
 
     remove_last_block() {
-        const last_block_item = this.block_items[this.block_items.length - 1];
-        last_block_item.box.element.remove();
-        this.block_items.pop();
+        const last_block_item = this.block_items.pop();
+        if (last_block_item) {
+            last_block_item.box.element.remove();
+        }
     }
 }
