@@ -160,9 +160,7 @@ export class BlockPage extends Page {
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.socket.addEventListener(`open`, () => {
-            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
-        });
+        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
     async load(parent: HTMLElement) {

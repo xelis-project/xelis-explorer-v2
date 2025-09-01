@@ -88,10 +88,8 @@ export class PeersPage extends Page {
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.socket.addEventListener(`open`, () => {
-            node.ws.methods.listen(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
-            node.ws.methods.listen(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
-        });
+        node.ws.methods.listen(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
+        node.ws.methods.listen(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
     }
 
     async load(parent: HTMLElement) {

@@ -205,14 +205,12 @@ export class DashboardPage extends Page {
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.socket.addEventListener(`open`, () => {
-            node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
-            node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
-            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
-            node.ws.methods.listen(DaemonRPCEvent.TransactionAddedInMempool, this.on_transaction_added_in_mempool);
-            node.ws.methods.listen(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
-            node.ws.methods.listen(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
-        });
+        node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+        node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
+        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+        node.ws.methods.listen(DaemonRPCEvent.TransactionAddedInMempool, this.on_transaction_added_in_mempool);
+        node.ws.methods.listen(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
+        node.ws.methods.listen(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
     }
 
     async load_top_stats() {

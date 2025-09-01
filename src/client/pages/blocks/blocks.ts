@@ -99,11 +99,9 @@ export class BlocksPage extends Page {
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.socket.addEventListener(`open`, () => {
-            node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
-            node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
-            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
-        });
+        node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+        node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
+        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
     add_empty_blocks() {
