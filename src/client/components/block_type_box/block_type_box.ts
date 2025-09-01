@@ -2,6 +2,13 @@ import { BlockType } from "@xelis/sdk/daemon/types";
 
 import './block_type_box.css';
 
+export const block_type_colors = {
+    [BlockType.Normal]: `#F4D35E`,
+    [BlockType.Sync]: `#A3C293`,
+    [BlockType.Side]: `#6A8DAD`,
+    [BlockType.Orphaned]: `#E07A5F`
+}
+
 export class BlockTypeBox {
     element: HTMLDivElement;
 
