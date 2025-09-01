@@ -23,9 +23,12 @@ export class DashboardBlockTime {
         const height = 150 - margin.top - margin.bottom;
 
         const data = [];
-        for (let i = 0; i < blocks.length; i++) {
-            const prev_block = blocks[i - 1];
-            const block = blocks[i];
+
+        const sorted_blocks = [...blocks];
+        sorted_blocks.sort((a, b) => b.height - a.height);
+        for (let i = 0; i < sorted_blocks.length; i++) {
+            const prev_block = sorted_blocks[i + 1];
+            const block = sorted_blocks[i];
             if (prev_block) {
                 const time_ms = block.timestamp - prev_block.timestamp;
                 if (prev_block.height === block.height) continue;
