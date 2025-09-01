@@ -116,6 +116,7 @@ export class DashboardPage extends Page {
 
                 this.page_data.blocks = this.dashboard_blocks.block_items.map(x => x.data!);
                 const { info, blocks } = this.page_data;
+                this.dashboard_chart_section_2.pools.set(blocks);
                 if (info) {
                     this.dashboard_chart_section_2.hashrate.set(info, blocks);
                     this.dashboard_chart_section_2.block_time.set(info, blocks);
