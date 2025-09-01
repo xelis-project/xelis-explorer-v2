@@ -14,7 +14,7 @@ export const fetch_block_txs = async (block: Block) => {
         requests.push({
             method: DaemonRPCMethod.GetTransactions,
             params: { tx_hashes: block.txs_hashes.slice(i, batch_size) }
-        });
+        })
     }
 
     const res = await node.rpc.batchRequest(requests);
