@@ -5,6 +5,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
 import { Block } from '@xelis/sdk/daemon/types';
+import { block_type_colors } from '../block_type_box/block_type_box';
 
 export class DAG {
     element: HTMLDivElement;
@@ -98,9 +99,10 @@ export class DAG {
     create_box_mesh(block: Block) {
         const size = 2.5;
         const group = new THREE.Group();
+        const color = block_type_colors[block.block_type];
 
-        const geo = new RoundedBoxGeometry(size, size, size, 10, 0.5);
-        const mat = new THREE.MeshBasicMaterial();
+        const geo = new RoundedBoxGeometry(size, size, 0.5, 10, 0.5);
+        const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
         const box = new THREE.Mesh(geo, mat);
         group.add(box);
 
@@ -111,13 +113,13 @@ export class DAG {
                 const geo = new TextGeometry(block.hash.substring(block.hash.length - 6), {
                     font: font,
                     size: 0.5,
-                    depth: 0.1
+                    depth: 0.5
                 });
-                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(`white`) });
+                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
                 const text_mesh = new THREE.Mesh(geo, mat);
                 geo.computeBoundingBox();
                 if (geo.boundingBox) {
-                    text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, 1)
+                    text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, -0.25);
                 }
 
                 group.add(text_mesh);
@@ -128,13 +130,14 @@ export class DAG {
                 const geo = new TextGeometry(block.height.toLocaleString(), {
                     font: font,
                     size: 0.5,
-                    depth: 0.1
+                    depth: 0.5
                 });
-                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(`white`) });
+
+                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
                 const text_mesh = new THREE.Mesh(geo, mat);
                 geo.computeBoundingBox();
                 if (geo.boundingBox) {
-                    text_mesh.position.set(geo.boundingBox.max.x / -2, -2, 1)
+                    text_mesh.position.set(geo.boundingBox.max.x / -2, -2, -0.25);
                 }
 
                 group.add(text_mesh);
