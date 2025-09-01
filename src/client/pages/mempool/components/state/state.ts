@@ -34,22 +34,6 @@ export class MempoolState {
         container_2.appendChild(this.mempool_tx_size_tree_map.box.element);
     }
 
-    reset() {
-        this.mempool_total.set_tx_count(0);
-        this.mempool_total.set_timer(Date.now());
-
-        this.mempool_total.set_fees(0);
-        this.mempool_total.set_size(0);
-
-        this.mempool_tx_type_bars.set_transfer_count(0, 0);
-        this.mempool_tx_type_bars.set_contract_invoke_count(0, 0);
-        this.mempool_tx_type_bars.set_multisig_count(0, 0);
-        this.mempool_tx_type_bars.set_contract_deploy_count(0, 0);
-        this.mempool_tx_type_bars.set_burn_count(0, 0);
-
-        this.mempool_tx_size_tree_map.build_chart();
-    }
-
     set(txs: Transaction[], top_block: Block) {
         let total_fees = 0;
         let total_size = 0;
