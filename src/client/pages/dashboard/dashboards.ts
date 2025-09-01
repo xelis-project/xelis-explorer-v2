@@ -139,7 +139,7 @@ export class DashboardPage extends Page {
         console.log("block_ordered", block_ordered);
         if (block_ordered) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === block_ordered.block_hash);
-            if (block_item && block_item.data && block_item.data.hash === block_ordered.block_hash) {
+            if (block_item && block_item.data) {
                 const new_block_type = block_ordered.block_type as BlockType;
                 block_item.data.block_type = new_block_type;
                 block_item.set_type(new_block_type);
@@ -153,7 +153,7 @@ export class DashboardPage extends Page {
         console.log("block_orphaned", block_orphaned);
         if (block_orphaned) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === block_orphaned.block_hash);
-            if (block_item && block_item.data && block_item.data.hash === block_orphaned.block_hash) {
+            if (block_item && block_item.data) {
                 const new_block_type = BlockType.Orphaned;
                 block_item.data.block_type = new_block_type;
                 block_item.set_type(new_block_type);
