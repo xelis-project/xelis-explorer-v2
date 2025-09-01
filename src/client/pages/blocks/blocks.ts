@@ -54,6 +54,17 @@ export class BlocksPage extends Page {
         const node = XelisNode.instance();
         const stable_height = await node.ws.methods.getStableHeight();
 
+        // normal blocks become sync under stableheight
+        // the node does not emit an event for this case
+        this.block_rows.forEach((block_row) => {
+            const block = block_row.data;
+            if (block && block.height <= stable_height && block.block_type === BlockType.Normal) {
+                block.block_type = BlockType.Sync;
+                block_row.set_type(BlockType.Sync);
+                block_row.animate_update();
+            }
+        });
+
         if (new_block && info) {
             const block_row = new BlockRow();
             block_row.set(new_block, info.block_time_target);
