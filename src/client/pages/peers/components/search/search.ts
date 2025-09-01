@@ -1,5 +1,6 @@
 import { Container } from "../../../../components/container/container";
 import { TextInput } from "../../../../components/text_input/text_input";
+import { PeersPage } from "../../peers";
 
 import './search.css';
 
@@ -16,7 +17,7 @@ export class PeersSearch {
 
         this.text_input = new TextInput();
         this.text_input.element.name = `peers_search_input`;
-        this.text_input.element.placeholder = `Search ip, country, or tag`;
+        this.text_input.element.placeholder = `Search ip, version, country, city or tag`;
         form.appendChild(this.text_input.element);
 
         let search_timeout_id: number | undefined;
@@ -30,6 +31,53 @@ export class PeersSearch {
     }
 
     async search() {
-        const value = this.text_input.element.value;
+        const value = this.text_input.element.value.toLowerCase();
+        const { peers_list } = PeersPage.instance();
+
+        if (value.length > 0) {
+            const filter_peer_ids = [] as string[];
+
+            peers_list.peer_items.forEach((peer_item) => {
+                const data = peer_item.data;
+
+                if (data) {
+                    const addr = data.peer.addr;
+                    if (addr.toLowerCase().indexOf(value) !== -1) {
+                        filter_peer_ids.push(data.peer.id);
+                        return;
+                    }
+
+                    const version = data.peer.version;
+                    if (version.toLowerCase().indexOf(value) !== -1) {
+                        filter_peer_ids.push(data.peer.id);
+                        return;
+                    }
+
+                    const tag = data.peer.tag;
+                    if (tag && tag.toLowerCase().indexOf(value) !== -1) {
+                        filter_peer_ids.push(data.peer.id);
+                        return;
+                    }
+
+                    const country = data.geo_location.country;
+                    if (country.toLowerCase().indexOf(value) !== -1) {
+                        filter_peer_ids.push(data.peer.id);
+                        return;
+                    }
+
+                    const city = data.geo_location.city;
+                    if (city.toLowerCase().indexOf(value) !== -1) {
+                        filter_peer_ids.push(data.peer.id);
+                        return;
+                    }
+                }
+            });
+
+            peers_list.filter_peer_ids = filter_peer_ids;
+        } else {
+            peers_list.filter_peer_ids = undefined;
+        }
+
+        peers_list.update_filter();
     }
 }

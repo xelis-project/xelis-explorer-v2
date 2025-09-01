@@ -38,7 +38,9 @@ export class PeersList {
         });
 
         this.peer_items.push(peer_item);
-        this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
+        if (this.is_in_filter(peer_item)) {
+            this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
+        }
         return peer_item;
     }
 
@@ -57,6 +59,31 @@ export class PeersList {
         this.container.element.replaceChildren();
         peers_locations.forEach((peer_location) => {
             this.prepend_peer(peer_location);
+        });
+    }
+
+    filter_peer_ids = undefined as string[] | undefined;
+    is_in_filter(peer_item: PeerItem) {
+        if (this.filter_peer_ids) {
+            const data = peer_item.data;
+            if (data && this.filter_peer_ids && this.filter_peer_ids.length > 0) {
+                return this.filter_peer_ids.indexOf(data.peer.id) !== -1;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    update_filter() {
+        this.peer_items.forEach((peer_item) => {
+            const parent_element = peer_item.box.element.parentElement;
+            if (!this.is_in_filter(peer_item)) {
+                peer_item.box.element.remove();
+            } else if (!parent_element) {
+                this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
+            }
         });
     }
 }
