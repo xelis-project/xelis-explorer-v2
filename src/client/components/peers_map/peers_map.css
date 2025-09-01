@@ -2,6 +2,19 @@
     background-color: #090909;
 }
 
+.xe-peers-map-peer-count {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: white;
+    z-index: 999;
+    font-weight: bold;
+    font-size: 1rem;
+    background: black;
+    padding: .25rem .6rem;
+    border-radius: .5rem;
+}
+
 .xe-peers-map-loading {
     position: absolute;
     width: 100%;

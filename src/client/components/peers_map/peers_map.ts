@@ -21,6 +21,7 @@ export class PeersMap {
     element: HTMLDivElement;
     map!: leaflet.Map;
     loading_element?: HTMLDivElement;
+    peer_count_element: HTMLDivElement;
 
     peer_markers: Record<string, PeerMarker>;
 
@@ -28,6 +29,10 @@ export class PeersMap {
         this.element = document.createElement(`div`);
         this.peer_markers = {};
         this.setup_map();
+
+        this.peer_count_element = document.createElement(`div`);
+        this.peer_count_element.classList.add(`xe-peers-map-peer-count`);
+        this.element.appendChild(this.peer_count_element);
     }
 
     async setup_map() {
@@ -37,6 +42,10 @@ export class PeersMap {
         leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         }).addTo(this.map);
+    }
+
+    set_peer_count(count: number) {
+        this.peer_count_element.innerHTML = `${count.toLocaleString()}P`;
     }
 
     async fetch_peers_locations(peers: Peer[]) {
@@ -64,6 +73,8 @@ export class PeersMap {
 
     async set(peers_locations: PeerLocation[]) {
         const group_markers = {} as Record<string, PeerLocation[]>;
+
+        this.set_peer_count(peers_locations.length);
 
         peers_locations.forEach((peer_location) => {
             const { geo_location } = peer_location;
