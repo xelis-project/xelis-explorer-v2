@@ -139,7 +139,7 @@ export class BlockRow {
         const { animate, utils } = await import("animejs");
         animate(this.element, {
             translateX: [`100%`, 0],
-            duration: 500,
+            duration: 750,
             onComplete: utils.cleanInlineStyles
         });
     }
@@ -147,7 +147,7 @@ export class BlockRow {
     async animate_update() {
         const { animate, eases, utils } = await import("animejs");
         animate(this.element, {
-            scale: [`100%`, `95%`, `100%`],
+            scale: [`100%`, `98%`, `100%`],
             duration: 1000,
             ease: eases.inBack(3),
             onComplete: utils.cleanInlineStyles
