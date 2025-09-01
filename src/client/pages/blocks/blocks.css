@@ -1,10 +1,11 @@
-.xe-blocks {
-
-}
+.xe-blocks {}
 
 .xe-blocks-table {
     animation: xe-blocks-table-appear-animation .4s;
     min-height: 50rem;
+
+    /* for translate animations stay inside container */
+    overflow: hidden;
 }
 
 @keyframes xe-blocks-table-appear-animation {

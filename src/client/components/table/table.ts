@@ -52,4 +52,9 @@ export class Table {
     set_clickable() {
         this.element.classList.add(`xe-table-clickable`);
     }
+
+    remove_last() {
+        const last_child = this.body_element.lastChild;
+        if (last_child) last_child.remove();
+    }
 }

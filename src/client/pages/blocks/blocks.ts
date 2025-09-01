@@ -5,6 +5,8 @@ import { Table } from "../../components/table/table";
 import { Container } from "../../components/container/container";
 import { BlockRow } from "./block_row/block_row";
 import { App } from "../../app/app";
+import { Block, BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, GetInfoResult } from "@xelis/sdk/daemon/types";
+import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
 
 import './blocks.css';
 
@@ -17,8 +19,17 @@ export class BlocksPage extends Page {
     container_table: Container;
     table: Table;
 
+    block_rows: BlockRow[];
+    page_data: {
+        info?: GetInfoResult;
+    }
+
     constructor() {
         super();
+
+        this.block_rows = [];
+        this.page_data = {};
+
         this.master = new Master();
         this.element.appendChild(this.master.element);
         this.master.content.classList.add(`xe-blocks`);
@@ -35,22 +46,86 @@ export class BlocksPage extends Page {
         this.table.set_head_row(titles);
     }
 
-    async load(parent: HTMLElement) {
-        super.load(parent);
-        this.set_window_title(BlocksPage.title);
-        const node = XelisNode.instance();
+    on_new_block = async (new_block?: Block, err?: Error) => {
+        console.log("new_block", new_block)
 
-        for (let i = 0; i < 50; i++) {
+        const { info } = this.page_data;
+
+        const node = XelisNode.instance();
+        const stable_height = await node.ws.methods.getStableHeight();
+
+        if (new_block && info) {
+            const block_row = new BlockRow();
+            block_row.set(new_block, info);
+            this.table.prepend_row(block_row.element);
+            block_row.animate_prepend();
+            this.table.remove_last();
+        }
+    }
+
+    on_block_ordered = (block_ordered?: BlockOrdered | undefined, err?: Error) => {
+        console.log("block_ordered", block_ordered);
+        if (block_ordered) {
+            const block_row = this.block_rows.find(b => b.data && b.data.hash === block_ordered.block_hash);
+            if (block_row && block_row.data) {
+                const new_block_type = block_ordered.block_type as BlockType;
+                block_row.data.block_type = new_block_type;
+                block_row.set_type(new_block_type);
+                block_row.data.topoheight = block_ordered.topoheight;
+                block_row.animate_update();
+            }
+        }
+    }
+
+    on_block_orphaned = (block_orphaned?: BlockOrphaned | undefined, err?: Error) => {
+        console.log("block_orphaned", block_orphaned);
+        if (block_orphaned) {
+            const block_row = this.block_rows.find(b => b.data && b.data.hash === block_orphaned.block_hash);
+            if (block_row && block_row.data) {
+                const new_block_type = BlockType.Orphaned;
+                block_row.data.block_type = new_block_type;
+                block_row.set_type(new_block_type);
+                block_row.animate_update();
+            }
+        }
+    }
+
+    clear_node_events() {
+        const node = XelisNode.instance();
+        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
+        node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
+    }
+
+    async listen_node_events() {
+        const node = XelisNode.instance();
+        node.ws.socket.addEventListener(`open`, () => {
+            node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+            node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
+            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+        });
+    }
+
+    add_empty_blocks() {
+        for (let i = 0; i < 100; i++) {
             const block_row = new BlockRow();
             this.table.set_row_loading(block_row.element, true);
             this.table.prepend_row(block_row.element);
         }
+    }
+
+    async load(parent: HTMLElement) {
+        super.load(parent);
+        this.set_window_title(BlocksPage.title);
+        this.listen_node_events();
+        const node = XelisNode.instance();
+
+        this.add_empty_blocks();
 
         const info = await node.rpc.getInfo();
-        const blocks = await node.rpc.getBlocksRangeByTopoheight({
-            start_topoheight: info.topoheight - 20,
-            end_topoheight: info.topoheight
-        });
+        this.page_data.info = info;
+
+        const blocks = await fetch_blocks(info.height, 100);
 
         this.table.body_element.replaceChildren();
         blocks.forEach((block) => {
@@ -62,6 +137,12 @@ export class BlocksPage extends Page {
             });
 
             this.table.prepend_row(block_row.element);
+            this.block_rows.push(block_row);
         });
+    }
+
+    unload() {
+        super.unload();
+        this.clear_node_events();
     }
 }
