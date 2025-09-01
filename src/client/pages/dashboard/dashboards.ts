@@ -96,6 +96,31 @@ export class DashboardPage extends Page {
 
         await this.load_top_stats();
         if (new_block) {
+
+            const node = XelisNode.instance();
+            const stable_height = await node.ws.methods.getStableHeight();
+
+            // normal blocks become sync under stableheight
+            // the node does not emit an event for this case
+            const side_block_heights = this.dashboard_blocks.block_items.filter(b => {
+                if (b.data && b.data.block_type === BlockType.Side) {
+                    return b;
+                }
+            }).map(b => b.data!.height);
+
+            this.dashboard_blocks.block_items.forEach((block_item) => {
+                const block = block_item.data;
+                if (block &&
+                    block.height <= stable_height
+                    && block.block_type === BlockType.Normal
+                    && side_block_heights.indexOf(block.height) === -1
+                ) {
+                    block.block_type = BlockType.Sync;
+                    block_item.set_type(BlockType.Sync);
+                    block_item.animate_update();
+                }
+            });
+
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
             if (!block_item) {
                 this.dashboard_blocks.prepend_block(new_block).animate_prepend();
