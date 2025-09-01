@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { TxBlock } from '../../../../components/tx_item/tx_item';
 import { Block } from '@xelis/sdk/daemon/types';
 
 export class MempoolChartBlocksTxs {
@@ -31,7 +30,7 @@ export class MempoolChartBlocksTxs {
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
         const x_scale = d3
-            .scaleBand<string>()
+            .scaleBand<number>()
             .domain(data.map((d) => d.label))
             .range([0, width])
             .padding(0.2);
@@ -72,5 +71,15 @@ export class MempoolChartBlocksTxs {
             .style("text-anchor", "middle")
             .style('font-weight', `bold`)
             .style('fill', 'white');
+    }
+
+    set_tx_count(tx_count: number) {
+        this.box_chart.element_value.innerHTML = `${tx_count.toLocaleString()} TXS`;
+    }
+
+    set(blocks: Block[]) {
+        const total_txs = blocks.reduce((t, b) => t + b.txs_hashes.length, 0);
+        this.set_tx_count(total_txs);
+        this.build_chart(blocks);
     }
 }

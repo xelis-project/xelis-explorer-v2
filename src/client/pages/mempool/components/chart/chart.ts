@@ -20,14 +20,4 @@ export class MempoolChart {
     set_loading(loading: boolean) {
         // TODO
     }
-
-    set_tx_count(tx_count: number) {
-        this.blocks_txs.box_chart.element_value.innerHTML = `${tx_count.toLocaleString()} TXS`;
-    }
-
-    set(blocks: Block[]) {
-        const total_txs = blocks.reduce((t, b) => t + b.txs_hashes.length, 0);
-        this.set_tx_count(total_txs);
-        this.blocks_txs.build_chart(blocks);
-    }
 }
