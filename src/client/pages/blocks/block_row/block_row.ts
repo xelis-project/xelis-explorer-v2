@@ -24,6 +24,8 @@ export class BlockRow {
     cell_9_element: HTMLTableCellElement;
     cell_10_element: HTMLTableCellElement;
 
+    data?: Block;
+
     constructor() {
         this.element = document.createElement(`tr`);
 
@@ -50,6 +52,7 @@ export class BlockRow {
     }
 
     set(block: Block, info: GetInfoResult) {
+        this.data = block;
         this.set_topoheight(block.topoheight);
         this.set_height(block.height);
         this.set_type(block.block_type);
@@ -130,5 +133,24 @@ export class BlockRow {
         set_age();
         if (this.age_interval_id) window.clearInterval(this.age_interval_id);
         this.age_interval_id = window.setInterval(set_age, 1000);
+    }
+
+    async animate_prepend() {
+        const { animate, utils } = await import("animejs");
+        animate(this.element, {
+            translateX: [`100%`, 0],
+            duration: 500,
+            onComplete: utils.cleanInlineStyles
+        });
+    }
+
+    async animate_update() {
+        const { animate, eases, utils } = await import("animejs");
+        animate(this.element, {
+            scale: [`100%`, `95%`, `100%`],
+            duration: 1000,
+            ease: eases.inBack(3),
+            onComplete: utils.cleanInlineStyles
+        });
     }
 }
