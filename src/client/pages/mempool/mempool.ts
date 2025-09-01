@@ -23,8 +23,17 @@ export class MempoolPage extends Page {
     mempool_txs_list: MempoolTxsList;
     mempool_search: MempoolSearch;
 
+    page_data: {
+        blocks: Block[]
+    }
+
     constructor() {
         super();
+
+        this.page_data = {
+            blocks: []
+        };
+
         this.master = new Master();
         this.master.content.classList.add(`xe-mempool`);
         this.element.appendChild(this.master.element);
@@ -60,7 +69,11 @@ export class MempoolPage extends Page {
 
     on_new_block = async (new_block?: Block, err?: Error) => {
         if (new_block) {
+            this.page_data.blocks.push(new_block);
+            this.page_data.blocks.pop();
 
+            this.mempool_chart.blocks_txs.set(this.page_data.blocks);
+            this.mempool_state.reset();
         }
     }
 
@@ -90,10 +103,11 @@ export class MempoolPage extends Page {
         const top_block = await node.rpc.getTopBlock();
         const mempool = await node.rpc.getMemPool();
         const blocks = await fetch_blocks(top_block.height, 50);
+        this.page_data.blocks = blocks;
 
         this.mempool_state.set(mempool, top_block);
         this.mempool_txs_list.set([]);
-        this.mempool_chart.set(blocks);
+        this.mempool_chart.blocks_txs.set(blocks);
     }
 
     unload() {
