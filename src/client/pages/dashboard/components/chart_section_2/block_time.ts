@@ -32,7 +32,7 @@ export class DashboardBlockTime {
             if (prev_block) {
                 const time_ms = block.timestamp - prev_block.timestamp;
                 if (prev_block.height === block.height) continue;
-                data.push({ x: block.height, y: time_ms });
+                data.unshift({ x: block.height, y: time_ms });
             }
         }
 
