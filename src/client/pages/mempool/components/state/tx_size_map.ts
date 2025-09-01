@@ -24,8 +24,12 @@ export class MempoolTxSizeTreeMap {
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
+        interface TreeNode {
+            value?: number;
+            children?: TreeNode[];
+        }
+
         const data = {
-            name: "root",
             children: [
                 { name: "A", value: 100 },
                 { name: "B", value: 300 },
@@ -35,33 +39,36 @@ export class MempoolTxSizeTreeMap {
             ]
         };
 
-        const root = d3.hierarchy(data).sum(function (d) { return d.value });
+        const root = d3.hierarchy<TreeNode>(data).sum((d) => { return d.value ?? 0 });
 
-        d3.treemap()
+        const treemap = d3.treemap<TreeNode>()
             .size([width, height])
             .padding(15)
-            (root);
+
+        treemap(root);
+
+        const leaves = root.leaves() as d3.HierarchyRectangularNode<any>[];
 
         svg
             .selectAll("rect")
-            .data(root.leaves())
+            .data(leaves)
             .enter()
             .append("rect")
             .attr("rx", 10)
-            .attr('x', function (d) { return d.x0; })
-            .attr('y', function (d) { return d.y0; })
-            .attr('width', function (d) { return d.x1 - d.x0; })
-            .attr('height', function (d) { return d.y1 - d.y0; })
+            .attr('x', (d) => { return d.x0; })
+            .attr('y', (d) => { return d.y0; })
+            .attr('width', (d) => { return d.x1 - d.x0; })
+            .attr('height', (d) => { return d.y1 - d.y0; })
             .style("stroke", "none")
             .style("fill", "red");
 
         svg
             .selectAll("text")
-            .data(root.leaves())
+            .data(leaves)
             .enter()
             .append("text")
-            .attr("x", function (d) { return d.x0 + 5 })
-            .attr("y", function (d) { return d.y0 + 20 })
+            .attr("x", (d) => { return d.x0 + 5 })
+            .attr("y", (d) => { return d.y0 + 20 })
             .text(function (d) { return d.data.name })
             .attr("font-size", "1rem")
             .attr("fill", "white");
