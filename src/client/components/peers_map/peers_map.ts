@@ -53,20 +53,24 @@ export class PeersMap {
             const addr = parse_addr(peer.addr);
             return { peer, addr };
         }).filter(p => p !== undefined);
-        const ips = peers_addr.map(p => p.addr.ip);
 
+        const ips = peers_addr.map(p => p.addr.ip);
         let peers_locations: PeerLocation[] = [];
 
-        const geo_locations = await fetch_geo_location(ips);
-        Object.keys(geo_locations).forEach((key) => {
-            const peer_addr = peers_addr.find(p => p.addr.ip === key);
-            if (!peer_addr) return;
+        const batch_size = 50;
+        for (let i = 0; i < ips.length; i += batch_size) {
+            const ips_to_fetch = ips.slice(i, i + batch_size);
+            const geo_locations = await fetch_geo_location(ips_to_fetch);
+            Object.keys(geo_locations).forEach((key) => {
+                const peer_addr = peers_addr.find(p => p.addr.ip === key);
+                if (!peer_addr) return;
 
-            peers_locations.push({
-                peer: peer_addr.peer,
-                geo_location: geo_locations[key]
+                peers_locations.push({
+                    peer: peer_addr.peer,
+                    geo_location: geo_locations[key]
+                });
             });
-        });
+        }
 
         return peers_locations;
     }
