@@ -56,7 +56,7 @@ export class BlocksPage extends Page {
 
         if (new_block && info) {
             const block_row = new BlockRow();
-            block_row.set(new_block, info);
+            block_row.set(new_block, info.block_time_target);
             this.table.prepend_row(block_row.element);
             block_row.animate_prepend();
             this.table.remove_last();
@@ -128,7 +128,7 @@ export class BlocksPage extends Page {
         this.table.body_element.replaceChildren();
         blocks.forEach((block) => {
             const block_row = new BlockRow();
-            block_row.set(block, info);
+            block_row.set(block, info.block_time_target);
 
             block_row.element.addEventListener(`click`, () => {
                 App.instance().go_to(`/block/${block.hash}`);

@@ -51,7 +51,7 @@ export class BlockRow {
         this.element.appendChild(this.cell_10_element);
     }
 
-    set(block: Block, info: GetInfoResult) {
+    set(block: Block, block_time_target: number) {
         this.data = block;
         this.set_topoheight(block.topoheight);
         this.set_height(block.height);
@@ -61,7 +61,7 @@ export class BlockRow {
         this.set_tx_count(block.txs_hashes.length);
         this.set_hash(block.hash);
         this.set_reward(block.reward);
-        this.set_diff(parseInt(block.difficulty), info.block_time_target);
+        this.set_diff(parseInt(block.difficulty), block_time_target);
         this.set_age(block.timestamp);
     }
 
