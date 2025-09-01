@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block } from '@xelis/sdk/daemon/types';
+import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
 import { DashboardPage } from '../../dashboards';
 import prettyMilliseconds from 'pretty-ms';
 
@@ -76,9 +76,8 @@ export class DashboardBlockTime {
             .attr(`stroke`, `rgba(2, 255, 209, 0.3)`);
     }
 
-    update() {
-        const { info, blocks } = DashboardPage.instance().page_data;
-        if (info) this.set_avg_time(info.average_block_time);
+    set(info: GetInfoResult, blocks: Block[]) {
+        this.set_avg_time(info.average_block_time);
         this.build_chart(blocks);
     }
 }

@@ -17,9 +17,8 @@ export class DashboardBlocks {
         this.container.element.classList.add(`xe-dashboard-blocks`, `scrollbar-1`, `scrollbar-1-right`);
     }
 
-    update() {
+    set(blocks: Block[]) {
         this.container.element.replaceChildren();
-        const blocks = DashboardPage.instance().page_data.blocks;
         blocks.forEach(block => this.prepend_block(block));
     }
 

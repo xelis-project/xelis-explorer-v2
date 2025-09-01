@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { DashboardPage } from '../../dashboards';
 import { format_address } from '../../../../utils/format_address';
+import { Block } from '@xelis/sdk/daemon/types';
 
 interface DataItem {
     label: string;
@@ -101,8 +102,7 @@ export class DashboardPools {
             .text((d) => `${d.label} (${d.value})`);
     }
 
-    update() {
-        const { blocks } = DashboardPage.instance().page_data;
+    set(blocks: Block[]) {
         const miners = {} as Record<string, number>;
 
         for (let i = 0; i < blocks.length; i++) {

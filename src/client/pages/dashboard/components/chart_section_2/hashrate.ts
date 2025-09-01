@@ -124,11 +124,8 @@ export class DashboardHashRate {
             .style('fill', 'rgba(2, 255, 209, 0.8)');
     }
 
-    update() {
-        const { info, blocks } = DashboardPage.instance().page_data;
-        if (info) {
-            this.set_hashrate(info);
-            this.build_chart(blocks, info);
-        }
+    set(info: GetInfoResult, blocks: Block[]) {
+        this.set_hashrate(info);
+        this.build_chart(blocks, info);
     }
 }

@@ -15,10 +15,9 @@ export class DashboardTxs {
         this.tx_items = [];
     }
 
-    update() {
+    set(txs_blocks: TxBlock[]) {
         this.container.element.replaceChildren();
-        const { txs_block } = DashboardPage.instance().page_data;
-        txs_block.forEach(tx_block => this.prepend_tx(tx_block));
+        txs_blocks.forEach(tx_block => this.prepend_tx(tx_block));
     }
 
     set_loading() {

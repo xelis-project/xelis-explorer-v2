@@ -38,7 +38,7 @@ export class DashboardPage extends Page {
         size?: DiskSize;
         p2p_status?: P2PStatusResult;
         blocks: Block[];
-        txs_block: TxBlock[];
+        txs_blocks: TxBlock[];
     }
 
     master: Master;
@@ -48,7 +48,7 @@ export class DashboardPage extends Page {
 
         this.page_data = {
             blocks: [],
-            txs_block: []
+            txs_blocks: []
         };
 
         this.master = new Master();
@@ -94,7 +94,7 @@ export class DashboardPage extends Page {
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
-        this.load_top_stats();
+        await this.load_top_stats();
         if (new_block) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
             if (!block_item) {
@@ -114,9 +114,12 @@ export class DashboardPage extends Page {
 
                 update_txs();
 
-                const blocks = this.dashboard_blocks.block_items.map(x => x.data!);
-                this.dashboard_chart_section_2.hashrate.update();
-                this.dashboard_chart_section_2.block_time.update();
+                this.page_data.blocks = this.dashboard_blocks.block_items.map(x => x.data!);
+                const { info, blocks } = this.page_data;
+                if (info) {
+                    this.dashboard_chart_section_2.hashrate.set(info, blocks);
+                    this.dashboard_chart_section_2.block_time.set(info, blocks);
+                }
             } else {
                 block_item.set(new_block);
                 block_item.animate_update();
@@ -234,10 +237,10 @@ export class DashboardPage extends Page {
         const blocks = await fetch_blocks(info.height, 100);
 
         this.page_data.blocks = blocks;
-        this.dashboard_chart_section_2.hashrate.update();
-        this.dashboard_chart_section_2.block_time.update();
-        this.dashboard_chart_section_2.pools.update();
-        this.dashboard_blocks.update();
+        this.dashboard_chart_section_2.hashrate.set(info, blocks);
+        this.dashboard_chart_section_2.block_time.set(info, blocks);
+        this.dashboard_chart_section_2.pools.set(blocks);
+        this.dashboard_blocks.set(blocks);
     }
 
     async load_blocks_txs() {
@@ -246,17 +249,17 @@ export class DashboardPage extends Page {
 
         await fetch_blocks_txs(blocks);
 
-        const txs_block: TxBlock[] = [];
+        const txs_blocks: TxBlock[] = [];
         blocks.forEach((block) => {
             if (block.transactions) {
                 block.transactions.forEach((tx) => {
-                    txs_block.push({ block, tx });
+                    txs_blocks.push({ block, tx });
                 });
             }
         });
 
-        this.page_data.txs_block = txs_block;
-        this.dashboard_txs.update();
+        this.page_data.txs_blocks = txs_blocks;
+        this.dashboard_txs.set(txs_blocks);
     }
 
     async load_peers() {
