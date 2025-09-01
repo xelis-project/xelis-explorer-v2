@@ -1,3 +1,63 @@
-.xe-state {
-    
+.xe-mempool-state {
+    animation: xe-mempool-state-appear-animation .8s;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+@keyframes xe-mempool-state-appear-animation {
+    0% {
+        translate: 0 -25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-mempool-state-container-1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-mempool-state-container-1>:nth-child(1) {
+    flex: 1;
+}
+
+.xe-mempool-state-container-1>:nth-child(2) {
+    flex: 2;
+}
+
+.xe-mempool-total {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-mempool-tx-type-bars {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-mempool-tx-type-bars>div {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-mempool-tx-type-bars-bar {
+    width: 100%;
+    height: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: .5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.xe-mempool-tx-type-bars-bar>:first-child {
+    position: absolute;
+    height: 100%;
+    background-color: #156358;
 }

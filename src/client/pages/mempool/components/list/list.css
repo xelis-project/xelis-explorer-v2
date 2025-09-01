@@ -6,6 +6,7 @@
     gap: 1rem;
     flex-direction: column;
     animation: xe-mempool-list-animation .65s;
+    height: 100%;
 }
 
 @keyframes xe-mempool-list-animation {
