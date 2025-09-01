@@ -69,8 +69,8 @@ export class MempoolPage extends Page {
 
     on_new_block = async (new_block?: Block, err?: Error) => {
         if (new_block) {
+            this.page_data.blocks.unshift();
             this.page_data.blocks.push(new_block);
-            this.page_data.blocks.pop();
 
             this.mempool_chart.blocks_txs.set(this.page_data.blocks);
             this.mempool_state.reset();
