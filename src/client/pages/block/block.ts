@@ -53,7 +53,6 @@ export class BlockPage extends Page {
     }
 
     page_data: {
-        info?: GetInfoResult;
         block?: Block;
     }
     master: Master;
@@ -98,7 +97,7 @@ export class BlockPage extends Page {
     }
 
     async load_block() {
-        const server_data = BlockPage.consume_server_data<BlockPageServerData>();
+        const { server_data, consumed } = BlockPage.consume_server_data<BlockPageServerData>();
         const id = BlockPage.get_pattern_id(window.location.href);
 
         this.page_data = {
@@ -106,7 +105,7 @@ export class BlockPage extends Page {
         };
 
         try {
-            if (id) {
+            if (!consumed && id) {
                 const block_hash = id;
                 this.set_window_title(`Block ${block_hash}`);
 
@@ -117,17 +116,9 @@ export class BlockPage extends Page {
                         hash: block_hash
                     });
                 }
-
-                this.page_data.info = await node.rpc.getInfo();
             }
         } catch {
 
-        }
-
-        if (!this.page_data.block) {
-            const not_found_page = new NotFoundPage();
-            this.element.replaceChildren();
-            this.element.appendChild(not_found_page.element);
         }
     }
 
@@ -164,16 +155,13 @@ export class BlockPage extends Page {
         node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
-    display_data() {
-        if (this.page_data.block && this.page_data.info) {
-            const { block, info } = this.page_data;
-            this.block_info.set(block, info);
-            this.block_miner.set(block);
-            this.block_hashrate.set(block, info);
-            this.block_extra.set(block);
-            this.block_graph.set(block);
-            this.block_txs.load(block);
-        }
+    set(block: Block, info: GetInfoResult) {
+        this.block_info.set(block, info);
+        this.block_miner.set(block);
+        this.block_hashrate.set(block, info);
+        this.block_extra.set(block);
+        this.block_graph.set(block);
+        this.block_txs.load(block);
     }
 
     async load(parent: HTMLElement) {
@@ -181,7 +169,18 @@ export class BlockPage extends Page {
 
         this.listen_node_events();
         await this.load_block();
-        this.display_data();
+
+        const node = XelisNode.instance();
+        const info = await node.rpc.getInfo();
+
+        const { block } = this.page_data;
+        if (block) {
+            this.set_element(this.master.element);
+            this.set(block, info);
+        } else {
+            const not_found_page = new NotFoundPage();
+            this.set_element(not_found_page.element);
+        }
     }
 
     unload(): void {

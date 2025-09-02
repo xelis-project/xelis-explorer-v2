@@ -83,7 +83,7 @@ export class BlockHeightPage extends Page {
     }
 
     async load_blocks() {
-        const server_data = BlockHeightPage.consume_server_data<BlockHeightServerData>();
+        const { server_data, consumed } = BlockHeightPage.consume_server_data<BlockHeightServerData>();
         const id = BlockHeightPage.get_pattern_id(window.location.href);
 
         this.page_data = {
@@ -91,7 +91,7 @@ export class BlockHeightPage extends Page {
         }
 
         try {
-            if (id) {
+            if (!consumed && id) {
                 const block_height = parseInt(id);
                 this.set_window_title(`Block Height ${block_height.toLocaleString()}`);
 
@@ -106,15 +106,10 @@ export class BlockHeightPage extends Page {
         } catch {
 
         }
-
-        if (this.page_data.blocks.length === 0) {
-            const not_found_page = new NotFoundPage();
-            this.element.replaceChildren();
-            this.element.appendChild(not_found_page.element);
-        }
     }
 
     add_empty_blocks() {
+        this.table.body_element.replaceChildren();
         for (let i = 0; i < 5; i++) {
             const block_row = new BlockRow();
             this.table.set_row_loading(block_row.element, true);
@@ -129,17 +124,25 @@ export class BlockHeightPage extends Page {
         await this.load_blocks();
 
         const { blocks } = this.page_data;
-        this.table.body_element.replaceChildren();
-        blocks.forEach((block) => {
-            const block_row = new BlockRow();
-            block_row.set(block);
 
-            block_row.element.addEventListener(`click`, () => {
-                App.instance().go_to(`/block/${block.hash}`);
+        if (blocks.length > 0) {
+            this.set_element(this.master.element);
+
+            this.table.body_element.replaceChildren();
+            blocks.forEach((block) => {
+                const block_row = new BlockRow();
+                block_row.set(block);
+
+                block_row.element.addEventListener(`click`, () => {
+                    App.instance().go_to(`/block/${block.hash}`);
+                });
+
+                this.table.prepend_row(block_row.element);
             });
-
-            this.table.prepend_row(block_row.element);
-        });
+        } else {
+            const not_found_page = new NotFoundPage();
+            this.set_element(not_found_page.element);
+        }
     }
 
     unload() {

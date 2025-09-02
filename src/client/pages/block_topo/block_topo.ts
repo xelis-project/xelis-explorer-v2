@@ -49,7 +49,7 @@ export class BlockTopoPage extends Page {
     }
 
     async load_block() {
-        const server_data = BlockTopoPage.consume_server_data<BlockPageServerData>();
+        const { server_data, consumed } = BlockTopoPage.consume_server_data<BlockPageServerData>();
         const id = BlockTopoPage.get_pattern_id(window.location.href);
 
         this.block_page.page_data = {
@@ -57,7 +57,7 @@ export class BlockTopoPage extends Page {
         };
 
         try {
-            if (id) {
+            if (!consumed && id) {
                 const block_topoheight = parseInt(id);
                 this.set_window_title(`Block Topo ${block_topoheight.toLocaleString()}`);
 
@@ -68,17 +68,9 @@ export class BlockTopoPage extends Page {
                         topoheight: block_topoheight
                     });
                 }
-
-                this.block_page.page_data.info = await node.rpc.getInfo();
             }
         } catch {
 
-        }
-
-        if (!this.block_page.page_data.block) {
-            const not_found_page = new NotFoundPage();
-            this.element.replaceChildren();
-            this.element.appendChild(not_found_page.element);
         }
     }
 
@@ -87,7 +79,17 @@ export class BlockTopoPage extends Page {
 
         this.block_page.listen_node_events();
         await this.load_block();
-        this.block_page.display_data();
+
+        const node = XelisNode.instance();
+        const info = await node.rpc.getInfo();
+        const { block } = this.block_page.page_data;
+        if (block) {
+            this.set_element(this.block_page.element);
+            this.block_page.set(block, info);
+        } else {
+            const not_found_page = new NotFoundPage();
+            this.set_element(not_found_page.element);
+        }
     }
 
     unload() {

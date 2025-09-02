@@ -21,14 +21,17 @@ export class BlockTxs {
         this.table.set_head_row(titles);
     }
 
-    async load(block: Block) {
-        const node = XelisNode.instance();
-
+    add_empty_rows() {
+        this.table.body_element.replaceChildren();
         for (let i = 0; i < 20; i++) {
             const tx_row = new TxRow();
             this.table.set_row_loading(tx_row.element, true);
             this.table.prepend_row(tx_row.element);
         }
+    }
+
+    async load(block: Block) {
+        const node = XelisNode.instance();
 
         // A block with a lot of txs: e3818b9824351af0cbae4db51bd73381bb5838949a76d65d910a9bf0d48cdc2e
         const requests = [] as RPCRequest[];
