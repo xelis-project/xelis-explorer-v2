@@ -34,14 +34,15 @@ export class Page extends Singleton<Page> {
         return `<script>window["SSR_${this.pathname}"] = ${JSON.stringify(data)};</script>`;
     }
 
-    static consume_server_data<T>() {
+    static consume_server_data<T>(): { server_data?: T, consumed: boolean } {
         const key = `SSR_${this.pathname}`;
-        // @ts-ignore
-        const data = window[key] as T;
-        if (data) {
+        if (key in window) {
+            const server_data = window[key as any] as T;
             Reflect.deleteProperty(window, key); // remove data as it might be outdated when returning to page
-            return data;
+            return { server_data, consumed: true };
         }
+
+        return { server_data: undefined, consumed: false };
     }
 
     constructor() {
@@ -59,5 +60,10 @@ export class Page extends Singleton<Page> {
 
     unload() {
         this.element.remove();
+    }
+
+    set_element(element: HTMLElement) {
+        this.element.replaceChildren();
+        this.element.appendChild(element);
     }
 }
