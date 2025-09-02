@@ -1,11 +1,11 @@
-.xe-mempool-state {
-    animation: xe-mempool-state-appear-animation .8s;
+.xe-mempool-summary {
+    animation: xe-mempool-summary-appear-animation .8s;
     display: flex;
     gap: 1rem;
     flex-direction: column;
 }
 
-@keyframes xe-mempool-state-appear-animation {
+@keyframes xe-mempool-summary-appear-animation {
     0% {
         translate: 0 -25%;
     }
@@ -15,21 +15,21 @@
     }
 }
 
-.xe-mempool-state-container-1 {
+.xe-mempool-summary-container-1 {
     display: flex;
     gap: 1rem;
     flex-direction: row;
 }
 
-.xe-mempool-state-container-1>:nth-child(1) {
+.xe-mempool-summary-container-1>:nth-child(1) {
     flex: 1;
 }
 
-.xe-mempool-state-container-1>:nth-child(2) {
+.xe-mempool-summary-container-1>:nth-child(2) {
     flex: 2;
 }
 
-.xe-mempool-total {
+.xe-mempool-summary {
     display: flex;
     gap: .5rem;
     flex-direction: column;

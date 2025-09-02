@@ -3,12 +3,11 @@ import { XelisNode } from "../../app/xelis_node";
 import { Master } from "../../components/master/master";
 import { TxBlock } from "../../components/tx_item/tx_item";
 import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
-import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 import { Page } from "../page";
 import { MempoolChart } from "./components/chart/chart";
 import { MempoolTxsList } from "./components/list/list";
 import { MempoolSearch } from "./components/search/search";
-import { MempoolState } from "./components/state/state";
+import { MempoolSummary } from "./components/summary/summary";
 
 import './mempool.css';
 
@@ -18,7 +17,7 @@ export class MempoolPage extends Page {
 
     master: Master;
 
-    mempool_state: MempoolState;
+    mempool_summary: MempoolSummary;
     mempool_chart: MempoolChart;
     mempool_txs_list: MempoolTxsList;
     mempool_search: MempoolSearch;
@@ -48,8 +47,8 @@ export class MempoolPage extends Page {
         const sub_container_1 = document.createElement(`div`);
         container_1.appendChild(sub_container_1);
 
-        this.mempool_state = new MempoolState();
-        sub_container_1.appendChild(this.mempool_state.container.element);
+        this.mempool_summary = new MempoolSummary();
+        sub_container_1.appendChild(this.mempool_summary.container.element);
 
         this.mempool_chart = new MempoolChart();
         sub_container_1.appendChild(this.mempool_chart.container.element);
@@ -78,7 +77,7 @@ export class MempoolPage extends Page {
 
                 const tx_block = { tx: tx, block: future_block } as TxBlock;
                 this.mempool_txs_list.prepend_tx(tx_block);
-                this.mempool_state.set(this.page_data.mempool_txs, top_block);
+                this.mempool_summary.set(this.page_data.mempool_txs, top_block);
             }
         }
     }
@@ -91,8 +90,9 @@ export class MempoolPage extends Page {
                 blocks.push(new_block);
 
                 this.page_data.mempool_txs = [];
+                this.mempool_txs_list.set([]);
                 this.mempool_chart.blocks_txs.set(this.page_data.blocks);
-                this.mempool_state.set(mempool_txs, top_block);
+                this.mempool_summary.set(mempool_txs, top_block);
             }
         }
     }
@@ -126,7 +126,7 @@ export class MempoolPage extends Page {
         const blocks = await fetch_blocks(top_block.height, 50);
         this.page_data.blocks = blocks;
 
-        this.mempool_state.set(this.page_data.mempool_txs, top_block);
+        this.mempool_summary.set(this.page_data.mempool_txs, top_block);
         this.mempool_txs_list.set([]);
         this.mempool_chart.blocks_txs.set(blocks);
     }

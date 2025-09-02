@@ -1,28 +1,28 @@
 import { Container } from "../../../../components/container/container";
 import { MempoolTxTypeBars } from "./tx_type_bars";
-import { MempoolTotal } from "./total";
-
-import './state.css';
+import { MempoolInfo } from "./info";
 import { MempoolTxSizeTreeMap } from "./tx_size_map";
 import { Block, GetMempoolResult, Transaction } from "@xelis/sdk/daemon/types";
 
-export class MempoolState {
+import './summary.css';
+
+export class MempoolSummary {
     container: Container;
 
-    mempool_total: MempoolTotal;
+    mempool_info: MempoolInfo;
     mempool_tx_type_bars: MempoolTxTypeBars;
     mempool_tx_size_tree_map: MempoolTxSizeTreeMap;
 
     constructor() {
         this.container = new Container();
-        this.container.element.classList.add(`xe-mempool-state`);
+        this.container.element.classList.add(`xe-mempool-summary`);
 
         const container_1 = document.createElement(`div`);
-        container_1.classList.add(`xe-mempool-state-container-1`);
+        container_1.classList.add(`xe-mempool-summary-container-1`);
         this.container.element.appendChild(container_1);
 
-        this.mempool_total = new MempoolTotal();
-        container_1.appendChild(this.mempool_total.box.element);
+        this.mempool_info = new MempoolInfo();
+        container_1.appendChild(this.mempool_info.box.element);
 
         this.mempool_tx_type_bars = new MempoolTxTypeBars();
         container_1.appendChild(this.mempool_tx_type_bars.element);
@@ -74,11 +74,12 @@ export class MempoolState {
             }
         });
 
-        this.mempool_total.set_tx_count(txs.length);
-        this.mempool_total.set_timer(top_block.timestamp);
+        this.mempool_info.set_tx_count(txs.length);
+        this.mempool_info.set_timer(top_block.timestamp);
 
-        this.mempool_total.set_fees(total_fees);
-        this.mempool_total.set_size(total_size);
+        this.mempool_info.set_fees(total_fees);
+        this.mempool_info.set_size(total_size);
+        this.mempool_info.set_height(top_block.height + 1);
 
         this.mempool_tx_type_bars.set_transfer_count(transfer_count, total);
         this.mempool_tx_type_bars.set_contract_invoke_count(invoke_count, total);
