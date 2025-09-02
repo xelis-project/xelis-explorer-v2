@@ -3,6 +3,7 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 
 // https://vite.dev/config/
 export default defineConfig({
+    envDir: "./env",
     plugins: [cloudflare()],
     build: {
         // generate .vite/manifest.json in outDir

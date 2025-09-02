@@ -6,8 +6,8 @@ export class XelisNode extends Singleton<XelisNode> {
     rpc: DaemonRPC;
     ws: DaemonWS;
 
-    static rpc_node_endpoint: string = `https://node.xelis.io/json_rpc`;
-    static ws_node_endpoint: string = `wss://node.xelis.io/json_rpc`;
+    static rpc_node_endpoint: string = import.meta.env.VITE_XELIS_NODE_RPC;
+    static ws_node_endpoint: string = import.meta.env.VITE_XELIS_NODE_WS;
 
     constructor() {
         super();
