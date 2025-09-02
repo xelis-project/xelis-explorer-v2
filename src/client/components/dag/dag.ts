@@ -1,23 +1,29 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/Addons.js';
+//import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
 import { Block } from '@xelis/sdk/daemon/types';
 import { block_type_colors } from '../block_type_box/block_type_box';
+import { fetch_blocks } from '../../fetch_helpers/fetch_blocks';
+import CameraControls from 'camera-controls';
 
+CameraControls.install({ THREE });
 export class DAG {
     element: HTMLDivElement;
 
     scene: THREE.Scene;
     renderer: THREE.WebGLRenderer;
     orthographic_camera: THREE.OrthographicCamera;
-    controls: OrbitControls;
+    controls: CameraControls;
+    clock: THREE.Clock;
+    block_group: THREE.Group;
 
     constructor() {
         this.element = document.createElement(`div`);
 
+        this.clock = new THREE.Clock();
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color('#151515');
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -29,31 +35,30 @@ export class DAG {
         this.renderer.setAnimationLoop(this.render);
         this.element.appendChild(this.renderer.domElement);
 
-        const aspect = rect.width / rect.height;
-        //this.perspective_camera = new THREE.PerspectiveCamera(70, aspect, 0.1, 1000);
-        //this.perspective_camera.position.set(0, 0, 50);
+        this.orthographic_camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 2000);
 
-        this.orthographic_camera = new THREE.OrthographicCamera();
+        this.orthographic_camera.zoom = 15;
+        this.orthographic_camera.position.set(0, 0, 1);
 
-        this.orthographic_camera.zoom = 10;
-        this.orthographic_camera.position.set(0, 0, 2);
-        this.orthographic_camera.updateProjectionMatrix();
 
-        this.controls = new OrbitControls(this.orthographic_camera, this.renderer.domElement);
+        this.controls = new CameraControls(this.orthographic_camera, this.renderer.domElement);
+        this.controls.truckSpeed = 1;
+
+        //this.controls.mouseButtons
+
         //this.controls.enableRotate = false;
-        this.controls.screenSpacePanning = true;
-        this.controls.enableZoom = true;
-        this.controls.mouseButtons = {
-            //LEFT: THREE.MOUSE.PAN,
-            LEFT: THREE.MOUSE.ROTATE,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.PAN
-        };
-        this.controls.update();
+        //this.controls.screenSpacePanning = true;
+        //this.controls.enableZoom = true;
+        this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK;
+        this.controls.mouseButtons.middle = CameraControls.ACTION.ZOOM;
+
+        //this.controls.update();
 
         const grid = new THREE.GridHelper(1000, 500, new THREE.Color("#202020"), new THREE.Color("#202020"));
         grid.rotation.x = -Math.PI / 2;
         this.scene.add(grid);
+        this.block_group = new THREE.Group();
+        this.scene.add(this.block_group);
 
         window.addEventListener('resize', this.on_resize);
     }
@@ -73,22 +78,19 @@ export class DAG {
         this.update_size();
     }
 
-    async load(topoheight: number) {
+    async load(height: number) {
         const node = XelisNode.instance();
-        const blocks = await node.rpc.getBlocksRangeByTopoheight({
-            start_topoheight: topoheight - 10,
-            end_topoheight: topoheight + 10
+
+        const blocks = await node.rpc.getBlocksRangeByHeight({
+            start_height: height - 10,
+            end_height: height + 10
         });
 
         blocks.forEach((block, i) => {
-            const x = block.topoheight! - topoheight;
+            //const x = block.topoheight! - topoheight;
             const box_mesh = this.create_box_mesh(block);
-            box_mesh.position.set(
-                x * 4,
-                0,
-                0
-            );
-            this.scene.add(box_mesh);
+            box_mesh.position.set(i * 4, 0, 0);
+            this.block_group.add(box_mesh);
         });
     }
 
@@ -148,7 +150,26 @@ export class DAG {
     }
 
     render = (time: number) => {
-        this.controls.update();
+        const cam_pos = this.orthographic_camera.position;
+        if (cam_pos.x < -100) {
+            this.controls.normalizeRotations().reset();
+            this.block_group.clear();
+            this.load(80)
+        }
+
+        if (cam_pos.x > 100) {
+            //const delta = new THREE.Vector3(0, 0, 0); // change direction as needed
+            this.controls.normalizeRotations().reset();
+            this.block_group.clear();
+            this.load(120)
+            // this.orthographic_camera.position.set(0, 0,0);
+            // this.orthographic_camera.lookAt(0, 0, 0);
+            //  this.controls.target.set(0, 0, 0);
+            //this.controls.update();
+        }
+
+        const delta = this.clock.getDelta();
+        this.controls.update(delta);
         this.renderer.render(this.scene, this.orthographic_camera);
     }
 }
