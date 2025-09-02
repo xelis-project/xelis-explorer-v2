@@ -31,7 +31,7 @@ export class MempoolSummary {
         this.container.element.appendChild(container_2);
 
         this.mempool_tx_size_tree_map = new MempoolTxSizeTreeMap();
-        container_2.appendChild(this.mempool_tx_size_tree_map.box.element);
+        //container_2.appendChild(this.mempool_tx_size_tree_map.box.element);
     }
 
     set(txs: Transaction[], top_block: Block) {

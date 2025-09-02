@@ -1,3 +1,5 @@
+import './tx_type_bars.css';
+
 export class MempoolTxTypeBars {
     element: HTMLDivElement;
     transfers_element: HTMLDivElement;
