@@ -1,4 +1,5 @@
 import { BlockPage } from "../pages/block/block";
+import { BlockTopoPage } from "../pages/block_topo/block_topo";
 import { BlocksPage } from "../pages/blocks/blocks";
 import { DAGPage } from "../pages/dag/dag";
 import { DashboardPage } from "../pages/dashboard/dashboards";
@@ -13,7 +14,8 @@ export const pages = [
     BlocksPage,
     MempoolPage,
     PeersPage,
-    DAGPage
+    DAGPage,
+    BlockTopoPage
 ];
 
 export const match_route = (url: URL): typeof Page => {
