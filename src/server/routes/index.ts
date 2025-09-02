@@ -21,10 +21,8 @@ export default (app: Hono<App>) => {
         let description = page_type.description;
         let status = page_type.status;
 
-        if (page_type.server_data) {
-            const window_data = page_type.serialize_server_data(page_type.server_data);
-            body += window_data;
-        }
+        const window_data = page_type.serialize_server_data(page_type.server_data);
+        body += window_data;
 
         const html = master(c, { lang, title, description, body, head });
         return c.html(html, status);
