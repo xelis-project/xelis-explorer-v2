@@ -148,7 +148,6 @@ export class DAG {
     }
 
     render = (time: number) => {
-        requestAnimationFrame(this.render);
         this.controls.update();
         this.renderer.render(this.scene, this.orthographic_camera);
     }
