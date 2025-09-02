@@ -29,7 +29,7 @@ export class BlockTopoPage extends Page {
         const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
 
         const block_topoheight = parseInt(id);
-        this.title = `Block ${block_topoheight}`;
+        this.title = `Block Topo ${block_topoheight.toLocaleString()}`;
 
         try {
             const block = await daemon.getBlockAtTopoheight({
@@ -59,7 +59,7 @@ export class BlockTopoPage extends Page {
         try {
             if (id) {
                 const block_topoheight = parseInt(id);
-                this.set_window_title(`Block ${block_topoheight}`);
+                this.set_window_title(`Block Topo ${block_topoheight.toLocaleString()}`);
 
                 const node = XelisNode.instance();
 
