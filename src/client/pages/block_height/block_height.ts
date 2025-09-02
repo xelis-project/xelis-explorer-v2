@@ -109,7 +109,8 @@ export class BlockHeightPage extends Page {
 
         if (this.page_data.blocks.length === 0) {
             const not_found_page = new NotFoundPage();
-            this.element = not_found_page.element;
+            this.element.replaceChildren();
+            this.element.appendChild(not_found_page.element);
         }
     }
 

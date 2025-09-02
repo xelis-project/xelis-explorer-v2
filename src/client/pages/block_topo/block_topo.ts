@@ -77,7 +77,8 @@ export class BlockTopoPage extends Page {
 
         if (!this.block_page.page_data.block) {
             const not_found_page = new NotFoundPage();
-            this.element = not_found_page.element;
+            this.element.replaceChildren();
+            this.element.appendChild(not_found_page.element);
         }
     }
 
