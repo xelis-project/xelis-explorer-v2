@@ -51,6 +51,15 @@ export class BlocksPage extends Page {
 
         const { info } = this.page_data;
 
+        if (new_block && info) {
+            const block_row = new BlockRow();
+            block_row.set(new_block, info.block_time_target);
+            this.table.prepend_row(block_row.element);
+            this.block_rows.unshift(block_row);
+            block_row.animate_prepend();
+            this.table.remove_last();
+        }
+
         const node = XelisNode.instance();
         const stable_height = await node.ws.methods.getStableHeight();
 
@@ -76,25 +85,20 @@ export class BlocksPage extends Page {
                 }
             });
         }
-
-        if (new_block && info) {
-            const block_row = new BlockRow();
-            block_row.set(new_block, info.block_time_target);
-            this.table.prepend_row(block_row.element);
-            block_row.animate_prepend();
-            this.table.remove_last();
-        }
     }
 
-    on_block_ordered = (block_ordered?: BlockOrdered | undefined, err?: Error) => {
+    on_block_ordered = async (block_ordered?: BlockOrdered | undefined, err?: Error) => {
         console.log("block_ordered", block_ordered);
         if (block_ordered) {
             const block_row = this.block_rows.find(b => b.data && b.data.hash === block_ordered.block_hash);
-            if (block_row && block_row.data) {
-                const new_block_type = block_ordered.block_type as BlockType;
-                block_row.data.block_type = new_block_type;
-                block_row.set_type(new_block_type);
-                block_row.data.topoheight = block_ordered.topoheight;
+            if (block_row && block_row.data && this.page_data.info) {
+                // refetch block instead of using data from block_ordered
+                // block can pass from orphaned to normal, sync
+                // other attributes can also change
+                const node = XelisNode.instance();
+                const block = await node.ws.methods.getBlockByHash({ hash: block_ordered.block_hash });
+                const { block_time_target } = this.page_data.info;
+                block_row.set(block, block_time_target);
                 block_row.animate_update();
             }
         }

@@ -94,8 +94,37 @@ export class DashboardPage extends Page {
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
-        await this.load_top_stats();
         if (new_block) {
+            const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
+            if (!block_item) {
+                this.dashboard_blocks.prepend_block(new_block).animate_prepend();
+                this.dashboard_blocks.remove_last_block();
+                this.dashboard_txs.remove_block_txs(new_block.hash);
+
+                const update_txs = async () => {
+                    // we don't need to fetch txs, new_block should already have them
+                    // await fetch_block_txs(new_block);
+                    if (new_block.transactions) {
+                        new_block.transactions.forEach((tx) => {
+                            this.dashboard_txs.prepend_tx({ block: new_block, tx });
+                        });
+                    }
+                }
+
+                update_txs();
+
+                this.page_data.blocks = this.dashboard_blocks.block_items.map(x => x.data!);
+                await this.load_top_stats();
+                const { info, blocks } = this.page_data;
+                this.dashboard_chart_section_2.pools.set(blocks);
+                if (info) {
+                    this.dashboard_chart_section_2.hashrate.set(info, blocks);
+                    this.dashboard_chart_section_2.block_time.set(info, blocks);
+                }
+            } else {
+                block_item.set(new_block);
+                block_item.animate_update();
+            }
 
             const node = XelisNode.instance();
             const stable_height = await node.ws.methods.getStableHeight();
@@ -120,36 +149,6 @@ export class DashboardPage extends Page {
                     block_item.animate_update();
                 }
             });
-
-            const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
-            if (!block_item) {
-                this.dashboard_blocks.prepend_block(new_block).animate_prepend();
-                this.dashboard_blocks.remove_last_block();
-                this.dashboard_txs.remove_block_txs(new_block.hash);
-
-                const update_txs = async () => {
-                    // we don't need to fetch txs, new_block should already have them
-                    // await fetch_block_txs(new_block);
-                    if (new_block.transactions) {
-                        new_block.transactions.forEach((tx) => {
-                            this.dashboard_txs.prepend_tx({ block: new_block, tx });
-                        });
-                    }
-                }
-
-                update_txs();
-
-                this.page_data.blocks = this.dashboard_blocks.block_items.map(x => x.data!);
-                const { info, blocks } = this.page_data;
-                this.dashboard_chart_section_2.pools.set(blocks);
-                if (info) {
-                    this.dashboard_chart_section_2.hashrate.set(info, blocks);
-                    this.dashboard_chart_section_2.block_time.set(info, blocks);
-                }
-            } else {
-                block_item.set(new_block);
-                block_item.animate_update();
-            }
         }
     }
 
@@ -161,15 +160,17 @@ export class DashboardPage extends Page {
         }
     }
 
-    on_block_ordered = (block_ordered?: BlockOrdered | undefined, err?: Error) => {
+    on_block_ordered = async (block_ordered?: BlockOrdered | undefined, err?: Error) => {
         console.log("block_ordered", block_ordered);
         if (block_ordered) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === block_ordered.block_hash);
             if (block_item && block_item.data) {
-                const new_block_type = block_ordered.block_type as BlockType;
-                block_item.data.block_type = new_block_type;
-                block_item.set_type(new_block_type);
-                block_item.data.topoheight = block_ordered.topoheight;
+                // refetch block instead of using data from block_ordered
+                // block can pass from orphaned to normal, sync
+                // other attributes can also change
+                const node = XelisNode.instance();
+                const block = await node.ws.methods.getBlockByHash({ hash: block_ordered.block_hash });
+                block_item.set(block);
                 block_item.animate_update();
             }
         }
