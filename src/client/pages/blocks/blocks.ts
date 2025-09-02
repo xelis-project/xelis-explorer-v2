@@ -127,7 +127,8 @@ export class BlocksPage extends Page {
         node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
-    add_empty_blocks() {
+    add_empty_rows() {
+        this.table.body_element.replaceChildren();
         for (let i = 0; i < 100; i++) {
             const block_row = new BlockRow();
             this.table.set_row_loading(block_row.element, true);
@@ -141,7 +142,7 @@ export class BlocksPage extends Page {
         this.listen_node_events();
         const node = XelisNode.instance();
 
-        this.add_empty_blocks();
+        this.add_empty_rows();
 
         const info = await node.rpc.getInfo();
         this.page_data.info = info;
