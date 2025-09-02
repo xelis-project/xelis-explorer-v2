@@ -15,7 +15,7 @@ import { BlockGraph } from "./components/graph/graph";
 
 import './block.css';
 
-interface BlockPageServerData {
+export interface BlockPageServerData {
     block: Block;
 }
 
@@ -99,17 +99,17 @@ export class BlockPage extends Page {
 
     async load_block() {
         const server_data = BlockPage.consume_server_data<BlockPageServerData>();
-        const block_hash = BlockPage.get_pattern_id(window.location.href);
-        this.set_window_title(`Block ${block_hash}`);
+        const id = BlockPage.get_pattern_id(window.location.href);
 
-        this.page_data = {};
-
-        if (server_data) {
-            this.page_data.block = server_data.block;
-        }
+        this.page_data = {
+            block: server_data ? server_data.block : undefined
+        };
 
         try {
-            if (block_hash) {
+            if (id) {
+                const block_hash = id;
+                this.set_window_title(`Block ${block_hash}`);
+
                 const node = XelisNode.instance();
 
                 if (!this.page_data.block) {
@@ -163,12 +163,7 @@ export class BlockPage extends Page {
         node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
-    async load(parent: HTMLElement) {
-        super.load(parent);
-
-        this.listen_node_events();
-
-        await this.load_block();
+    display_data() {
         if (this.page_data.block && this.page_data.info) {
             const { block, info } = this.page_data;
             this.block_info.set(block, info);
@@ -178,6 +173,14 @@ export class BlockPage extends Page {
             this.block_graph.set(block);
             this.block_txs.load(block);
         }
+    }
+
+    async load(parent: HTMLElement) {
+        super.load(parent);
+
+        this.listen_node_events();
+        await this.load_block();
+        this.display_data();
     }
 
     unload(): void {
