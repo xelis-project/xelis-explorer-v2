@@ -3,6 +3,8 @@ import { Box } from "../../../../components/box/box";
 import { format_xel } from "../../../../utils/format_xel";
 import prettyBytes from "pretty-bytes";
 
+import './info.css';
+
 export class MempoolInfo {
     box: Box;
 
@@ -14,22 +16,33 @@ export class MempoolInfo {
 
     constructor() {
         this.box = new Box();
-        this.box.element.classList.add(`xe-mempool-total`);
+        this.box.element.classList.add(`xe-mempool-info`);
 
-        this.height_element = document.createElement(`div`);
-        this.box.element.appendChild(this.height_element);
+        const container_1 = document.createElement(`div`);
+        this.box.element.appendChild(container_1);
 
         this.tx_total_element = document.createElement(`div`);
-        this.box.element.appendChild(this.tx_total_element);
+        this.tx_total_element.classList.add(`xe-mempool-info-tx-total`);
+        container_1.appendChild(this.tx_total_element);
 
         this.timer_element = document.createElement(`div`);
-        this.box.element.appendChild(this.timer_element);
+        this.timer_element.classList.add(`xe-mempool-info-timer`);
+        container_1.appendChild(this.timer_element);
+
+        const container_2 = document.createElement(`div`);
+        this.box.element.appendChild(container_2);
+
+        this.height_element = document.createElement(`div`);
+        this.height_element.classList.add(`xe-mempool-info-item`);
+        container_2.appendChild(this.height_element);
 
         this.total_fees_element = document.createElement(`div`);
-        this.box.element.appendChild(this.total_fees_element);
+        this.total_fees_element.classList.add(`xe-mempool-info-item`);
+        container_2.appendChild(this.total_fees_element);
 
         this.total_size_element = document.createElement(`div`);
-        this.box.element.appendChild(this.total_size_element);
+        this.total_size_element.classList.add(`xe-mempool-info-item`);
+        container_2.appendChild(this.total_size_element);
     }
 
     set_tx_count(tx_count: number) {

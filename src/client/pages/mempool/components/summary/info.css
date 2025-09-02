@@ -1,0 +1,43 @@
+.xe-mempool-info {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
+.xe-mempool-info>:nth-child(1) {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-mempool-info-tx-total {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.xe-mempool-info-timer {
+    font-weight: light;
+    font-size: 1.5rem;
+    color: #02FFCF;
+}
+
+.xe-mempool-info>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-mempool-info-item {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-mempool-info-item>:nth-child(1) {
+    font-size: .9rem;
+    opacity: .8;
+}
+
+.xe-mempool-info-item>:nth-child(2) {
+    font-size: 1.5rem;
+}
