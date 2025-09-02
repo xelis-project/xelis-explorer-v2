@@ -4,12 +4,14 @@ import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
-import { Block } from '@xelis/sdk/daemon/types';
+import { Block, RPCMethod as DaemonRPCMethod, HeightRangeParams } from '@xelis/sdk/daemon/types';
 import { block_type_colors } from '../block_type_box/block_type_box';
 import { fetch_blocks } from '../../fetch_helpers/fetch_blocks';
 import CameraControls from 'camera-controls';
+import { RPCRequest } from '@xelis/sdk/rpc/types';
 
 CameraControls.install({ THREE });
+
 export class DAG {
     element: HTMLDivElement;
 
@@ -81,10 +83,43 @@ export class DAG {
     async load(height: number) {
         const node = XelisNode.instance();
 
-        const blocks = await node.rpc.getBlocksRangeByHeight({
+        const requests = [] as RPCRequest[];
+        requests.push({
+            method: DaemonRPCMethod.GetBlocksRangeByHeight,
+            params: {
+                start_height: height - 30,
+                end_height: height - 10
+            } as HeightRangeParams
+        });
+        requests.push({
+            method: DaemonRPCMethod.GetBlocksRangeByHeight,
+            params: {
+                start_height: height - 10,
+                end_height: height + 10
+            } as HeightRangeParams
+        });
+        requests.push({
+            method: DaemonRPCMethod.GetBlocksRangeByHeight,
+            params: {
+                start_height: height + 10,
+                end_height: height + 30
+            } as HeightRangeParams
+        });
+        const res = await node.rpc.batchRequest(requests);
+
+        let blocks = [] as Block[];
+        res.forEach((result) => {
+            if (result instanceof Error) {
+                throw result;
+            } else {
+                blocks = [...blocks, ...result as Block[]];
+            }
+        });
+
+        /*const blocks = await node.rpc.getBlocksRangeByHeight({
             start_height: height - 10,
             end_height: height + 10
-        });
+        });*/
 
         blocks.forEach((block, i) => {
             //const x = block.topoheight! - topoheight;
@@ -92,6 +127,8 @@ export class DAG {
             box_mesh.position.set(i * 4, 0, 0);
             this.block_group.add(box_mesh);
         });
+
+        new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
     }
 
     set_active() {
@@ -151,7 +188,7 @@ export class DAG {
 
     render = (time: number) => {
         const cam_pos = this.orthographic_camera.position;
-        if (cam_pos.x < -100) {
+        /*if (cam_pos.x < -100) {
             this.controls.normalizeRotations().reset();
             this.block_group.clear();
             this.load(80)
@@ -166,7 +203,7 @@ export class DAG {
             // this.orthographic_camera.lookAt(0, 0, 0);
             //  this.controls.target.set(0, 0, 0);
             //this.controls.update();
-        }
+        }*/
 
         const delta = this.clock.getDelta();
         this.controls.update(delta);
