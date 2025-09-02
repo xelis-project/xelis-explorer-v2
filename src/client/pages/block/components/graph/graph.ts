@@ -43,7 +43,7 @@ export class BlockGraph {
         this.set_tips(block.tips);
         this.set_nonce(block.nonce);
         this.set_extra_nonce(block.extra_nonce);
-        this.dag.load(100);
+        this.dag.load(block.height);
         this.dag.update_size();
     }
 
