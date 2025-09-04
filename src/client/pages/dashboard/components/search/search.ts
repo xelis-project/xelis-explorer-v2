@@ -28,14 +28,13 @@ export class DashboardSearch {
     }
 
     async search() {
-
         const node = XelisNode.instance();
         const app = App.instance();
 
         const search_value = this.text_input.element.value;
         if (search_value) {
             if (/^\d+$/.test(search_value)) {
-                app.go_to(`/block/${search_value}`);
+                app.go_to(`/topo/${search_value}`);
                 return;
             }
 
