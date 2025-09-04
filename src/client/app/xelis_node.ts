@@ -12,6 +12,7 @@ export class XelisNode extends Singleton<XelisNode> {
     constructor() {
         super();
         this.rpc = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        this.rpc.timeout = 5000;
         this.ws = new DaemonWS(XelisNode.ws_node_endpoint);
     }
 
