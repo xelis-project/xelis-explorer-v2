@@ -126,8 +126,7 @@ export class BlockHeightPage extends Page {
                 this.table.prepend_row(block_row.element);
             });
         } else {
-            const not_found_page = new NotFoundPage();
-            this.set_element(not_found_page.element);
+            this.set_element(NotFoundPage.instance().element);
         }
     }
 

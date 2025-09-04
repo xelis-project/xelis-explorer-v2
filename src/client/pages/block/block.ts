@@ -194,8 +194,7 @@ export class BlockPage extends Page {
             this.set_element(this.master.element);
             this.set(block, info);
         } else {
-            const not_found_page = new NotFoundPage();
-            this.set_element(not_found_page.element);
+            this.set_element(NotFoundPage.instance().element);
         }
     }
 

@@ -88,11 +88,10 @@ export class BlockTopoPage extends Page {
 
         const { block } = this.block_page.page_data;
         if (block) {
-            this.set_element(this.block_page.element);
+            this.set_element(this.block_page.master.element);
             this.block_page.set(block, info);
         } else {
-            const not_found_page = new NotFoundPage();
-            this.set_element(not_found_page.element);
+            this.set_element(NotFoundPage.instance().element);
         }
     }
 
