@@ -6,9 +6,9 @@ import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
 import { Block, RPCMethod as DaemonRPCMethod, HeightRangeParams } from '@xelis/sdk/daemon/types';
 import { block_type_colors } from '../block_type_box/block_type_box';
-import { fetch_blocks } from '../../fetch_helpers/fetch_blocks';
 import CameraControls from 'camera-controls';
 import { RPCRequest } from '@xelis/sdk/rpc/types';
+import { OverlayLoading } from '../overlay_loading/overlay_loading';
 
 CameraControls.install({ THREE });
 
@@ -22,8 +22,13 @@ export class DAG {
     clock: THREE.Clock;
     block_group: THREE.Group;
 
+    overlay_loading: OverlayLoading;
+
     constructor() {
         this.element = document.createElement(`div`);
+
+        this.overlay_loading = new OverlayLoading();
+        this.element.appendChild(this.overlay_loading.element);
 
         this.clock = new THREE.Clock();
         this.scene = new THREE.Scene();

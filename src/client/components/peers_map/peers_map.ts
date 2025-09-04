@@ -3,6 +3,7 @@ import type * as leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { fetch_geo_location, GeoLocationData } from "../../utils/fetch_geo_location";
 import { parse_addr } from "../../utils/parse_addr";
+import { OverlayLoading } from "../overlay_loading/overlay_loading";
 
 import './peers_map.css';
 
@@ -22,6 +23,7 @@ export class PeersMap {
     map!: leaflet.Map;
     loading_element?: HTMLDivElement;
     peer_count_element: HTMLDivElement;
+    overlay_loading: OverlayLoading;
 
     peer_markers: Record<string, PeerMarker>;
 
@@ -33,6 +35,9 @@ export class PeersMap {
         this.peer_count_element = document.createElement(`div`);
         this.peer_count_element.classList.add(`xe-peers-map-peer-count`);
         this.element.appendChild(this.peer_count_element);
+
+        this.overlay_loading = new OverlayLoading();
+        this.element.appendChild(this.overlay_loading.element);
     }
 
     async setup_map() {
@@ -103,23 +108,6 @@ export class PeersMap {
             peer_marker.bindPopup(new_popup);
             this.peer_markers[marker_key] = { marker: peer_marker, geo_location, peers };
         });
-    }
-
-    set_loading(loading: boolean) {
-        if (loading) {
-            this.loading_element = document.createElement(`div`);
-            this.loading_element.classList.add(`xe-peers-map-loading`);
-            this.loading_element.innerHTML = `
-                <div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                </div>
-            `;
-            this.element.appendChild(this.loading_element);
-        } else {
-            if (this.loading_element) this.loading_element.remove();
-        }
     }
 
     build_marker_popup(geo_location: GeoLocationData, peers: Peer[]) {

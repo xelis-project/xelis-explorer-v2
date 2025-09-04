@@ -289,11 +289,11 @@ export class DashboardPage extends Page {
 
     async load_peers() {
         const node = XelisNode.instance();
-        this.dashboard_peers.peers_map.set_loading(true);
+        this.dashboard_peers.peers_map.overlay_loading.set_loading(true);
         const peers_result = await node.rpc.getPeers();
         const peers_locations = await this.dashboard_peers.peers_map.fetch_peers_locations(peers_result.peers);
         this.dashboard_peers.peers_map.set(peers_locations);
-        this.dashboard_peers.peers_map.set_loading(false);
+        this.dashboard_peers.peers_map.overlay_loading.set_loading(false);
     }
 
     async load(parent: HTMLElement) {

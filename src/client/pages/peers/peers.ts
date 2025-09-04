@@ -100,7 +100,7 @@ export class PeersPage extends Page {
 
         this.listen_node_events();
 
-        this.peers_map.map.set_loading(true);
+        this.peers_map.map.overlay_loading.set_loading(true);
         this.peers_chart.container.box_loading(true);
         this.peers_list.container.list_loading(20, `8rem`);
         this.peers_info.set_loading(true);
@@ -112,7 +112,7 @@ export class PeersPage extends Page {
 
         const peers_locations = await this.peers_map.map.fetch_peers_locations(peers);
         this.peers_map.map.set(peers_locations);
-        this.peers_map.map.set_loading(false);
+        this.peers_map.map.overlay_loading.set_loading(false);
         this.peers_chart.container.box_loading(false);
         this.peers_info.set_loading(false);
 

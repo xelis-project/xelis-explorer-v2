@@ -21,6 +21,7 @@
 
 .xe-block-graph-dag {
     height: 15rem;
+    position: relative;
 }
 
 .xe-block-graph-dag canvas {

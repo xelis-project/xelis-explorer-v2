@@ -179,13 +179,15 @@ export class BlockPage extends Page {
         this.listen_node_events();
 
         this.set_loading(true);
+        this.block_graph.dag.overlay_loading.set_loading(true);
 
         await this.load_block();
-
+        
         const node = XelisNode.instance();
         const info = await node.rpc.getInfo();
 
         this.set_loading(false);
+        this.block_graph.dag.overlay_loading.set_loading(false);
 
         const { block } = this.page_data;
         if (block) {
