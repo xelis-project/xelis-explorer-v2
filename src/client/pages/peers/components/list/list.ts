@@ -25,6 +25,9 @@ export class PeersList {
             peers_map.map.map.flyTo([geo_location.latitude, geo_location.longitude], 6);
         });
 
+        const { country, city } = peer_location.geo_location;
+        peer_item.box.element.title = `Fly to ${country} / ${city}`;
+
         this.peer_items.push(peer_item);
         if (this.is_in_filter(peer_item)) {
             this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
