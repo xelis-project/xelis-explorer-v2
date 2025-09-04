@@ -23,11 +23,11 @@ export class DashboardBlocks {
     }
 
     prepend_block(block: Block) {
-        const block_item = new BlockItem();
+        const block_item = new BlockItem(`/block/${block.hash}`);
         block_item.set(block);
-        block_item.box.element.addEventListener(`click`, () => {
-            App.instance().go_to(`/block/${block.hash}`);
-        });
+        //block_item.box.element.addEventListener(`click`, () => {
+        //     App.instance().go_to(`/block/${block.hash}`);
+        //});
 
         this.block_items.unshift(block_item);
         this.container.element.insertBefore(block_item.box.element, this.container.element.firstChild);

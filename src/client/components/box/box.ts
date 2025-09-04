@@ -1,10 +1,16 @@
 import './box.css';
 
 export class Box {
-    element: HTMLDivElement;
+    element: HTMLDivElement | HTMLAnchorElement;
 
-    constructor() {
-        this.element = document.createElement(`div`);
+    constructor(href?: string) {
+        if (href) {
+            this.element = document.createElement(`a`);
+            this.element.href = href;
+        } else {
+            this.element = document.createElement(`div`);
+        }
+
         this.element.classList.add(`xe-box`);
     }
 

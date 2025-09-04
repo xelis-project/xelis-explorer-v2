@@ -1,9 +1,5 @@
-import { PeerLocation } from "../../../../components/peers_map/peers_map";
 import { Container } from "../../../../components/container/container";
-import { PeerItem } from "../../../../components/peer_item/peer_item";
 import { TxBlock, TxItem } from "../../../../components/tx_item/tx_item";
-import { Transaction } from "@xelis/sdk/daemon/types";
-import { App } from "../../../../app/app";
 
 import './list.css';
 
@@ -16,11 +12,8 @@ export class MempoolTxsList {
     }
 
     prepend_tx(tx_block: TxBlock) {
-        const tx_item = new TxItem();
+        const tx_item = new TxItem(`/tx/${tx_block.tx.hash}`);
         tx_item.set(tx_block);
-        tx_item.box.element.addEventListener(`click`, () => {
-            App.instance().go_to(`/tx/${tx_block.tx.hash}`);
-        });
 
         // this.tx_items.unshift(tx_item);
         this.container.element.insertBefore(tx_item.box.element, this.container.element.firstChild);

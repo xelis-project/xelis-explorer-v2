@@ -22,8 +22,8 @@ export class BlockItem {
     element_type: HTMLDivElement;
     element_reward: HTMLDivElement;
 
-    constructor() {
-        this.box = new Box();
+    constructor(href?: string) {
+        this.box = new Box(href);
         this.box.element.classList.add(`xe-block-item`);
 
         const container_1 = document.createElement(`div`);

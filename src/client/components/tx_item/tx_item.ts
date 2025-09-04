@@ -26,8 +26,8 @@ export class TxItem {
     element_height: HTMLDivElement;
     element_fee: HTMLDivElement;
 
-    constructor() {
-        this.box = new Box();
+    constructor(href?: string) {
+        this.box = new Box(href);
         this.box.element.classList.add(`xe-tx-item`);
 
         const container_1 = document.createElement(`div`);
