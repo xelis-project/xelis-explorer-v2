@@ -168,6 +168,9 @@ export class BlockPage extends Page {
         super.load(parent);
 
         this.listen_node_events();
+
+        this.block_txs.set_loading();
+
         await this.load_block();
 
         const node = XelisNode.instance();

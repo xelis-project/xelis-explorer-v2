@@ -16,12 +16,13 @@ export class PeersList {
     }
 
     set_loading() {
+        this.container.element.replaceChildren();
         for (let i = 0; i < 20; i++) {
-            this.add_empty_block();
+            this.add_empty_peer();
         }
     }
 
-    add_empty_block() {
+    add_empty_peer() {
         const peer_item = new PeerItem();
         peer_item.box.set_loading(true);
         this.container.element.appendChild(peer_item.box.element);

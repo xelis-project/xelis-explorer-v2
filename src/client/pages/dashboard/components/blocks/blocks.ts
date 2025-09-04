@@ -23,6 +23,7 @@ export class DashboardBlocks {
     }
 
     set_loading() {
+        this.container.element.replaceChildren();
         for (let i = 0; i < 20; i++) {
             this.add_empty_block();
         }
