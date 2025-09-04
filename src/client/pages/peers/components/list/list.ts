@@ -15,19 +15,6 @@ export class PeersList {
         this.container.element.classList.add(`xe-peers-list`, `scrollbar-1`, `scrollbar-1-right`);
     }
 
-    set_loading() {
-        this.container.element.replaceChildren();
-        for (let i = 0; i < 20; i++) {
-            this.add_empty_peer();
-        }
-    }
-
-    add_empty_peer() {
-        const peer_item = new PeerItem();
-        peer_item.box.set_loading(true);
-        this.container.element.appendChild(peer_item.box.element);
-    }
-
     prepend_peer(peer_location: PeerLocation) {
         const peer_item = new PeerItem();
         peer_item.set(peer_location);

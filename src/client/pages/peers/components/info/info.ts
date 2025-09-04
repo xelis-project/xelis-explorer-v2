@@ -26,22 +26,6 @@ export class PeersInfo {
         this.container.element.appendChild(this.pruned_ledger_element);
     }
 
-    set_loading(loading: boolean) {
-        this.container.element.replaceChildren();
-        if (loading) {
-            const box = new Box();
-            box.element.style.height = `1rem`;
-            box.element.style.width = `100%`;
-            box.set_loading(true);
-            this.container.element.appendChild(box.element);
-        } else {
-            this.container.element.appendChild(this.sync_element);
-            this.container.element.appendChild(this.desync_element);
-            this.container.element.appendChild(this.full_ledger_element);
-            this.container.element.appendChild(this.pruned_ledger_element);
-        }
-    }
-
     set(peers: Peer[], height: number) {
         let node_count = 0;
         let sync_count = 0;

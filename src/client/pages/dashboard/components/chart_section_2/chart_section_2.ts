@@ -1,9 +1,9 @@
 import { Container } from '../../../../components/container/container';
 import { DashboardHashRate } from './hashrate';
-``
-import './chart_section_2.css';
 import { DashboardPools } from './pools';
 import { DashboardBlockTime } from './block_time';
+
+import './chart_section_2.css';
 
 export class DashboardChartSection2 {
     container: Container;
@@ -26,11 +26,5 @@ export class DashboardChartSection2 {
 
         this.block_time = new DashboardBlockTime();
         container_1.appendChild(this.block_time.box_chart.box.element);
-    }
-
-    set_loading(loading: boolean) {
-        this.hashrate.box_chart.box.set_loading(loading);
-        this.block_time.box_chart.box.set_loading(loading);
-        this.pools.box_chart.box.set_loading(loading);
     }
 }

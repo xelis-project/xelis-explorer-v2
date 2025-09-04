@@ -22,19 +22,6 @@ export class DashboardBlocks {
         blocks.forEach(block => this.prepend_block(block));
     }
 
-    set_loading() {
-        this.container.element.replaceChildren();
-        for (let i = 0; i < 20; i++) {
-            this.add_empty_block();
-        }
-    }
-
-    add_empty_block() {
-        const block_item = new BlockItem();
-        block_item.box.set_loading(true);
-        this.container.element.appendChild(block_item.box.element);
-    }
-
     prepend_block(block: Block) {
         const block_item = new BlockItem();
         block_item.set(block);

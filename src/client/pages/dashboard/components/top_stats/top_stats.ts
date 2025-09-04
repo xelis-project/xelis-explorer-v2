@@ -115,13 +115,6 @@ export class DashboardTopStats {
         this.item_block_reward.element_value.innerHTML = format_xel(block_reward, true);
     }
 
-    set_loading(loading: boolean) {
-        this.box_1.set_loading(loading);
-        this.box_2.set_loading(loading);
-        this.box_3.set_loading(loading);
-        this.box_4.set_loading(loading);
-    }
-
     set_topoheight(topoheight: number) {
         this.item_topo.element_value.innerHTML = `${topoheight.toLocaleString()}`;
     }

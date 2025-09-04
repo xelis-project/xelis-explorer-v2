@@ -29,16 +29,4 @@ export class PeersChart {
         this.nodes_by_country = new PeersChartNodesByCountry();
         this.container.element.appendChild(this.nodes_by_country.box_chart.box.element);
     }
-
-    set_loading(loading: boolean) {
-        if (loading) {
-            this.nodes_by_version.box_chart.box.set_loading(true);
-            this.nodes_by_country.box_chart.box.set_loading(true);
-            this.nodes_by_height.box_chart.box.set_loading(true);
-        } else {
-            this.nodes_by_version.box_chart.box.set_loading(false);
-            this.nodes_by_country.box_chart.box.set_loading(false);
-            this.nodes_by_height.box_chart.box.set_loading(false);
-        }
-    }
 }

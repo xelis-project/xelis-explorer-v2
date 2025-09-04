@@ -21,4 +21,6 @@
     display: flex;
     gap: .25rem;
     flex-direction: column;
+    min-height: 1rem;
+    width: 100%;
 }

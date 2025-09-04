@@ -20,19 +20,6 @@ export class DashboardTxs {
         txs_blocks.forEach(tx_block => this.prepend_tx(tx_block));
     }
 
-    set_loading() {
-        this.container.element.replaceChildren();
-        for (let i = 0; i < 20; i++) {
-            this.add_empty_tx();
-        }
-    }
-
-    add_empty_tx() {
-        const tx_item = new TxItem();
-        tx_item.box.set_loading(true);
-        this.container.element.appendChild(tx_item.box.element);
-    }
-
     prepend_tx(tx_block: TxBlock) {
         const tx_item = new TxItem();
         tx_item.set(tx_block);

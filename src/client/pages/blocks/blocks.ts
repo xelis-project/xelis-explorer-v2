@@ -131,22 +131,13 @@ export class BlocksPage extends Page {
         node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
-    add_empty_rows() {
-        this.table.body_element.replaceChildren();
-        for (let i = 0; i < 100; i++) {
-            const block_row = new BlockRow();
-            this.table.set_row_loading(block_row.element, true);
-            this.table.prepend_row(block_row.element);
-        }
-    }
-
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(BlocksPage.title);
         this.listen_node_events();
         const node = XelisNode.instance();
 
-        this.add_empty_rows();
+        this.table.set_loading(100);
 
         const info = await node.rpc.getInfo();
         this.page_data.info = info;

@@ -15,19 +15,6 @@ export class MempoolTxsList {
         this.container.element.classList.add(`xe-mempool-txs-list`, `scrollbar-1`, `scrollbar-1-right`);
     }
 
-    set_loading() {
-        this.container.element.replaceChildren();
-        for (let i = 0; i < 20; i++) {
-            this.add_empty_block();
-        }
-    }
-
-    add_empty_block() {
-        const tx_item = new TxItem();
-        tx_item.box.set_loading(true);
-        this.container.element.appendChild(tx_item.box.element);
-    }
-
     prepend_tx(tx_block: TxBlock) {
         const tx_item = new TxItem();
         tx_item.set(tx_block);

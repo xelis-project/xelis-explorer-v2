@@ -169,7 +169,7 @@ export class BlockPage extends Page {
 
         this.listen_node_events();
 
-        this.block_txs.set_loading();
+        this.block_txs.table.set_loading(5);
 
         await this.load_block();
 

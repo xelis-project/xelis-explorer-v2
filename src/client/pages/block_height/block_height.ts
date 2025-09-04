@@ -108,19 +108,10 @@ export class BlockHeightPage extends Page {
         }
     }
 
-    add_empty_blocks() {
-        this.table.body_element.replaceChildren();
-        for (let i = 0; i < 5; i++) {
-            const block_row = new BlockRow();
-            this.table.set_row_loading(block_row.element, true);
-            this.table.prepend_row(block_row.element);
-        }
-    }
-
     async load(parent: HTMLElement) {
         super.load(parent);
 
-        this.add_empty_blocks();
+        this.table.set_loading(5);
         await this.load_blocks();
 
         const { blocks } = this.page_data;

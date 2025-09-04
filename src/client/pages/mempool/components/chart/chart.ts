@@ -16,8 +16,4 @@ export class MempoolChart {
         this.blocks_txs = new MempoolChartBlocksTxs();
         this.container.element.appendChild(this.blocks_txs.box_chart.box.element);
     }
-
-    set_loading(loading: boolean) {
-        // TODO
-    }
 }

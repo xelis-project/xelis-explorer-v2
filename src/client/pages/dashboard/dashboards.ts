@@ -302,22 +302,21 @@ export class DashboardPage extends Page {
 
         this.listen_node_events();
 
-        this.dashboard_top_stats.set_loading(true);
-        this.dashboard_blocks.set_loading();
-        this.dashboard_txs.set_loading();
-        this.dashboard_chart_section_2.set_loading(true);
+        this.dashboard_top_stats.container.box_loading(true);
+        this.dashboard_blocks.container.list_loading(20, `5rem`);
+        this.dashboard_txs.container.list_loading(20, `5rem`);
+        this.dashboard_chart_section_2.container.box_loading(true);
 
         this.load_peers();
 
-
         await this.load_top_stats()
 
-        this.dashboard_top_stats.set_loading(false);
+        this.dashboard_top_stats.container.box_loading(false);
 
         await this.load_blocks();
         this.load_blocks_txs();
 
-        this.dashboard_chart_section_2.set_loading(false);
+        this.dashboard_chart_section_2.container.box_loading(false);
     }
 
     unload() {
