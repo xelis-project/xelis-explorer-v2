@@ -6,4 +6,5 @@ html,
 body {
     font-family: Jura;
     color: white;
+    font-size: calc(15px + 0.390625vw);
 }
