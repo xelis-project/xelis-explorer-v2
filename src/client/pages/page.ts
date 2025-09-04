@@ -63,7 +63,9 @@ export class Page extends Singleton<Page> {
     }
 
     set_element(element: HTMLElement) {
-        this.element.replaceChildren();
-        this.element.appendChild(element);
+        if (!this.element.contains(element)) {
+            this.element.replaceChildren();
+            this.element.appendChild(element);
+        }
     }
 }
