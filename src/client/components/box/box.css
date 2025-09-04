@@ -9,7 +9,8 @@
     animation: xe-box-loading-animation .5s infinite alternate;
 }
 
-.xe-box-loading > * {
+.xe-box-loading>* {
+    display: none;
     visibility: hidden;
 }
 
