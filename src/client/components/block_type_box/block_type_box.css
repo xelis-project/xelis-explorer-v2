@@ -1,6 +1,11 @@
 .xe-block-type-box {
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
 }
 
 .xe-block-type-box::after {

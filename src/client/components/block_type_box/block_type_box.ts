@@ -21,7 +21,9 @@ export class BlockTypeBox {
         this.element.style.width = `${size}rem`;
         this.element.style.height = `${size}rem`;
         this.element.style.borderRadius = `${size/5}rem`;
+        this.element.style.fontSize = `${75*size}%`;
         this.element.className = ``;
+        this.element.innerHTML = `${block_type.slice(0,1).toUpperCase()}`
         this.element.classList.add(`xe-block-type-box`, `xe-block-type-box-${block_type.toLowerCase()}`);
     }
 
