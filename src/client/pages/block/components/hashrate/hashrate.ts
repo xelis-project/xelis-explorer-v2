@@ -2,6 +2,7 @@ import { Block, GetInfoResult } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { format_diff } from "../../../../utils/format_diff";
 import { format_hashrate } from "../../../../utils/format_hashrate";
+import { Box } from "../../../../components/box/box";
 
 import './hashrate.css';
 
@@ -26,12 +27,17 @@ export class BlockHashrate {
         this.container.element.appendChild(this.cum_diff_element);
     }
 
+    set_loading(loading: boolean) {
+        Box.content_loading(this.hashrate_element, loading);
+        Box.content_loading(this.diff_element, loading);
+        Box.content_loading(this.cum_diff_element, loading);
+    }
+
     set(block: Block, info: GetInfoResult) {
         this.set_hashrate(parseInt(block.difficulty), info.block_time_target);
         this.set_diff(parseInt(block.difficulty));
         this.set_cum_diff(parseInt(block.cumulative_difficulty));
     }
-
 
     set_hashrate(difficulty: number, block_time_target: number) {
         this.hashrate_element.innerHTML = `

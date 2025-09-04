@@ -3,6 +3,7 @@ import { Container } from "../../../../components/container/container"
 import { Block, BlockType, GetInfoResult } from "@xelis/sdk/daemon/types";
 import prettyMilliseconds from "pretty-ms";
 import { BlockTypeBox } from "../../../../components/block_type_box/block_type_box";
+import { Box } from "../../../../components/box/box";
 
 import './info.css';
 
@@ -21,6 +22,9 @@ export class BlockInfo {
     confirmations_element: HTMLDivElement;
     version_element: HTMLDivElement;
 
+    sub_container_1: HTMLDivElement;
+    sub_container_2: HTMLDivElement;
+
     constructor() {
         this.container = new Container();
         this.container.element.classList.add(`xe-block-info`);
@@ -31,30 +35,37 @@ export class BlockInfo {
         this.height_type_element.classList.add(`xe-block-height-type`);
         container_1.appendChild(this.height_type_element);
 
-        const sub_container_1 = document.createElement(`div`);
-        container_1.appendChild(sub_container_1);
+        this.sub_container_1 = document.createElement(`div`);
+        container_1.appendChild(this.sub_container_1);
         this.confirmations_element = document.createElement(`div`);
-        sub_container_1.appendChild(this.confirmations_element);
+        this.sub_container_1.appendChild(this.confirmations_element);
         this.version_element = document.createElement(`div`);
-        sub_container_1.appendChild(this.version_element);
+        this.sub_container_1.appendChild(this.version_element);
 
         const container_2 = document.createElement(`div`);
         this.container.element.appendChild(container_2);
         this.age_element = document.createElement(`div`);
         container_2.appendChild(this.age_element);
 
-        const sub_container_2 = document.createElement(`div`);
-        container_2.appendChild(sub_container_2);
+        this.sub_container_2 = document.createElement(`div`);
+        container_2.appendChild(this.sub_container_2);
         this.topo_element = document.createElement(`div`);
-        sub_container_2.appendChild(this.topo_element);
+        this.sub_container_2.appendChild(this.topo_element);
         this.size_element = document.createElement(`div`);
-        sub_container_2.appendChild(this.size_element);
+        this.sub_container_2.appendChild(this.size_element);
         this.tx_count_element = document.createElement(`div`);
-        sub_container_2.appendChild(this.tx_count_element);
+        this.sub_container_2.appendChild(this.tx_count_element);
 
         this.last_update_element = document.createElement(`div`);
         this.last_update_element.classList.add(`xe-block-info-last-update`);
         this.container.element.appendChild(this.last_update_element);
+    }
+
+    set_loading(loading: boolean) {
+        Box.content_loading(this.height_type_element, loading);
+        Box.content_loading(this.sub_container_1, loading);
+        Box.content_loading(this.age_element, loading);
+        Box.content_loading(this.sub_container_2, loading);
     }
 
     set(block: Block, info: GetInfoResult) {

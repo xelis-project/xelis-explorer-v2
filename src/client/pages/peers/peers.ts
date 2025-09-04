@@ -103,7 +103,7 @@ export class PeersPage extends Page {
         this.peers_map.map.set_loading(true);
         this.peers_chart.container.box_loading(true);
         this.peers_list.container.list_loading(20, `8rem`);
-        this.peers_info.container.content_loading(true);
+        this.peers_info.set_loading(true);
 
         const info = await node.rpc.getInfo();
 
@@ -114,7 +114,7 @@ export class PeersPage extends Page {
         this.peers_map.map.set(peers_locations);
         this.peers_map.map.set_loading(false);
         this.peers_chart.container.box_loading(false);
-        this.peers_info.container.content_loading(false);
+        this.peers_info.set_loading(false);
 
         this.peers_info.set(peers, info.height);
         this.peers_list.set(peers_locations);

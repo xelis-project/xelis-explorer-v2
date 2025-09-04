@@ -9,28 +9,6 @@ export class Container {
         this.element.classList.add(`xe-container`);
     }
 
-    private content_elements: Element[] = [];
-    content_loading(loading: boolean) {
-        if (loading) {
-            for (let i = 0; i < this.element.children.length; i++) {
-                const element = this.element.children[i];
-                this.content_elements.push(element);
-            }
-
-            this.content_elements.forEach((element) => {
-                element.remove();
-                const box = new Box();
-                box.set_loading(true);
-                this.element.appendChild(box.element);
-            })
-        } else {
-            this.element.replaceChildren();
-            this.content_elements.forEach((element) => {
-                this.element.appendChild(element);
-            });
-        }
-    }
-
     box_loading(loading: boolean) {
         const boxes = this.element.querySelectorAll(`.xe-box`);
         boxes.forEach(box => {

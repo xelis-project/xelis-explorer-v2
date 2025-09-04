@@ -1,5 +1,6 @@
 .xe-block-hashrate {
     display: flex;
+    gap: 1rem;
     justify-content: space-between;
 }
 
@@ -7,4 +8,5 @@
     display: flex;
     gap: .25rem;
     flex-direction: column;
+    flex: 1;
 }

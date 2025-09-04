@@ -1,6 +1,7 @@
 import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { format_xel } from "../../../../utils/format_xel";
+import { Box } from "../../../../components/box/box";
 
 import './extra.css';
 
@@ -35,6 +36,15 @@ export class BlockExtra {
         container_2.appendChild(this.unix_time_element);
         this.utc_time_element = document.createElement(`div`);
         container_2.appendChild(this.utc_time_element);
+    }
+
+    set_loading(loading: boolean) {
+        Box.content_loading(this.supply_element, loading);
+        Box.content_loading(this.dev_reward_element, loading);
+
+        Box.content_loading(this.local_time_element, loading);
+        Box.content_loading(this.unix_time_element, loading);
+        Box.content_loading(this.utc_time_element, loading);
     }
 
     set(block: Block) {

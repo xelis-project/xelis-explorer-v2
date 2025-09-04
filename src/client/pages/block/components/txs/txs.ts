@@ -54,7 +54,7 @@ export class BlockTxs {
                 this.table.prepend_row(tx_row.element);
             });
         } else {
-            this.table.set_empty_row(`No transactions`);
+            this.table.set_empty(`No transactions`);
         }
     }
 }

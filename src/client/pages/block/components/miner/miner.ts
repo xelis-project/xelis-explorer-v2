@@ -4,6 +4,7 @@ import { format_address } from "../../../../utils/format_address";
 import hashicon from 'hashicon';
 import { format_xel } from "../../../../utils/format_xel";
 import { Block } from "@xelis/sdk/daemon/types";
+import { Box } from "../../../../components/box/box";
 
 import './miner.css';
 
@@ -23,6 +24,11 @@ export class BlockMiner {
         this.reward_element = document.createElement(`div`);
         this.reward_element.classList.add(`xe-block-reward`);
         this.container.element.appendChild(this.reward_element);
+    }
+
+    set_loading(loading: boolean) {
+        Box.content_loading(this.miner_element, loading);
+        Box.content_loading(this.reward_element, loading);
     }
 
     set(block: Block) {

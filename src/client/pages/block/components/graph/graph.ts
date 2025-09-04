@@ -1,6 +1,7 @@
 import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { DAG } from "../../../../components/dag/dag";
+import { Box } from "../../../../components/box/box";
 
 import './graph.css';
 
@@ -36,6 +37,14 @@ export class BlockGraph {
         container_2.appendChild(this.nonce_element);
         this.extra_nonce_element = document.createElement(`div`);
         container_2.appendChild(this.extra_nonce_element);
+    }
+
+    set_loading(loading: boolean) {
+
+        Box.content_loading(this.hash_element, loading);
+        Box.content_loading(this.tips_element, loading);
+        Box.content_loading(this.nonce_element, loading);
+        Box.content_loading(this.extra_nonce_element, loading);
     }
 
     set(block: Block) {

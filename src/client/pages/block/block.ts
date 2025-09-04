@@ -169,12 +169,23 @@ export class BlockPage extends Page {
 
         this.listen_node_events();
 
+        this.block_miner.set_loading(true);
+        this.block_hashrate.set_loading(true);
+        this.block_info.set_loading(true);
+        this.block_extra.set_loading(true);
+        this.block_graph.set_loading(true);
         this.block_txs.table.set_loading(5);
 
         await this.load_block();
 
         const node = XelisNode.instance();
         const info = await node.rpc.getInfo();
+
+        this.block_hashrate.set_loading(false);
+        this.block_miner.set_loading(false);
+        this.block_info.set_loading(false);
+        this.block_extra.set_loading(false);
+        this.block_graph.set_loading(false);
 
         const { block } = this.page_data;
         if (block) {

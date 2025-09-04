@@ -18,17 +18,24 @@
     white-space: nowrap;
 }
 
+.xe-table-empty {
+    background-color: rgba(2, 255, 209, 0.1);
+    cursor: inherit;
+}
+
 .xe-table-clickable tbody tr:hover td {
     background-color: rgba(2, 255, 209, 0.1);
     cursor: pointer;
 }
 
-.xe-table-clickable td:first-child {
+.xe-table-clickable td:first-child,
+.xe-table-empty td:first-child {
     border-top-left-radius: .5rem;
     border-bottom-left-radius: .5rem;
 }
 
-.xe-table-clickable td:last-child {
+.xe-table-clickable td:last-child,
+.xe-table-empty td:first-child {
     border-top-right-radius: .5rem;
     border-bottom-right-radius: .5rem;
 }

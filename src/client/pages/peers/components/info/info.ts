@@ -26,6 +26,13 @@ export class PeersInfo {
         this.container.element.appendChild(this.pruned_ledger_element);
     }
 
+    set_loading(loading: boolean) {
+        Box.content_loading(this.sync_element, loading, `1rem`);
+        Box.content_loading(this.desync_element, loading, `1rem`);
+        Box.content_loading(this.full_ledger_element, loading, `1rem`);
+        Box.content_loading(this.pruned_ledger_element, loading, `1rem`);
+    }
+
     set(peers: Peer[], height: number) {
         let node_count = 0;
         let sync_count = 0;
