@@ -77,11 +77,15 @@ export class BlockTopoPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
 
+        this.block_page.set_loading(true);
         this.block_page.listen_node_events();
         await this.load_block();
 
         const node = XelisNode.instance();
         const info = await node.rpc.getInfo();
+
+        this.block_page.set_loading(false);
+
         const { block } = this.block_page.page_data;
         if (block) {
             this.set_element(this.block_page.element);

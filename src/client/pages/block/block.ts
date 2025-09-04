@@ -155,6 +155,15 @@ export class BlockPage extends Page {
         node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
     }
 
+    set_loading(loading: boolean) {
+        this.block_miner.set_loading(loading);
+        this.block_hashrate.set_loading(loading);
+        this.block_info.set_loading(loading);
+        this.block_extra.set_loading(loading);
+        this.block_graph.set_loading(loading);
+        if (loading) this.block_txs.table.set_loading(5);
+    }
+
     set(block: Block, info: GetInfoResult) {
         this.block_info.set(block, info);
         this.block_miner.set(block);
@@ -169,23 +178,14 @@ export class BlockPage extends Page {
 
         this.listen_node_events();
 
-        this.block_miner.set_loading(true);
-        this.block_hashrate.set_loading(true);
-        this.block_info.set_loading(true);
-        this.block_extra.set_loading(true);
-        this.block_graph.set_loading(true);
-        this.block_txs.table.set_loading(5);
+        this.set_loading(true);
 
         await this.load_block();
 
         const node = XelisNode.instance();
         const info = await node.rpc.getInfo();
 
-        this.block_hashrate.set_loading(false);
-        this.block_miner.set_loading(false);
-        this.block_info.set_loading(false);
-        this.block_extra.set_loading(false);
-        this.block_graph.set_loading(false);
+        this.set_loading(false);
 
         const { block } = this.page_data;
         if (block) {
