@@ -14,6 +14,5 @@ export class DashboardDAG {
         this.dag.element.classList.add(`xe-dashboard-dag-dag`);
         this.container.element.appendChild(this.dag.element);
         setTimeout(() => this.dag.update_size());
-        this.dag.load(100);
     }
 }

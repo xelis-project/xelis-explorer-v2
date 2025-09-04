@@ -296,6 +296,12 @@ export class DashboardPage extends Page {
         this.dashboard_peers.peers_map.overlay_loading.set_loading(false);
     }
 
+    async load_dag() {
+        this.dashboard_dag.dag.overlay_loading.set_loading(true);
+        await this.dashboard_dag.dag.load(100);
+        this.dashboard_dag.dag.overlay_loading.set_loading(false);
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(DashboardPage.title);
@@ -307,6 +313,7 @@ export class DashboardPage extends Page {
         this.dashboard_txs.container.list_loading(20, `5rem`);
         this.dashboard_chart_section_2.container.box_loading(true);
 
+        this.load_dag();
         this.load_peers();
 
         await this.load_top_stats()
