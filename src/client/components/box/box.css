@@ -3,6 +3,7 @@
     padding: 1rem;
     border-radius: 1rem;
     text-decoration: none;
+    color: white;
 }
 
 .xe-box-loading {
@@ -13,6 +14,10 @@
 .xe-box-loading>* {
     display: none;
     visibility: hidden;
+}
+
+.xe-box:visited {
+    color: rgb(160, 160, 160);
 }
 
 @keyframes xe-box-loading-animation {

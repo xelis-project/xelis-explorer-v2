@@ -148,11 +148,6 @@ export class BlocksPage extends Page {
         blocks.forEach((block) => {
             const block_row = new BlockRow();
             block_row.set(block, info.block_time_target);
-
-            block_row.element.addEventListener(`click`, () => {
-                App.instance().go_to(`/block/${block.hash}`);
-            });
-
             this.table.prepend_row(block_row.element);
             this.block_rows.push(block_row);
         });

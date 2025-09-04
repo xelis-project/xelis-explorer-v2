@@ -54,7 +54,7 @@ export class Table {
         empty_row.classList.add(`xe-table-empty`);
         this.element.classList.remove(`xe-table-clickable`);
         const td = empty_row.querySelector(`td`);
-        if (td) td.innerHTML = text;
+        if (td) td.innerHTML = `<div>${text}</div>`;
     }
 
     set_clickable() {

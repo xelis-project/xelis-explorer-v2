@@ -13,9 +13,24 @@
 }
 
 .xe-table tbody tr td {
-    padding: .75rem .5rem;
+
     vertical-align: middle;
     white-space: nowrap;
+}
+
+.xe-table tbody tr td>div {
+    padding: .75rem .5rem;
+}
+
+.xe-table tbody tr td>a {
+    padding: .75rem .5rem;
+    text-decoration: none;
+    display: block;
+    color: white;
+}
+
+.xe-table tbody tr td>a:visited {
+    color: rgb(160, 160, 160);
 }
 
 .xe-table-empty {

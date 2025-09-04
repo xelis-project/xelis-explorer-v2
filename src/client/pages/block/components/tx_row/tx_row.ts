@@ -6,38 +6,12 @@ import { format_xel } from "../../../../utils/format_xel";
 import { Transaction, TransactionData } from "@xelis/sdk/daemon/types";
 import prettyBytes from "pretty-bytes";
 import { format_asset } from "../../../../utils/format_asset";
+import { Row } from "../../../../components/table/row";
 
-export class TxRow {
-    element: HTMLTableRowElement;
-    cell_1_element: HTMLTableCellElement;
-    cell_2_element: HTMLTableCellElement;
-    cell_3_element: HTMLTableCellElement;
-    cell_4_element: HTMLTableCellElement;
-    cell_5_element: HTMLTableCellElement;
-
+export class TxRow extends Row {
     constructor() {
-        this.element = document.createElement(`tr`);
+        super(5);
         this.element.classList.add(`xe-blocks-tx-row`);
-
-        this.cell_1_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_1_element);
-        this.cell_2_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_2_element);
-        this.cell_3_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_3_element);
-        this.cell_4_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_4_element);
-        this.cell_5_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_5_element);
-    }
-
-    
-    set_loading(loading: boolean) {
-        if (loading) {
-            this.element.classList.add(`xe-block-tx-row-loading`);
-        } else {
-            this.element.classList.remove(`xe-blocks-tx-row-loading`);
-        }
     }
 
     set(tx: Transaction) {
@@ -46,10 +20,11 @@ export class TxRow {
         this.set_signer(tx.source);
         this.set_type(tx.data);
         this.set_size(tx.size);
+        this.set_link(`/tx/${tx.hash}`);
     }
 
     set_hash(hash: string) {
-        this.cell_1_element.innerHTML = `${reduce_text(hash)}`;
+        this.value_cells[0].innerHTML = `${reduce_text(hash)}`;
     }
 
     set_type(data: TransactionData) {
@@ -66,7 +41,7 @@ export class TxRow {
             value = `${data.transfers.length} transfer`;
         }
 
-        this.cell_2_element.innerHTML = value;
+        this.value_cells[1].innerHTML = value;
     }
 
     set_signer(signer: string) {
@@ -80,15 +55,15 @@ export class TxRow {
         signer_addr.innerHTML = format_address(signer);
         container.appendChild(signer_addr);
 
-        this.cell_3_element.replaceChildren();
-        this.cell_3_element.appendChild(container);
+        this.value_cells[2].replaceChildren();
+        this.value_cells[2].appendChild(container);
     }
 
     set_size(size_in_bytes: number) {
-        this.cell_4_element.innerHTML = `${prettyBytes(size_in_bytes)}`;
+        this.value_cells[3].innerHTML = `${prettyBytes(size_in_bytes)}`;
     }
 
     set_fee(fee: number) {
-        this.cell_5_element.innerHTML = `${format_xel(fee, true)}`;
+        this.value_cells[5].innerHTML = `${format_xel(fee, true)}`;
     }
 }

@@ -123,11 +123,6 @@ export class BlockHeightPage extends Page {
             blocks.forEach((block) => {
                 const block_row = new BlockRow();
                 block_row.set(block);
-
-                block_row.element.addEventListener(`click`, () => {
-                    App.instance().go_to(`/block/${block.hash}`);
-                });
-
                 this.table.prepend_row(block_row.element);
             });
         } else {

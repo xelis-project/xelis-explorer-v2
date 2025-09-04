@@ -8,47 +8,15 @@ import { format_xel } from "../../../utils/format_xel";
 import { format_hashrate } from "../../../utils/format_hashrate";
 import prettyMilliseconds from "pretty-ms";
 import { BlockTypeBox } from "../../../components/block_type_box/block_type_box";
+import { Row } from "../../../components/table/row";
 
 import './block_row.css';
 
-export class BlockRow {
-    element: HTMLTableRowElement;
-    cell_1_element: HTMLTableCellElement;
-    cell_2_element: HTMLTableCellElement;
-    cell_3_element: HTMLTableCellElement;
-    cell_4_element: HTMLTableCellElement;
-    cell_5_element: HTMLTableCellElement;
-    cell_6_element: HTMLTableCellElement;
-    cell_7_element: HTMLTableCellElement;
-    cell_8_element: HTMLTableCellElement;
-    cell_9_element: HTMLTableCellElement;
-    cell_10_element: HTMLTableCellElement;
-
+export class BlockRow extends Row {
     data?: Block;
 
     constructor() {
-        this.element = document.createElement(`tr`);
-
-        this.cell_1_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_1_element);
-        this.cell_2_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_2_element);
-        this.cell_3_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_3_element);
-        this.cell_4_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_4_element);
-        this.cell_5_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_5_element);
-        this.cell_6_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_6_element);
-        this.cell_7_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_7_element);
-        this.cell_8_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_8_element);
-        this.cell_9_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_9_element);
-        this.cell_10_element = document.createElement(`td`);
-        this.element.appendChild(this.cell_10_element);
+        super(10);
     }
 
     set(block: Block, block_time_target: number) {
@@ -63,14 +31,15 @@ export class BlockRow {
         this.set_reward(block.reward);
         this.set_diff(parseInt(block.difficulty), block_time_target);
         this.set_age(block.timestamp);
+        this.set_link(`/block/${block.hash}`);
     }
 
     set_topoheight(topoheight?: number) {
-        this.cell_1_element.innerHTML = topoheight ? topoheight.toLocaleString() : `--`;
+        this.value_cells[0].innerHTML = topoheight ? topoheight.toLocaleString() : `--`;
     }
 
     set_height(height: number) {
-        this.cell_2_element.innerHTML = height.toLocaleString();
+        this.value_cells[1].innerHTML = height.toLocaleString();
     }
 
     set_type(type: BlockType) {
@@ -85,8 +54,8 @@ export class BlockRow {
         text.innerHTML = type.toUpperCase();
         container.appendChild(text);
 
-        this.cell_3_element.replaceChildren();
-        this.cell_3_element.appendChild(container);
+        this.value_cells[2].replaceChildren();
+        this.value_cells[2].appendChild(container);
     }
 
     set_miner(miner: string) {
@@ -100,34 +69,34 @@ export class BlockRow {
         miner_addr.innerHTML = format_address(miner);
         container.appendChild(miner_addr);
 
-        this.cell_4_element.replaceChildren();
-        this.cell_4_element.appendChild(container);
+        this.value_cells[3].replaceChildren();
+        this.value_cells[3].appendChild(container);
     }
 
     set_size(size_in_bytes: number) {
-        this.cell_5_element.innerHTML = prettyBytes(size_in_bytes);
+        this.value_cells[4].innerHTML = prettyBytes(size_in_bytes);
     }
 
     set_tx_count(tx_count: number) {
-        this.cell_6_element.innerHTML = tx_count.toLocaleString(undefined, { minimumIntegerDigits: 4, notation: "compact" });
+        this.value_cells[5].innerHTML = tx_count.toLocaleString(undefined, { minimumIntegerDigits: 4, notation: "compact" });
     }
 
     set_hash(hash: string) {
-        this.cell_7_element.innerHTML = reduce_text(hash);
+        this.value_cells[6].innerHTML = reduce_text(hash);
     }
 
     set_reward(reward?: number) {
-        this.cell_8_element.innerHTML = reward ? format_xel(reward, true) : `--`;
+        this.value_cells[7].innerHTML = reward ? format_xel(reward, true) : `--`;
     }
 
     set_diff(difficulty: number, block_time_target: number) {
-        this.cell_9_element.innerHTML = format_hashrate(difficulty, block_time_target);
+        this.value_cells[8].innerHTML = format_hashrate(difficulty, block_time_target);
     }
 
     age_interval_id?: number;
     set_age(timestamp: number) {
         const set_age = () => {
-            this.cell_10_element.innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true, secondsDecimalDigits: 0 });
+            this.value_cells[9].innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true, secondsDecimalDigits: 0 });
         }
 
         set_age();

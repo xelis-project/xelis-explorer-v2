@@ -48,9 +48,6 @@ export class BlockTxs {
             txs.forEach((tx) => {
                 const tx_row = new TxRow();
                 tx_row.set(tx);
-                tx_row.element.addEventListener(`click`, () => {
-                    App.instance().go_to(`/tx/${tx.hash}`);
-                });
                 this.table.prepend_row(tx_row.element);
             });
         } else {
