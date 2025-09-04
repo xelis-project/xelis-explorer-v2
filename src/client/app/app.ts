@@ -48,7 +48,6 @@ export class App extends Singleton<App> {
         if (this.current_page) this.current_page.unload();
         this.current_page = page_type.instance();
         this.current_page.load(this.root);
-        this.intercept_links();
         this.events.emit("page_load");
     }
 
@@ -56,20 +55,17 @@ export class App extends Singleton<App> {
         this.load_page();
     }
 
-    register_events() {
-        window.addEventListener(`popstate`, this.on_pop_state);
+    on_click = (e: PointerEvent) => {
+        // intercept link click
+        if (e.target instanceof HTMLAnchorElement) {
+            e.preventDefault();
+            const target = e.target as HTMLAnchorElement;
+            this.go_to(target.href);
+        }
     }
 
-    intercept_links() {
-        const links = this.root.querySelectorAll(`a`);
-        links.forEach((link) => {
-            if (!link.hasAttribute("attached")) {
-                link.setAttribute(`attached`, ``);
-                link.addEventListener(`click`, (e) => {
-                    e.preventDefault();
-                    this.go_to(link.href);
-                });
-            }
-        });
+    register_events() {
+        window.addEventListener(`popstate`, this.on_pop_state);
+        window.addEventListener(`click`, this.on_click);
     }
 }
