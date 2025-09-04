@@ -12,6 +12,7 @@
     flex-direction: row;
     align-items: center;
     flex: 1;
+    min-height: 1.5rem;
 }
 
 .xe-block-miner-miner> :nth-child(2) {
@@ -25,4 +26,5 @@
     gap: .25rem;
     flex-direction: column;
     flex: 1;
+    min-height: 2rem;
 }

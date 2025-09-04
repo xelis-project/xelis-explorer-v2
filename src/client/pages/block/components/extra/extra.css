@@ -9,11 +9,12 @@
     gap: 1rem;
 }
 
-.xe-block-extra-container-1 > div {
+.xe-block-extra-container-1>div {
     display: flex;
     gap: .25rem;
     flex-direction: column;
     flex: 1;
+    min-height: 1rem;
 }
 
 .xe-block-extra-container-2 {
@@ -26,7 +27,7 @@
     border-bottom-right-radius: .5rem;
 }
 
-.xe-block-extra-container-2 > div {
+.xe-block-extra-container-2>div {
     display: flex;
     gap: .5rem;
     flex-direction: row;
