@@ -84,16 +84,14 @@ export class MempoolPage extends Page {
 
     on_new_block = async (new_block?: Block, err?: Error) => {
         if (new_block) {
-            const { top_block, blocks, mempool_txs } = this.page_data;
-            if (top_block) {
-                blocks.shift();
-                blocks.push(new_block);
+            const { blocks, mempool_txs } = this.page_data;
+            blocks.shift();
+            blocks.push(new_block);
 
-                this.page_data.mempool_txs = [];
-                this.mempool_txs_list.set([]);
-                this.mempool_chart.blocks_txs.set(this.page_data.blocks);
-                this.mempool_summary.set(mempool_txs, top_block);
-            }
+            this.page_data.mempool_txs = [];
+            this.mempool_txs_list.set([]);
+            this.mempool_chart.blocks_txs.set(this.page_data.blocks);
+            this.mempool_summary.set(mempool_txs, new_block);
         }
     }
 
@@ -112,7 +110,7 @@ export class MempoolPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(MempoolPage.title);
-        this.mempool_txs_list.set_loading();
+        this.mempool_txs_list.container.list_loading(5, `5rem`);
         this.listen_node_events();
 
         const node = XelisNode.instance();
@@ -123,11 +121,11 @@ export class MempoolPage extends Page {
         const mempool_txs = await node.rpc.getMemPool() as any; // TODO fix return type
         this.page_data.mempool_txs = mempool_txs as Transaction[];
 
-        const blocks = await fetch_blocks(top_block.height, 50);
+        const blocks = await fetch_blocks(top_block.height, 25);
         this.page_data.blocks = blocks;
 
         this.mempool_summary.set(this.page_data.mempool_txs, top_block);
-        this.mempool_txs_list.set([]);
+        this.mempool_txs_list.set(mempool_txs);
         this.mempool_chart.blocks_txs.set(blocks);
     }
 
