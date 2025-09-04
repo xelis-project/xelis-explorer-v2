@@ -5,4 +5,15 @@
     overflow-y: scroll;
     height: 50rem;
     overflow-x: hidden;
+    animation: xe-dashboard-txs-appear-animation .65s;
+}
+
+@keyframes xe-dashboard-txs-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }

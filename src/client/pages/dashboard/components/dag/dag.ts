@@ -9,6 +9,7 @@ export class DashboardDAG {
 
     constructor() {
         this.container = new Container();
+        this.container.element.classList.add(`xe-dashboard-dag`);
         this.dag = new DAG();
         this.dag.element.classList.add(`xe-dashboard-dag-dag`);
         this.container.element.appendChild(this.dag.element);

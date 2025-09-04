@@ -1,4 +1,19 @@
+.xe-dashboard-peers {
+    animation: xe-dashboard-peers-appear-animation .9s;
+}
+
+@keyframes xe-dashboard-peers-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
 .xe-dashboard-peers-map {
     height: 25rem;
     border-radius: 1rem;
+
 }

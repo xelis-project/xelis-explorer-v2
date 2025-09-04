@@ -9,6 +9,8 @@ export class DashboardPeers {
 
     constructor() {
         this.container = new Container();
+        this.container.element.classList.add(`xe-dashboard-peers`);
+
         this.peers_map = new PeersMap();
         this.peers_map.element.classList.add(`xe-dashboard-peers-map`);
         this.container.element.appendChild(this.peers_map.element);

@@ -1,3 +1,18 @@
+.xe-dashboard-dag {
+    animation: xe-dashboard-dag-appear-animation 1s;
+}
+
+@keyframes xe-dashboard-dag-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+
 .xe-dashboard-dag-dag {
     height: 25rem;
 }
