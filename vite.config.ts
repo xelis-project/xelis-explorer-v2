@@ -1,10 +1,16 @@
 import { defineConfig } from "vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import checker from "vite-plugin-checker";
 
 // https://vite.dev/config/
 export default defineConfig({
     envDir: "./env",
-    plugins: [cloudflare()],
+    plugins: [
+        cloudflare(),
+        checker({
+            typescript: true
+        })
+    ],
     build: {
         // generate .vite/manifest.json in outDir
         manifest: true,
