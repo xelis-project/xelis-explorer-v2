@@ -1,4 +1,4 @@
-import addresses from "../maps/addresses";
+import addresses from "../maps/addresses/addresses";
 import { reduce_text } from "./reduce_text";
 
 export const format_address = (address: string) => {
