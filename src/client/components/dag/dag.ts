@@ -9,6 +9,7 @@ import { block_type_colors } from '../block_type_box/block_type_box';
 import CameraControls from 'camera-controls';
 import { RPCRequest } from '@xelis/sdk/rpc/types';
 import { OverlayLoading } from '../overlay_loading/overlay_loading';
+import { DAGBlockDetails } from './block_details/block_details';
 
 CameraControls.install({ THREE });
 
@@ -25,9 +26,14 @@ export class DAG {
     pointer: THREE.Vector2;
 
     overlay_loading: OverlayLoading;
+    block_details: DAGBlockDetails;
+    hovered_block_mesh?: THREE.Mesh;
 
     constructor() {
         this.element = document.createElement(`div`);
+
+        this.block_details = new DAGBlockDetails();
+        this.element.appendChild(this.block_details.element);
 
         this.overlay_loading = new OverlayLoading();
         this.element.appendChild(this.overlay_loading.element);
@@ -75,6 +81,7 @@ export class DAG {
         window.addEventListener('resize', this.on_resize);
 
         this.element.addEventListener(`pointermove`, this.on_pointer_move);
+        this.element.addEventListener(`mousedown`, this.on_click);
     }
 
     update_size() {
@@ -97,6 +104,17 @@ export class DAG {
         const y = -(e.clientY / this.element.clientHeight) * 2 + 1;
         this.pointer.x = x;
         this.pointer.y = y;
+    }
+
+    on_click = (e: MouseEvent) => {
+        if (this.hovered_block_mesh) {
+            const block = this.hovered_block_mesh.userData.block as Block;
+            this.block_details.set(block);
+            this.block_details.set_position(e.clientX, e.clientY);
+            this.block_details.show();
+        } else {
+            this.block_details.hide();
+        }
     }
 
     async load(height: number) {
@@ -150,22 +168,20 @@ export class DAG {
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
     }
 
-    hover_block_mesh?: THREE.Mesh;
-    intercept_blocks() {
-        if (this.hover_block_mesh) {
-            const material = this.hover_block_mesh.material as THREE.MeshBasicMaterial;
-            material.color.set(0x000);
-            this.hover_block_mesh = undefined;
-        }
-
+    intercept_block() {
         const mesh_blocks = this.block_group.getObjectsByProperty(`name`, `block`) as THREE.Mesh[];
         const intersects = this.raycaster.intersectObjects<THREE.Mesh>(mesh_blocks);
-        for (let i = 0; i < intersects.length; i++) {
-            const intersection = intersects[i];
-            const block_mesh = intersection.object;
-            const material = block_mesh.material as THREE.MeshBasicMaterial;
-            material.color.set(0xff0000);
-            this.hover_block_mesh = block_mesh;
+
+        if (intersects.length > 0) {
+            if (!this.hovered_block_mesh) {
+                const intersection = intersects[0];
+                const block_mesh = intersection.object;
+                block_mesh.scale.set(0.95, 0.95, 0.95);
+                this.hovered_block_mesh = block_mesh;
+            }
+        } else {
+            this.hovered_block_mesh?.scale.set(1, 1, 1);
+            this.hovered_block_mesh = undefined;
         }
     }
 
@@ -177,6 +193,7 @@ export class DAG {
         const geo = new RoundedBoxGeometry(size, size, 0.5, 10, 0.5);
         const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
         const box = new THREE.Mesh(geo, mat);
+        box.userData = { block };
         box.name = "block";
         group.add(box);
 
@@ -223,7 +240,7 @@ export class DAG {
 
     render = (time: number) => {
         this.raycaster.setFromCamera(this.pointer, this.orthographic_camera);
-        this.intercept_blocks();
+        this.intercept_block();
 
         const cam_pos = this.orthographic_camera.position;
         /*if (cam_pos.x < -100) {

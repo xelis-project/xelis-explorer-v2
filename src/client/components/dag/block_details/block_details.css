@@ -1,0 +1,31 @@
+.xe-dag-block-details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.1);
+    width: 15rem;
+    height: 15rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(15px);
+    padding: 1rem;
+    font-size: .8rem;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.xe-dag-block-details>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-dag-block-details>div>:nth-child(1) {
+    font-weight: 300;
+    opacity: .7;
+}
+
+.xe-dag-block-details>div>:nth-child(2) {
+    word-break: break-all;
+}
