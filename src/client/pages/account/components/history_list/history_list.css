@@ -1,0 +1,27 @@
+.xe-account-list {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    max-height: 40rem;
+    overflow: auto;
+}
+
+.xe-account-list-item {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-account-list-item>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.xe-account-list-item>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+}

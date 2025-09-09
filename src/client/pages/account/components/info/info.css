@@ -1,0 +1,24 @@
+.xe-account-info {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-account-info-container-1 {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-account-info-container-2 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-account-info-container-2>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
