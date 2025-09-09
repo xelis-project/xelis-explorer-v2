@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { App } from "../../server";
+import { App as ServerApp } from "../../server";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { Singleton } from "../utils/singleton";
 
@@ -26,7 +26,7 @@ export class Page extends Singleton<Page> {
         return pattern.exec(new URL(href));
     }
 
-    static async handle_server(c: Context<App>) {
+    static async handle_server(c: Context<ServerApp>) {
         return;
     }
 

@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { App } from "../../../server";
+import { App as ServerApp } from "../../../server";
 import { Page } from "../page";
 import { Block, GetInfoResult, RPCEvent as DaemonRPCEvent } from "@xelis/sdk/daemon/types";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
@@ -30,7 +30,7 @@ export class BlockPage extends Page {
         }
     }
 
-    static async handle_server(c: Context<App>) {
+    static async handle_server(c: Context<ServerApp>) {
         let block_hash = this.get_pattern_id(c.req.url);
         this.title = `Block ${block_hash}`;
         this.server_data = undefined;

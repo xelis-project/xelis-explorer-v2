@@ -1,6 +1,6 @@
 import { Page } from "../page";
 import { Context } from "hono";
-import { App } from "../../../server";
+import { App as ServerApp } from "../../../server";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { XelisNode } from "../../app/xelis_node";
 import { BlockPage, BlockPageServerData } from "../block/block";
@@ -17,7 +17,7 @@ export class BlockTopoPage extends Page {
         }
     }
 
-    static async handle_server(c: Context<App>) {
+    static async handle_server(c: Context<ServerApp>) {
         let id = BlockTopoPage.get_pattern_id(c.req.url);
         if (!id) {
             this.status = 404;
