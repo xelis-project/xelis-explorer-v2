@@ -112,6 +112,8 @@ export class MempoolPage extends Page {
         super.load(parent);
         this.set_window_title(MempoolPage.title);
         //this.mempool_txs_list.container.list_loading(5, `5rem`);
+        Box.boxes_loading(this.mempool_chart.container.element, true);
+        Box.boxes_loading(this.mempool_summary.container.element, true);
         Box.list_loading(this.mempool_txs_list.container.element, 5, `5rem`);
         this.listen_node_events();
 
@@ -120,15 +122,18 @@ export class MempoolPage extends Page {
         const top_block = await node.rpc.getTopBlock();
         this.page_data.top_block = top_block;
 
-        const mempool_txs = await node.rpc.getMemPool() as any; // TODO fix return type
-        this.page_data.mempool_txs = mempool_txs as Transaction[];
+        const mempool_txs = await node.rpc.getMemPool();
+        this.page_data.mempool_txs = mempool_txs.transactions;
 
         const blocks = await fetch_blocks(top_block.height, 25);
         this.page_data.blocks = blocks;
 
         this.mempool_summary.set(this.page_data.mempool_txs, top_block);
-        this.mempool_txs_list.set(mempool_txs);
+        this.mempool_txs_list.set(this.page_data.mempool_txs as any);
         this.mempool_chart.blocks_txs.set(blocks);
+
+        Box.boxes_loading(this.mempool_summary.container.element, false);
+        Box.boxes_loading(this.mempool_chart.container.element, false);
     }
 
     unload() {

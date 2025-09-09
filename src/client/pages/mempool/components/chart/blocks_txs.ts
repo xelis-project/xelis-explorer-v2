@@ -14,7 +14,7 @@ export class MempoolChartBlocksTxs {
         const margin = { top: 20, right: 0, bottom: 20, left: 0 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
-        const height = 150 - margin.top - margin.bottom;
+        const height = 200 - margin.top - margin.bottom;
 
         const data = blocks.map((b, i) => {
             return { label: blocks.length - i, value: b.txs_hashes.length };

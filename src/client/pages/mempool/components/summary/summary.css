@@ -1,8 +1,8 @@
 .xe-mempool-summary {
     animation: xe-mempool-summary-appear-animation .8s;
     display: flex;
-    gap: 1rem;
     flex-direction: column;
+    justify-content: center;
 }
 
 @keyframes xe-mempool-summary-appear-animation {
@@ -19,6 +19,7 @@
     display: flex;
     gap: 1rem;
     flex-direction: row;
+    min-height: 20rem;
 }
 
 .xe-mempool-summary-container-1>:nth-child(1) {
