@@ -15,31 +15,30 @@ export class Box {
     }
 
     set_loading(loading: boolean) {
+        Box.set_loading(this.element, loading);
+    }
+
+    static set_loading(element: HTMLElement, loading: boolean) {
         if (loading) {
-            this.element.classList.add(`xe-box-loading`);
+            // element.style.animationDelay = `${Math.random()*0.1}s`;
+            element.classList.add(`xe-box-loading`);
         } else {
-            this.element.classList.remove(`xe-box-loading`);
+            element.classList.remove(`xe-box-loading`);
         }
     }
 
     static content_loading(element: HTMLElement, loading: boolean, min_height?: string) {
         if (loading) {
             if (min_height) element.style.minHeight = min_height;
-            element.classList.add(`xe-box`, `xe-box-loading`);
-        } else {
-            element.classList.remove(`xe-box`, `xe-box-loading`);
+            element.classList.add(`xe-box`);
         }
+
+        Box.set_loading(element, loading);
     }
 
     static boxes_loading(element: HTMLElement, loading: boolean) {
-        const boxes = element.querySelectorAll(`.xe-box`);
-        boxes.forEach(box => {
-            if (loading) {
-                box.classList.add(`xe-box-loading`);
-            } else {
-                box.classList.remove(`xe-box-loading`);
-            }
-        });
+        const boxes = element.querySelectorAll<HTMLElement>(`.xe-box`);
+        boxes.forEach(box => Box.set_loading(box, loading));
     }
 
     static list_loading(element: HTMLElement, count: number, min_height: string) {
