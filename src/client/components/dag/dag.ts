@@ -100,17 +100,24 @@ export class DAG {
     }
 
     on_pointer_move = (e: PointerEvent) => {
-        const x = (e.clientX / this.element.clientWidth) * 2 - 1;
-        const y = -(e.clientY / this.element.clientHeight) * 2 + 1;
+        const rect = this.element.getBoundingClientRect();
+        const offset_client_x = e.clientX - rect.x;
+        const offset_client_y = e.clientY - rect.y;
+        const x = (offset_client_x / rect.width) * 2 - 1;
+        const y = -(offset_client_y / rect.height) * 2 + 1;
         this.pointer.x = x;
         this.pointer.y = y;
     }
 
     on_click = (e: MouseEvent) => {
+        const rect = this.element.getBoundingClientRect();
+        const offset_client_x = e.clientX - rect.x;
+        const offset_client_y = e.clientY - rect.y;
+
         if (this.hovered_block_mesh) {
             const block = this.hovered_block_mesh.userData.block as Block;
             this.block_details.set(block);
-            this.block_details.set_position(e.clientX, e.clientY);
+            this.block_details.set_position(offset_client_x, offset_client_y);
             this.block_details.show();
         } else {
             this.block_details.hide();
@@ -171,7 +178,6 @@ export class DAG {
     intercept_block() {
         const mesh_blocks = this.block_group.getObjectsByProperty(`name`, `block`) as THREE.Mesh[];
         const intersects = this.raycaster.intersectObjects<THREE.Mesh>(mesh_blocks);
-
         if (intersects.length > 0) {
             if (!this.hovered_block_mesh) {
                 const intersection = intersects[0];
