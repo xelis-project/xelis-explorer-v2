@@ -40,7 +40,6 @@ export class BlockGraph {
     }
 
     set_loading(loading: boolean) {
-
         Box.content_loading(this.hash_element, loading);
         Box.content_loading(this.tips_element, loading);
         Box.content_loading(this.nonce_element, loading);
@@ -52,7 +51,7 @@ export class BlockGraph {
         this.set_tips(block.tips);
         this.set_nonce(block.nonce);
         this.set_extra_nonce(block.extra_nonce);
-        //this.dag.load(block.height);
+        this.dag.load(block.height);
         this.dag.update_size();
     }
 
