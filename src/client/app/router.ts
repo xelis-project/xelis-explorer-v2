@@ -9,6 +9,7 @@ import { MempoolPage } from "../pages/mempool/mempool";
 import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
 import { PeersPage } from "../pages/peers/peers";
+import { TransactionPage } from "../pages/transaction/transaction";
 
 export const pages = [
     DashboardPage,
@@ -19,7 +20,8 @@ export const pages = [
     DAGPage,
     BlockTopoPage,
     BlockHeightPage,
-    AccountPage
+    AccountPage,
+    TransactionPage
 ];
 
 export const match_route = (url: URL): typeof Page => {
