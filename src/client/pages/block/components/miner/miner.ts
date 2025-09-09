@@ -10,14 +10,14 @@ import './miner.css';
 
 export class BlockMiner {
     container: Container;
-    miner_element: HTMLDivElement;
+    miner_element: HTMLAnchorElement;
     reward_element: HTMLDivElement;
 
     constructor() {
         this.container = new Container();
         this.container.element.classList.add(`xe-block-miner`);
 
-        this.miner_element = document.createElement(`div`);
+        this.miner_element = document.createElement(`a`);
         this.miner_element.classList.add(`xe-block-miner-miner`);
         this.container.element.appendChild(this.miner_element);
 
@@ -38,6 +38,8 @@ export class BlockMiner {
 
     set_miner(miner: string) {
         this.miner_element.replaceChildren();
+
+        this.miner_element.href = `/account/${miner}`;
 
         const miner_icon = hashicon(miner, 45) as HTMLCanvasElement;
         this.miner_element.appendChild(miner_icon);
