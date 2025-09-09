@@ -21,6 +21,8 @@ export class DAG {
     controls: CameraControls;
     clock: THREE.Clock;
     block_group: THREE.Group;
+    raycaster: THREE.Raycaster;
+    pointer: THREE.Vector2;
 
     overlay_loading: OverlayLoading;
 
@@ -35,6 +37,9 @@ export class DAG {
         this.scene.background = new THREE.Color('#151515');
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setPixelRatio(window.devicePixelRatio);
+
+        this.raycaster = new THREE.Raycaster();
+        this.pointer = new THREE.Vector2();
 
         const rect = this.element.getBoundingClientRect();
         this.renderer.setSize(rect.width, rect.height);
@@ -68,6 +73,8 @@ export class DAG {
         this.scene.add(this.block_group);
 
         window.addEventListener('resize', this.on_resize);
+
+        this.element.addEventListener(`pointermove`, this.on_pointer_move);
     }
 
     update_size() {
@@ -83,6 +90,13 @@ export class DAG {
 
     on_resize = () => {
         this.update_size();
+    }
+
+    on_pointer_move = (e: PointerEvent) => {
+        const x = (e.clientX / this.element.clientWidth) * 2 - 1;
+        const y = -(e.clientY / this.element.clientHeight) * 2 + 1;
+        this.pointer.x = x;
+        this.pointer.y = y;
     }
 
     async load(height: number) {
@@ -136,8 +150,23 @@ export class DAG {
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
     }
 
-    set_active() {
+    hover_block_mesh?: THREE.Mesh;
+    intercept_blocks() {
+        if (this.hover_block_mesh) {
+            const material = this.hover_block_mesh.material as THREE.MeshBasicMaterial;
+            material.color.set(0x000);
+            this.hover_block_mesh = undefined;
+        }
 
+        const mesh_blocks = this.block_group.getObjectsByProperty(`name`, `block`) as THREE.Mesh[];
+        const intersects = this.raycaster.intersectObjects<THREE.Mesh>(mesh_blocks);
+        for (let i = 0; i < intersects.length; i++) {
+            const intersection = intersects[i];
+            const block_mesh = intersection.object;
+            const material = block_mesh.material as THREE.MeshBasicMaterial;
+            material.color.set(0xff0000);
+            this.hover_block_mesh = block_mesh;
+        }
     }
 
     create_box_mesh(block: Block) {
@@ -148,6 +177,7 @@ export class DAG {
         const geo = new RoundedBoxGeometry(size, size, 0.5, 10, 0.5);
         const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
         const box = new THREE.Mesh(geo, mat);
+        box.name = "block";
         group.add(box);
 
         const loader = new FontLoader();
@@ -192,6 +222,9 @@ export class DAG {
     }
 
     render = (time: number) => {
+        this.raycaster.setFromCamera(this.pointer, this.orthographic_camera);
+        this.intercept_blocks();
+
         const cam_pos = this.orthographic_camera.position;
         /*if (cam_pos.x < -100) {
             this.controls.normalizeRotations().reset();
