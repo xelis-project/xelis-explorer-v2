@@ -54,7 +54,7 @@ export class Page extends Singleton<Page> {
         document.title = title;
     }
 
-    load(parent: HTMLElement) {
+    async load(parent: HTMLElement) {
         parent.appendChild(this.element);
     }
 
