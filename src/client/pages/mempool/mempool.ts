@@ -111,7 +111,6 @@ export class MempoolPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(MempoolPage.title);
-        //this.mempool_txs_list.container.list_loading(5, `5rem`);
         Box.boxes_loading(this.mempool_chart.container.element, true);
         Box.boxes_loading(this.mempool_summary.container.element, true);
         Box.list_loading(this.mempool_txs_list.container.element, 5, `5rem`);
