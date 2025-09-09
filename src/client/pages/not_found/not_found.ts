@@ -42,7 +42,7 @@ export class NotFoundPage extends Page {
         sub_container.appendChild(description_element);
     }
 
-    load(parent: HTMLElement) {
+    async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(NotFoundPage.title);
     }

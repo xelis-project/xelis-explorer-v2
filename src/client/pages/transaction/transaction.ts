@@ -46,7 +46,7 @@ export class TransactionPage extends Page {
         this.element.appendChild(this.master.element);
     }
 
-    load(parent: HTMLElement) {
+    async load(parent: HTMLElement) {
         super.load(parent);
     }
 }

@@ -18,7 +18,7 @@ export class DAGPage extends Page {
         this.element.appendChild(this.dag.element);
     }
 
-    load(parent: HTMLElement): void {
+    async load(parent: HTMLElement) {
         super.load(parent);
         this.dag.update_size();
         this.set_window_title(DAGPage.title);

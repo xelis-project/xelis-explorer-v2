@@ -198,7 +198,7 @@ export class BlockPage extends Page {
         }
     }
 
-    unload(): void {
+    unload() {
         super.unload();
         this.clear_node_events();
     }
