@@ -27,7 +27,7 @@ export class NotFoundPage extends Page {
         this.master.content.appendChild(container);
 
         const xelis_mascot = document.createElement(`img`);
-        xelis_mascot.src = `/images/mascot_confused.png`;
+        xelis_mascot.src = `/images/xelite_confused.png`;
         container.appendChild(xelis_mascot);
 
         const sub_container = document.createElement(`div`);
