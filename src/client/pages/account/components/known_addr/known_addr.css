@@ -1,0 +1,18 @@
+.xe-account-known-addr {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-account-known-addr svg {
+    width: 2rem;
+    height: 2rem;
+    color: #02FFCF;
+}
+
+.xe-account-known-addr>:nth-child(2) {
+    display: flex;
+    gap: .1rem;
+    flex-direction: column;
+}

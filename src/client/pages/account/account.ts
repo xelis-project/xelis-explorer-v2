@@ -10,9 +10,10 @@ import { Block, RPCMethod as DaemonRPCMethod, RPCEvent as DaemonRPCEvent, GetBal
 import { XELIS_ASSET } from "@xelis/sdk/config";
 import { AccountHistoryList } from "./components/history_list/history_list";
 import { AccountBalance } from "./components/balance/balance";
+import { NotFoundPage } from "../not_found/not_found";
+import { AccountKnownAddr } from "./components/known_addr/known_addr";
 
 import "./account.css";
-import { NotFoundPage } from "../not_found/not_found";
 
 interface AccountServerData {
     is_integrated: boolean;
@@ -106,6 +107,7 @@ export class AccountPage extends Page {
     master: Master;
     account_info: AccountInfo;
     account_balance: AccountBalance;
+    account_known_addr: AccountKnownAddr;
     incoming_history_list: AccountHistoryList;
     outgoing_history_list: AccountHistoryList;
 
@@ -115,6 +117,9 @@ export class AccountPage extends Page {
         this.page_data = { addr: "" };
         this.master = new Master();
         this.element.appendChild(this.master.element);
+
+        this.account_known_addr = new AccountKnownAddr();
+        this.master.content.appendChild(this.account_known_addr.container.element);
 
         const container_1 = document.createElement(`div`);
         container_1.classList.add(`xe-account-container-1`);
@@ -201,7 +206,9 @@ export class AccountPage extends Page {
         const { addr, server_data } = this.page_data;
         if (addr && server_data) {
             this.set_element(this.master.element);
+
             this.account_info.set(addr);
+            this.account_known_addr.set(addr);
 
             const incoming = await xelis_node.rpc.getAccountHistory({
                 address: addr,
