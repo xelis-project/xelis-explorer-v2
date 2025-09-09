@@ -30,4 +30,25 @@ export class Box {
             element.classList.remove(`xe-box`, `xe-box-loading`);
         }
     }
+
+    static boxes_loading(element: HTMLElement, loading: boolean) {
+        const boxes = element.querySelectorAll(`.xe-box`);
+        boxes.forEach(box => {
+            if (loading) {
+                box.classList.add(`xe-box-loading`);
+            } else {
+                box.classList.remove(`xe-box-loading`);
+            }
+        });
+    }
+
+    static list_loading(element: HTMLElement, count: number, min_height: string) {
+        element.replaceChildren();
+        for (let i = 0; i < count; i++) {
+            const box = new Box();
+            box.set_loading(true);
+            box.element.style.minHeight = min_height;
+            element.appendChild(box.element);
+        }
+    }
 }
