@@ -58,19 +58,12 @@ export class DAG {
         this.orthographic_camera.zoom = 15;
         this.orthographic_camera.position.set(0, 0, 1);
 
-
         this.controls = new CameraControls(this.orthographic_camera, this.renderer.domElement);
         this.controls.truckSpeed = 1;
-
-        //this.controls.mouseButtons
-
-        //this.controls.enableRotate = false;
-        //this.controls.screenSpacePanning = true;
-        //this.controls.enableZoom = true;
+        this.controls.maxZoom = 20;
+        this.controls.minZoom = 5;
         this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK;
         this.controls.mouseButtons.middle = CameraControls.ACTION.ZOOM;
-
-        //this.controls.update();
 
         const grid = new THREE.GridHelper(1000, 500, new THREE.Color("#202020"), new THREE.Color("#202020"));
         grid.rotation.x = -Math.PI / 2;
