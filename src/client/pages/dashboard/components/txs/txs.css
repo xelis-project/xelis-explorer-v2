@@ -8,6 +8,12 @@
     animation: xe-dashboard-txs-appear-animation .65s;
 }
 
+.xe-dashboard-txs>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
 @keyframes xe-dashboard-txs-appear-animation {
     0% {
         translate: 0 25%;

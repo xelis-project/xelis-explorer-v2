@@ -10,6 +10,7 @@ import { MempoolSearch } from "./components/search/search";
 import { MempoolSummary } from "./components/summary/summary";
 
 import './mempool.css';
+import { Box } from "../../components/box/box";
 
 export class MempoolPage extends Page {
     static pathname = "/mempool";
@@ -110,7 +111,8 @@ export class MempoolPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(MempoolPage.title);
-        this.mempool_txs_list.container.list_loading(5, `5rem`);
+        //this.mempool_txs_list.container.list_loading(5, `5rem`);
+        Box.list_loading(this.mempool_txs_list.container.element, 5, `5rem`);
         this.listen_node_events();
 
         const node = XelisNode.instance();

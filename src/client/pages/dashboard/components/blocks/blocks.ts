@@ -10,15 +10,25 @@ export class DashboardBlocks {
     container: Container;
     block_items: BlockItem[];
 
+    element_title: HTMLDivElement;
+    element_content: HTMLDivElement;
+
     constructor() {
         this.container = new Container();
+        this.container.element.classList.add(`xe-dashboard-blocks`, `scrollbar-1`, `scrollbar-1-right`);
+
         this.block_items = [];
 
-        this.container.element.classList.add(`xe-dashboard-blocks`, `scrollbar-1`, `scrollbar-1-right`);
+        this.element_title = document.createElement(`div`);
+        this.element_title.innerHTML = `BLOCKS`;
+        this.container.element.appendChild(this.element_title);
+
+        this.element_content = document.createElement(`div`);
+        this.container.element.appendChild(this.element_content);
     }
 
     set(blocks: Block[]) {
-        this.container.element.replaceChildren();
+        this.element_content.replaceChildren();
         blocks.forEach(block => this.prepend_block(block));
     }
 
@@ -30,7 +40,7 @@ export class DashboardBlocks {
         //});
 
         this.block_items.unshift(block_item);
-        this.container.element.insertBefore(block_item.box.element, this.container.element.firstChild);
+        this.element_content.insertBefore(block_item.box.element, this.element_content.firstChild);
         return block_item;
     }
 

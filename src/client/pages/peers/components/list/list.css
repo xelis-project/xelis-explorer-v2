@@ -8,6 +8,12 @@
     animation: xe-peers-list-animation .65s;
 }
 
+.xe-peers-list>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
 @keyframes xe-peers-list-animation {
     0% {
         translate: 0 25%;

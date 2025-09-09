@@ -8,6 +8,12 @@
     overflow-x: hidden;
 }
 
+.xe-dashboard-blocks>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
 @keyframes xe-dashboard-blocks-appear-animation {
     0% {
         translate: 25% 0;

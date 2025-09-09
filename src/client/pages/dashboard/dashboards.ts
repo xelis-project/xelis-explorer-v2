@@ -19,6 +19,7 @@ import { fetch_geo_location } from "../../utils/fetch_geo_location";
 import { PeerLocation } from "../../components/peers_map/peers_map";
 
 import './dashboard.css';
+import { Box } from "../../components/box/box";
 
 export class DashboardPage extends Page {
     static pathname = "/";
@@ -308,22 +309,28 @@ export class DashboardPage extends Page {
 
         this.listen_node_events();
 
-        this.dashboard_top_stats.container.box_loading(true);
-        this.dashboard_blocks.container.list_loading(20, `5rem`);
-        this.dashboard_txs.container.list_loading(20, `5rem`);
-        this.dashboard_chart_section_2.container.box_loading(true);
+        //this.dashboard_top_stats.container.box_loading(true);
+        Box.boxes_loading(this.dashboard_top_stats.container.element, true);
+        //this.dashboard_blocks.container.list_loading(20, `5rem`);
+        Box.list_loading(this.dashboard_blocks.element_content, 20, `5rem`);
+        //this.dashboard_txs.container.list_loading(20, `5rem`);
+        Box.list_loading(this.dashboard_txs.element_content, 20, `5rem`);
+        // this.dashboard_chart_section_2.container.box_loading(true);
+        Box.boxes_loading(this.dashboard_chart_section_2.container.element, true);
 
         this.load_dag();
         this.load_peers();
 
         await this.load_top_stats()
 
-        this.dashboard_top_stats.container.box_loading(false);
+        //this.dashboard_top_stats.container.box_loading(false);
+        Box.boxes_loading(this.dashboard_top_stats.container.element, false);
 
         await this.load_blocks();
         this.load_blocks_txs();
 
-        this.dashboard_chart_section_2.container.box_loading(false);
+        //this.dashboard_chart_section_2.container.box_loading(false);
+        Box.boxes_loading(this.dashboard_chart_section_2.container.element, false);
     }
 
     unload() {

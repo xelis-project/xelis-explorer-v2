@@ -9,10 +9,20 @@ export class PeersList {
     container: Container;
     peer_items: PeerItem[];
 
+    element_title: HTMLDivElement;
+    element_content: HTMLDivElement;
+
     constructor() {
         this.container = new Container();
         this.peer_items = [];
         this.container.element.classList.add(`xe-peers-list`, `scrollbar-1`, `scrollbar-1-right`);
+
+        this.element_title = document.createElement(`div`);
+        this.element_title.innerHTML = `PEERS`;
+        this.container.element.appendChild(this.element_title);
+
+        this.element_content = document.createElement(`div`);
+        this.container.element.appendChild(this.element_content);
     }
 
     prepend_peer(peer_location: PeerLocation) {
@@ -30,7 +40,7 @@ export class PeersList {
 
         this.peer_items.push(peer_item);
         if (this.is_in_filter(peer_item)) {
-            this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
+            this.element_content.insertBefore(peer_item.box.element, this.element_content.firstChild);
         }
         return peer_item;
     }
@@ -47,7 +57,7 @@ export class PeersList {
     }
 
     set(peers_locations: PeerLocation[]) {
-        this.container.element.replaceChildren();
+        this.element_content.replaceChildren();
         peers_locations.forEach((peer_location) => {
             this.prepend_peer(peer_location);
         });
@@ -73,7 +83,7 @@ export class PeersList {
             if (!this.is_in_filter(peer_item)) {
                 peer_item.box.element.remove();
             } else if (!parent_element) {
-                this.container.element.insertBefore(peer_item.box.element, this.container.element.firstChild);
+                this.element_content.insertBefore(peer_item.box.element, this.element_content.firstChild);
             }
         });
     }

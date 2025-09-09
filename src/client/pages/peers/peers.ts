@@ -12,6 +12,7 @@ import { parse_addr } from "../../utils/parse_addr";
 import { PeerLocation } from "../../components/peers_map/peers_map";
 
 import './peers.css';
+import { Box } from "../../components/box/box";
 
 export class PeersPage extends Page {
     static pathname = "/peers";
@@ -101,8 +102,10 @@ export class PeersPage extends Page {
         this.listen_node_events();
 
         this.peers_map.map.overlay_loading.set_loading(true);
-        this.peers_chart.container.box_loading(true);
-        this.peers_list.container.list_loading(20, `8rem`);
+        //this.peers_chart.container.box_loading(true);
+        Box.boxes_loading(this.peers_chart.container.element, true);
+        //this.peers_list.container.list_loading(20, `8rem`);
+        Box.list_loading(this.peers_list.element_content, 20, `8rem`);
         this.peers_info.set_loading(true);
 
         const info = await node.rpc.getInfo();
@@ -113,7 +116,8 @@ export class PeersPage extends Page {
         const peers_locations = await this.peers_map.map.fetch_peers_locations(peers);
         this.peers_map.map.set(peers_locations);
         this.peers_map.map.overlay_loading.set_loading(false);
-        this.peers_chart.container.box_loading(false);
+        //this.peers_chart.container.box_loading(false);
+        Box.boxes_loading(this.peers_chart.container.element, false);
         this.peers_info.set_loading(false);
 
         this.peers_info.set(peers, info.height);
