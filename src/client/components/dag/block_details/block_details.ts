@@ -8,6 +8,7 @@ import './block_details.css';
 
 export class DAGBlockDetails {
     element: HTMLDivElement;
+    visible: boolean;
 
     element_hash: HTMLDivElement;
     element_block_type: HTMLDivElement;
@@ -27,6 +28,8 @@ export class DAGBlockDetails {
     element_tips: HTMLDivElement;
 
     constructor() {
+        this.visible = false;
+
         this.element = document.createElement(`div`);
         this.element.classList.add(`xe-dag-block-details`, `scrollbar-1`, `scrollbar-1-right`);
 
@@ -78,17 +81,36 @@ export class DAGBlockDetails {
         this.element_tips = document.createElement(`div`);
         this.element.appendChild(this.element_tips);
 
-        this.element.addEventListener(`click`, (e) => {
+        this.element.addEventListener(`mousedown`, (e) => {
             e.stopImmediatePropagation();
         });
     }
 
-    show() {
-        this.element.style.display = `block`;
+    async show() {
+        //if (this.visible) return;
+        this.visible = true;
+        this.element.style.visibility = `visible`;
+        const { animate } = await import(`animejs`);
+        animate(this.element, {
+            translateY: [`-5%`, `0`],
+            opacity: [0, 1],
+            duration: 500
+        });
     }
 
-    hide() {
-        this.element.style.display = `none`;
+    async hide() {
+        if (!this.visible) return;
+        this.visible = false;
+
+        const { animate } = await import(`animejs`);
+        animate(this.element, {
+            translateY: [`0`, `-5%`],
+            opacity: [1, 0],
+            duration: 250,
+            onComplete: () => {
+                this.element.style.visibility = `hidden`;
+            }
+        });
     }
 
     set_position(x: number, y: number) {
