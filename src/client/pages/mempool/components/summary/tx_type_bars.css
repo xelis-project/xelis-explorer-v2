@@ -23,6 +23,7 @@
 .xe-mempool-tx-type-bars-bar>:first-child {
     position: absolute;
     height: 100%;
+    width: 0;
     background-color: #156358;
     transition: 1s width;
 }
