@@ -78,6 +78,9 @@ export class DAG {
         this.block_group = new THREE.Group();
         this.scene.add(this.block_group);
 
+        const middle_line = this.create_middle_line();
+        this.scene.add(middle_line);
+
         window.addEventListener('resize', this.on_resize);
 
         this.element.addEventListener(`pointermove`, this.on_pointer_move);
@@ -189,6 +192,19 @@ export class DAG {
             this.hovered_block_mesh?.scale.set(1, 1, 1);
             this.hovered_block_mesh = undefined;
         }
+    }
+
+    create_middle_line() {
+        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#404040`) });
+
+        const points = [
+            new THREE.Vector3(0, -1000, 0),
+            new THREE.Vector3(0, 1000, 0)
+        ];
+
+        const geo = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(geo, mat);
+        return line;
     }
 
     create_box_mesh(block: Block) {
