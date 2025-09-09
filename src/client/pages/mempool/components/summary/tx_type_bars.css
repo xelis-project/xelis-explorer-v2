@@ -17,10 +17,12 @@
     border-radius: .5rem;
     overflow: hidden;
     position: relative;
+
 }
 
 .xe-mempool-tx-type-bars-bar>:first-child {
     position: absolute;
     height: 100%;
     background-color: #156358;
+    transition: 1s width;
 }
