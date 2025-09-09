@@ -1,0 +1,17 @@
+.xe-account {}
+
+.xe-account-container-1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-account-container-2 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-account-container-2>div {
+    flex: 1;
+}
