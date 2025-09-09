@@ -7,6 +7,7 @@
     "name": "xelis-explorer-2",
 	"main": "./src/server/index.ts",
     "compatibility_date": "2025-08-19",
+    "compatibility_flags": ["nodejs_compat"],
     "assets": {
         "binding": "ASSETS",
         "directory": "./public"
