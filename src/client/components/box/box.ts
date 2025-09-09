@@ -31,6 +31,8 @@ export class Box {
         if (loading) {
             if (min_height) element.style.minHeight = min_height;
             element.classList.add(`xe-box`);
+        } else {
+            element.classList.remove(`xe-box`);
         }
 
         Box.set_loading(element, loading);
