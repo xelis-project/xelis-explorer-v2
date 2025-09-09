@@ -2,6 +2,7 @@ import { Page } from "../pages/page";
 import { match_route } from "./router";
 import { Singleton } from "../utils/singleton";
 import { EventEmitter } from "../utils/event_emitter";
+import { TopLoadingBar } from "./top_loading_bar/top_loading_bar";
 
 import "reset-css";
 import "urlpattern-polyfill"; // URLPattern is a new web API we use polyfill for now
@@ -20,14 +21,18 @@ export class App extends Singleton<App> {
     root!: HTMLElement;
     current_page?: Page;
 
+    top_loading_bar: TopLoadingBar;
+
     constructor() {
         super();
         this.events = new EventEmitter();
+        this.top_loading_bar = new TopLoadingBar();
     }
 
     load(root: HTMLElement) {
         this.root = root;
         this.root.classList.add(`xe-app`);
+        this.root.appendChild(this.top_loading_bar.element);
 
         this.load_page();
         this.register_events();
@@ -47,7 +52,16 @@ export class App extends Singleton<App> {
         const page_type = match_route(url);
         if (this.current_page) this.current_page.unload();
         this.current_page = page_type.instance();
-        this.current_page.load(this.root);
+
+        const load_page = async () => {
+            if (this.current_page) {
+                this.top_loading_bar.start();
+                await this.current_page.load(this.root);
+                this.top_loading_bar.end();
+            }
+        }
+
+        load_page();
         this.events.emit("page_load");
     }
 

@@ -1,0 +1,23 @@
+.xe-top-loading-bar {
+    position: fixed;
+    top: 0;
+    height: .5rem;
+    background-color: #02FFCF;
+    display: none;
+}
+
+.xe-top-loading-bar-animate {
+    display: block;
+    width: 80%;
+    animation: xe-top-loading-bar-animation 3s ease-in;
+}
+
+@keyframes xe-top-loading-bar-animation {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 80%;
+    }
+}
