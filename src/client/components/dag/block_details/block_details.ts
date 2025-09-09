@@ -28,7 +28,7 @@ export class DAGBlockDetails {
 
     constructor() {
         this.element = document.createElement(`div`);
-        this.element.classList.add(`xe-dag-block-details`);
+        this.element.classList.add(`xe-dag-block-details`, `scrollbar-1`, `scrollbar-1-right`);
 
         this.element_hash = document.createElement(`div`);
         this.element.appendChild(this.element_hash);

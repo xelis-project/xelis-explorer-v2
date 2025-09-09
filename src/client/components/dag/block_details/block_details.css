@@ -5,7 +5,7 @@
     background: rgba(0, 0, 0, 0.1);
     width: 15rem;
     height: 15rem;
-    border-radius: 1rem;
+    border-radius: .5rem;
     backdrop-filter: blur(15px);
     padding: 1rem;
     font-size: .8rem;
