@@ -2,6 +2,7 @@
     display: flex;
     gap: 1rem;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .xe-mempool-tx-type-bars>div {
@@ -17,7 +18,6 @@
     border-radius: .5rem;
     overflow: hidden;
     position: relative;
-
 }
 
 .xe-mempool-tx-type-bars-bar>:first-child {
