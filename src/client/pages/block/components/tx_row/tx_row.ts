@@ -64,6 +64,6 @@ export class TxRow extends Row {
     }
 
     set_fee(fee: number) {
-        this.value_cells[5].innerHTML = `${format_xel(fee, true)}`;
+        this.value_cells[4].innerHTML = `${format_xel(fee, true)}`;
     }
 }
