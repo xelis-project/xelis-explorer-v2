@@ -239,6 +239,25 @@ export class DAG {
 
                 group.add(text_mesh);
             }
+
+            // block type
+            {
+                const first_letter = block.block_type.substring(0, 1).toUpperCase();
+                const geo = new TextGeometry(first_letter, {
+                    font: font,
+                    size: 1,
+                    depth: 0.5
+                });
+
+                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(`black`) });
+                const text_mesh = new THREE.Mesh(geo, mat);
+                geo.computeBoundingBox();
+                if (geo.boundingBox) {
+                    text_mesh.position.set(geo.boundingBox.max.x / -2, geo.boundingBox.max.y / -2, -0.25);
+                }
+
+                group.add(text_mesh);
+            }
         });
 
         return group;
