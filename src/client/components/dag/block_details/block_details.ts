@@ -3,6 +3,9 @@ import { format_xel } from '../../../utils/format_xel';
 import prettyBytes from 'pretty-bytes';
 import { format_hashrate } from '../../../utils/format_hashrate';
 import { format_diff } from '../../../utils/format_diff';
+// @ts-ignore
+import hashicon from 'hashicon';
+import { format_address } from '../../../utils/format_address';
 
 import './block_details.css';
 
@@ -13,7 +16,7 @@ export class DAGBlockDetails {
     element_hash: HTMLDivElement;
     element_block_type: HTMLDivElement;
     element_timestamp: HTMLDivElement;
-    element_confirmations: HTMLDivElement;
+    element_version: HTMLDivElement;
     element_topoheight: HTMLDivElement;
     element_height: HTMLDivElement;
     element_miner: HTMLDivElement;
@@ -26,6 +29,7 @@ export class DAGBlockDetails {
     element_size: HTMLDivElement;
     element_nonce: HTMLDivElement;
     element_tips: HTMLDivElement;
+    element_extra_nonce: HTMLDivElement;
 
     constructor() {
         this.visible = false;
@@ -39,11 +43,11 @@ export class DAGBlockDetails {
         this.element_block_type = document.createElement(`div`);
         this.element.appendChild(this.element_block_type);
 
+        this.element_version = document.createElement(`div`);
+        this.element.appendChild(this.element_version);
+
         this.element_timestamp = document.createElement(`div`);
         this.element.appendChild(this.element_timestamp);
-
-        this.element_confirmations = document.createElement(`div`);
-        this.element.appendChild(this.element_confirmations);
 
         this.element_topoheight = document.createElement(`div`);
         this.element.appendChild(this.element_topoheight);
@@ -78,7 +82,11 @@ export class DAGBlockDetails {
         this.element_nonce = document.createElement(`div`);
         this.element.appendChild(this.element_nonce);
 
+        this.element_extra_nonce = document.createElement(`div`);
+        this.element.appendChild(this.element_extra_nonce);
+
         this.element_tips = document.createElement(`div`);
+        this.element_tips.classList.add(`xe-dag-block-details-tips`);
         this.element.appendChild(this.element_tips);
 
         this.element.addEventListener(`mousedown`, (e) => {
@@ -121,7 +129,7 @@ export class DAGBlockDetails {
     set(block: Block) {
         this.set_hash(block.hash);
         this.set_block_type(block.block_type);
-
+        this.set_miner(block.miner);
         this.set_topoheight(block.topoheight);
         this.set_height(block.height);
         this.set_fees(block.total_fees);
@@ -130,14 +138,31 @@ export class DAGBlockDetails {
         this.set_supply(block.supply);
         this.set_size(block.total_size_in_bytes);
         this.set_nonce(block.nonce);
+        this.set_diff(parseInt(block.difficulty));
         this.set_hashrate(parseInt(block.difficulty), 15000);
+        this.set_tips(block.tips);
+        this.set_timestamp(block.timestamp);
+        this.set_version(block.version);
+        this.set_extra_nonce(block.extra_nonce);
     }
 
-    set_item(element: HTMLDivElement, title: string, value: string) {
-        element.innerHTML = `
-            <div>${title}</div>
-            <div>${value}</div>
-        `;
+    set_item(element: HTMLDivElement, title: string, value: HTMLElement | string) {
+        const title_element = document.createElement(`div`);
+        title_element.innerHTML = title;
+        const value_element = document.createElement(`div`);
+        if (typeof value === `string`) {
+            value_element.innerHTML = value;
+        } else {
+            value_element.appendChild(value);
+        }
+
+        element.replaceChildren();
+        element.appendChild(title_element);
+        element.appendChild(value_element);
+    }
+
+    set_version(version: number) {
+        this.set_item(this.element_version, `VERSION`, `${version}`);
     }
 
     set_hash(hash: string) {
@@ -148,12 +173,12 @@ export class DAGBlockDetails {
         this.set_item(this.element_block_type, `TYPE`, block_type);
     }
 
-    set_timestamp() {
-
-    }
-
-    set_confirmations() {
-
+    set_timestamp(timestamp: number) {
+        this.set_item(this.element_timestamp, `TIMESTAMP`, `
+            <div>LOCAL: ${new Date(timestamp).toLocaleString()}</div>
+            <div>UNIX: ${timestamp}</div>
+            <div>UTC: ${new Date(timestamp).toUTCString()}</div>
+        `);
     }
 
     set_topoheight(topoheight?: number) {
@@ -164,8 +189,18 @@ export class DAGBlockDetails {
         this.set_item(this.element_height, `HEIGHT`, height.toLocaleString());
     }
 
-    set_miner() {
+    set_miner(miner: string) {
+        const container = document.createElement(`div`);
+        container.classList.add(`xe-blocks-table-miner`);
 
+        const miner_icon = hashicon(miner, 25) as HTMLCanvasElement;
+        container.appendChild(miner_icon);
+
+        const miner_addr = document.createElement(`div`);
+        miner_addr.innerHTML = format_address(miner);
+        container.appendChild(miner_addr);
+
+        this.set_item(this.element_miner, `MINER`, container);
     }
 
     set_fees(fees?: number) {
@@ -196,15 +231,18 @@ export class DAGBlockDetails {
         this.set_item(this.element_size, `SIZE`, prettyBytes(size_in_bytes));
     }
 
-    set_nonce(nonce: string) {
-        this.set_item(this.element_size, `NONCE`, nonce);
+    set_nonce(nonce: number) {
+        this.set_item(this.element_nonce, `NONCE`, `${nonce}`);
     }
 
-    set_extra_nonce() {
-
+    set_extra_nonce(extra_nonce: string) {
+        this.set_item(this.element_extra_nonce, `EXTRA NONCE`, extra_nonce);
     }
 
-    set_tips() {
-
+    set_tips(tips: string[]) {
+        const value = tips.map((tip, i) => {
+            return `<div>${i}: ${tip}</div>`;
+        }).join(``);
+        this.set_item(this.element_tips, `TIPS`, value);
     }
 }
