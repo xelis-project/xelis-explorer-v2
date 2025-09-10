@@ -80,7 +80,7 @@ export class BlockGraph {
         });
     }
 
-    set_nonce(nonce: string) {
+    set_nonce(nonce: number) {
         this.nonce_element.innerHTML = `
             <div>NONCE</div>
             <div>${nonce}</div>
