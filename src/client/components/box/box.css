@@ -12,7 +12,7 @@
 }
 
 .xe-box-loading>* {
-    display: none;
+    /* display: none; Don't use display or getBoundingClientRect returns 0 */
     visibility: hidden;
 }
 
