@@ -229,8 +229,58 @@ export class DAG {
         const group = new THREE.Group();
         const color = block_type_colors[block.block_type];
 
+        const uniforms = {
+            color: { type: 'vec3', value: new THREE.Color(color) },
+            outline_color: { type: 'vec3', value: new THREE.Color(`white`) },
+            enable_outline: { value: false }
+        };
+
+        function vertexShader() {
+            return `
+                varying vec3 v_uv; 
+
+                void main() {
+                    v_uv = position; 
+                    vec4 model_view_position = modelViewMatrix * vec4(position, 1.0);
+                    gl_Position = projectionMatrix * model_view_position; 
+                }
+            `;
+        }
+
+        function fragmentShader() {
+            return `
+                uniform vec3 color; 
+                uniform vec3 outline_color;
+                uniform bool enable_outline;
+                varying vec3 v_uv;
+         
+                void main() {
+                    vec2 st = v_uv.xy;
+                    vec3 new_color = color;
+                    float outline_size = 1.1;
+
+                    if (enable_outline) {
+                        if (
+                            st.x > outline_size || 
+                            st.x < -outline_size ||
+                            st.y > outline_size || 
+                            st.y < -outline_size
+                        ) {
+                            new_color = outline_color;
+                        }
+                    }
+
+                    gl_FragColor = vec4(new_color, 1.0);
+                }
+            `;
+        }
+
         const geo = new RoundedBoxGeometry(size, size, 0.5, 10, 0.5);
-        const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
+        const mat = new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            fragmentShader: fragmentShader(),
+            vertexShader: vertexShader(),
+        });
         const box = new THREE.Mesh(geo, mat);
         box.userData = { block };
         box.name = "block";
@@ -300,6 +350,7 @@ export class DAG {
         this.raycaster.setFromCamera(this.pointer, this.orthographic_camera);
         this.intercept_block();
 
+        //this.uniforms.time.value = this.clock.getElapsedTime();
         const cam_pos = this.orthographic_camera.position;
         /*if (cam_pos.x < -100) {
             this.controls.normalizeRotations().reset();
