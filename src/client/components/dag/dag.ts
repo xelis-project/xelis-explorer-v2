@@ -10,6 +10,7 @@ import CameraControls from 'camera-controls';
 import { RPCRequest } from '@xelis/sdk/rpc/types';
 import { OverlayLoading } from '../overlay_loading/overlay_loading';
 import { DAGBlockDetails } from './block_details/block_details';
+import { clamp_number } from '../../utils/clamp_number';
 
 CameraControls.install({ THREE });
 
@@ -107,13 +108,22 @@ export class DAG {
 
     on_click = (e: MouseEvent) => {
         const rect = this.element.getBoundingClientRect();
-        const offset_client_x = e.clientX - rect.x;
-        const offset_client_y = e.clientY - rect.y;
+        const offset_mouse_x = e.clientX - rect.x;
+        const offset_mouse_y = e.clientY - rect.y;
 
         if (this.hovered_block_mesh) {
             const block = this.hovered_block_mesh.userData.block as Block;
+            const block_details_rect = this.block_details.element.getBoundingClientRect();
+
+            let block_details_x = offset_mouse_x + 20;
+            let block_details_y =  offset_mouse_y - (block_details_rect.height / 2);
+
+            // make sure the block details box does not go off screen
+            block_details_x = clamp_number(block_details_x, 0, rect.width - block_details_rect.width - 20);
+            block_details_y = clamp_number(block_details_y, 0, rect.height - (block_details_rect.height / 2));
+
             this.block_details.set(block);
-            this.block_details.set_position(offset_client_x, offset_client_y);
+            this.block_details.set_position(block_details_x, block_details_y);
             this.block_details.show();
         } else {
             this.block_details.hide();
