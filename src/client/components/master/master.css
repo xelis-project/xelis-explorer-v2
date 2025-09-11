@@ -6,8 +6,8 @@
 .xe-master-content {
     max-width: 80rem;
     width: 100%;
-    margin: 0 auto 10rem auto;
-    padding: 1rem;
+    margin: 0 auto;
+    padding: 1rem 1rem 10rem 1rem;
     box-sizing: border-box;
     display: flex;
     gap: 1rem;
