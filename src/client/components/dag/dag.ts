@@ -23,7 +23,7 @@ export class DAG {
     controls: CameraControls;
     clock: THREE.Clock;
     block_group: THREE.Group;
-    line_group: THREE.Group;
+    tip_line_group: THREE.Group;
     raycaster: THREE.Raycaster;
     pointer: THREE.Vector2;
 
@@ -71,8 +71,8 @@ export class DAG {
         grid.rotation.x = -Math.PI / 2;
         this.scene.add(grid);
 
-        this.line_group = new THREE.Group();
-        this.scene.add(this.line_group);
+        this.tip_line_group = new THREE.Group();
+        this.scene.add(this.tip_line_group);
 
         this.block_group = new THREE.Group();
         this.scene.add(this.block_group);
@@ -202,8 +202,8 @@ export class DAG {
         this.block_group.children.forEach((block_group) => {
             const block_mesh = block_group.getObjectByName(`block_mesh`) as THREE.Mesh;
             const block = block_mesh.userData.block as Block;
-            block.tips.forEach((tip) => {
-                const block_mesh_target = block_mesh_hashes.get(tip);
+            block.tips.forEach((tip_hash) => {
+                const block_mesh_target = block_mesh_hashes.get(tip_hash);
                 if (block_mesh_target) {
                     const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#404040`) });
 
@@ -214,15 +214,37 @@ export class DAG {
 
                     const geo = new THREE.BufferGeometry().setFromPoints(points);
                     const line = new THREE.Line(geo, mat);
-                    this.line_group.add(line);
+                    line.userData.hash = `${block.hash}${tip_hash}`;
+                    this.tip_line_group.add(line);
                 }
             });
         });
 
         // center blocks and block tip lines
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
-        new THREE.Box3().setFromObject(this.line_group).getCenter(this.line_group.position).multiplyScalar(-1);
+        new THREE.Box3().setFromObject(this.tip_line_group).getCenter(this.tip_line_group.position).multiplyScalar(-1);
     }
+
+    highlight_tip_lines(block: Block) {
+        const hashes = block.tips.map(tip_hash => `${block.hash}${tip_hash}`);
+
+        this.tip_line_group.children.forEach((tip_line) => {
+            const tip_line_mesh = tip_line as THREE.Mesh;
+            const tip_line_mat = tip_line_mesh.material as THREE.LineBasicMaterial;
+            if (hashes.indexOf(tip_line.userData.hash) !== -1) {
+                tip_line_mat.color.set(`white`);
+            }
+        });
+    }
+
+    clear_highlight_tip_lines() {
+        this.tip_line_group.children.forEach((tip_line) => {
+            const tip_line_mesh = tip_line as THREE.Mesh;
+            const tip_line_mat = tip_line_mesh.material as THREE.LineBasicMaterial;
+            tip_line_mat.color.set(`#404040`);
+        });
+    }
+
 
     intercept_block() {
         const blocks_mesh = this.block_group.getObjectsByProperty(`name`, `block_mesh`) as THREE.Mesh[];
@@ -233,9 +255,13 @@ export class DAG {
                 const block_mesh = intersection.object;
                 block_mesh.userData.uniforms.enable_outline.value = true;
                 block_mesh.scale.set(0.95, 0.95, 0.95);
+                const block = block_mesh.userData.block as Block;
+                this.highlight_tip_lines(block);
+
                 this.hovered_block_mesh = block_mesh;
             }
         } else if (this.hovered_block_mesh) {
+            this.clear_highlight_tip_lines();
             this.hovered_block_mesh.scale.set(1, 1, 1);
             this.hovered_block_mesh.userData.uniforms.enable_outline.value = false;
             this.hovered_block_mesh = undefined;
