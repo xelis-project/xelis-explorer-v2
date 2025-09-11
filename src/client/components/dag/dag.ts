@@ -67,6 +67,10 @@ export class DAG {
         this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK;
         this.controls.mouseButtons.middle = CameraControls.ACTION.ZOOM;
 
+        this.controls.addEventListener(`controlstart`, () => {
+            this.block_details.hide();
+        });
+
         const grid = new THREE.GridHelper(1000, 500, new THREE.Color("#202020"), new THREE.Color("#202020"));
         grid.rotation.x = -Math.PI / 2;
         this.scene.add(grid);
