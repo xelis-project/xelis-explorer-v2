@@ -83,7 +83,7 @@ export class DAG {
         window.addEventListener('resize', this.on_resize);
 
         this.element.addEventListener(`pointermove`, this.on_pointer_move);
-        this.element.addEventListener(`mousedown`, this.on_click);
+        this.element.addEventListener(`click`, this.on_click);
     }
 
     update_size() {

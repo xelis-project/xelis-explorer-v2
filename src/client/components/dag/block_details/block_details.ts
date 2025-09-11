@@ -89,7 +89,7 @@ export class DAGBlockDetails {
         this.element_tips.classList.add(`xe-dag-block-details-tips`);
         this.element.appendChild(this.element_tips);
 
-        this.element.addEventListener(`mousedown`, (e) => {
+        this.element.addEventListener(`click`, (e) => {
             e.stopImmediatePropagation();
         });
     }
