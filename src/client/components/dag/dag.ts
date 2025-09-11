@@ -23,6 +23,7 @@ export class DAG {
     controls: CameraControls;
     clock: THREE.Clock;
     block_group: THREE.Group;
+    line_group: THREE.Group;
     raycaster: THREE.Raycaster;
     pointer: THREE.Vector2;
 
@@ -69,6 +70,10 @@ export class DAG {
         const grid = new THREE.GridHelper(1000, 500, new THREE.Color("#202020"), new THREE.Color("#202020"));
         grid.rotation.x = -Math.PI / 2;
         this.scene.add(grid);
+
+        this.line_group = new THREE.Group();
+        this.scene.add(this.line_group);
+
         this.block_group = new THREE.Group();
         this.scene.add(this.block_group);
 
@@ -168,10 +173,6 @@ export class DAG {
             }
         });
 
-        /*const blocks = await node.rpc.getBlocksRangeByHeight({
-            start_height: height - 10,
-            end_height: height + 10
-        });*/
         const group_blocks = new Map<number, Block[]>();
         for (let i = 0; i < blocks.length; i++) {
             const block = blocks[i];
@@ -183,30 +184,60 @@ export class DAG {
             }
         }
 
-        group_blocks.forEach((height_blocks, x) => {
+        const block_mesh_hashes = new Map<string, THREE.Group>();
+        let x = 0;
+        group_blocks.forEach((height_blocks) => {
             height_blocks.forEach((block, y) => {
                 const box_mesh = this.create_box_mesh(block);
                 const center_y = (y * 5) - (height_blocks.length / 2 * 5);
                 box_mesh.position.set(x * 4, center_y, 0);
                 this.block_group.add(box_mesh);
+
+                block_mesh_hashes.set(block.hash, box_mesh);
+            });
+
+            x++;
+        });
+
+        this.block_group.children.forEach((block_group) => {
+            const block_mesh = block_group.getObjectByName(`block_mesh`) as THREE.Mesh;
+            const block = block_mesh.userData.block as Block;
+            block.tips.forEach((tip) => {
+                const block_mesh_target = block_mesh_hashes.get(tip);
+                if (block_mesh_target) {
+                    const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#404040`) });
+
+                    const points = [
+                        block_group.position,
+                        block_mesh_target.position
+                    ];
+
+                    const geo = new THREE.BufferGeometry().setFromPoints(points);
+                    const line = new THREE.Line(geo, mat);
+                    this.line_group.add(line);
+                }
             });
         });
 
+        // center blocks and block tip lines
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
+        new THREE.Box3().setFromObject(this.line_group).getCenter(this.line_group.position).multiplyScalar(-1);
     }
 
     intercept_block() {
-        const mesh_blocks = this.block_group.getObjectsByProperty(`name`, `block`) as THREE.Mesh[];
-        const intersects = this.raycaster.intersectObjects<THREE.Mesh>(mesh_blocks);
+        const blocks_mesh = this.block_group.getObjectsByProperty(`name`, `block_mesh`) as THREE.Mesh[];
+        const intersects = this.raycaster.intersectObjects<THREE.Mesh>(blocks_mesh);
         if (intersects.length > 0) {
             if (!this.hovered_block_mesh) {
                 const intersection = intersects[0];
                 const block_mesh = intersection.object;
+                block_mesh.userData.uniforms.enable_outline.value = true;
                 block_mesh.scale.set(0.95, 0.95, 0.95);
                 this.hovered_block_mesh = block_mesh;
             }
-        } else {
-            this.hovered_block_mesh?.scale.set(1, 1, 1);
+        } else if (this.hovered_block_mesh) {
+            this.hovered_block_mesh.scale.set(1, 1, 1);
+            this.hovered_block_mesh.userData.uniforms.enable_outline.value = false;
             this.hovered_block_mesh = undefined;
         }
     }
@@ -226,7 +257,7 @@ export class DAG {
 
     create_box_mesh(block: Block) {
         const size = 2.5;
-        const group = new THREE.Group();
+        const block_group = new THREE.Group();
         const color = block_type_colors[block.block_type];
 
         const uniforms = {
@@ -282,9 +313,10 @@ export class DAG {
             vertexShader: vertexShader(),
         });
         const box = new THREE.Mesh(geo, mat);
-        box.userData = { block };
-        box.name = "block";
-        group.add(box);
+        box.name = "block_mesh";
+        box.userData.uniforms = uniforms;
+        box.userData.block = block;
+        block_group.add(box);
 
         const loader = new FontLoader();
         loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
@@ -302,7 +334,7 @@ export class DAG {
                     text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, -0.25);
                 }
 
-                group.add(text_mesh);
+                block_group.add(text_mesh);
             }
 
             // height
@@ -320,7 +352,7 @@ export class DAG {
                     text_mesh.position.set(geo.boundingBox.max.x / -2, -2, -0.25);
                 }
 
-                group.add(text_mesh);
+                block_group.add(text_mesh);
             }
 
             // block type
@@ -339,11 +371,11 @@ export class DAG {
                     text_mesh.position.set(geo.boundingBox.max.x / -2, geo.boundingBox.max.y / -2, -0.25);
                 }
 
-                group.add(text_mesh);
+                block_group.add(text_mesh);
             }
         });
 
-        return group;
+        return block_group;
     }
 
     render = (time: number) => {
