@@ -116,7 +116,7 @@ export class DAG {
             const block_details_rect = this.block_details.element.getBoundingClientRect();
 
             let block_details_x = offset_mouse_x + 20;
-            let block_details_y =  offset_mouse_y - (block_details_rect.height / 2);
+            let block_details_y = offset_mouse_y - (block_details_rect.height / 2);
 
             // make sure the block details box does not go off screen
             block_details_x = clamp_number(block_details_x, 0, rect.width - block_details_rect.width - 20);
@@ -131,6 +131,7 @@ export class DAG {
     }
 
     async load(height: number) {
+        height = 434191;
         const node = XelisNode.instance();
 
         const requests = [] as RPCRequest[];
@@ -138,23 +139,24 @@ export class DAG {
             method: DaemonRPCMethod.GetBlocksRangeByHeight,
             params: {
                 start_height: height - 30,
-                end_height: height - 10
+                end_height: height - 11
             } as HeightRangeParams
         });
         requests.push({
             method: DaemonRPCMethod.GetBlocksRangeByHeight,
             params: {
                 start_height: height - 10,
-                end_height: height + 10
+                end_height: height + 9
             } as HeightRangeParams
         });
         requests.push({
             method: DaemonRPCMethod.GetBlocksRangeByHeight,
             params: {
                 start_height: height + 10,
-                end_height: height + 30
+                end_height: height + 29
             } as HeightRangeParams
         });
+
         const res = await node.rpc.batchRequest(requests);
 
         let blocks = [] as Block[];
@@ -170,12 +172,24 @@ export class DAG {
             start_height: height - 10,
             end_height: height + 10
         });*/
+        const group_blocks = new Map<number, Block[]>();
+        for (let i = 0; i < blocks.length; i++) {
+            const block = blocks[i];
+            const heigh_blocks = group_blocks.get(block.height);
+            if (heigh_blocks) {
+                group_blocks.set(block.height, [...heigh_blocks, block]);
+            } else {
+                group_blocks.set(block.height, [block]);
+            }
+        }
 
-        blocks.forEach((block, i) => {
-            //const x = block.topoheight! - topoheight;
-            const box_mesh = this.create_box_mesh(block);
-            box_mesh.position.set(i * 4, 0, 0);
-            this.block_group.add(box_mesh);
+        group_blocks.forEach((height_blocks, x) => {
+            height_blocks.forEach((block, y) => {
+                const box_mesh = this.create_box_mesh(block);
+                const center_y = (y * 5) - (height_blocks.length / 2 * 5);
+                box_mesh.position.set(x * 4, center_y, 0);
+                this.block_group.add(box_mesh);
+            });
         });
 
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
