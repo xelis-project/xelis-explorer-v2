@@ -12,6 +12,7 @@ import { AccountHistoryList } from "./components/history_list/history_list";
 import { AccountBalance } from "./components/balance/balance";
 import { NotFoundPage } from "../not_found/not_found";
 import { AccountKnownAddr } from "./components/known_addr/known_addr";
+import { Box } from "../../components/box/box";
 
 import "./account.css";
 
@@ -209,6 +210,8 @@ export class AccountPage extends Page {
 
             this.account_info.set(addr);
             this.account_known_addr.set(addr);
+            Box.list_loading(this.incoming_history_list.container.element, 10, `3rem`);
+            Box.list_loading(this.outgoing_history_list.container.element, 10, `3rem`);
 
             const incoming = await xelis_node.rpc.getAccountHistory({
                 address: addr,
