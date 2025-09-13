@@ -70,11 +70,23 @@ export class App extends Singleton<App> {
     }
 
     on_click = (e: PointerEvent) => {
-        // intercept link click
-        if (e.target instanceof HTMLAnchorElement) {
-            e.preventDefault();
-            const target = e.target as HTMLAnchorElement;
-            this.go_to(target.href);
+        // intercept link click recursively
+        const check_parent_link = (element: HTMLElement) => {
+            if (element.parentElement) {
+                if (element instanceof HTMLAnchorElement) {
+                    const link = element as HTMLAnchorElement;
+                    if (link.target !== `_blank`) {
+                        e.preventDefault();
+                        this.go_to(element.href);
+                    }
+                } else {
+                    check_parent_link(element.parentElement);
+                }
+            }
+        }
+
+        if (e.target instanceof HTMLElement) {
+            check_parent_link(e.target);
         }
     }
 
