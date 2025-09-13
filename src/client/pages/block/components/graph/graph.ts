@@ -73,9 +73,9 @@ export class BlockGraph {
 
         const tips_container = document.createElement(`div`);
         container.appendChild(tips_container);
-        tips.forEach((tip) => {
+        tips.forEach((tip, i) => {
             const tip_element = document.createElement(`div`);
-            tip_element.innerHTML = tip;
+            tip_element.innerHTML = `${i}: <a href="/block/${tip}">${tip}</a>`;
             tips_container.appendChild(tip_element);
         });
     }
