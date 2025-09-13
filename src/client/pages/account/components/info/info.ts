@@ -2,6 +2,8 @@ import { Container } from "../../../../components/container/container";
 //@ts-ignore
 import hashicon from "hashicon";
 import QRCode from 'qrcode';
+import { AccountServerData } from "../../account";
+import prettyMilliseconds from "pretty-ms";
 
 import './info.css';
 
@@ -48,13 +50,13 @@ export class AccountInfo {
         this.container.element.appendChild(this.qr_code_element);
     }
 
-    set(addr: string) {
+    set(addr: string, data: AccountServerData) {
         this.set_hashicon(addr);
         this.set_addr(addr);
         this.set_qrcode(addr);
-        this.set_last_activity(0);
-        this.set_nonce(123);
-        this.set_registered(12);
+        this.set_last_activity(data.balance.topoheight, data.last_activity_timestamp);
+        this.set_nonce(data.nonce.nonce);
+        this.set_registered(data.registration_topoheight, data.registration_timestamp);
     }
 
     set_hashicon(addr: string) {
@@ -67,11 +69,11 @@ export class AccountInfo {
         this.addr_element.innerHTML = addr;
     }
 
-    set_last_activity(last_activity: number) {
+    set_last_activity(topoheight: number, timestamp: number) {
         this.last_activity_element.innerHTML = `
             <div>LAST ACTIVITY</div>
-            <div>${last_activity.toLocaleString()}</div>
-            <div></div>
+            <div>${topoheight.toLocaleString()} (${prettyMilliseconds(Date.now() - timestamp, { compact: true })})</div>
+            <div>${new Date(timestamp).toLocaleString()}</div>
         `;
     }
 
@@ -82,11 +84,11 @@ export class AccountInfo {
         `;
     }
 
-    set_registered(registered: number) {
+    set_registered(topoheight: number, timestamp: number) {
         this.registered_element.innerHTML = `
             <div>REGISTERED</div>
-            <div>${registered.toLocaleString()}</div>
-            <div></div>
+            <div>${topoheight.toLocaleString()} (${prettyMilliseconds(Date.now() - timestamp, { compact: true })})</div>
+            <div>${new Date(timestamp).toLocaleString()}</div>
         `;
     }
 
