@@ -6,7 +6,7 @@ import { XelisNode } from "../../app/xelis_node";
 import { Master } from "../../components/master/master";
 import { AccountInfo } from "./components/info/info";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
-import { Block, RPCMethod as DaemonRPCMethod, RPCEvent as DaemonRPCEvent, GetBalanceParams, GetBalanceResult, GetNonceParams, ValidateAddressParams, ValidateAddressResult } from "@xelis/sdk/daemon/types";
+import { Block, RPCMethod as DaemonRPCMethod, RPCEvent as DaemonRPCEvent, GetBalanceParams, GetBalanceResult, GetNonceParams, ValidateAddressParams, ValidateAddressResult, GetNonceResult, VersionedNonce, GetBlockAtTopoheightParams } from "@xelis/sdk/daemon/types";
 import { XELIS_ASSET } from "@xelis/sdk/config";
 import { AccountHistoryList } from "./components/history_list/history_list";
 import { AccountBalance } from "./components/balance/balance";
@@ -16,10 +16,12 @@ import { Box } from "../../components/box/box";
 
 import "./account.css";
 
-interface AccountServerData {
+export interface AccountServerData {
     is_integrated: boolean;
     registration_topoheight: number;
-    nonce: {};
+    registration_timestamp: number;
+    nonce: VersionedNonce;
+    last_activity_timestamp: number;
     balance: GetBalanceResult;
 }
 
@@ -35,47 +37,83 @@ export class AccountPage extends Page {
     }
 
     static async load_server_data(daemon: DaemonRPC, addr: string) {
-        const requests = [
-            {
-                method: DaemonRPCMethod.ValidateAddress,
-                params: { address: addr, allow_integrated: true } as ValidateAddressParams
-            },
-            {
-                method: DaemonRPCMethod.GetAccountRegistrationTopoheight,
-                params: { address: addr }
-            },
-            {
-                method: DaemonRPCMethod.GetNonce,
-                params: { address: addr } as GetNonceParams
-            },
-            {
-                method: DaemonRPCMethod.GetBalance,
-                params: { address: addr, asset: XELIS_ASSET } as GetBalanceParams
-            }
-        ] as RPCRequest[];
-
         const server_data = {} as AccountServerData;
-        const res = await daemon.batchRequest(requests);
-        res.forEach((result, i) => {
-            if (result instanceof Error) {
-                throw result;
-            } else {
-                switch (i) {
-                    case 0: // ValidateAddress
-                        server_data.is_integrated = (result as ValidateAddressResult).is_integrated;
-                        break;
-                    case 1: // GetAccountRegistrationTopoheight
-                        server_data.registration_topoheight = (result as number);
-                        break;
-                    case 2: // GetNonce
-                        server_data.nonce = result;
-                        break;
-                    case 3: // GetBalance (encrypted)
-                        server_data.balance = result as GetBalanceResult;
-                        break;
+
+        {
+            const requests = [
+                {
+                    method: DaemonRPCMethod.ValidateAddress,
+                    params: { address: addr, allow_integrated: true } as ValidateAddressParams
+                },
+                {
+                    method: DaemonRPCMethod.GetAccountRegistrationTopoheight,
+                    params: { address: addr }
+                },
+                {
+                    method: DaemonRPCMethod.GetNonce,
+                    params: { address: addr } as GetNonceParams
+                },
+                {
+                    method: DaemonRPCMethod.GetBalance,
+                    params: { address: addr, asset: XELIS_ASSET } as GetBalanceParams
                 }
-            }
-        });
+            ] as RPCRequest[];
+
+
+            const res = await daemon.batchRequest(requests);
+            res.forEach((result, i) => {
+                if (result instanceof Error) {
+                    throw result;
+                } else {
+                    switch (i) {
+                        case 0: // ValidateAddress
+                            server_data.is_integrated = (result as ValidateAddressResult).is_integrated;
+                            break;
+                        case 1: // GetAccountRegistrationTopoheight
+                            server_data.registration_topoheight = (result as number);
+                            break;
+                        case 2: // GetNonce
+                            server_data.nonce = result as VersionedNonce;
+                            break;
+                        case 3: // GetBalance (encrypted)
+                            server_data.balance = result as GetBalanceResult;
+                            break;
+                    }
+                }
+            });
+        }
+
+        {
+            const requests = [
+                {
+                    method: DaemonRPCMethod.GetBlockAtTopoheight,
+                    params: { topoheight: server_data.balance.topoheight } as GetBlockAtTopoheightParams
+                },
+                {
+                    method: DaemonRPCMethod.GetBlockAtTopoheight,
+                    params: { topoheight: server_data.registration_topoheight } as GetBlockAtTopoheightParams
+                },
+            ] as RPCRequest[];
+
+            const res = await daemon.batchRequest(requests);
+            res.forEach((result, i) => {
+                if (result instanceof Error) {
+                    throw result;
+                } else {
+                    switch (i) {
+                        case 0: // getBlockAtTopoheight
+                            const last_balance_block = result as Block;
+                            server_data.last_activity_timestamp = last_balance_block.timestamp;
+                            break;
+                        case 1: // getBlockAtTopoheight
+                            const registration_block = result as Block;
+                            server_data.registration_timestamp = registration_block.timestamp;
+                            break;
+                    }
+                }
+            });
+        }
+
         return server_data;
     }
 
@@ -165,6 +203,36 @@ export class AccountPage extends Page {
         }
     }
 
+    async load_history() {
+        const { addr } = this.page_data;
+        if (!addr) return;
+
+        this.incoming_history_list.container.element.replaceChildren();
+        this.outgoing_history_list.container.element.replaceChildren();
+        Box.list_loading(this.incoming_history_list.container.element, 10, `3rem`);
+        Box.list_loading(this.outgoing_history_list.container.element, 10, `3rem`);
+
+        const xelis_node = XelisNode.instance();
+
+        const incoming = await xelis_node.rpc.getAccountHistory({
+            address: addr,
+            incoming_flow: true,
+            outgoing_flow: false
+        });
+
+        const outgoing = await xelis_node.rpc.getAccountHistory({
+            address: addr,
+            incoming_flow: false,
+            outgoing_flow: true
+        });
+
+        incoming.sort((a, b) => a.block_timestamp - b.block_timestamp);
+        this.incoming_history_list.set(incoming);
+
+        outgoing.sort((a, b) => a.block_timestamp - b.block_timestamp);
+        this.outgoing_history_list.set(outgoing);
+    }
+
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
@@ -180,7 +248,7 @@ export class AccountPage extends Page {
                 });
 
                 if (balance.topoheight > server_data.balance.topoheight) {
-                    // TODO: reload account and history
+                    this.load_history();
                 }
             }
         }
@@ -202,34 +270,15 @@ export class AccountPage extends Page {
         await this.load_account();
         this.listen_node_events();
 
-        const xelis_node = XelisNode.instance();
-
         const { addr, server_data } = this.page_data;
         if (addr && server_data) {
             this.set_element(this.master.element);
 
-            this.account_info.set(addr);
+
+
+            this.account_info.set(addr, server_data);
             this.account_known_addr.set(addr);
-            Box.list_loading(this.incoming_history_list.container.element, 10, `3rem`);
-            Box.list_loading(this.outgoing_history_list.container.element, 10, `3rem`);
-
-            const incoming = await xelis_node.rpc.getAccountHistory({
-                address: addr,
-                incoming_flow: true,
-                outgoing_flow: false
-            });
-
-            const outgoing = await xelis_node.rpc.getAccountHistory({
-                address: addr,
-                incoming_flow: false,
-                outgoing_flow: true
-            });
-
-            incoming.sort((a, b) => a.block_timestamp - b.block_timestamp);
-            this.incoming_history_list.set(incoming);
-
-            outgoing.sort((a, b) => a.block_timestamp - b.block_timestamp);
-            this.outgoing_history_list.set(outgoing);
+            this.load_history();
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
