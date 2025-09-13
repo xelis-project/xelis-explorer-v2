@@ -1,0 +1,31 @@
+.xe-transaction-in-blocks {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-transaction-in-blocks>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.xe-transaction-in-blocks-legend {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-transaction-in-blocks-legend>:nth-child(1) {
+    width: .5rem;
+    height: .5rem;
+    border-radius: 100%;
+    border: .2rem solid #02ffcf;
+}
+
+.xe-transaction-in-blocks-legend>:nth-child(2) {
+    color: #02FFCF;
+    font-size: .8rem;
+}

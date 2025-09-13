@@ -1,0 +1,61 @@
+.xe-transaction-transfer-item {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-transaction-transfer-item>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.xe-transaction-transfer-item>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.xe-transaction-transfer-item-recipient {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-transaction-transfer-item-asset {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+    text-align: right;
+}
+
+.xe-transaction-transfer-item-asset>:nth-child(2) {
+    opacity: .8;
+    font-size: .9rem;
+}
+
+.xe-transaction-transfer-item-commitment {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+    text-align: right;
+}
+
+.xe-transaction-transfer-item-commitment>:nth-child(1) {
+    opacity: .8;
+    font-size: .9rem;
+}
+
+.xe-transaction-transfer-item-extra-data {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-transaction-transfer-item-extra-data>:nth-child(2) {
+    opacity: .8;
+    font-size: .9rem;
+}
