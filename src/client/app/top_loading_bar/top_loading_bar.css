@@ -4,6 +4,7 @@
     height: .5rem;
     background-color: #02FFCF;
     display: none;
+    z-index: 1;
 }
 
 .xe-top-loading-bar-animate {
