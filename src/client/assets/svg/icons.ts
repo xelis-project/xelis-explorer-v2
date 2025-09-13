@@ -18,4 +18,13 @@ export const tag = () => {
     `;
 }
 
-export default { question_mark_shield, tag };
+export const exchange = () => {
+    return `
+        <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 10H20L16 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 14L4 14L8 18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    `;
+}
+
+export default { question_mark_shield, tag, exchange };
