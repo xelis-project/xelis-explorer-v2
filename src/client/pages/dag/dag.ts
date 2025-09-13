@@ -23,6 +23,8 @@ export class DAGPage extends Page {
         this.dag.update_size();
         this.set_window_title(DAGPage.title);
 
-        this.dag.load(100);
+        this.dag.overlay_loading.set_loading(true);
+        await this.dag.load(100);
+        this.dag.overlay_loading.set_loading(false);
     }
 }
