@@ -199,7 +199,7 @@ export class AccountPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
 
-        this.load_account();
+        await this.load_account();
         this.listen_node_events();
 
         const xelis_node = XelisNode.instance();
