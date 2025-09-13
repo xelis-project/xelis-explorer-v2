@@ -69,13 +69,29 @@ export class AccountInfo {
         this.addr_element.innerHTML = addr;
     }
 
+    last_activity_interval_id?: number;
+    set_last_activity(topoheight: number, timestamp: number) {
+        const set_last_activity = () => {
+            this.last_activity_element.innerHTML = `
+                <div>LAST ACTIVITY</div>
+                <div>${topoheight.toLocaleString()} (${prettyMilliseconds(Date.now() - timestamp, { compact: true })})</div>
+                <div>${new Date(timestamp).toLocaleString()}</div>
+            `;
+        }
+
+        set_last_activity();
+        if (this.last_activity_interval_id) window.clearInterval(this.last_activity_interval_id);
+        this.last_activity_interval_id = window.setInterval(set_last_activity, 1000);
+    }
+
+    /*
     set_last_activity(topoheight: number, timestamp: number) {
         this.last_activity_element.innerHTML = `
             <div>LAST ACTIVITY</div>
             <div>${topoheight.toLocaleString()} (${prettyMilliseconds(Date.now() - timestamp, { compact: true })})</div>
             <div>${new Date(timestamp).toLocaleString()}</div>
         `;
-    }
+    }*/
 
     set_nonce(nonce: number) {
         this.nonce_element.innerHTML = `
