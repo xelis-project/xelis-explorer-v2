@@ -4,16 +4,15 @@ import { format_xel } from '../../../../utils/format_xel';
 import prettyBytes from 'pretty-bytes';
 // @ts-ignore
 import hashicon from 'hashicon';
-
-import './info.css';
 import { format_address } from '../../../../utils/format_address';
 import icons from '../../../../assets/svg/icons';
 
+import './info.css';
 
 export class TransactionInfo {
     container: Container;
 
-    signer_element: HTMLDivElement;
+    signer_element: HTMLAnchorElement;
     fees_element: HTMLDivElement;
     size_element: HTMLDivElement;
     hash_element: HTMLDivElement;
@@ -24,7 +23,7 @@ export class TransactionInfo {
 
         const container_1 = document.createElement(`div`);
         this.container.element.appendChild(container_1);
-        this.signer_element = document.createElement(`div`);
+        this.signer_element = document.createElement(`a`);
         this.signer_element.classList.add(`xe-transaction-info-signer`);
         container_1.appendChild(this.signer_element);
 
@@ -77,6 +76,7 @@ export class TransactionInfo {
     set_signer(signer: string) {
         const signer_icon = hashicon(signer, 40) as HTMLCanvasElement;
         this.signer_element.replaceChildren();
+        this.signer_element.href = `/account/${signer}`;
         this.signer_element.appendChild(signer_icon);
         const signer_text = document.createElement(`div`);
         signer_text.innerHTML = format_address(signer);
