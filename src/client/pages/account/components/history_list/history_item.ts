@@ -1,8 +1,13 @@
 import prettyMilliseconds from "pretty-ms";
 import { Box } from "../../../../components/box/box";
 import { reduce_text } from "../../../../utils/reduce_text";
-import { AccountHistory, TransactionData } from "@xelis/sdk/daemon/types";
+import { AccountHistory } from "@xelis/sdk/daemon/types";
 import { format_xel } from "../../../../utils/format_xel";
+import { format_address } from "../../../../utils/format_address";
+// @ts-ignore
+import hashicon from 'hashicon';
+
+import './history_item.css';
 
 export class AccountHistoryListItem {
     box: Box;
@@ -68,8 +73,13 @@ export class AccountHistoryListItem {
         }
 
         if (history.outgoing) {
-            const addr = reduce_text(history.outgoing.to);
-            this.type_element.innerHTML = `OUTGOING (${addr})`;
+            const addr = history.outgoing.to;
+            const to_icon = hashicon(addr, 25) as HTMLCanvasElement;
+            this.type_element.replaceChildren();
+            this.type_element.appendChild(to_icon);
+            const addr_text = document.createElement(`div`);
+            addr_text.innerHTML = format_address(addr);
+            this.type_element.appendChild(addr_text);
         }
 
         if (history.dev_fee) {
