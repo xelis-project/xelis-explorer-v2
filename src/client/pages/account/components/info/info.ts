@@ -22,6 +22,7 @@ export class AccountInfo {
         this.container.element.classList.add(`xe-account-info`);
 
         this.hashicon_element = document.createElement(`div`);
+        this.hashicon_element.classList.add(`xe-account-info-icon`);
         this.container.element.appendChild(this.hashicon_element);
 
         const container_1 = document.createElement(`div`);
@@ -60,7 +61,7 @@ export class AccountInfo {
     }
 
     set_hashicon(addr: string) {
-        const addr_icon = hashicon(addr, 100) as HTMLCanvasElement;
+        const addr_icon = hashicon(addr, 90) as HTMLCanvasElement;
         this.hashicon_element.replaceChildren();
         this.hashicon_element.appendChild(addr_icon);
     }

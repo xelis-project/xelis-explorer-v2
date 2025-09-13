@@ -11,6 +11,12 @@
     flex-direction: column;
 }
 
+.xe-account-info-icon {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 100%;
+    padding: 1rem;
+}
+
 .xe-account-info-container-2 {
     display: flex;
     gap: 2rem;
