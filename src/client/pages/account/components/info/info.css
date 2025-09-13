@@ -7,13 +7,13 @@
 
 .xe-account-info-container-1 {
     display: flex;
-    gap: .5rem;
+    gap: 1rem;
     flex-direction: column;
 }
 
 .xe-account-info-container-2 {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-direction: row;
 }
 
@@ -21,4 +21,14 @@
     display: flex;
     gap: .25rem;
     flex-direction: column;
+}
+
+.xe-account-info-addr {
+    font-size: 1.5rem;
+    max-width: 30rem;
+    word-break: break-all;
+}
+
+.xe-account-info-qr {
+    border-radius: .5rem;
 }

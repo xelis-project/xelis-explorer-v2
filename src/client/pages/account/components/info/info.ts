@@ -27,6 +27,7 @@ export class AccountInfo {
         this.container.element.appendChild(container_1);
 
         this.addr_element = document.createElement(`div`);
+        this.addr_element.classList.add(`xe-account-info-addr`);
         container_1.appendChild(this.addr_element);
 
         const container_2 = document.createElement(`div`);
@@ -43,6 +44,7 @@ export class AccountInfo {
         container_2.appendChild(this.registered_element);
 
         this.qr_code_element = document.createElement(`canvas`);
+        this.qr_code_element.classList.add(`xe-account-info-qr`);
         this.container.element.appendChild(this.qr_code_element);
     }
 
@@ -90,10 +92,11 @@ export class AccountInfo {
 
     set_qrcode(addr: string) {
         QRCode.toCanvas(this.qr_code_element, addr, {
-            margin: 2,
+            margin: 4,
+            scale: 3,
             color: {
                 dark: "#FFFFFF",
-                light: "#000000"
+                light: "#00000030"
             }
         });
     }
