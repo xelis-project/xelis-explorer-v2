@@ -4,7 +4,8 @@ import { Table } from "../../../../components/table/table";
 import { XelisNode } from "../../../../app/xelis_node";
 import { TxRow } from "../tx_row/tx_row";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
-import { App } from "../../../../app/app";
+
+import './txs.css';
 
 export class BlockTxs {
     container: Container;
@@ -12,6 +13,7 @@ export class BlockTxs {
 
     constructor() {
         this.container = new Container();
+        this.container.element.classList.add(`xe-block-txs`);
 
         this.table = new Table();
         this.table.set_clickable();

@@ -4,6 +4,17 @@
     display: flex;
     gap: 1rem;
     flex-direction: column;
+    animation: xe-block-graph-appear-animation 0.5s;
+}
+
+@keyframes xe-block-graph-appear-animation {
+    0% {
+        translate: 25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }
 
 .xe-block-graph-container-2 {

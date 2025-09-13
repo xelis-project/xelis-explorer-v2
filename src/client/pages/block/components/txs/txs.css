@@ -1,0 +1,13 @@
+.xe-block-txs {
+    animation: xe-block-txs-appear-animation 0.8s;
+}
+
+@keyframes xe-block-txs-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}

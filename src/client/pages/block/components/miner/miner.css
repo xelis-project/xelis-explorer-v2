@@ -4,7 +4,19 @@
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+    animation: xe-block-miner-appear-animation 0.5s;
 }
+
+@keyframes xe-block-miner-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
 
 .xe-block-miner-miner {
     display: flex;

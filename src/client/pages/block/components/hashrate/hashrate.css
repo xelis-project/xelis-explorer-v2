@@ -2,7 +2,19 @@
     display: flex;
     gap: 1rem;
     justify-content: space-between;
+    animation: xe-block-hashrate-appear-animation 0.6s;
 }
+
+@keyframes xe-block-hashrate-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
 
 .xe-block-hashrate>div {
     display: flex;
