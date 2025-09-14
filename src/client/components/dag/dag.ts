@@ -255,6 +255,8 @@ export class DAG {
     }
 
     center_blocks() {
+        this.tip_line_group.position.set(0, 0, 0);
+        this.block_group.position.set(0, 0, 0);
         // center blocks and block tip lines
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
         new THREE.Box3().setFromObject(this.tip_line_group).getCenter(this.tip_line_group.position).multiplyScalar(-1);
