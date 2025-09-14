@@ -45,6 +45,7 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
             const target = e.target as HTMLInputElement;
             const new_height = parseInt(target.value);
             this.set_height(new_height);
+            this.emit(`new_height`, new_height);
         });
         inputs_container.appendChild(this.height_input_element);
 
@@ -63,7 +64,7 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
 
         this.height_slider = nouislider.create(this.height_slider_element, {
             cssPrefix: `dag-slider-`,
-            start: 50,
+            start: 0,
             step: 1,
             tooltips: {
                 to: format_to
@@ -94,7 +95,8 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
     set_height(height: number) {
         this.height_slider.updateOptions({
             start: height
-        }, true);
+        }, false);
+        this.height_input_element.value = `${height}`;
     }
 
     set_max_height(max_height: number) {
