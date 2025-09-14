@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { Font, TextGeometry } from 'three/examples/jsm/Addons.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
@@ -11,6 +11,7 @@ import { OverlayLoading } from '../overlay_loading/overlay_loading';
 import { DAGBlockDetails } from './block_details/block_details';
 import { clamp_number } from '../../utils/clamp_number';
 import { HeightControl } from './height_control/height_control';
+import helvetiker_regular_font_data from './helvetiker_regular.typeface.json';
 
 CameraControls.install({ THREE });
 
@@ -32,8 +33,12 @@ export class DAG {
     height_control: HeightControl;
     hovered_block_mesh?: THREE.Mesh;
 
+    helvetiker_regular_font: Font;
+
     constructor() {
         this.element = document.createElement(`div`);
+
+        this.helvetiker_regular_font = new Font(helvetiker_regular_font_data);
 
         this.block_details = new DAGBlockDetails();
         this.element.appendChild(this.block_details.element);
@@ -373,62 +378,59 @@ export class DAG {
         box.userData.block = block;
         block_group.add(box);
 
-        const loader = new FontLoader();
-        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-            // hash
-            {
-                const geo = new TextGeometry(block.hash.substring(block.hash.length - 6), {
-                    font: font,
-                    size: 0.5,
-                    depth: 0.5
-                });
-                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
-                const text_mesh = new THREE.Mesh(geo, mat);
-                geo.computeBoundingBox();
-                if (geo.boundingBox) {
-                    text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, -0.25);
-                }
-
-                block_group.add(text_mesh);
+        // hash
+        {
+            const geo = new TextGeometry(block.hash.substring(block.hash.length - 6), {
+                font: this.helvetiker_regular_font,
+                size: 0.5,
+                depth: 0.5
+            });
+            const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
+            const text_mesh = new THREE.Mesh(geo, mat);
+            geo.computeBoundingBox();
+            if (geo.boundingBox) {
+                text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, -0.25);
             }
 
-            // height
-            {
-                const geo = new TextGeometry(block.height.toLocaleString(), {
-                    font: font,
-                    size: 0.5,
-                    depth: 0.5
-                });
+            block_group.add(text_mesh);
+        }
 
-                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
-                const text_mesh = new THREE.Mesh(geo, mat);
-                geo.computeBoundingBox();
-                if (geo.boundingBox) {
-                    text_mesh.position.set(geo.boundingBox.max.x / -2, -2, -0.25);
-                }
+        // height
+        {
+            const geo = new TextGeometry(block.height.toLocaleString(), {
+                font: this.helvetiker_regular_font,
+                size: 0.5,
+                depth: 0.5
+            });
 
-                block_group.add(text_mesh);
+            const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
+            const text_mesh = new THREE.Mesh(geo, mat);
+            geo.computeBoundingBox();
+            if (geo.boundingBox) {
+                text_mesh.position.set(geo.boundingBox.max.x / -2, -2, -0.25);
             }
 
-            // block type
-            {
-                const first_letter = block.block_type.substring(0, 1).toUpperCase();
-                const geo = new TextGeometry(first_letter, {
-                    font: font,
-                    size: 1,
-                    depth: 0.5
-                });
+            block_group.add(text_mesh);
+        }
 
-                const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(`black`) });
-                const text_mesh = new THREE.Mesh(geo, mat);
-                geo.computeBoundingBox();
-                if (geo.boundingBox) {
-                    text_mesh.position.set(geo.boundingBox.max.x / -2, geo.boundingBox.max.y / -2, -0.25);
-                }
+        // block type
+        {
+            const first_letter = block.block_type.substring(0, 1).toUpperCase();
+            const geo = new TextGeometry(first_letter, {
+                font: this.helvetiker_regular_font,
+                size: 1,
+                depth: 0.5
+            });
 
-                block_group.add(text_mesh);
+            const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(`black`) });
+            const text_mesh = new THREE.Mesh(geo, mat);
+            geo.computeBoundingBox();
+            if (geo.boundingBox) {
+                text_mesh.position.set(geo.boundingBox.max.x / -2, geo.boundingBox.max.y / -2, -0.25);
             }
-        });
+
+            block_group.add(text_mesh);
+        }
 
         return block_group;
     }
