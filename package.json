@@ -20,6 +20,7 @@
         "hono": "^4.9.2",
         "human-number": "^2.0.5",
         "leaflet": "^1.9.4",
+        "nouislider": "^15.8.1",
         "pretty": "^2.0.0",
         "pretty-bytes": "^7.0.1",
         "pretty-ms": "^9.2.0",
