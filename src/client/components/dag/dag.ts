@@ -159,50 +159,33 @@ export class DAG {
 
         const node = XelisNode.instance();
 
-        const requests = [] as RPCRequest[];
-        requests.push({
-            method: DaemonRPCMethod.GetHeight
-        });
+        const max_height = await node.rpc.getHeight();
+        this.height_control.set_height(height);
+        this.height_control.set_max_height(max_height);
 
-        requests.push({
-            method: DaemonRPCMethod.GetBlocksRangeByHeight,
-            params: {
-                start_height: height - 30,
-                end_height: height - 11
-            } as HeightRangeParams
-        });
-        requests.push({
-            method: DaemonRPCMethod.GetBlocksRangeByHeight,
-            params: {
-                start_height: height - 10,
-                end_height: height + 9
-            } as HeightRangeParams
-        });
-        requests.push({
-            method: DaemonRPCMethod.GetBlocksRangeByHeight,
-            params: {
-                start_height: height + 10,
-                end_height: height + 29
-            } as HeightRangeParams
-        });
+        const start_height = Math.max(0, height - 30);
+        const end_height = Math.min(max_height, height + 30);
+        const requests = [] as RPCRequest[];
+        for (let i = start_height; i < end_height; i += 20) {
+            requests.push({
+                method: DaemonRPCMethod.GetBlocksRangeByHeight,
+                params: {
+                    start_height: i,
+                    end_height: i + 20 - 1
+                } as HeightRangeParams
+            });
+        }
 
         const res = await node.rpc.batchRequest(requests);
 
-        let current_height = 0;
         let blocks = [] as Block[];
         res.forEach((result, i) => {
             if (result instanceof Error) {
                 throw result;
-            }
-
-            if (i === 0) {
-                current_height = result as number;
             } else {
                 blocks = [...blocks, ...result as Block[]];
             }
         });
-
-        this.height_control.set_max_height(current_height);
 
         const group_blocks = new Map<number, Block[]>();
         for (let i = 0; i < blocks.length; i++) {
