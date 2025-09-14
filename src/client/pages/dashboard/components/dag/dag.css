@@ -14,8 +14,7 @@
 
 .xe-dashboard-dag-dag {
     height: 25rem;
-}
-
-.xe-dashboard-dag-dag canvas {
+    position: relative;
+    overflow: hidden;
     border-radius: 1rem;
 }

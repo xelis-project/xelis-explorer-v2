@@ -31,10 +31,8 @@
 }
 
 .xe-block-graph-dag {
-    height: 15rem;
+    height: 22rem;
     position: relative;
-}
-
-.xe-block-graph-dag canvas {
+    overflow: hidden;
     border-radius: 1rem;
 }
