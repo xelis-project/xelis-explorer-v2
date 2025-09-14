@@ -1,0 +1,39 @@
+.xe-dag-height-control {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 4rem 2rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    background: linear-gradient(rgba(0, 0, 0, 0), rgb(15, 15, 15));
+}
+
+.xe-dag-height-control-inputs {
+    position: absolute;
+    right: 2rem;
+    top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-dag-height-control-inputs input {
+    max-width: 5rem;
+    text-align: right;
+    border-radius: .5rem;
+    border: none;
+    padding: .5rem .6rem;
+    background-color: rgb(15, 15, 15);
+    color: white;
+}
+
+.xe-dag-height-control-inputs button {
+    background-color: rgb(15, 15, 15);
+    color: white;
+    padding: .5rem .75rem;
+    border: none;
+    border-radius: .5rem;
+    font-weight: bold;
+    cursor: pointer;
+}

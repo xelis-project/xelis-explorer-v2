@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-//import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { FontLoader } from 'three/examples/jsm/Addons.js';
@@ -11,6 +10,7 @@ import { RPCRequest } from '@xelis/sdk/rpc/types';
 import { OverlayLoading } from '../overlay_loading/overlay_loading';
 import { DAGBlockDetails } from './block_details/block_details';
 import { clamp_number } from '../../utils/clamp_number';
+import { HeightControl } from './height_control/height_control';
 
 CameraControls.install({ THREE });
 
@@ -29,6 +29,7 @@ export class DAG {
 
     overlay_loading: OverlayLoading;
     block_details: DAGBlockDetails;
+    height_control: HeightControl;
     hovered_block_mesh?: THREE.Mesh;
 
     constructor() {
@@ -39,6 +40,13 @@ export class DAG {
 
         this.overlay_loading = new OverlayLoading();
         this.element.appendChild(this.overlay_loading.element);
+
+        this.height_control = new HeightControl();
+        this.height_control.add_listener(`new_height`, (height) => {
+            if (height) this.load(height);
+        });
+
+        this.element.appendChild(this.height_control.element);
 
         this.clock = new THREE.Clock();
         this.scene = new THREE.Scene();
@@ -140,10 +148,17 @@ export class DAG {
     }
 
     async load(height: number) {
-        height = 434191;
+        // height = 434191; // height with a lot of side blocks
+        this.tip_line_group.clear();
+        this.block_group.clear();
+
         const node = XelisNode.instance();
 
         const requests = [] as RPCRequest[];
+        requests.push({
+            method: DaemonRPCMethod.GetHeight
+        });
+
         requests.push({
             method: DaemonRPCMethod.GetBlocksRangeByHeight,
             params: {
@@ -168,14 +183,21 @@ export class DAG {
 
         const res = await node.rpc.batchRequest(requests);
 
+        let current_height = 0;
         let blocks = [] as Block[];
-        res.forEach((result) => {
+        res.forEach((result, i) => {
             if (result instanceof Error) {
                 throw result;
+            }
+
+            if (i === 0) {
+                current_height = result as number;
             } else {
                 blocks = [...blocks, ...result as Block[]];
             }
         });
+
+        this.height_control.set_max_height(current_height);
 
         const group_blocks = new Map<number, Block[]>();
         for (let i = 0; i < blocks.length; i++) {
@@ -224,6 +246,10 @@ export class DAG {
             });
         });
 
+        this.center_blocks();
+    }
+
+    center_blocks() {
         // center blocks and block tip lines
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
         new THREE.Box3().setFromObject(this.tip_line_group).getCenter(this.tip_line_group.position).multiplyScalar(-1);
@@ -248,7 +274,6 @@ export class DAG {
             tip_line_mat.color.set(`#404040`);
         });
     }
-
 
     intercept_block() {
         const blocks_mesh = this.block_group.getObjectsByProperty(`name`, `block_mesh`) as THREE.Mesh[];

@@ -1,0 +1,339 @@
+/* Functional styling;
+ * These styles are required for dag-sliderSlider to function.
+ * You don't need to change these rules to apply your design.
+ */
+.dag-slider-target,
+.dag-slider-target * {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    touch-action: none;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.dag-slider-target {
+    position: relative;
+}
+
+.dag-slider-base,
+.dag-slider-connects {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+/* Wrapper for all connect elements.
+ */
+.dag-slider-connects {
+    overflow: hidden;
+    z-index: 0;
+}
+
+.dag-slider-connect,
+.dag-slider-origin {
+    will-change: transform;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    -webkit-transform-style: preserve-3d;
+    transform-origin: 0 0;
+    transform-style: flat;
+}
+
+/* Offset direction
+ */
+.dag-slider-txt-dir-rtl.dag-slider-horizontal .dag-slider-origin {
+    left: 0;
+    right: auto;
+}
+
+/* Give origins 0 height/width so they don't interfere with clicking the
+ * connect elements.
+ */
+.dag-slider-vertical .dag-slider-origin {
+    top: -100%;
+    width: 0;
+}
+
+.dag-slider-horizontal .dag-slider-origin {
+    height: 0;
+}
+
+.dag-slider-handle {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: absolute;
+}
+
+.dag-slider-touch-area {
+    height: 100%;
+    width: 100%;
+}
+
+.dag-slider-state-tap .dag-slider-connect,
+.dag-slider-state-tap .dag-slider-origin {
+    -webkit-transition: transform 0.3s;
+    transition: transform 0.3s;
+}
+
+.dag-slider-state-drag * {
+    cursor: inherit !important;
+}
+
+/* Slider size and handle placement;
+ */
+.dag-slider-horizontal {
+    height: 1rem;
+}
+
+.dag-slider-horizontal .dag-slider-handle {
+    width: 2rem;
+    height: 1.3rem;
+    right: -1rem;
+    top: -.15rem;
+}
+
+.dag-slider-vertical {
+    width: 18px;
+}
+
+.dag-slider-vertical .dag-slider-handle {
+    width: 28px;
+    height: 34px;
+    right: -6px;
+    bottom: -17px;
+}
+
+.dag-slider-txt-dir-rtl.dag-slider-horizontal .dag-slider-handle {
+    left: -17px;
+    right: auto;
+}
+
+/* Styling;
+ * Giving the connect element a border radius causes issues with using transform: scale
+ */
+.dag-slider-target {
+    background: rgba(2, 255, 209, 0.1);
+    border-radius: .25rem;
+}
+
+.dag-slider-connects {
+    border-radius: 3px;
+}
+
+.dag-slider-connect {
+    background: #3FB8AF;
+}
+
+/* Handles and cursors;
+ */
+.dag-slider-draggable {
+    cursor: ew-resize;
+}
+
+.dag-slider-vertical .dag-slider-draggable {
+    cursor: ns-resize;
+}
+
+.dag-slider-handle {
+    border-radius: .25rem;
+    background: #0CFFCF;
+    cursor: default;
+}
+
+.dag-slider-active {}
+
+/* Handle stripes;
+ */
+.dag-slider-handle:before,
+.dag-slider-handle:after {
+    content: "";
+    display: block;
+    position: absolute;
+    height: .5rem;
+    width: .1rem;
+    background: rgba(255, 255, 255, 0.9);
+    left: 1rem;
+    top: .4rem;
+}
+
+.dag-slider-handle:after {
+    left: 17px;
+}
+
+.dag-slider-vertical .dag-slider-handle:before,
+.dag-slider-vertical .dag-slider-handle:after {
+    width: 14px;
+    height: 1px;
+    left: 6px;
+    top: 14px;
+}
+
+.dag-slider-vertical .dag-slider-handle:after {
+    top: 17px;
+}
+
+/* Disabled state;
+ */
+[disabled] .dag-slider-connect {
+    background: #B8B8B8;
+}
+
+[disabled].dag-slider-target,
+[disabled].dag-slider-handle,
+[disabled] .dag-slider-handle {
+    cursor: not-allowed;
+}
+
+/* Base;
+ *
+ */
+.dag-slider-pips,
+.dag-slider-pips * {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.dag-slider-pips {
+    position: absolute;
+    color: #999;
+}
+
+/* Values;
+ *
+ */
+.dag-slider-value {
+    position: absolute;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.dag-slider-value:last-child {
+    transform: translate(-100%, 150%);
+}
+
+.dag-slider-value-sub {
+    color: #ccc;
+    font-size: 10px;
+}
+
+/* Markings;
+ *
+ */
+.dag-slider-marker {
+    position: absolute;
+    background: #CCC;
+}
+
+.dag-slider-marker-sub {
+    background: #AAA;
+}
+
+.dag-slider-marker-large {
+    background: #AAA;
+}
+
+/* Horizontal layout;
+ *
+ */
+.dag-slider-pips-horizontal {
+    padding: 10px 0;
+    height: 80px;
+    top: 100%;
+    left: 0;
+    width: 100%;
+}
+
+.dag-slider-value-horizontal {
+    transform: translate(-50%, 150%);
+}
+
+.dag-slider-rtl .dag-slider-value-horizontal {
+    transform: translate(50%, 50%);
+}
+
+.dag-slider-marker-horizontal.dag-slider-marker {
+    margin-left: -1px;
+    width: 2px;
+    height: 5px;
+}
+
+.dag-slider-marker-horizontal.dag-slider-marker-sub {
+    height: 10px;
+}
+
+.dag-slider-marker-horizontal.dag-slider-marker-large {
+    height: 15px;
+}
+
+/* Vertical layout;
+ *
+ */
+.dag-slider-pips-vertical {
+    padding: 0 10px;
+    height: 100%;
+    top: 0;
+    left: 100%;
+}
+
+.dag-slider-value-vertical {
+    transform: translate(0, -50%);
+    padding-left: 25px;
+}
+
+.dag-slider-rtl .dag-slider-value-vertical {
+    transform: translate(0, 50%);
+}
+
+.dag-slider-marker-vertical.dag-slider-marker {
+    width: 5px;
+    height: 2px;
+    margin-top: -1px;
+}
+
+.dag-slider-marker-vertical.dag-slider-marker-sub {
+    width: 10px;
+}
+
+.dag-slider-marker-vertical.dag-slider-marker-large {
+    width: 15px;
+}
+
+.dag-slider-tooltip {
+    display: block;
+    position: absolute;
+    border-radius: .5rem;
+    background: rgb(15, 15, 15);
+    color: white;
+    padding: .5rem .75rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.dag-slider-horizontal .dag-slider-tooltip {
+    transform: translate(-50%, 0);
+    left: 50%;
+    bottom: -200%;
+}
+
+.dag-slider-vertical .dag-slider-tooltip {
+    transform: translate(0, -50%);
+    top: 50%;
+    right: 120%;
+}
+
+.dag-slider-horizontal .dag-slider-origin>.dag-slider-tooltip {
+    transform: translate(50%, 0);
+    left: auto;
+    bottom: 10px;
+}
+
+.dag-slider-vertical .dag-slider-origin>.dag-slider-tooltip {
+    transform: translate(0, -18px);
+    top: auto;
+    right: 28px;
+}
