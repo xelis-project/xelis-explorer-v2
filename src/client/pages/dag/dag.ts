@@ -1,3 +1,5 @@
+import { App } from "../../app/app";
+import icons from "../../assets/svg/icons";
 import { DAG } from "../../components/dag/dag";
 import { Page } from "../page";
 
@@ -9,9 +11,18 @@ export class DAGPage extends Page {
 
     dag: DAG;
 
+    home_button_element: HTMLButtonElement;
+
     constructor() {
         super();
 
+        this.home_button_element = document.createElement(`button`);
+        this.home_button_element.classList.add(`xe-dag-back`);
+        this.home_button_element.innerHTML = icons.home();
+        this.home_button_element.addEventListener(`click`, () => {
+            App.instance().go_to(`/`);
+        });
+        this.element.appendChild(this.home_button_element);
 
         this.dag = new DAG();
         this.dag.element.classList.add(`xe-dag`);

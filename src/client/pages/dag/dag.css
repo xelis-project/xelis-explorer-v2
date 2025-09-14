@@ -4,3 +4,28 @@
     position: absolute;
     overflow: hidden;
 }
+
+.xe-dag-back {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1;
+    padding: .6rem .7rem;
+    cursor: pointer;
+    border-radius: 100%;
+    border: none;
+    color: white;
+    opacity: .7;
+    background-color: rgb(15, 15, 15);
+    transition: translate .15s, opacity .15s;
+}
+
+.xe-dag-back:hover {
+    opacity: 1;
+    translate: 0 5%;
+}
+
+.xe-dag-back svg {
+    width: 1.3rem;
+    height: 1.3rem;
+}
