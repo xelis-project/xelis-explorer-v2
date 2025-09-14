@@ -48,7 +48,7 @@ export class DAG {
 
         this.height_control = new HeightControl();
         this.height_control.add_listener(`new_height`, (height) => {
-            if (height) this.load(height);
+            if (height !== undefined) this.load(height);
         });
 
         this.element.appendChild(this.height_control.element);
