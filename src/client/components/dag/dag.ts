@@ -1,9 +1,8 @@
 import * as THREE from 'three';
 import { Font, TextGeometry } from 'three/examples/jsm/Addons.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
-import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
-import { Block, RPCMethod as DaemonRPCMethod, HeightRangeParams } from '@xelis/sdk/daemon/types';
+import { Block, RPCMethod as DaemonRPCMethod, HeightRangeParams, RPCEvent as DaemonRPCEvent, BlockOrdered, BlockType } from '@xelis/sdk/daemon/types';
 import { block_type_colors } from '../block_type_box/block_type_box';
 import CameraControls from 'camera-controls';
 import { RPCRequest } from '@xelis/sdk/rpc/types';
@@ -23,21 +22,29 @@ export class DAG {
     orthographic_camera: THREE.OrthographicCamera;
     controls: CameraControls;
     clock: THREE.Clock;
-    block_group: THREE.Group;
-    tip_line_group: THREE.Group;
     raycaster: THREE.Raycaster;
     pointer: THREE.Vector2;
+
+    block_group: THREE.Group;
+    tip_line_group: THREE.Group;
 
     overlay_loading: OverlayLoading;
     block_details: DAGBlockDetails;
     height_control: HeightControl;
-    hovered_block_mesh?: THREE.Mesh;
+    hovered_block_box_mesh?: THREE.Mesh;
+
+    block_mesh_hashes: Map<string, THREE.Group>;
+    blocks_by_height: Map<number, Block[]>;
 
     helvetiker_regular_font: Font;
+    is_live: boolean;
+    target_line: THREE.Line;
 
     constructor() {
         this.element = document.createElement(`div`);
 
+        this.block_mesh_hashes = new Map();
+        this.blocks_by_height = new Map();
         this.helvetiker_regular_font = new Font(helvetiker_regular_font_data);
 
         this.block_details = new DAGBlockDetails();
@@ -48,7 +55,15 @@ export class DAG {
 
         this.height_control = new HeightControl();
         this.height_control.add_listener(`new_height`, (height) => {
-            if (height !== undefined) this.load(height);
+            if (height !== undefined) {
+                this.load_blocks(height);
+                this.set_live(false);
+            }
+        });
+
+        this.is_live = false;
+        this.height_control.live_btn_element.addEventListener(`click`, () => {
+            this.set_live(!this.is_live);
         });
 
         this.element.appendChild(this.height_control.element);
@@ -94,13 +109,147 @@ export class DAG {
         this.block_group = new THREE.Group();
         this.scene.add(this.block_group);
 
-        const middle_line = this.create_middle_line();
-        this.scene.add(middle_line);
+        this.target_line = this.create_target_line();
+        this.scene.add(this.target_line);
 
         window.addEventListener('resize', this.on_resize);
 
         this.element.addEventListener(`pointermove`, this.on_pointer_move);
         this.element.addEventListener(`click`, this.on_click);
+    }
+
+    on_new_block = async (new_block?: Block, err?: Error) => {
+        console.log("new_block", new_block);
+
+        if (new_block) {
+            this.add_block_to_height(new_block);
+
+            if (this.blocks_by_height.size >= 25) {
+                const min_height = Math.min(...this.blocks_by_height.keys());
+                this.delete_blocks_at_height(min_height);
+            }
+
+            const block_mesh = this.create_block_mesh(new_block);
+            const blocks_at_height = this.blocks_by_height.get(new_block.height);
+            if (blocks_at_height) {
+                const block_count = blocks_at_height.length - 1;
+                const center_y = block_count * 5; //(block_count * 5) - (block_count / 2 * 5);
+                block_mesh.position.set((this.blocks_by_height.size - 1) * 4, center_y, 0);
+            }
+
+            this.block_group.add(block_mesh);
+
+            const new_height = new_block.height;
+            this.height_control.set_height(new_height);
+            this.height_control.set_max_height(new_height)
+            this.move_to_block(new_height);
+
+            new_block.tips.forEach((hash) => {
+                const block_mesh_target = this.block_mesh_hashes.get(hash);
+                if (block_mesh_target) {
+                    const tip_hash = this.create_tip_hash(new_block.hash, hash);
+                    const line_mesh = this.create_tip_line_mesh(block_mesh, block_mesh_target, tip_hash);
+                    this.tip_line_group.add(line_mesh);
+                }
+            });
+
+            const node = XelisNode.instance();
+            const stable_height = await node.ws.methods.getStableHeight();
+            this.blocks_by_height.forEach((blocks, height) => {
+                if (
+                    blocks.length === 1 &&
+                    height <= stable_height
+                ) {
+                    const single_block = blocks[0];
+                    if (single_block.block_type === BlockType.Normal) {
+                        single_block.block_type = BlockType.Sync;
+
+                        const block_mesh = this.block_group.children.find(b => {
+                            return b.userData.block.hash === single_block.hash;
+                        });
+
+                        if (block_mesh) {
+                            const new_block_mesh = this.create_block_mesh(single_block);
+                            new_block_mesh.position.copy(block_mesh.position);
+                            this.block_group.remove(block_mesh);
+                            this.block_group.add(new_block_mesh);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    delete_blocks_at_height(height: number) {
+        const blocks_to_delete = this.blocks_by_height.get(height);
+        if (blocks_to_delete) {
+            blocks_to_delete.forEach((block) => {
+                const block_mesh = this.block_mesh_hashes.get(block.hash);
+                if (block_mesh) {
+                    this.block_group.remove(block_mesh);
+                    this.block_mesh_hashes.delete(block.hash);
+                }
+
+                this.tip_line_group.children.forEach((tip_line_mesh) => {
+                    const block_target_height = tip_line_mesh.userData.block_target_height;
+                    if (block_target_height === height) {
+                        this.tip_line_group.remove(tip_line_mesh);
+                    }
+                });
+            });
+            this.blocks_by_height.delete(height);
+
+            this.block_group.children.forEach((block_mesh) => {
+                block_mesh.position.sub(new THREE.Vector3(4, 0, 0));
+            });
+
+            this.tip_line_group.children.forEach((tip_line_mesh) => {
+                tip_line_mesh.position.sub(new THREE.Vector3(4, 0, 0));
+            });
+        }
+    }
+
+    on_block_ordered = async (block_ordered?: BlockOrdered | undefined, err?: Error) => {
+        console.log("block_ordered", block_ordered);
+        if (block_ordered) {
+            const node = XelisNode.instance();
+            const block = await node.ws.methods.getBlockByHash({
+                hash: block_ordered.block_hash
+            });
+
+            const block_mesh = this.block_mesh_hashes.get(block_ordered.block_hash);
+            if (block_mesh) {
+                const new_block_mesh = this.create_block_mesh(block);
+                new_block_mesh.position.copy(block_mesh.position);
+                this.block_group.remove(block_mesh);
+                this.block_group.add(new_block_mesh);
+            }
+        }
+    }
+
+    async set_live(live: boolean) {
+        this.is_live = live;
+        const node = XelisNode.instance();
+
+        if (live) {
+            const current_height = await node.rpc.getHeight();
+            this.load_blocks(current_height);
+
+            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+            node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+            this.height_control.live_btn_element.classList.add(`active`);
+        }
+        else {
+            node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
+            node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+            this.height_control.live_btn_element.classList.remove(`active`);
+        }
+    }
+
+    clear_node_events() {
+        const node = XelisNode.instance();
+        node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
+        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
     }
 
     update_size() {
@@ -133,8 +282,8 @@ export class DAG {
         const offset_mouse_x = e.clientX - rect.x;
         const offset_mouse_y = e.clientY - rect.y;
 
-        if (this.hovered_block_mesh) {
-            const block = this.hovered_block_mesh.userData.block as Block;
+        if (this.hovered_block_box_mesh && this.hovered_block_box_mesh.parent) {
+            const block = this.hovered_block_box_mesh.parent.userData.block as Block;
             const block_details_rect = this.block_details.element.getBoundingClientRect();
 
             let block_details_x = offset_mouse_x + 20;
@@ -152,26 +301,36 @@ export class DAG {
         }
     }
 
-    async load(height: number) {
+    async load_blocks(height: number) {
         // height = 434191; // height with a lot of side blocks
+        this.controls.normalizeRotations().reset(true);
         this.tip_line_group.clear();
         this.block_group.clear();
+        this.block_mesh_hashes.clear();
+        this.blocks_by_height.clear();
+        this.target_line.visible = false;
 
         const node = XelisNode.instance();
 
         const max_height = await node.rpc.getHeight();
-        this.height_control.set_height(height);
         this.height_control.set_max_height(max_height);
+        this.height_control.set_height(height);
 
-        const start_height = Math.max(0, height - 30);
-        const end_height = Math.min(max_height, height + 30);
+        const start_height = Math.max(0, height - 25);
+        const end_height = Math.min(max_height, height + 25);
         const requests = [] as RPCRequest[];
         for (let i = start_height; i < end_height; i += 20) {
+            let start = i;
+            let end = i + 20 - 1;
+            if (end > end_height) {
+                end = end_height;
+            }
+
             requests.push({
                 method: DaemonRPCMethod.GetBlocksRangeByHeight,
                 params: {
-                    start_height: i,
-                    end_height: i + 20 - 1
+                    start_height: start,
+                    end_height: end
                 } as HeightRangeParams
             });
         }
@@ -187,56 +346,52 @@ export class DAG {
             }
         });
 
-        const group_blocks = new Map<number, Block[]>();
         for (let i = 0; i < blocks.length; i++) {
             const block = blocks[i];
-            const heigh_blocks = group_blocks.get(block.height);
-            if (heigh_blocks) {
-                group_blocks.set(block.height, [...heigh_blocks, block]);
-            } else {
-                group_blocks.set(block.height, [block]);
-            }
+            this.add_block_to_height(block);
         }
 
-        const block_mesh_hashes = new Map<string, THREE.Group>();
         let x = 0;
-        group_blocks.forEach((height_blocks) => {
+        this.blocks_by_height.forEach((height_blocks) => {
             height_blocks.forEach((block, y) => {
-                const box_mesh = this.create_box_mesh(block);
-                const center_y = (y * 5) - (height_blocks.length / 2 * 5);
-                box_mesh.position.set(x * 4, center_y, 0);
-                this.block_group.add(box_mesh);
-
-                block_mesh_hashes.set(block.hash, box_mesh);
+                const block_mesh = this.create_block_mesh(block);
+                const center_y = (y * 5) //- (height_blocks.length / 2 * 5);
+                block_mesh.position.set(x * 4, center_y, 0);
+                this.block_group.add(block_mesh);
             });
 
             x++;
         });
 
-        this.block_group.children.forEach((block_group) => {
-            const block_mesh = block_group.getObjectByName(`block_mesh`) as THREE.Mesh;
+        this.block_group.children.forEach((block_mesh) => {
             const block = block_mesh.userData.block as Block;
-            block.tips.forEach((tip_hash) => {
-                const block_mesh_target = block_mesh_hashes.get(tip_hash);
+            block.tips.forEach((hash) => {
+                const block_mesh_target = this.block_mesh_hashes.get(hash);
                 if (block_mesh_target) {
-                    const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#404040`) });
-
-                    const points = [
-                        block_group.position,
-                        block_mesh_target.position
-                    ];
-
-                    const geo = new THREE.BufferGeometry().setFromPoints(points);
-                    const line = new THREE.Line(geo, mat);
-                    line.userData.hash = `${block.hash}${tip_hash}`;
-                    this.tip_line_group.add(line);
+                    const tip_hash = this.create_tip_hash(block.hash, hash);
+                    const line_mesh = this.create_tip_line_mesh(block_mesh as THREE.Group, block_mesh_target, tip_hash);
+                    this.tip_line_group.add(line_mesh);
                 }
             });
         });
 
-        this.center_blocks();
+        this.target_line.visible = true;
+        this.move_to_block(height);
     }
 
+    move_to_block(height: number) {
+        const block_mesh = this.block_group.children.find((b) => {
+            return b.userData.block.height === height;
+        });
+
+        if (block_mesh) {
+            const x = block_mesh.position.x;
+            this.target_line.position.set(x, 0, 0);
+            this.controls.moveTo(x, 0, 0, true);
+        }
+    }
+
+    /*
     center_blocks() {
         this.tip_line_group.position.set(0, 0, 0);
         this.block_group.position.set(0, 0, 0);
@@ -244,9 +399,23 @@ export class DAG {
         new THREE.Box3().setFromObject(this.block_group).getCenter(this.block_group.position).multiplyScalar(-1);
         new THREE.Box3().setFromObject(this.tip_line_group).getCenter(this.tip_line_group.position).multiplyScalar(-1);
     }
+    */
+
+    add_block_to_height(block: Block) {
+        const heigh_blocks = this.blocks_by_height.get(block.height);
+        if (heigh_blocks) {
+            this.blocks_by_height.set(block.height, [...heigh_blocks, block]);
+        } else {
+            this.blocks_by_height.set(block.height, [block]);
+        }
+    }
+
+    create_tip_hash(block_hash: string, block_target_hash: string) {
+        return `${block_hash}${block_target_hash}`;
+    }
 
     highlight_tip_lines(block: Block) {
-        const hashes = block.tips.map(tip_hash => `${block.hash}${tip_hash}`);
+        const hashes = block.tips.map(hash => this.create_tip_hash(block.hash, hash));
 
         this.tip_line_group.children.forEach((tip_line) => {
             const tip_line_mesh = tip_line as THREE.Mesh;
@@ -261,34 +430,36 @@ export class DAG {
         this.tip_line_group.children.forEach((tip_line) => {
             const tip_line_mesh = tip_line as THREE.Mesh;
             const tip_line_mat = tip_line_mesh.material as THREE.LineBasicMaterial;
-            tip_line_mat.color.set(`#404040`);
+            tip_line_mat.color.set(`#606060`);
         });
     }
 
     intercept_block() {
-        const blocks_mesh = this.block_group.getObjectsByProperty(`name`, `block_mesh`) as THREE.Mesh[];
-        const intersects = this.raycaster.intersectObjects<THREE.Mesh>(blocks_mesh);
+        const box_meshes = this.block_group.getObjectsByProperty(`name`, `box_mesh`) as THREE.Mesh[];
+        const intersects = this.raycaster.intersectObjects<THREE.Mesh>(box_meshes);
         if (intersects.length > 0) {
-            if (!this.hovered_block_mesh) {
+            if (!this.hovered_block_box_mesh) {
                 const intersection = intersects[0];
-                const block_mesh = intersection.object;
-                block_mesh.userData.uniforms.enable_outline.value = true;
-                block_mesh.scale.set(0.95, 0.95, 0.95);
-                const block = block_mesh.userData.block as Block;
-                this.highlight_tip_lines(block);
+                const box_mesh = intersection.object;
+                box_mesh.userData.uniforms.enable_outline.value = true;
+                // block_mesh.scale.set(0.95, 0.95, 0.95);
+                if (box_mesh.parent) {
+                    const block = box_mesh.parent.userData.block as Block;
+                    this.highlight_tip_lines(block);
+                }
 
-                this.hovered_block_mesh = block_mesh;
+                this.hovered_block_box_mesh = box_mesh;
             }
-        } else if (this.hovered_block_mesh) {
+        } else if (this.hovered_block_box_mesh) {
             this.clear_highlight_tip_lines();
-            this.hovered_block_mesh.scale.set(1, 1, 1);
-            this.hovered_block_mesh.userData.uniforms.enable_outline.value = false;
-            this.hovered_block_mesh = undefined;
+            //this.hovered_block_mesh.scale.set(1, 1, 1);
+            this.hovered_block_box_mesh.userData.uniforms.enable_outline.value = false;
+            this.hovered_block_box_mesh = undefined;
         }
     }
 
-    create_middle_line() {
-        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#404040`) });
+    create_target_line() {
+        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#606060`) });
 
         const points = [
             new THREE.Vector3(0, -1000, 0),
@@ -296,13 +467,32 @@ export class DAG {
         ];
 
         const geo = new THREE.BufferGeometry().setFromPoints(points);
-        const line = new THREE.Line(geo, mat);
+        const line = new THREE.LineSegments(geo, mat);
         return line;
     }
 
-    create_box_mesh(block: Block) {
+    create_tip_line_mesh(block_mesh: THREE.Group, block_target_mesh: THREE.Group, hash: string) {
+        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#606060`) });
+
+        const points = [
+            block_mesh.position,
+            block_target_mesh.position
+        ];
+
+        const block_target = block_target_mesh.userData.block;
+
+        const geo = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(geo, mat);
+        line.userData.hash = hash;
+        line.userData.block_target_height = block_target.height;
+        return line;
+    }
+
+    create_block_mesh(block: Block) {
         const size = 2.5;
-        const block_group = new THREE.Group();
+        const block_mesh = new THREE.Group();
+        block_mesh.userData.block = block;
+
         const color = block_type_colors[block.block_type];
 
         const uniforms = {
@@ -358,10 +548,10 @@ export class DAG {
             vertexShader: vertexShader(),
         });
         const box = new THREE.Mesh(geo, mat);
-        box.name = "block_mesh";
+        box.name = "box_mesh";
         box.userData.uniforms = uniforms;
-        box.userData.block = block;
-        block_group.add(box);
+
+        block_mesh.add(box);
 
         // hash
         {
@@ -377,7 +567,7 @@ export class DAG {
                 text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, -0.25);
             }
 
-            block_group.add(text_mesh);
+            block_mesh.add(text_mesh);
         }
 
         // height
@@ -395,7 +585,7 @@ export class DAG {
                 text_mesh.position.set(geo.boundingBox.max.x / -2, -2, -0.25);
             }
 
-            block_group.add(text_mesh);
+            block_mesh.add(text_mesh);
         }
 
         // block type
@@ -414,34 +604,16 @@ export class DAG {
                 text_mesh.position.set(geo.boundingBox.max.x / -2, geo.boundingBox.max.y / -2, -0.25);
             }
 
-            block_group.add(text_mesh);
+            block_mesh.add(text_mesh);
         }
 
-        return block_group;
+        this.block_mesh_hashes.set(block.hash, block_mesh);
+        return block_mesh;
     }
 
     render = (time: number) => {
         this.raycaster.setFromCamera(this.pointer, this.orthographic_camera);
         this.intercept_block();
-
-        //this.uniforms.time.value = this.clock.getElapsedTime();
-        const cam_pos = this.orthographic_camera.position;
-        /*if (cam_pos.x < -100) {
-            this.controls.normalizeRotations().reset();
-            this.block_group.clear();
-            this.load(80)
-        }
-
-        if (cam_pos.x > 100) {
-            //const delta = new THREE.Vector3(0, 0, 0); // change direction as needed
-            this.controls.normalizeRotations().reset();
-            this.block_group.clear();
-            this.load(120)
-            // this.orthographic_camera.position.set(0, 0,0);
-            // this.orthographic_camera.lookAt(0, 0, 0);
-            //  this.controls.target.set(0, 0, 0);
-            //this.controls.update();
-        }*/
 
         const delta = this.clock.getDelta();
         this.controls.update(delta);

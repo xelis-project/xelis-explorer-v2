@@ -1,12 +1,10 @@
 import * as nouislider from 'nouislider';
-
+import { EventEmitter } from '../../../utils/event_emitter';
 // import 'nouislider/dist/nouislider.css';
 import './dag_slider.css';
 import './height_control.css';
-import { EventEmitter } from '../../../utils/event_emitter';
-
 interface HeightControlEventMap {
-    new_height: number
+    new_height: number;
 }
 
 export class HeightControl extends EventEmitter<HeightControlEventMap> {
@@ -27,10 +25,8 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
         inputs_container.classList.add(`xe-dag-height-control-inputs`);
 
         this.live_btn_element = document.createElement(`button`);
+        this.live_btn_element.classList.add(`xe-dag-height-control-live-button`);
         this.live_btn_element.innerHTML = `LIVE`;
-        this.live_btn_element.addEventListener(`click`, () => {
-
-        });
         inputs_container.appendChild(this.live_btn_element);
 
         const title_element = document.createElement(`div`);

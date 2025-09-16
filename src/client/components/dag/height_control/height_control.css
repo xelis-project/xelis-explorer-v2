@@ -29,7 +29,7 @@
     color: white;
 }
 
-.xe-dag-height-control-inputs button {
+.xe-dag-height-control-live-button {
     background-color: rgb(15, 15, 15);
     color: white;
     padding: .5rem .75rem;
@@ -37,4 +37,31 @@
     border-radius: .5rem;
     font-weight: bold;
     cursor: pointer;
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+    transition: translate .15s;
+}
+
+.xe-dag-height-control-live-button:hover {
+    translate: 0 -4%;
+}
+
+.xe-dag-height-control-live-button::before {
+    content: "";
+    border-radius: 100%;
+    width: .5rem;
+    height: .5rem;
+    background-color: white;
+}
+
+.xe-dag-height-control-live-button.active::before {
+    animation: xe-dag-height-control-live-button-animation .75s infinite alternate;
+}
+
+@keyframes xe-dag-height-control-live-button-animation {
+    100% {
+        background-color: #02FFCF;
+    }
 }
