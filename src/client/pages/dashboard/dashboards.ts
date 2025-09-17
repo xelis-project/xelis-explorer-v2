@@ -331,5 +331,6 @@ export class DashboardPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
+        this.dashboard_dag.dag.clear_node_events();
     }
 }

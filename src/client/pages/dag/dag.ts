@@ -49,4 +49,9 @@ export class DAGPage extends Page {
             this.dag.set_live(true);
         }
     }
+
+    unload() {
+        super.unload();
+        this.dag.clear_node_events();
+    }
 }
