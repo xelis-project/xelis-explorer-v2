@@ -70,7 +70,7 @@ export class DashboardSearch {
                     });
 
                     if (addr.is_valid) {
-                        app.go_to(`/addr/${search_value}`);
+                        app.go_to(`/account/${search_value}`);
                         return;
                     }
                 } catch {
