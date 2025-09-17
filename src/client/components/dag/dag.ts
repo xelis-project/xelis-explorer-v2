@@ -189,15 +189,14 @@ export class DAG {
                     this.block_group.remove(block_mesh);
                     this.block_mesh_hashes.delete(block.hash);
                 }
-
-                this.tip_line_group.children.forEach((tip_line_mesh) => {
-                    const block_target_height = tip_line_mesh.userData.block_target_height;
-                    if (block_target_height === height) {
-                        this.tip_line_group.remove(tip_line_mesh);
-                    }
-                });
             });
             this.blocks_by_height.delete(height);
+
+            const tip_lines_to_delete = this.tip_line_group.children.filter((tip_line_mesh) => {
+                const block_target_height = tip_line_mesh.userData.block_target_height;
+                return block_target_height === height;
+            });
+            this.tip_line_group.remove(...tip_lines_to_delete);
 
             this.block_group.children.forEach((block_mesh) => {
                 block_mesh.position.sub(new THREE.Vector3(4, 0, 0));
