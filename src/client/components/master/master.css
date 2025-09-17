@@ -1,6 +1,10 @@
 .xe-master {
     position: relative;
     min-height: 100vh;
+    background-size: 2rem 2rem;
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.01) .1rem, rgba(255, 255, 255, 0.02) .1rem),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.01) .1rem, rgba(255, 255, 255, 0.02) .1rem);
 }
 
 .xe-master-content {
