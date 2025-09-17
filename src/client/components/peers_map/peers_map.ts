@@ -105,7 +105,7 @@ export class PeersMap {
             const peer_marker = await this.new_peer_marker(geo_location, peers.length);
             const new_popup = this.build_marker_popup(geo_location, peers);
             peer_marker.addTo(this.map);
-            peer_marker.bindPopup(new_popup);
+            peer_marker.bindPopup(new_popup, { closeButton: false });
             this.peer_markers[marker_key] = { marker: peer_marker, geo_location, peers };
         });
     }
