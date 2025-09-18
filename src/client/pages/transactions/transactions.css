@@ -1,3 +1,21 @@
 .xe-transactions {
-    
+
+}
+
+.xe-transactions-table {
+    animation: xe-transactions-table-appear-animation .4s;
+    min-height: 30rem;
+
+    /* for translate animations stay inside container */
+    overflow: hidden;
+}
+
+@keyframes xe-transactions-table-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }
