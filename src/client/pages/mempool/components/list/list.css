@@ -18,3 +18,32 @@
         translate: 0 0;
     }
 }
+
+.xe-mempool-txs-list-empty {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    flex-direction: column;
+    opacity: .1;
+    text-align: center;
+    user-select: none;
+    animation: xe-mempool-txs-list-empty-animation .5s infinite alternate;
+}
+
+.xe-mempool-txs-list-empty svg {
+    width: 4rem;
+    height: 4rem;
+}
+
+.xe-mempool-txs-list-empty div {
+    max-width: 10rem;
+}
+
+@keyframes xe-mempool-txs-list-empty-animation {
+    100% {
+        opacity: .2;
+    }
+}

@@ -77,6 +77,7 @@ export class MempoolPage extends Page {
                 this.page_data.mempool_txs.push(tx);
 
                 const tx_block = { tx: tx, block: future_block } as TxBlock;
+                this.mempool_txs_list.set_empty(false);
                 this.mempool_txs_list.prepend_tx(tx_block);
                 this.mempool_summary.set(this.page_data.mempool_txs, top_block);
             }
@@ -91,6 +92,7 @@ export class MempoolPage extends Page {
 
             this.page_data.mempool_txs = [];
             this.mempool_txs_list.set([]);
+            this.mempool_txs_list.set_empty(true);
             this.mempool_chart.blocks_txs.set(this.page_data.blocks);
             this.mempool_summary.set(mempool_txs, new_block);
         }
@@ -129,6 +131,7 @@ export class MempoolPage extends Page {
 
         this.mempool_summary.set(this.page_data.mempool_txs, top_block);
         this.mempool_txs_list.set(this.page_data.mempool_txs as any);
+        if (this.page_data.mempool_txs.length === 0) this.mempool_txs_list.set_empty(true);
         this.mempool_chart.blocks_txs.set(blocks);
 
         Box.boxes_loading(this.mempool_summary.container.element, false);
