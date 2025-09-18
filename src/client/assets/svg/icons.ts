@@ -35,4 +35,12 @@ export const home = () => {
     `;
 }
 
-export default { question_mark_shield, tag, exchange, home };
+export const empty_box = () => {
+    return `
+        <svg fill="currentColor" height="800px" width="800px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <path d="M480,32H32C14.328,32,0,46.326,0,64v320v64c0,17.674,14.328,32,32,32h448c17.672,0,32-14.326,32-32v-64V64 C512,46.326,497.672,32,480,32z M448,320h-80c-17.672,0-32,14.326-32,32v32H176v-32c0-17.674-14.328-32-32-32H64V96h384V320z"/>
+        </svg>
+    `;
+}
+
+export default { question_mark_shield, tag, exchange, home, empty_box };
