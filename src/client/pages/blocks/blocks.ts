@@ -56,6 +56,7 @@ export class BlocksPage extends Page {
             block_row.set(new_block, info.block_time_target);
             this.table.prepend_row(block_row.element);
             this.block_rows.unshift(block_row);
+            this.block_rows.pop();
             block_row.animate_prepend();
             this.table.remove_last();
         }
