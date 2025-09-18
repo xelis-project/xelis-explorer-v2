@@ -6,6 +6,7 @@ import './header.css';
 export const menu_links = {
     "/": "DASHBOARD",
     "/blocks": "BLOCKS",
+    "/transactions": "TRANSACTIONS",
     "/contracts": "CONTRACTS",
     "/mempool": "MEMPOOL",
     "/dag": "DAG",
@@ -40,18 +41,6 @@ export class Header {
         app.events.add_listener("page_load", () => {
             this.highlight_menu_link();
         });
-
-        /*
-        const link_test = document.createElement(`a`);
-        link_test.href = "/asdasd";
-        link_test.innerHTML = `asdasd`;
-        container.appendChild(link_test);
-
-        const link_test_2 = document.createElement(`a`);
-        link_test_2.href = "/block/f33d819b12d753750fee8b66ae935cdbfd9233b767541278c169f33f4413e609";
-        link_test_2.innerHTML = "A block";
-        container.appendChild(link_test_2);
-        */
     }
 
     highlight_menu_link() {
