@@ -3,7 +3,6 @@ import { DashboardBlocks } from "./components/blocks/blocks";
 import { Master } from "../../components/master/master";
 import { DashboardSearch } from "./components/search/search";
 import { DashboardTopStats } from "./components/top_stats/top_stats";
-import { DashboardChartSection1 } from "./components/chart_section_1/chart_section_1";
 import { DashboardChartSection2 } from "./components/chart_section_2/chart_section_2";
 import { DashboardTxs } from "./components/txs/txs";
 import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult, Peer } from '@xelis/sdk/daemon/types';
@@ -29,7 +28,6 @@ export class DashboardPage extends Page {
     dashboard_blocks: DashboardBlocks;
     dashboard_txs: DashboardTxs;
     dashboard_search: DashboardSearch;
-    dashboard_chart_section_1: DashboardChartSection1;
     dashboard_chart_section_2: DashboardChartSection2;
     dashboard_peers: DashboardPeers;
     dashboard_dag: DashboardDAG;
@@ -69,9 +67,6 @@ export class DashboardPage extends Page {
 
         this.dashboard_search = new DashboardSearch();
         sub_container_1.appendChild(this.dashboard_search.container.element);
-
-        this.dashboard_chart_section_1 = new DashboardChartSection1();
-        sub_container_1.appendChild(this.dashboard_chart_section_1.container.element);
 
         this.dashboard_chart_section_2 = new DashboardChartSection2();
         sub_container_1.appendChild(this.dashboard_chart_section_2.container.element);
