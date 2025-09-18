@@ -10,6 +10,7 @@ import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
 import { PeersPage } from "../pages/peers/peers";
 import { TransactionPage } from "../pages/transaction/transaction";
+import { TransactionsPage } from "../pages/transactions/transactions";
 
 export const pages = [
     DashboardPage,
@@ -21,7 +22,8 @@ export const pages = [
     BlockTopoPage,
     BlockHeightPage,
     AccountPage,
-    TransactionPage
+    TransactionPage,
+    TransactionsPage
 ];
 
 export const match_route = (url: URL): typeof Page => {
