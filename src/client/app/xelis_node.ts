@@ -2,7 +2,7 @@ import { Singleton } from "../utils/singleton";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import DaemonWS from '@xelis/sdk/daemon/websocket';
 
-export class XelisNode extends Singleton<XelisNode> {
+export class XelisNode extends Singleton {
     rpc: DaemonRPC;
     ws: DaemonWS;
 

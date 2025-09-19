@@ -16,7 +16,7 @@ interface AppEventMap {
     page_load: void;
 }
 
-export class App extends Singleton<App> {
+export class App extends Singleton {
     events: EventEmitter<AppEventMap>;
     root!: HTMLElement;
     current_page?: Page;

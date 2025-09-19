@@ -13,7 +13,7 @@ export const supported_languages = [
     { title: "French", key: "fr" },
 ] as { title: string, key: Locale }[];
 
-export class Localization extends Singleton<Localization> {
+export class Localization extends Singleton {
     locale: Locale;
     vars: Record<string, string[]>;
 

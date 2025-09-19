@@ -3,7 +3,7 @@ import { App as ServerApp } from "../../server";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { Singleton } from "../utils/singleton";
 
-export class Page extends Singleton<Page> {
+export class Page extends Singleton {
     element: HTMLDivElement;
 
     static pathname: string = "";

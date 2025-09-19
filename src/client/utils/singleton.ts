@@ -1,4 +1,4 @@
-export class Singleton<T> {
+export class Singleton {
     private static _instance: any = null;
 
     constructor() {
