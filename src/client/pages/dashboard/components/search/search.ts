@@ -1,5 +1,6 @@
 import { App } from "../../../../app/app";
 import { XelisNode } from "../../../../app/xelis_node";
+import icons from "../../../../assets/svg/icons";
 import { Container } from "../../../../components/container/container";
 import { TextInput } from "../../../../components/text_input/text_input";
 
@@ -9,19 +10,25 @@ export class DashboardSearch {
     container: Container;
     text_input: TextInput;
 
+
     constructor() {
         this.container = new Container();
         this.container.element.classList.add(`xe-dashboard-search`);
 
-        const form = document.createElement(`form`);
-        this.container.element.appendChild(form);
+        const form_element = document.createElement(`form`);
+        this.container.element.appendChild(form_element);
 
         this.text_input = new TextInput();
         this.text_input.element.name = `dashboard_search_input`;
         this.text_input.element.placeholder = `Search block, transaction or account address`;
-        form.appendChild(this.text_input.element);
+        form_element.appendChild(this.text_input.element);
 
-        form.addEventListener(`submit`, (e) => {
+        const search_button = document.createElement(`button`);
+        search_button.innerHTML = `${icons.search()}`;
+        search_button.type = `submit`;
+        form_element.appendChild(search_button);
+
+        form_element.addEventListener(`submit`, (e) => {
             e.preventDefault();
             this.search();
         });

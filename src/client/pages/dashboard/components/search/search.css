@@ -1,4 +1,5 @@
 .xe-dashboard-search {
+    position: relative;
     animation: xe-dashboard-search-appear-animation .5s;
 }
 
@@ -10,4 +11,32 @@
     100% {
         translate: 0 0;
     }
+}
+
+.xe-dashboard-search form>:nth-child(1) {
+    padding-right: 3rem;
+}
+
+.xe-dashboard-search form>:nth-child(2) {
+    border: none;
+    color: white;
+    rotate: 90deg;
+    cursor: pointer;
+    background: none;
+    border-radius: 1rem;
+    height: 100%;
+    position: absolute;
+    top:0;
+    right: 1.5rem;
+    transition: translate .15s;
+}
+
+.xe-dashboard-search form >:nth-child(2):hover {
+    color: #0CFFCF;
+    translate: -3% 0;
+}
+
+.xe-dashboard-search form >:nth-child(2) svg {
+    width: 1.5rem;
+    height: 1.5rem;
 }
