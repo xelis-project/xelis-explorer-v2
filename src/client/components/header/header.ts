@@ -4,15 +4,20 @@ import icons from '../../assets/svg/icons';
 import { svg_xelis_logo } from '../../assets/svg/xelis';
 import './header.css';
 
+interface LinkDef {
+    text: string;
+    icon: string;
+}
+
 export const menu_links = {
-    "/": "DASHBOARD",
-    "/blocks": "BLOCKS",
-    "/transactions": "TRANSACTIONS",
-    "/contracts": "CONTRACTS",
-    "/mempool": "MEMPOOL",
-    "/dag": "DAG",
-    "/peers": "PEERS"
-} as Record<string, string>;
+    "/": { text: "DASHBOARD", icon: icons.dashboard() },
+    "/blocks": { text: "BLOCKS", icon: icons.blocks() },
+    "/transactions": { text: "TRANSACTIONS", icon: icons.exchange() },
+    "/contracts": { text: "CONTRACTS", icon: icons.contract() },
+    "/mempool": { text: "MEMPOOL", icon: icons.compute() },
+    "/dag": { text: "DAG", icon: icons.block_graph() },
+    "/peers": { text: "PEERS", icon: icons.network() }
+} as Record<string, LinkDef>;
 
 export class Header {
     element: HTMLDivElement;
@@ -55,10 +60,11 @@ export class Header {
         this.element.appendChild(this.links_element);
 
         Object.keys(menu_links).forEach((key) => {
-            const text = menu_links[key];
+            const link_def = menu_links[key];
             const link = document.createElement(`a`);
             link.href = key;
-            link.innerHTML = Localization.instance().get_text(text);
+            const text = Localization.instance().get_text(link_def.text);
+            link.innerHTML = `${link_def.icon}${text}`;
             this.links_element.appendChild(link);
         });
 
