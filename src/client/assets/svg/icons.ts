@@ -43,4 +43,15 @@ export const empty_box = () => {
     `;
 }
 
-export default { question_mark_shield, tag, exchange, home, empty_box };
+export const menu = () => {
+    return `
+        <svg width="800px" height="800px" viewBox="0 0 24 24" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M9 18H21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    `;
+}
+
+export default { 
+    question_mark_shield, tag, exchange, 
+    home, empty_box, menu
+};
