@@ -51,7 +51,73 @@ export const menu = () => {
     `;
 }
 
+export const dashboard = () => {
+    return `
+        <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12M21 12C21 7.02944 16.9706 3 12 3M21 12H19M3 12C3 7.02944 7.02944 3 12 3M3 12H5M12 3V5M13.3229 10.5C12.9703 10.1888 12.5072 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14C13.1046 14 14 13.1046 14 12C14 11.4027 13.7381 10.8665 13.3229 10.5ZM13.3229 10.5L15.8229 8" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    `;
+}
+
+export const blocks = () => {
+    return `
+        <svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16,4a1,1,0,0,0-1-1H9A1,1,0,0,0,8,4v7h8Z"/>
+            <path d="M3,14v6a1,1,0,0,0,1,1h7V13H4A1,1,0,0,0,3,14Z"/>
+            <path d="M20,13H13v8h7a1,1,0,0,0,1-1V14A1,1,0,0,0,20,13Z"/>
+        </svg>
+    `;
+}
+/*
+<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 10H20L16 6" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M16 14L4 14L8 18" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+*/
+export const contract = () => {
+    return `
+        <svg width="800px" height="800px" viewBox="0 0 1024 1024" fill="currentColor" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <path d="M182.88 146.2h585.14v365.71h73.14V73.06H109.74v877.71h402.28v-73.14H182.88z" />
+            <path d="M256.01 219.34h438.86v73.14H256.01zM256.01 365.63h365.71v73.14H256.01zM256.01 511.91h219.43v73.14H256.01zM731.44 545.76L548.59 646.33v201.14l182.86 100.57L914.3 847.47V646.33L731.44 545.76z m109.72 258.46l-109.71 60.34-109.71-60.34V689.58l109.71-60.34 109.71 60.34v114.64z" />
+            <path d="M731.44 746.9m-36.57 0a36.57 36.57 0 1 0 73.14 0 36.57 36.57 0 1 0-73.14 0Z" />
+        </svg>
+    `;
+}
+
+export const compute = () => {
+    return `
+        <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 6V4M10 20V18M14 6V4M14 20V18M18.2222 10H20M4 10H5.77778M18.2222 14H20M4 14H5.77778M10 10H14V14H10V10ZM7.99998 18H16C17.1046 18 18 17.1046 18 16V8C18 6.89543 17.1046 6 16 6H7.99998C6.89542 6 5.99998 6.89543 5.99998 8V16C5.99998 17.1046 6.89542 18 7.99998 18Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    `;
+}
+
+export const block_graph = () => {
+    return `
+        <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="800px" height="800px" viewBox="0 0 102.166 102.166">
+            <path d="M102.166,8.75v24.666H77.5V8.75H102.166z M77.5,93.416h24.666V68.75H77.5V93.416z M38.75,93.416h24.666V68.75H38.75V93.416
+                z M0,93.416h24.666V68.75H0V93.416z M86.584,65.167h5V37.1h-5v11.333h-17.5h-2.25H12.332v0.017H9.834v16.716h5V53.434h34.342
+                v11.733h3.814V53.434h13.844h2.25h17.5V65.167z"/>
+        </svg>
+    `;
+}
+
+export const network = () => {
+    return `
+        <svg width="800px" height="800px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g id="Dribbble-Light-Preview" transform="translate(-300.000000, -3399.000000)" fill="currentColor">
+                    <g id="icons" transform="translate(56.000000, 160.000000)">
+                        <path d="M251.907,3250 L253.907,3250 L253.907,3248 L251.907,3248 L251.907,3250 Z M256,3250 L262,3250 L262,3248 L256,3248 L256,3250 Z M251.907,3257 L253.907,3257 L253.907,3255 L251.907,3255 L251.907,3257 Z M256,3257 L262,3257 L262,3255 L256,3255 L256,3257 Z M251.907,3243 L253.907,3243 L253.907,3241 L251.907,3241 L251.907,3243 Z M256,3243 L262,3243 L262,3241 L256,3241 L256,3243 Z M264,3245 L264,3239 L250,3239 L250,3241 L246,3241 L246,3239 L244,3239 L244,3257 L250,3257 L250,3259 L264,3259 L264,3253 L250,3253 L250,3255 L246,3255 L246,3250 L250,3250 L250,3252 L264,3252 L264,3246 L250,3246 L250,3248 L246,3248 L246,3243 L250,3243 L250,3245 L264,3245 Z" id="network_3-[#1082]"></path>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    `;
+}
+
 export default { 
     question_mark_shield, tag, exchange, 
-    home, empty_box, menu
+    home, empty_box, menu, dashboard, blocks,
+    contract, compute, block_graph, network
 };
