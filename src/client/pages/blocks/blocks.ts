@@ -35,7 +35,7 @@ export class BlocksPage extends Page {
         this.master.content.classList.add(`xe-blocks`);
 
         this.container_table = new Container();
-        this.container_table.element.classList.add(`xe-blocks-table`);
+        this.container_table.element.classList.add(`xe-blocks-table`, `scrollbar-1`, `scrollbar-1-bottom`);
         this.master.content.appendChild(this.container_table.element);
 
         this.table = new Table();

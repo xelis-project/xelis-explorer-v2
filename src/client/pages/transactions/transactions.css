@@ -5,9 +5,7 @@
 .xe-transactions-table {
     animation: xe-transactions-table-appear-animation .4s;
     min-height: 30rem;
-
-    /* for translate animations stay inside container */
-    overflow: hidden;
+    overflow-x: auto;
 }
 
 @keyframes xe-transactions-table-appear-animation {
