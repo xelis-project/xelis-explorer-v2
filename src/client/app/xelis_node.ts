@@ -15,15 +15,4 @@ export class XelisNode extends Singleton {
         this.rpc.timeout = 5000;
         this.ws = new DaemonWS(XelisNode.ws_node_endpoint);
     }
-
-    set_rpc_endpoint(endpoint: string) {
-        XelisNode.rpc_node_endpoint = endpoint;
-        this.rpc = new DaemonRPC(XelisNode.rpc_node_endpoint);
-    }
-
-    set_ws_endpoint(endpoint: string) {
-        XelisNode.ws_node_endpoint = endpoint;
-        this.ws.socket.close();
-        this.ws = new DaemonWS(XelisNode.ws_node_endpoint);
-    }
 }
