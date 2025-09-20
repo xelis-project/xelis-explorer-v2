@@ -29,7 +29,7 @@ export class DashboardHashRate {
 
     build_chart(blocks: Block[], info: GetInfoResult) {
         const data = blocks
-            //.filter((item, i) => blocks.indexOf(item) === i)
+            .filter((item, i) => blocks.map(x => x.height).indexOf(item.height) === i) // no duplicate height - remove side block
             .map((block) => {
                 return { x: block.height, y: parseInt(block.difficulty) };
             });
