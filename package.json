@@ -25,7 +25,6 @@
         "pretty-bytes": "^7.1.0",
         "pretty-ms": "^9.3.0",
         "qrcode": "^1.5.4",
-        "query-string": "^9.3.1",
         "reset-css": "^5.0.2",
         "three": "^0.179.1",
         "urlpattern-polyfill": "^10.1.0"

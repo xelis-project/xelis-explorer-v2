@@ -2,7 +2,6 @@ import { App } from "../../app/app";
 import icons from "../../assets/svg/icons";
 import { DAG } from "../../components/dag/dag";
 import { Page } from "../page";
-import queryString from "query-string";
 
 import './dag.css';
 
@@ -35,10 +34,12 @@ export class DAGPage extends Page {
         this.dag.update_size();
         this.set_window_title(DAGPage.title);
 
-        const parsed_query = queryString.parse(location.search);
+        const query = new URLSearchParams(location.search);
+        const height_query = query.get(`height`);
+
         let height = undefined as number | undefined;
-        if (parsed_query && typeof parsed_query.height === `string`) {
-            height = parseInt(parsed_query.height);
+        if (typeof height_query === `string`) {
+            height = parseInt(height_query);
         }
 
         if (height) {
