@@ -2,9 +2,9 @@
     "name": "xelis-explorer-2",
     "type": "module",
     "scripts": {
-        "dev": "vite dev",
-        "dev-testnet": "vite dev --mode testnet",
-        "dev-mainnet": "vite dev --mode mainnet",
+        "dev": "vite dev --host",
+        "dev-testnet": "npm run dev -- --mode testnet",
+        "dev-mainnet": "npm run dev -- --mode mainnet",
         "build": "vite build --mode mainnet",
         "preview": "npm run build && vite preview",
         "deploy": "npm run build && wrangler deploy",
