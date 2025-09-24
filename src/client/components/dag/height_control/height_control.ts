@@ -29,12 +29,13 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
         this.live_btn_element.innerHTML = `LIVE`;
         inputs_container.appendChild(this.live_btn_element);
 
-        const title_element = document.createElement(`div`);
+        const title_element = document.createElement(`label`);
         title_element.innerHTML = `HEIGHT`;
         inputs_container.appendChild(title_element);
 
         this.height_input_element = document.createElement(`input`);
 
+        this.height_input_element.ariaLabel = 'Block height';
         this.height_input_element.type = `text`;
         this.height_input_element.name = `xe-dag-height-control`;
         this.height_input_element.addEventListener(`change`, (e) => {

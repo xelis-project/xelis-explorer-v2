@@ -24,6 +24,7 @@ export class DashboardSearch {
         form_element.appendChild(this.text_input.element);
 
         const search_button = document.createElement(`button`);
+        search_button.ariaLabel = this.text_input.element.placeholder;
         search_button.innerHTML = `${icons.search()}`;
         search_button.type = `submit`;
         form_element.appendChild(search_button);
