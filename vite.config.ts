@@ -17,6 +17,13 @@ export default defineConfig({
         rollupOptions: {
             // overwrite default .html entry
             input: '/src/client/index.ts',
+            output: {
+                manualChunks: {
+                    three: ['three', 'camera-controls'],
+                    animejs: ['animejs'],
+                    d3: ['d3']
+                }
+            }
         },
     },
 });
