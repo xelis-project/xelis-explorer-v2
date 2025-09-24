@@ -12,7 +12,19 @@ import { clamp_number } from '../../utils/clamp_number';
 import { HeightControl } from './height_control/height_control';
 import helvetiker_regular_font_data from './helvetiker_regular.typeface.json';
 
-CameraControls.install({ THREE });
+const three_lib_for_camera = {
+    Vector2: THREE.Vector2,
+    Vector3: THREE.Vector3,
+    Vector4: THREE.Vector4,
+    Quaternion: THREE.Quaternion,
+    Matrix4: THREE.Matrix4,
+    Spherical: THREE.Spherical,
+    Box3: THREE.Box3,
+    Sphere: THREE.Sphere,
+    Raycaster: THREE.Raycaster,
+};
+
+CameraControls.install({ THREE: three_lib_for_camera });
 
 export class DAG {
     element: HTMLDivElement;
