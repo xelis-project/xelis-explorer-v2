@@ -27,7 +27,7 @@ export class Background {
         circuit.element.classList.add(`xe-background-circuit`);
         //circuit.innerHTML = svg_circuit();
         this.element.appendChild(circuit.element);
-        circuit.load();
+        //circuit.load();
 
         document.body.style.overflowX = `hidden`;
     }
