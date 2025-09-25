@@ -52,6 +52,48 @@
     translate: 0 -4%;
 }
 
+@media screen and (max-width: 900px) {
+    .xe-header-links {
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.2);
+        top: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+        z-index: 1;
+        backdrop-filter: blur(30px);
+        font-size: 1.5rem;
+        box-shadow: 0px 0px 100px 10px black;
+        translate: 100% 0;
+        width: 15rem;
+    }
+
+    .xe-header-links.open {
+        translate: 100% 0;
+        animation: xe-header-links-open-animation .25s forwards ease-out;
+    }
+
+    @keyframes xe-header-links-open-animation {
+        100% {
+            translate: 0 0;
+        }
+    }
+
+    .xe-header-links.close {
+        translate: 0 0;
+        animation: xe-header-links-close-animation .25s forwards ease-out;
+    }
+
+    @keyframes xe-header-links-close-animation {
+        100% {
+            translate: 100% 0;
+        }
+    }
+}
+
 .xe-header-logo {
     display: flex;
     gap: 1rem;
@@ -98,47 +140,8 @@
     height: 2rem;
 }
 
-@media screen and (max-width:900px) {
+@media screen and (max-width: 900px) {
     .xe-header-mobile-menu-button {
         display: block;
-    }
-
-    .xe-header-links {
-        position: fixed;
-        background-color: rgba(0, 0, 0, 0.2);
-        top: 0;
-        right: 0;
-        bottom: 0;
-        height: 100%;
-        flex-direction: column;
-        gap: 2rem;
-        padding: 2rem;
-        z-index: 1;
-        backdrop-filter: blur(30px);
-        font-size: 1.5rem;
-        box-shadow: 0px 0px 100px 10px black;
-        translate: 100% 0;
-    }
-
-    .xe-header-links.open {
-        translate: 100% 0;
-        animation: xe-header-links-open-animation .25s forwards ease-out;
-    }
-
-    @keyframes xe-header-links-open-animation {
-        100% {
-            translate: 0 0;
-        }
-    }
-
-    .xe-header-links.close {
-        translate: 0 0;
-        animation: xe-header-links-close-animation .25s forwards ease-out;
-    }
-
-    @keyframes xe-header-links-close-animation {
-        100% {
-            translate: 100% 0;
-        }
     }
 }

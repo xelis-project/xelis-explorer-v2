@@ -21,6 +21,12 @@
     flex-direction: row;
 }
 
+@media screen and (max-width: 900px) {
+    .xe-peers-chart-container-1 {
+        flex-direction: column;
+    }
+}
+
 .xe-peers-chart-container-1> :nth-child(1) {
     flex: 1;
     min-height: 10rem;

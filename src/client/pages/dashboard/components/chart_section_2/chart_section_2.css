@@ -26,6 +26,12 @@
     min-height: 10rem;
 }
 
+@media screen and (max-width: 900px) {
+    .xe-dashboard-chart-section-2>:nth-child(2) {
+        flex-direction: column;
+    }
+}
+
 .xe-dashboard-chart-section-2>:nth-child(2)>div {
     flex: 1;
 }
