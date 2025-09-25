@@ -105,6 +105,7 @@ export class DAG {
         this.controls.minZoom = 5;
         this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK;
         this.controls.mouseButtons.middle = CameraControls.ACTION.ZOOM;
+        this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK;
 
         this.controls.addEventListener(`controlstart`, () => {
             this.block_details.hide();
