@@ -1,7 +1,13 @@
 .xe-account-list {
+    max-height: 40rem;
+    overflow: auto;
     display: flex;
     gap: 1rem;
     flex-direction: column;
-    max-height: 40rem;
-    overflow: auto;
+}
+
+.xe-account-list> :nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
 }

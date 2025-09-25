@@ -6,10 +6,26 @@
     flex-direction: row;
 }
 
+.xe-account-container-1 >:nth-child(2) {
+    min-height: 10rem;
+}
+
+@media screen and (max-width: 900px) {
+    .xe-account-container-1 {
+        flex-direction: column;
+    }
+}
+
 .xe-account-container-2 {
     display: flex;
     gap: 1rem;
     flex-direction: row;
+}
+
+@media screen and (max-width: 900px) {
+    .xe-account-container-2 {
+        flex-direction: column;
+    }
 }
 
 .xe-account-container-2>div {

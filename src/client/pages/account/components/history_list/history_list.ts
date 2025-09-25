@@ -5,25 +5,37 @@ import { AccountHistoryListItem } from './history_item';
 
 export class AccountHistoryList {
     container: Container;
+    list_element: HTMLDivElement;
 
-    constructor() {
+    constructor(title: string) {
         this.container = new Container();
         this.container.element.classList.add(`xe-account-list`, `scrollbar-1`, `scrollbar-1-right`);
+
+        const title_element = document.createElement(`div`);
+        title_element.innerHTML = title;
+        this.container.element.appendChild(title_element);
+
+        this.list_element = document.createElement(`div`);
+        this.container.element.appendChild(this.list_element);
     }
 
     set(history_list: AccountHistory[]) {
-        this.container.element.replaceChildren();
+        this.list_element.replaceChildren();
         history_list.forEach(history_item => this.prepend_history(history_item));
     }
 
     prepend_history(history: AccountHistory) {
-        const history_item = new AccountHistoryListItem();
-        history_item.set(history);
-        //block_item.box.element.addEventListener(`click`, () => {
-        //     App.instance().go_to(`/block/${block.hash}`);
-        //});
+        let link = undefined;
+        if (history.outgoing || history.incoming) {
+            link = `/tx/${history.hash}`;
+        } else if (history.mining) {
+            link = `/block/${history.hash}`;
+        }
 
-        this.container.element.insertBefore(history_item.box.element, this.container.element.firstChild);
+        const history_item = new AccountHistoryListItem(link);
+        history_item.set(history);
+
+        this.list_element.insertBefore(history_item.box.element, this.list_element.firstChild);
         return history_item;
     }
 }

@@ -174,10 +174,10 @@ export class AccountPage extends Page {
         container_2.classList.add(`xe-account-container-2`);
         this.master.content.appendChild(container_2);
 
-        this.incoming_history_list = new AccountHistoryList();
+        this.incoming_history_list = new AccountHistoryList(`Incoming`);
         container_2.appendChild(this.incoming_history_list.container.element);
 
-        this.outgoing_history_list = new AccountHistoryList();
+        this.outgoing_history_list = new AccountHistoryList(`Outgoing`);
         container_2.appendChild(this.outgoing_history_list.container.element);
     }
 
@@ -207,10 +207,10 @@ export class AccountPage extends Page {
         const { addr } = this.page_data;
         if (!addr) return;
 
-        this.incoming_history_list.container.element.replaceChildren();
-        this.outgoing_history_list.container.element.replaceChildren();
-        Box.list_loading(this.incoming_history_list.container.element, 10, `3rem`);
-        Box.list_loading(this.outgoing_history_list.container.element, 10, `3rem`);
+        this.incoming_history_list.list_element.replaceChildren();
+        this.outgoing_history_list.list_element.replaceChildren();
+        Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
+        Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
 
         const xelis_node = XelisNode.instance();
 

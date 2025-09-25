@@ -19,7 +19,7 @@ export class AccountInfo {
 
     constructor() {
         this.container = new Container();
-        this.container.element.classList.add(`xe-account-info`);
+        this.container.element.classList.add(`xe-account-info`, `scrollbar-1`, `scrollbar-1-bottom`);
 
         this.hashicon_element = document.createElement(`div`);
         this.hashicon_element.classList.add(`xe-account-info-icon`);

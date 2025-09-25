@@ -17,8 +17,8 @@ export class AccountHistoryListItem {
     age_element: HTMLDivElement;
     type_element: HTMLDivElement;
 
-    constructor() {
-        this.box = new Box();
+    constructor(href?: string) {
+        this.box = new Box(href);
         this.box.element.classList.add(`xe-account-list-item`);
 
         const container_1 = document.createElement(`div`);
@@ -68,14 +68,27 @@ export class AccountHistoryListItem {
 
     set_type(history: AccountHistory) {
         if (history.incoming) {
-            const addr = reduce_text(history.incoming.from);
-            this.type_element.innerHTML = `INCOMING (${addr})`;
+            const addr = history.incoming.from;
+            const to_icon = hashicon(addr, 25) as HTMLCanvasElement;
+            this.type_element.classList.add(`xe-account-list-item-outgoing`);
+            this.type_element.replaceChildren();
+            const text = document.createElement(`div`);
+            text.innerHTML = `IN TRANSFER`;
+            this.type_element.appendChild(text);
+            this.type_element.appendChild(to_icon);
+            const addr_text = document.createElement(`div`);
+            addr_text.innerHTML = format_address(addr);
+            this.type_element.appendChild(addr_text);
         }
 
         if (history.outgoing) {
             const addr = history.outgoing.to;
             const to_icon = hashicon(addr, 25) as HTMLCanvasElement;
+            this.type_element.classList.add(`xe-account-list-item-outgoing`);
             this.type_element.replaceChildren();
+            const text = document.createElement(`div`);
+            text.innerHTML = `OUT TRANSFER`;
+            this.type_element.appendChild(text);
             this.type_element.appendChild(to_icon);
             const addr_text = document.createElement(`div`);
             addr_text.innerHTML = format_address(addr);

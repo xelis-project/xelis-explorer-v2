@@ -3,6 +3,7 @@
     gap: 1rem;
     flex-direction: row;
     align-items: center;
+    overflow: auto;
 }
 
 .xe-account-info-container-1 {
@@ -21,6 +22,7 @@
     display: flex;
     gap: 2rem;
     flex-direction: row;
+    min-width: 30rem;
 }
 
 .xe-account-info-container-2>div {
