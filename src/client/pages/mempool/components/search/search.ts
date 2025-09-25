@@ -21,11 +21,17 @@ export class MempoolSearch {
 
         let search_timeout_id: number | undefined;
         form.addEventListener(`input`, (e) => {
-            if (search_timeout_id) window.clearTimeout(search_timeout_id)
+            if (search_timeout_id) window.clearTimeout(search_timeout_id);
 
             search_timeout_id = window.setTimeout(() => {
                 this.search();
             }, 500);
+        });
+
+        form.addEventListener(`submit`, (e) => {
+            e.preventDefault();
+            if (search_timeout_id) window.clearTimeout(search_timeout_id);
+            this.search();
         });
     }
 
