@@ -1,4 +1,7 @@
 .xe-dashboard-dag {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
     animation: xe-dashboard-dag-appear-animation 1s;
 }
 

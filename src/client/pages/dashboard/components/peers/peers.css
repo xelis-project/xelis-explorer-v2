@@ -1,4 +1,7 @@
 .xe-dashboard-peers {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
     animation: xe-dashboard-peers-appear-animation .9s;
 }
 

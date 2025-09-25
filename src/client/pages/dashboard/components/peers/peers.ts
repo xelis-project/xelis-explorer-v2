@@ -11,6 +11,10 @@ export class DashboardPeers {
         this.container = new Container();
         this.container.element.classList.add(`xe-dashboard-peers`);
 
+        const title_element = document.createElement(`div`);
+        title_element.innerHTML = `PEERS`;
+        this.container.element.appendChild(title_element);
+
         this.peers_map = new PeersMap();
         this.peers_map.element.classList.add(`xe-dashboard-peers-map`);
         this.container.element.appendChild(this.peers_map.element);
