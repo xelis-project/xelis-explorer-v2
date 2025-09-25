@@ -1,6 +1,5 @@
 import * as THREE from 'three';
-import { Font, TextGeometry } from 'three/examples/jsm/Addons.js';
-import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
+import { Font, TextGeometry, RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
 import { Block, RPCMethod as DaemonRPCMethod, HeightRangeParams, RPCEvent as DaemonRPCEvent, BlockOrdered, BlockType } from '@xelis/sdk/daemon/types';
 import { block_type_colors } from '../block_type_box/block_type_box';
