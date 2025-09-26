@@ -44,4 +44,29 @@
     display: flex;
     gap: .5rem;
     flex-direction: row;
+    color: #afafaf;
+    font-size: .9rem;
+}
+
+.xe-tx-item-hash {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.xe-tx-item-age {
+    font-size: 1.1rem;
+}
+
+.xe-tx-item-size {
+    color: #afafaf;
+    font-size: .9rem;
+}
+
+.xe-tx-item-height {
+    font-size: 1.1rem;
+}
+
+.xe-tx-item-fee {
+    color: #afafaf;
+    font-size: .9rem;
 }

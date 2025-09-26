@@ -69,7 +69,7 @@ export class TxItem {
         container_2.appendChild(sub_container_4);
 
         this.element_height = document.createElement(`div`);
-        this.element_height.classList.add(`xe-block-item-height`);
+        this.element_height.classList.add(`xe-tx-item-height`);
         sub_container_4.appendChild(this.element_height);
 
         this.element_fee = document.createElement(`div`);
