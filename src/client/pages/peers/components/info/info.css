@@ -4,6 +4,7 @@
     justify-content: space-between;
     flex-direction: row;
     animation: xe-peers-info-animation .55s;
+    padding: 2rem;
 }
 
 @keyframes xe-peers-info-animation {
@@ -22,4 +23,15 @@
     gap: .25rem;
     flex-direction: column;
     flex: 1;
+    white-space: nowrap;
+}
+
+.xe-peers-info>div>:nth-child(1) {
+    color: #afafaf;
+    font-size: .7rem;
+}
+
+.xe-peers-info>div>:nth-child(2) {
+    font-weight: bold;
+    font-size: 1.8rem;
 }
