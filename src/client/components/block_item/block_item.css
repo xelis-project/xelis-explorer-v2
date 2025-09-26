@@ -45,4 +45,29 @@
     gap: .5rem;
     flex-direction: row;
     align-items: center;
+    font-size: .9rem;
+}
+
+.xe-block-item-reward {
+    color: #afafaf;
+    font-size: .9rem;
+}
+
+.xe-block-item-size {
+    color: #afafaf;
+    font-size: .9rem;
+}
+
+.xe-block-item-height {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.xe-block-item-age {
+    font-size: 1.1rem;
+}
+
+.xe-block-item-txs {
+    color: #afafaf;
+    font-size: .9rem;
 }
