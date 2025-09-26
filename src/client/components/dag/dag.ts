@@ -128,6 +128,10 @@ export class DAG {
 
         this.element.addEventListener(`pointermove`, this.on_pointer_move);
         this.element.addEventListener(`click`, this.on_click);
+
+        window.addEventListener(`keypress`, () => {
+            this.animate_block_appear(this.block_group.children[this.block_group.children.length - 1] as any);
+        });
     }
 
     on_new_block = async (new_block?: Block, err?: Error) => {
@@ -150,6 +154,7 @@ export class DAG {
             }
 
             this.block_group.add(block_mesh);
+            // this.animate_block_appear(block_mesh); applied in on_block_ordered
 
             const new_height = new_block.height;
             this.height_control.set_height(new_height);
@@ -234,6 +239,7 @@ export class DAG {
                 new_block_mesh.position.copy(block_mesh.position);
                 this.block_group.remove(block_mesh);
                 this.block_group.add(new_block_mesh);
+                this.animate_block_appear(new_block_mesh);
             }
         }
     }
@@ -451,8 +457,9 @@ export class DAG {
         if (intersects.length > 0) {
             if (!this.hovered_block_box_mesh) {
                 const intersection = intersects[0];
-                const box_mesh = intersection.object;
-                box_mesh.userData.uniforms.enable_outline.value = true;
+                const box_mesh = intersection.object as THREE.Mesh;
+                const mat = box_mesh.material as THREE.ShaderMaterial;
+                mat.uniforms.enable_outline.value = true;
                 // block_mesh.scale.set(0.95, 0.95, 0.95);
                 if (box_mesh.parent) {
                     const block = box_mesh.parent.userData.block as Block;
@@ -464,7 +471,8 @@ export class DAG {
         } else if (this.hovered_block_box_mesh) {
             this.clear_highlight_tip_lines();
             //this.hovered_block_mesh.scale.set(1, 1, 1);
-            this.hovered_block_box_mesh.userData.uniforms.enable_outline.value = false;
+            const mat = this.hovered_block_box_mesh.material as THREE.ShaderMaterial;
+            mat.uniforms.enable_outline.value = false;
             this.hovered_block_box_mesh = undefined;
         }
     }
@@ -499,6 +507,33 @@ export class DAG {
         return line;
     }
 
+    async animate_block_appear(block_group: THREE.Group) {
+        const { animate, eases } = await import("animejs");
+
+        animate(block_group.scale, {
+            x: [0.5, 1],
+            y: [0.5, 1],
+            z: [0.5, 1],
+            duration: 1500,
+            ease: eases.outBack(5)
+        });
+    }
+
+    set_block_opacity(block_group: THREE.Group, opacity: number) {
+        block_group.children.forEach((child) => {
+            if (child instanceof THREE.Mesh) {
+                const mat = child.material;
+                if (mat instanceof THREE.MeshBasicMaterial) {
+                    mat.opacity = opacity;
+                }
+
+                if (mat instanceof THREE.ShaderMaterial) {
+                    mat.uniforms.opacity = { value: opacity };
+                }
+            }
+        });
+    }
+
     create_block_mesh(block: Block) {
         const size = 2.5;
         const block_mesh = new THREE.Group();
@@ -509,7 +544,8 @@ export class DAG {
         const uniforms = {
             color: { type: 'vec3', value: new THREE.Color(color) },
             outline_color: { type: 'vec3', value: new THREE.Color(`white`) },
-            enable_outline: { value: false }
+            enable_outline: { value: false },
+            opacity: { value: 1 }
         };
 
         function vertexShader() {
@@ -529,6 +565,7 @@ export class DAG {
                 uniform vec3 color; 
                 uniform vec3 outline_color;
                 uniform bool enable_outline;
+                uniform float opacity;
                 varying vec3 v_uv;
          
                 void main() {
@@ -547,7 +584,7 @@ export class DAG {
                         }
                     }
 
-                    gl_FragColor = vec4(new_color, 1.0);
+                    gl_FragColor = vec4(new_color, opacity);
                 }
             `;
         }
@@ -557,11 +594,10 @@ export class DAG {
             uniforms: uniforms,
             fragmentShader: fragmentShader(),
             vertexShader: vertexShader(),
+            transparent: true
         });
         const box = new THREE.Mesh(geo, mat);
         box.name = "box_mesh";
-        box.userData.uniforms = uniforms;
-
         block_mesh.add(box);
 
         // hash
@@ -571,7 +607,11 @@ export class DAG {
                 size: 0.5,
                 depth: 0.5
             });
-            const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
+            const mat = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(color),
+                transparent: true,
+                side: THREE.DoubleSide
+            });
             const text_mesh = new THREE.Mesh(geo, mat);
             geo.computeBoundingBox();
             if (geo.boundingBox) {
@@ -589,7 +629,11 @@ export class DAG {
                 depth: 0.5
             });
 
-            const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(color) });
+            const mat = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(color),
+                transparent: true,
+                side: THREE.DoubleSide
+            });
             const text_mesh = new THREE.Mesh(geo, mat);
             geo.computeBoundingBox();
             if (geo.boundingBox) {
@@ -608,7 +652,11 @@ export class DAG {
                 depth: 0.5
             });
 
-            const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(`black`) });
+            const mat = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(`black`),
+                transparent: true,
+                side: THREE.DoubleSide
+            });
             const text_mesh = new THREE.Mesh(geo, mat);
             geo.computeBoundingBox();
             if (geo.boundingBox) {
