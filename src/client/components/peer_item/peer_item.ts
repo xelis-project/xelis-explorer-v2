@@ -33,8 +33,10 @@ export class PeerItem {
         const sub_container_2 = document.createElement(`div`);
         sub_container_1.appendChild(sub_container_2);
         this.element_peer_count = document.createElement(`div`);
+        this.element_peer_count.classList.add(`xe-peer-item-pcount`);
         sub_container_2.appendChild(this.element_peer_count);
         this.element_version = document.createElement(`div`);
+        this.element_version.classList.add(`xe-peer-item-version`);
         sub_container_2.appendChild(this.element_version);
 
         this.element_location = document.createElement(`div`);
