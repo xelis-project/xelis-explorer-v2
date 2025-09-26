@@ -20,6 +20,7 @@ export interface DashboardTopStatsData {
 }
 
 export class DashboardTopStats {
+    element: HTMLDivElement;
     container: Container
 
     last_update_element: HTMLDivElement;
@@ -46,12 +47,16 @@ export class DashboardTopStats {
     item_db_size: StatsItem;
 
     constructor() {
-        this.container = new Container();
-        this.container.element.classList.add(`xe-dashboard-top-stats`, `scrollbar-1`, `scrollbar-1-bottom`);
+        this.element = document.createElement(`div`);
+        this.element.classList.add(`xe-dashboard-top-stats`);
 
         this.last_update_element = document.createElement(`div`);
         this.last_update_element.classList.add(`xe-dashboard-top-stats-last-update`);
-        this.container.element.appendChild(this.last_update_element);
+        this.element.appendChild(this.last_update_element);
+
+        this.container = new Container();
+        this.container.element.classList.add(`xe-dashboard-top-stats-container`, `scrollbar-1`, `scrollbar-1-bottom`);
+        this.element.appendChild(this.container.element);
 
         this.box_1 = new Box();
         this.container.element.appendChild(this.box_1.element);

@@ -56,7 +56,7 @@ export class DashboardPage extends Page {
         this.master.content.classList.add(`xe-dashboard`);
 
         this.dashboard_top_stats = new DashboardTopStats();
-        this.master.content.appendChild(this.dashboard_top_stats.container.element);
+        this.master.content.appendChild(this.dashboard_top_stats.element);
 
         const container_1 = document.createElement(`div`);
         container_1.classList.add(`xe-dashboard-container-1`);
