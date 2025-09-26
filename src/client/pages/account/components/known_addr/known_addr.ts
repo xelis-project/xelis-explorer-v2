@@ -16,6 +16,7 @@ export class AccountKnownAddr {
         const address_details = addresses[addr];
 
         if (address_details) {
+            this.container.element.style.removeProperty(`display`);
             const { name, link } = address_details;
             this.container.element.innerHTML = `
             ${icons.tag()}
@@ -25,7 +26,7 @@ export class AccountKnownAddr {
             </div>
         `;
         } else {
-
+            this.container.element.style.display = `none`;
         }
     }
 }

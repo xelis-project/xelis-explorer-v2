@@ -274,8 +274,6 @@ export class AccountPage extends Page {
         if (addr && server_data) {
             this.set_element(this.master.element);
 
-
-
             this.account_info.set(addr, server_data);
             this.account_known_addr.set(addr);
             this.load_history();
