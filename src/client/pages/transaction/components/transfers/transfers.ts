@@ -29,6 +29,7 @@ export class TransactionTransfers {
     }
 
     set(transfers: Transfer[]) {
+            this.title_element.innerHTML = `TRANSFERS (${transfers.length})`;
         this.transfers_element.replaceChildren();
         transfers.forEach((transfer) => {
             this.append_transfer(transfer);

@@ -58,7 +58,7 @@ export class BlockMiner {
 
     set_reward(reward?: number) {
         this.reward_element.innerHTML = `
-            <div>MINER REWARD</div>
+            <div>MINING REWARD</div>
             <div>${reward ? format_xel(reward, true) : `--`}</div>
         `;
     }

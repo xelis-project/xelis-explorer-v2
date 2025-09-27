@@ -1,9 +1,10 @@
 .xe-account-info {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-direction: row;
     align-items: center;
     overflow: auto;
+    padding: 2rem;
 }
 
 .xe-account-info-container-1 {
@@ -29,6 +30,19 @@
     display: flex;
     gap: .25rem;
     flex-direction: column;
+}
+
+.xe-account-info-container-2>div>:nth-child(1) {
+    color: #afafaf;
+    font-size: .9rem;
+}
+
+.xe-account-info-container-2>div>:nth-child(2) {
+    font-size: 1.4rem;
+}
+
+.xe-account-info-container-2>div>:nth-child(3) {
+    font-size: .9rem;
 }
 
 .xe-account-info-addr {

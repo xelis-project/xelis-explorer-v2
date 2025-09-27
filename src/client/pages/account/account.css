@@ -7,7 +7,7 @@
 }
 
 .xe-account-container-1 >:nth-child(2) {
-    min-height: 10rem;
+    min-height: 12rem;
 }
 
 @media screen and (max-width: 900px) {
