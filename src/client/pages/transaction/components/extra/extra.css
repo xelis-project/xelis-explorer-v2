@@ -21,7 +21,7 @@
 }
 
 .xe-transaction-extra-container-1>div>:nth-child(1) {
-    opacity: .8;
+    color: #afafaf;
     font-size: .9rem;
 }
 
@@ -40,6 +40,6 @@
 }
 
 .xe-transaction-extra-container-2>div>:nth-child(1) {
-    opacity: .8;
+    color: #afafaf;
     font-size: .9rem;
 }

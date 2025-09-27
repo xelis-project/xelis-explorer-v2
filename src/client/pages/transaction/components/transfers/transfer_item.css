@@ -33,7 +33,7 @@
 }
 
 .xe-transaction-transfer-item-asset>:nth-child(2) {
-    opacity: .8;
+    color: #afafaf;
     font-size: .9rem;
 }
 
@@ -45,7 +45,7 @@
 }
 
 .xe-transaction-transfer-item-commitment>:nth-child(1) {
-    opacity: .8;
+    color: #afafaf;
     font-size: .9rem;
 }
 
@@ -56,6 +56,6 @@
 }
 
 .xe-transaction-transfer-item-extra-data>:nth-child(2) {
-    opacity: .8;
+    color: #afafaf;
     font-size: .9rem;
 }

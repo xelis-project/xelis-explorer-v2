@@ -35,7 +35,7 @@
 
 .xe-mempool-info-item>:nth-child(1) {
     font-size: .9rem;
-    opacity: .8;
+    color: #afafaf;
 }
 
 .xe-mempool-info-item>:nth-child(2) {
