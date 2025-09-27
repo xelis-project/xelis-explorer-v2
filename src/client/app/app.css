@@ -8,3 +8,12 @@ body {
     color: white;
     font-size: calc(10px + 0.5vw);
 }
+
+a {
+    color: #F4D35E;
+    transition: opacity .25s;
+}
+
+a:hover {
+    opacity: .7;
+}
