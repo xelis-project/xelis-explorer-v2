@@ -22,7 +22,7 @@ export class BlockMiner {
         this.container.element.appendChild(this.miner_element);
 
         this.reward_element = document.createElement(`div`);
-        this.reward_element.classList.add(`xe-block-reward`);
+        this.reward_element.classList.add(`xe-block-miner-reward`);
         this.container.element.appendChild(this.reward_element);
     }
 

@@ -32,7 +32,7 @@ export class BlockInfo {
         const container_1 = document.createElement(`div`);
         this.container.element.appendChild(container_1);
         this.height_type_element = document.createElement(`div`);
-        this.height_type_element.classList.add(`xe-block-height-type`);
+        this.height_type_element.classList.add(`xe-block-info-type`);
         container_1.appendChild(this.height_type_element);
 
         this.sub_container_1 = document.createElement(`div`);
@@ -45,6 +45,7 @@ export class BlockInfo {
         const container_2 = document.createElement(`div`);
         this.container.element.appendChild(container_2);
         this.age_element = document.createElement(`div`);
+        this.age_element.classList.add(`xe-block-info-age`);
         container_2.appendChild(this.age_element);
 
         this.sub_container_2 = document.createElement(`div`);

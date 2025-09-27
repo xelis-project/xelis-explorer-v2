@@ -28,6 +28,15 @@
     min-height: 1rem;
 }
 
+.xe-block-extra-container-1>div>:nth-child(1) {
+    font-size: .9rem;
+    color: #afafaf;
+}
+
+.xe-block-extra-container-1>div>:nth-child(2) {
+    font-size: 1.4rem;
+}
+
 .xe-block-extra-container-2 {
     padding: 1rem;
     display: flex;
@@ -42,4 +51,10 @@
     display: flex;
     gap: .5rem;
     flex-direction: row;
+    align-items: center;
+}
+
+.xe-block-extra-container-2>div>:nth-child(1) {
+    font-size: .8rem;
+    color: #afafaf;
 }

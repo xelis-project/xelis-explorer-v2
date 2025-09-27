@@ -23,8 +23,11 @@
     flex: 1;
 }
 
-.xe-block-info> :nth-child(1) > div {
-    min-height: 1rem;
+.xe-block-info> :nth-child(1)>:nth-child(2) {
+    display: flex;
+    gap: .15rem;
+    flex-direction: column;
+    color: #afafaf;
 }
 
 .xe-block-info> :nth-child(2) {
@@ -36,33 +39,54 @@
     flex: 1;
 }
 
-.xe-block-info> :nth-child(2) > div {
-    min-height: 1rem;
+.xe-block-info> :nth-child(2)>:nth-child(2) {
+    display: flex;
+    gap: .15rem;
+    flex-direction: column;
+    color: #afafaf;
 }
 
 .xe-block-info-last-update {
     position: absolute;
-    bottom: .25rem;
+    bottom: 0;
     left: 50%;
-    translate: -50% -50%;
-    font-size: .7rem;
+    translate: -50% 0%;
+    font-size: .8rem;
     color: #afafaf;
+    padding: .4rem 0;
+    width: 3rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
 }
 
-.xe-block-height-type {
+.xe-block-info-type {
     display: flex;
     gap: 1rem;
     flex-direction: row;
 }
 
-.xe-block-height-type> :nth-child(1) {
+.xe-block-info-type> :nth-child(1) {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: .5rem;
 }
 
-.xe-block-height-type> :nth-child(2) {
+.xe-block-info-type> :nth-child(2) {
     display: flex;
     gap: .25rem;
     flex-direction: column;
+}
+
+.xe-block-info-type> :nth-child(2)>:nth-child(1) {
+    font-size: 1.4rem;
+}
+
+.xe-block-info-type> :nth-child(2)>:nth-child(2) {
+    font-size: .9rem;
+}
+
+.xe-block-info-age {
+    font-size: 1.4rem;
 }

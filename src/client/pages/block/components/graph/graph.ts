@@ -65,15 +65,13 @@ export class BlockGraph {
 
     set_tips(tips: string[]) {
         this.tips_element.replaceChildren();
-        const container = document.createElement(`div`);
-        this.tips_element.appendChild(container);
 
         const text = document.createElement(`div`);
         text.innerHTML = `TIPS`;
-        container.appendChild(text);
+        this.tips_element.appendChild(text);
 
         const tips_container = document.createElement(`div`);
-        container.appendChild(tips_container);
+        this.tips_element.appendChild(tips_container);
         tips.forEach((tip, i) => {
             const tip_element = document.createElement(`div`);
             tip_element.innerHTML = `${i}: <a href="/block/${tip}">${tip}</a>`;

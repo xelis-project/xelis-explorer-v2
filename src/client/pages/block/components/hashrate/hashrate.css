@@ -23,3 +23,12 @@
     flex: 1;
     min-height: 1rem;
 }
+
+.xe-block-hashrate>div>:nth-child(1) {
+    font-size: .9rem;
+    color: #afafaf;
+}
+
+.xe-block-hashrate>div>:nth-child(2) {
+    font-size: 1.4rem;
+}
