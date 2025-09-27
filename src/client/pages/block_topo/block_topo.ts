@@ -44,7 +44,7 @@ export class BlockTopoPage extends Page {
     block_page: BlockPage;
     constructor() {
         super();
-        this.block_page = new BlockPage();
+        this.block_page = BlockPage.instance();
         this.element = this.block_page.element;
     }
 
