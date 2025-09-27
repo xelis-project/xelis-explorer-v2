@@ -3,7 +3,19 @@
     gap: 1rem;
     flex-direction: row;
     align-items: center;
+    animation: xe-account-known-addr-appear-animation 0.5s;
 }
+
+@keyframes xe-account-known-addr-appear-animation {
+    0% {
+        translate: 0 -25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
 
 .xe-account-known-addr svg {
     width: 2rem;

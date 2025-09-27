@@ -5,6 +5,17 @@
     align-items: center;
     overflow: auto;
     padding: 2rem;
+    animation: xe-account-info-appear-animation 0.45s;
+}
+
+@keyframes xe-account-info-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }
 
 .xe-account-info-container-1 {
