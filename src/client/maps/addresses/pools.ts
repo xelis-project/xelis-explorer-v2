@@ -26,7 +26,7 @@ export const pools = {
         link: `https://pool.kryptex.com/xel`,
     },
     "xel:ee48xuktxn0kxh3r6p0hw9x68adcm0dqf4c04hptu0qhegcnldusqr62y47": {
-        name: `HeroMiners`,
+        name: `HeroMiners (Old)`,
         link: `https://xelis.herominers.com/`,
     },
     "xel:4r46fyhkhltjacaaqkr3vxhldf0stwpm3a8uku2ukztk74t88gpsqdlfua7": {
