@@ -1,4 +1,5 @@
 import { AccountPage } from "../pages/account/account";
+import { AccountsPage } from "../pages/accounts/accounts";
 import { BlockPage } from "../pages/block/block";
 import { BlockHeightPage } from "../pages/block_height/block_height";
 import { BlockTopoPage } from "../pages/block_topo/block_topo";
@@ -23,7 +24,8 @@ export const pages = [
     BlockHeightPage,
     AccountPage,
     TransactionPage,
-    TransactionsPage
+    TransactionsPage,
+    AccountsPage
 ];
 
 export const match_route = (url: URL): typeof Page => {
