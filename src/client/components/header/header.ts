@@ -30,7 +30,7 @@ export class Header {
 
         const logo = document.createElement(`div`);
         logo.classList.add(`xe-header-logo`);
-        logo.innerHTML = `${svg_xelis_logo()} XELIS EXPLORER <div>V2</div>`;
+        logo.innerHTML = `${svg_xelis_logo()} XELIS EXPLORER`;
         this.element.appendChild(logo);
 
         const mobile_menu_button = document.createElement(`button`);

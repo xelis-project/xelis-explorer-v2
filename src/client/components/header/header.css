@@ -111,20 +111,6 @@
     height: 1.5rem;
 }
 
-.xe-header-logo div {
-    font-weight: bold;
-    padding: .5rem;
-    border-radius: .5rem;
-    color: rgb(2 255 209);
-    background-color: black;
-    rotate: 20deg;
-    translate: -60% 20%;
-    font-size: .8rem;
-    z-index: -1;
-    opacity: .5;
-    user-select: none;
-}
-
 .xe-header-mobile-menu-button {
     background: none;
     color: rgb(255, 255, 255);
