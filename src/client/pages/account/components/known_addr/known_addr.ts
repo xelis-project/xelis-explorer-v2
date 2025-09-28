@@ -13,7 +13,7 @@ export class AccountKnownAddr {
     }
 
     set(addr: string) {
-        const address_details = addresses[addr];
+        const address_details = addresses.all[addr];
 
         if (address_details) {
             this.container.element.style.removeProperty(`display`);

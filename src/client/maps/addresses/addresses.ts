@@ -7,4 +7,6 @@ export interface AddressDetails {
     link: string;
 }
 
-export default { ...pools, ...exchanges, ...miscellaneous } as Record<string, AddressDetails>;
+const all = { ...pools, ...exchanges, ...miscellaneous };
+
+export default { all, pools, exchanges, miscellaneous };
