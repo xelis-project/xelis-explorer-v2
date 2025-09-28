@@ -16,9 +16,9 @@ import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 import { parse_addr } from "../../utils/parse_addr";
 import { fetch_geo_location } from "../../utils/fetch_geo_location";
 import { PeerLocation } from "../../components/peers_map/peers_map";
+import { Box } from "../../components/box/box";
 
 import './dashboard.css';
-import { Box } from "../../components/box/box";
 
 export class DashboardPage extends Page {
     static pathname = "/";
