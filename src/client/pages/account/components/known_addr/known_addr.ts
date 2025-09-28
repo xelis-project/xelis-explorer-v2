@@ -21,8 +21,8 @@ export class AccountKnownAddr {
             this.container.element.innerHTML = `
             ${icons.tag()}
             <div>
-                <div>This is a known address owned by ${name}.</div>
-                <div>You can visit the website at <a href="${link}" target="_blank">${link}</a>.</div>
+                <div>This is a known address: <span>${name}</span></div>
+                ${link && `<div>You can visit the website at <a href="${link}" target="_blank">${link}</a>.</div>`}
             </div>
         `;
         } else {
