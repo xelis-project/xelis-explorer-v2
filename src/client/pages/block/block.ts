@@ -140,7 +140,7 @@ export class BlockPage extends Page {
                 });
 
                 const info = await node.ws.methods.getInfo();
-                this.block_info.set(this.page_data.block, info);
+                this.set(this.page_data.block, info);
             }
         }
     }
