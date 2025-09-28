@@ -2,7 +2,6 @@
     display: flex;
     gap: 1rem;
     flex-direction: row;
-    height: 3rem;
     align-items: center;
     justify-content: space-between;
     animation: xe-header-appear-animation .75s;
@@ -22,9 +21,12 @@
 
 .xe-header-links {
     display: flex;
-    gap: 1rem;
+    row-gap: .5rem;
+    column-gap: 1rem;
     flex-direction: row;
     user-select: none;
+    flex-wrap: wrap;
+    justify-content: end;
 }
 
 .xe-header-links a {
