@@ -7,7 +7,7 @@
 }
 
 .xe-box-loading {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.4);
     animation: xe-box-loading-animation .5s infinite alternate;
 }
 
