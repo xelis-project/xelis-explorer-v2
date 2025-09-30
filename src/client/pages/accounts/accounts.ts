@@ -74,7 +74,7 @@ export class AccountsPage extends Page {
             const addr_batch = addr_list.slice(i, i + 6);
             const data = await fetch_accounts(addr_batch);
             data.forEach((item, i) => {
-                const addr = addr_list[i];
+                const addr = addr_batch[i];
                 const addr_details = addresses.all[addr];
 
                 const registration_topo = item[0];
