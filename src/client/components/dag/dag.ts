@@ -250,7 +250,7 @@ export class DAG {
 
         if (live) {
             const current_height = await node.rpc.getHeight();
-            this.load_blocks(current_height);
+            await this.load_blocks(current_height);
 
             node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
             node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);

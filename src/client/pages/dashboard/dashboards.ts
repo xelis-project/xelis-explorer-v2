@@ -293,10 +293,9 @@ export class DashboardPage extends Page {
     }
 
     async load_dag() {
-        this.dashboard_dag.dag.set_live(true);
-        //this.dashboard_dag.dag.overlay_loading.set_loading(true);
-        //await this.dashboard_dag.dag.load(100);
-        //this.dashboard_dag.dag.overlay_loading.set_loading(false);
+        this.dashboard_dag.dag.overlay_loading.set_loading(true);
+        await this.dashboard_dag.dag.set_live(true);
+        this.dashboard_dag.dag.overlay_loading.set_loading(false);
     }
 
     async load(parent: HTMLElement) {

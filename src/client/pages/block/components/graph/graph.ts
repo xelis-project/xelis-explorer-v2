@@ -46,13 +46,12 @@ export class BlockGraph {
         Box.content_loading(this.extra_nonce_element, loading);
     }
 
-    set(block: Block) {
+    async set(block: Block) {
         this.set_hash(block.hash);
         this.set_tips(block.tips);
         this.set_nonce(block.nonce);
         this.set_extra_nonce(block.extra_nonce);
-
-        this.dag.load_blocks(block.height);
+        await this.dag.load_blocks(block.height);
         this.dag.update_size();
     }
 

@@ -164,13 +164,13 @@ export class BlockPage extends Page {
         if (loading) this.block_txs.table.set_loading(5);
     }
 
-    set(block: Block, info: GetInfoResult) {
+    async set(block: Block, info: GetInfoResult) {
         this.block_info.set(block, info);
         this.block_miner.set(block);
         this.block_hashrate.set(block, info);
         this.block_extra.set(block);
-        this.block_graph.set(block);
         this.block_txs.load(block);
+        await this.block_graph.set(block);
     }
 
     async load(parent: HTMLElement) {
@@ -182,17 +182,17 @@ export class BlockPage extends Page {
         this.block_graph.dag.overlay_loading.set_loading(true);
 
         await this.load_block();
-        
+
         const node = XelisNode.instance();
         const info = await node.rpc.getInfo();
 
         this.set_loading(false);
-        this.block_graph.dag.overlay_loading.set_loading(false);
 
         const { block } = this.page_data;
         if (block) {
             this.set_element(this.master.element);
-            this.set(block, info);
+            await this.set(block, info);
+            this.block_graph.dag.overlay_loading.set_loading(false);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
