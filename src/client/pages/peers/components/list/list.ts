@@ -28,15 +28,18 @@ export class PeersList {
     prepend_peer(peer_location: PeerLocation) {
         const peer_item = new PeerItem();
         peer_item.set(peer_location);
+        const { geo_location } = peer_location;
 
-        peer_item.box.element.addEventListener(`click`, () => {
-            const { peers_map } = PeersPage.instance();
-            const { geo_location } = peer_location;
-            peers_map.map.map.flyTo([geo_location.latitude, geo_location.longitude], 6);
-        });
+        if (geo_location.success) {
+            peer_item.box.element.addEventListener(`click`, () => {
+                const { peers_map } = PeersPage.instance();
+                if (geo_location.success) {
+                    peers_map.map.map.flyTo([geo_location.latitude, geo_location.longitude], 6);
+                }
+            });
 
-        const { country, city } = peer_location.geo_location;
-        peer_item.box.element.title = `Fly to ${country} / ${city}`;
+            peer_item.box.element.title = `Fly to ${geo_location.country} / ${geo_location.city}`;
+        }
 
         this.peer_items.push(peer_item);
         if (this.is_in_filter(peer_item)) {

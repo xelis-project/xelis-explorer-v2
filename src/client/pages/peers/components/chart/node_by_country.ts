@@ -22,10 +22,12 @@ export class PeersChartNodesByCountry {
 
         peers_locations.forEach((peer_location) => {
             const { geo_location } = peer_location;
-            if (peers_country[geo_location.country]) {
-                peers_country[geo_location.country]++;
+            let country = geo_location.country || `Unknown`;
+
+            if (peers_country[country]) {
+                peers_country[country]++;
             } else {
-                peers_country[geo_location.country] = 1;
+                peers_country[country] = 1;
             }
         });
 

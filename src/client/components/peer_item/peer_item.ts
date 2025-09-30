@@ -67,10 +67,14 @@ export class PeerItem {
     }
 
     set_location(geo_location: GeoLocationData) {
-        this.element_location.innerHTML = `
-            <i class="fi fi-${geo_location.country_code.toLowerCase()}"></i>
-            <div>${geo_location.country} / ${geo_location.city}</div>
-        `;
+        if (geo_location.success) {
+            this.element_location.innerHTML = `
+                <i class="fi fi-${geo_location.country_code.toLowerCase()}"></i>
+                <div>${geo_location.country} / ${geo_location.city}</div>
+            `;
+        } else {
+            this.element_location.innerHTML = `Geo location failed.`;
+        }
     }
 
     set_height(height: number) {
