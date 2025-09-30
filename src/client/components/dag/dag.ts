@@ -159,7 +159,7 @@ export class DAG {
             const new_height = new_block.height;
             this.height_control.set_height(new_height);
             this.height_control.set_max_height(new_height)
-            this.move_to_block(new_height);
+            this.move_to_block(new_height, true);
 
             new_block.tips.forEach((hash) => {
                 const block_mesh_target = this.block_mesh_hashes.get(hash);
@@ -393,10 +393,10 @@ export class DAG {
         });
 
         this.target_line.visible = true;
-        this.move_to_block(height);
+        this.move_to_block(height, false);
     }
 
-    move_to_block(height: number) {
+    move_to_block(height: number, enable_transition: boolean) {
         const block_mesh = this.block_group.children.find((b) => {
             return b.userData.block.height === height;
         });
@@ -404,7 +404,7 @@ export class DAG {
         if (block_mesh) {
             const x = block_mesh.position.x;
             this.target_line.position.set(x, 0, 0);
-            this.controls.moveTo(x, 0, 0, true);
+            this.controls.moveTo(x, 0, 0, enable_transition);
         }
     }
 
