@@ -6,6 +6,7 @@ import prettyBytes from 'pretty-bytes';
 import hashicon from 'hashicon';
 import { format_address } from '../../../../utils/format_address';
 import icons from '../../../../assets/svg/icons';
+import { Box } from '../../../../components/box/box';
 
 import './info.css';
 
@@ -43,6 +44,13 @@ export class TransactionInfo {
         this.hash_element = document.createElement(`div`);
         this.hash_element.classList.add(`xe-transaction-info-hash`);
         this.container.element.appendChild(this.hash_element);
+    }
+
+    set_loading(loading: boolean) {
+        Box.content_loading(this.signer_element, loading);
+        Box.content_loading(this.fees_element, loading);
+        Box.content_loading(this.size_element, loading);
+        Box.content_loading(this.hash_element, loading);
     }
 
     set(tx: TransactionResponse) {

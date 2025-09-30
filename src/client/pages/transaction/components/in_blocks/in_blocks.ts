@@ -2,6 +2,7 @@ import { Block } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
 import './in_blocks.css';
 import { BlockItem } from '../../../../components/block_item/block_item';
+import { Box } from '../../../../components/box/box';
 
 export class TransactionInBlocks {
     container: Container;
@@ -30,6 +31,14 @@ export class TransactionInBlocks {
 
         this.blocks_element = document.createElement(`div`);
         this.container.element.appendChild(this.blocks_element);
+    }
+
+    set_loading(loading: boolean) {
+        if (loading) {
+            Box.list_loading(this.blocks_element, 3, `3rem`);
+        } else {
+            this.blocks_element.replaceChildren();
+        }
     }
 
     append_block(block: Block, executed_in_block: string) {

@@ -137,10 +137,18 @@ export class TransactionPage extends Page {
         }
     }
 
+    set_loading(loading: boolean) {
+        this.transaction_info.set_loading(loading);
+        this.transaction_extra.set_loading(loading);
+        this.transaction_in_blocks.set_loading(loading);
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
 
+        this.set_loading(true);
         await this.load_transaction();
+        this.set_loading(false);
 
         const { server_data } = this.page_data;
         if (server_data) {
@@ -151,7 +159,6 @@ export class TransactionPage extends Page {
             this.transaction_info.set(transaction);
             this.transaction_extra.set(transaction);
             this.transaction_in_blocks.set(in_blocks, transaction.executed_in_block);
-
 
             this.transaction_type_container.replaceChildren();
             if (transaction.data.transfers) {

@@ -11,6 +11,12 @@
     justify-content: space-between;
 }
 
+.xe-transaction-in-blocks>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
 .xe-transaction-in-blocks-legend {
     display: flex;
     gap: .5rem;

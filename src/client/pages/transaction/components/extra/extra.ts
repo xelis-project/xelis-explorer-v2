@@ -2,6 +2,7 @@ import { TransactionResponse } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
 
 import './extra.css';
+import { Box } from '../../../../components/box/box';
 
 export class TransactionExtra {
     container: Container;
@@ -40,6 +41,15 @@ export class TransactionExtra {
 
         this.signature_element = document.createElement(`div`);
         container_2.appendChild(this.signature_element);
+    }
+
+    set_loading(loading: boolean) {
+        Box.content_loading(this.ref_topo_element, loading);
+        Box.content_loading(this.nonce_element, loading);
+        Box.content_loading(this.in_mempool_element, loading);
+        Box.content_loading(this.version_element, loading);
+        Box.content_loading(this.ref_hash_element, loading);
+        Box.content_loading(this.signature_element, loading);
     }
 
     set(tx: TransactionResponse) {
