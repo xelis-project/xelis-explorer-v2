@@ -1,5 +1,6 @@
 import { Container } from "../../../../components/container/container";
 import { TextInput } from "../../../../components/text_input/text_input";
+import { MempoolPage } from "../../mempool";
 
 import './search.css';
 
@@ -37,5 +38,31 @@ export class MempoolSearch {
 
     async search() {
         const value = this.text_input.element.value;
+        const { mempool_txs_list } = MempoolPage.instance();
+
+        if (value.length > 0) {
+            let filter_tx_hashes = [] as string[];
+
+            mempool_txs_list.tx_items.forEach((tx_item) => {
+                if (tx_item.data) {
+                    const { tx } = tx_item.data;
+                    if (tx.hash === value) {
+                        filter_tx_hashes.push(tx.hash);
+                        return;
+                    }
+
+                    if (tx.source === value) {
+                        filter_tx_hashes.push(tx.hash);
+                        return;
+                    }
+                }
+            });
+
+            mempool_txs_list.filter_tx_hashes = filter_tx_hashes;
+        } else {
+            mempool_txs_list.filter_tx_hashes = undefined;
+        }
+
+        mempool_txs_list.update_filter();
     }
 }

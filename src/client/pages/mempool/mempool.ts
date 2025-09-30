@@ -91,7 +91,6 @@ export class MempoolPage extends Page {
             blocks.push(new_block);
 
             this.page_data.mempool_txs = [];
-            this.mempool_txs_list.set([]);
             this.mempool_txs_list.set_empty(true);
             this.mempool_chart.blocks_txs.set(this.page_data.blocks);
             this.mempool_summary.set(mempool_txs, new_block);
