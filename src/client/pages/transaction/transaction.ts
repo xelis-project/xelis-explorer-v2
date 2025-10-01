@@ -9,10 +9,11 @@ import { TransactionExtra } from "./components/extra/extra";
 import { TransactionInBlocks } from "./components/in_blocks/in_blocks";
 import { Block, RPCMethod as DaemonRPCMethod, GetBlockByHashParams, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { NotFoundPage } from "../not_found/not_found";
-
-import './transaction.css';
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { TransactionTransfers } from "./components/transfers/transfers";
+import { TransactionBurn } from "./components/burn/burn";
+
+import './transaction.css';
 
 interface TransactionPageServerData {
     transaction: TransactionResponse;
@@ -165,6 +166,11 @@ export class TransactionPage extends Page {
                 const transaction_transfers = new TransactionTransfers();
                 transaction_transfers.set(transaction.data.transfers);
                 this.transaction_type_container.appendChild(transaction_transfers.container.element);
+            }
+
+            if (transaction.data.burn) {
+                const transaction_burn = new TransactionBurn(transaction.data.burn);
+                this.transaction_type_container.appendChild(transaction_burn.container.element);
             }
 
         } else {
