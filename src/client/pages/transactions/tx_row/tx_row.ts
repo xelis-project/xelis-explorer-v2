@@ -81,8 +81,8 @@ export class TxRow extends Row {
         this.value_cells[5].innerHTML = format_xel(fee, true);
     }
 
-    set_executed_in_block(executed_in_block: string) {
-        this.value_cells[6].innerHTML = `${reduce_text(executed_in_block)}`;
+    set_executed_in_block(executed_in_block?: string) {
+        this.value_cells[6].innerHTML = executed_in_block ? reduce_text(executed_in_block) : `--`;
     }
 
     age_interval_id?: number;

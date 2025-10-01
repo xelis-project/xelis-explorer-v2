@@ -39,23 +39,26 @@ export class TransactionPage extends Page {
         server_data.transaction = await daemon.getTransaction(tx_hash);
 
         {
-            const requests = [] as RPCRequest[];
-            server_data.transaction.blocks.forEach((block_hash) => {
-                requests.push({
-                    method: DaemonRPCMethod.GetBlockByHash,
-                    params: { hash: block_hash } as GetBlockByHashParams
+            const tx_blocks = server_data.transaction.blocks;
+            if (tx_blocks && tx_blocks.length > 0) {
+                const requests = [] as RPCRequest[];
+                tx_blocks.forEach((block_hash) => {
+                    requests.push({
+                        method: DaemonRPCMethod.GetBlockByHash,
+                        params: { hash: block_hash } as GetBlockByHashParams
+                    });
                 });
-            });
 
-            server_data.in_blocks = [];
-            const res = await daemon.batchRequest(requests);
-            res.forEach((result) => {
-                if (result instanceof Error) {
-                    throw result;
-                } else {
-                    server_data.in_blocks.push(result as Block);
-                }
-            });
+                server_data.in_blocks = [];
+                const res = await daemon.batchRequest(requests);
+                res.forEach((result) => {
+                    if (result instanceof Error) {
+                        throw result;
+                    } else {
+                        server_data.in_blocks.push(result as Block);
+                    }
+                });
+            }
         }
 
         return server_data;

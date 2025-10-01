@@ -41,7 +41,7 @@ export class TransactionInBlocks {
         }
     }
 
-    append_block(block: Block, executed_in_block: string) {
+    append_block(block: Block, executed_in_block?: string) {
         const block_item = new BlockItem(`/block/${block.hash}`);
         block_item.set(block);
 
@@ -52,7 +52,7 @@ export class TransactionInBlocks {
         this.blocks_element.appendChild(block_item.box.element);
     }
 
-    set(blocks: Block[], executed_in_block: string) {
+    set(blocks: Block[], executed_in_block?: string) {
         this.blocks_element.replaceChildren();
         blocks.forEach((block) => {
             this.append_block(block, executed_in_block);
