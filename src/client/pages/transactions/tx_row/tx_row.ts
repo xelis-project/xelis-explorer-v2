@@ -48,7 +48,7 @@ export class TxRow extends Row {
         } else if (data.deploy_contract) {
             value = `Deploy Contract`;
         } else if (data.invoke_contract) {
-            value = `Invoke Contract ${reduce_text(data.invoke_contract.contract)}`;
+            value = `Invoke Contract (${reduce_text(data.invoke_contract.contract)})`;
         } else if (data.multi_sig) {
             value = `Multi Sig ${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`;
         } else if (data.transfers) {
