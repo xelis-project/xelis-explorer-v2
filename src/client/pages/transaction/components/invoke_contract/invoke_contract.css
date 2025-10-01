@@ -1,0 +1,27 @@
+.xe-transaction-invoke-contract {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-transaction-invoke-contract>:nth-child(2) {
+    font-size: 1.5rem;
+    max-width: 30rem;
+    word-break: break-all;
+}
+
+.xe-transaction-invoke-contract>:nth-child(3) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-transaction-invoke-contract>:nth-child(3)>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-transaction-invoke-contract>:nth-child(3)>div>:nth-child(2) {
+    font-size: 2rem;
+}

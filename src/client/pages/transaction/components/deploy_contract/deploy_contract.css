@@ -1,0 +1,11 @@
+.xe-transaction-deploy-contract {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-transaction-deploy-contract>:nth-child(2) {
+    font-size: 1.5rem;
+    max-width: 30rem;
+    word-break: break-all;
+}
