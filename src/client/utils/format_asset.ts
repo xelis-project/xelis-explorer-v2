@@ -11,5 +11,5 @@ export const format_asset = (asset_hash: string, atomic_amount: number, with_tic
         return value;
     }
 
-    return `${atomic_amount} ${reduce_text(asset_hash)}`;
+    return `${atomic_amount} (${reduce_text(asset_hash)})`;
 }
