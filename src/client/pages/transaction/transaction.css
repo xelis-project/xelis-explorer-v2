@@ -21,4 +21,15 @@
 
 .xe-transaction-sub-container-2 {
     flex: 1;
+    animation: xe-transaction-sub-container-2-appear-animation .65s;
+}
+
+@keyframes xe-transaction-sub-container-2-appear-animation  {
+    0% {
+        translate: 25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
 }

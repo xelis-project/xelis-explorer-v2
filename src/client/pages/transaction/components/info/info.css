@@ -2,6 +2,19 @@
     display: flex;
     gap: 1rem;
     flex-direction: column;
+    animation: xe-transaction-info-appear-animation .75s;
+}
+
+@keyframes xe-transaction-info-appear-animation  {
+    0% {
+        opacity: 0;
+        translate: 0 -25%;
+    }
+
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
 }
 
 .xe-transaction-info>:nth-child(1) {
