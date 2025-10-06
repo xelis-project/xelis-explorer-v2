@@ -17,7 +17,7 @@ export class MempoolTxsList {
 
         this.empty_element = document.createElement(`div`);
         this.empty_element.classList.add(`xe-mempool-txs-list-empty`);
-        this.empty_element.innerHTML = `${icons.empty_box()}<div>No transactions in mempool.</div>`;
+        this.empty_element.innerHTML = `${icons.exchange()}<div>No transactions in mempool</div>`;
     }
 
     set_empty(empty: boolean) {

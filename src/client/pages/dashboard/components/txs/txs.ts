@@ -1,3 +1,4 @@
+import icons from '../../../../assets/svg/icons';
 import { Container } from '../../../../components/container/container';
 import { TxBlock, TxItem } from '../../../../components/tx_item/tx_item';
 
@@ -9,6 +10,7 @@ export class DashboardTxs {
 
     element_title: HTMLDivElement;
     element_content: HTMLDivElement;
+    empty_element: HTMLDivElement;
 
     constructor() {
         this.container = new Container();
@@ -21,11 +23,26 @@ export class DashboardTxs {
 
         this.element_content = document.createElement(`div`);
         this.container.element.appendChild(this.element_content);
+
+        this.empty_element = document.createElement(`div`);
+        this.empty_element.classList.add(`xe-dashboard-txs-list-empty`);
+        this.empty_element.innerHTML = `${icons.exchange()}<div>No transactions</div>`;
     }
 
     set(txs_blocks: TxBlock[]) {
         this.element_content.replaceChildren();
         txs_blocks.forEach(tx_block => this.prepend_tx(tx_block));
+        this.check_display_empty();
+    }
+
+    check_display_empty() {
+        if (this.tx_items.length === 0) {
+            this.element_content.remove();
+            this.container.element.appendChild(this.empty_element);
+        } else {
+            this.container.element.appendChild(this.element_content);
+            this.empty_element.remove();
+        }
     }
 
     prepend_tx(tx_block: TxBlock) {
@@ -34,6 +51,7 @@ export class DashboardTxs {
 
         this.tx_items.unshift(tx_item);
         this.element_content.insertBefore(tx_item.box.element, this.element_content.firstChild);
+        this.empty_element.remove();
         return tx_item;
     }
 
@@ -45,5 +63,6 @@ export class DashboardTxs {
                 tx_item.box.element.remove();
             }
         }
+        this.check_display_empty();
     }
 }

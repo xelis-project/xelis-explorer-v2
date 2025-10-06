@@ -4,7 +4,7 @@
     flex-direction: column;
     overflow-y: scroll;
     animation: xe-dashboard-blocks-appear-animation .7s;
-    height: 50rem;
+    height: 55rem;
     overflow-x: hidden;
 }
 
