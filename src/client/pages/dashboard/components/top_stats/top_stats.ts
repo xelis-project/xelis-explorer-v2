@@ -30,6 +30,7 @@ export class DashboardTopStats {
     item_circ_supply: StatsItem;
     item_mined: StatsItem;
     item_block_reward: StatsItem;
+    item_daily_emission: StatsItem;
 
     box_2: Box;
     item_topo: StatsItem;
@@ -69,6 +70,8 @@ export class DashboardTopStats {
         this.box_1.element.appendChild(this.item_mined.element);
         this.item_block_reward = new StatsItem(`BLOCK REWARD`);
         this.box_1.element.appendChild(this.item_block_reward.element);
+        this.item_daily_emission = new StatsItem(`DAILY EMISSION`);
+        this.box_1.element.appendChild(this.item_daily_emission.element);
 
         this.box_2 = new Box();
         this.container.element.appendChild(this.box_2.element);
@@ -116,8 +119,15 @@ export class DashboardTopStats {
         this.item_mined.element_value.innerHTML = `${mined_percentage.toFixed(2)}%`;
     }
 
+    set_daily_emission(block_reward: number, block_time_target: number) {
+        const day_in_seconds = 84600;
+        const approx_blocks = day_in_seconds / (block_time_target / 1000);
+        const approx_reward = approx_blocks * block_reward /// Math.pow(10, 8);
+        this.item_daily_emission.element_value.innerHTML = `~${format_xel(approx_reward, true, undefined, { maximumFractionDigits: 0 })}`;
+    }
+
     set_block_reward(block_reward: number) {
-        this.item_block_reward.element_value.innerHTML = format_xel(block_reward, true);
+        this.item_block_reward.element_value.innerHTML = format_xel(block_reward, true, undefined);
     }
 
     set_topoheight(topoheight: number) {
@@ -161,6 +171,7 @@ export class DashboardTopStats {
         this.set_circ_supply(info.circulating_supply);
         this.set_mined(info.circulating_supply, info.maximum_supply);
         this.set_block_reward(info.block_reward);
+        this.set_daily_emission(info.block_reward, info.block_time_target);
 
         this.set_topoheight(info.topoheight);
         this.set_height(info.height);
