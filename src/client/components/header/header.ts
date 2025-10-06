@@ -13,8 +13,8 @@ export const menu_links = {
     "/": { text: "DASHBOARD", icon: icons.dashboard() },
     "/blocks": { text: "BLOCKS", icon: icons.blocks() },
     "/transactions": { text: "TRANSACTIONS", icon: icons.exchange() },
-    "/accounts": { text: "KNOWN ACCOUNTS", icon: icons.user() },
-    "/contracts": { text: "POPULAR CONTRACTS", icon: icons.contract() },
+    "/accounts": { text: "ACCOUNTS", icon: icons.user() },
+    "/contracts": { text: "CONTRACTS", icon: icons.contract() },
     "/mempool": { text: "MEMPOOL", icon: icons.compute() },
     "/dag": { text: "DAG", icon: icons.block_graph() },
     "/peers": { text: "PEERS", icon: icons.network() }
