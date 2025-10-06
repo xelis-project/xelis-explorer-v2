@@ -1,8 +1,8 @@
 .xe-peers-list {
-    max-height: 50rem;
     overflow-y: visible;
     overflow-x: hidden;
     display: flex;
+    height: 100%;
     gap: 1rem;
     flex-direction: column;
     animation: xe-peers-list-animation .65s;
