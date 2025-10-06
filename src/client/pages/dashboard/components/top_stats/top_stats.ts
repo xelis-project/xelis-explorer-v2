@@ -90,13 +90,13 @@ export class DashboardTopStats {
         this.box_3.element.appendChild(this.item_diff.element);
         this.item_hashrate = new StatsItem(`HASHRATE`);
         this.box_3.element.appendChild(this.item_hashrate.element);
-        this.item_avg_time = new StatsItem(`AVG TIME`);
+        this.item_avg_time = new StatsItem(`BLOCK TIME`);
         this.box_3.element.appendChild(this.item_avg_time.element);
 
         this.box_4 = new Box();
         this.container.element.appendChild(this.box_4.element);
 
-        this.item_mempool = new StatsItem(`MEMPOOL`);
+        this.item_mempool = new StatsItem(`MPOOL`);
         this.box_4.element.appendChild(this.item_mempool.element);
         this.item_peers = new StatsItem(`PEERS`);
         this.box_4.element.appendChild(this.item_peers.element);
