@@ -94,7 +94,12 @@ export class DashboardPage extends Page {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
             if (!block_item) {
                 this.dashboard_blocks.prepend_block(new_block).animate_prepend();
+                this.dashboard_blocks.block_items.forEach((block_item) => {
+                    block_item.animate_down();
+                });
+
                 this.dashboard_blocks.remove_last_block();
+                
                 this.dashboard_txs.remove_block_txs(new_block.hash);
 
                 const update_txs = async () => {
