@@ -60,11 +60,7 @@ export class PeersChartNodesByVersion {
 
         const color = d3.scaleOrdinal<string>()
             .domain(data.map(d => d.label))
-            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
-
-        //const color = d3.scaleOrdinal<string>()
-        //.domain(data.map(d => d.label))
-        //.range(d3.schemeCategory10);
+            .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
         const arcs = svg.selectAll('path')
             .data(arcData)

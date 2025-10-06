@@ -1,7 +1,5 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block, Peer } from '@xelis/sdk/daemon/types';
-import prettyMilliseconds from 'pretty-ms';
 import { PeerLocation } from '../../../../components/peers_map/peers_map';
 
 export class PeersChartNodesByCountry {
@@ -59,16 +57,14 @@ export class PeersChartNodesByCountry {
 
         const color = d3.scaleLinear<string>()
             .domain(data.map(d => d.value))
-            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
+            .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
         svg
-            .selectAll(".bar")
+            .selectAll()
             .data(data)
             .join("rect")
-            .attr("class", "bar")
             .attr("x", (d) => x_scale(d.label)!)
             .attr("y", (d) => y_scale(d.value))
-            .attr("rx", 3)
             .attr("width", x_scale.bandwidth())
             .attr("height", (d) => height - y_scale(d.value))
             .attr("fill", d => color(d.value));
