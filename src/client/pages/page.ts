@@ -11,6 +11,11 @@ export class Page extends Singleton {
     static description: string = "";
     static status: ContentfulStatusCode = 200;
     static server_data: any;
+    static title_prefix = "XELIS - ";
+
+    static get_title = () => {
+        return `${this.title_prefix}${this.title}`;
+    }
 
     static get_pattern() {
         return new URLPattern({ pathname: this.pathname });
@@ -51,7 +56,7 @@ export class Page extends Singleton {
     }
 
     set_window_title(title: string) {
-        document.title = title;
+        document.title = `${Page.title_prefix}${title}`;
     }
 
     async load(parent: HTMLElement) {

@@ -17,7 +17,7 @@ export default (app: Hono<App>) => {
 
         await page_type.handle_server(c);
 
-        let title = localization.get_text(page_type.title);
+        let title = localization.get_text(page_type.get_title());
         let description = page_type.description;
         let status = page_type.status;
 
