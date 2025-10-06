@@ -107,7 +107,7 @@ export class DashboardHashRate {
                 const rect_height = text_box.height + rect_margin.top + rect_margin.bottom;
 
                 const text_pos = { x: 0, y: 0 };
-                text_pos.x = Math.min(chart_rect.width - rect_width, Math.max(0, x_scale(d.x) - text_box.width / 2));
+                text_pos.x = Math.min(chart_rect.width - rect_width - 10, Math.max(0, x_scale(d.x) - text_box.width / 2));
                 text_pos.y = Math.max(rect_height / 2, y_scale(d.y));
                 d.text = text_pos;
 
@@ -135,7 +135,7 @@ export class DashboardHashRate {
             .attr("y", d => d.text_rect ? d.text_rect.y : 0)
             .attr("width", d => d.text_rect ? d.text_rect.width : 0)
             .attr("height", d => d.text_rect ? d.text_rect.height : 0)
-            .style('fill', 'rgba(2, 255, 209, 0.8)');
+            .style('fill', 'rgba(2, 255, 209)');
     }
 
     set(info: GetInfoResult, blocks: Block[]) {
