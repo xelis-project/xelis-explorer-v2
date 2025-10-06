@@ -26,10 +26,24 @@ export default defineConfig({
 
                     return 'assets/[name]-[hash][extname]';
                 },
-                manualChunks: {
-                    three: ['three', 'camera-controls'],
-                    animejs: ['animejs'],
-                    d3: ['d3']
+                manualChunks: (id) => {
+                    if (id.includes('three') || id.includes(`camera-controls`)) {
+                        return `three`;
+                    }
+
+                    if (id.includes(`animejs`)) {
+                        return `animejs`;
+                    }
+
+                    if (id.includes(`d3`)) {
+                        return `d3`;
+                    }
+               
+                    if(id.includes('noto_sans_regular')) {
+                        return 'noto_sans_regular';
+                    }
+
+                    return null;
                 }
             }
         },
