@@ -55,8 +55,8 @@ export class PeersChartNodesByCountry {
             .domain([0, d3.max(data, (d) => d.value)!])
             .range([height, 0]);
 
-        const color = d3.scaleLinear<string>()
-            .domain(data.map(d => d.value))
+        const color = d3.scaleOrdinal<string>()
+            .domain(data.map(d => d.label))
             .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
         svg
@@ -67,7 +67,7 @@ export class PeersChartNodesByCountry {
             .attr("y", (d) => y_scale(d.value))
             .attr("width", x_scale.bandwidth())
             .attr("height", (d) => height - y_scale(d.value))
-            .attr("fill", d => color(d.value));
+            .attr("fill", d => color(d.label));
 
         svg.append("g")
             .attr("transform", `translate(0,${height})`)
