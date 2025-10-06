@@ -22,5 +22,5 @@ export const format_diff = (diff: number, locale?: Intl.LocalesArgument) => {
     }
   }
 
-  return `${value.toLocaleString(locale)} ${suffix}`
+  return `${value.toLocaleString(locale, { maximumFractionDigits: 2 })} ${suffix}`
 }
