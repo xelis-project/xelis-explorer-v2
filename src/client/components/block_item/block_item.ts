@@ -155,4 +155,14 @@ export class BlockItem {
             onComplete: utils.cleanInlineStyles
         });
     }
+
+    async animate_down() {
+        const { animate, eases, utils } = await import("animejs");
+        animate(this.box.element, {
+            translateY: [`-100%`, `0`],
+            duration: 500,
+            ease: eases.linear(),
+            onComplete: utils.cleanInlineStyles
+        });
+    }
 }

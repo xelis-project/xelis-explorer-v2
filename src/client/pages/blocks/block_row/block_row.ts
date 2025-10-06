@@ -103,23 +103,4 @@ export class BlockRow extends Row {
         if (this.age_interval_id) window.clearInterval(this.age_interval_id);
         this.age_interval_id = window.setInterval(set_age, 1000);
     }
-
-    async animate_prepend() {
-        const { animate, utils } = await import("animejs");
-        animate(this.element, {
-            translateX: [`100%`, 0],
-            duration: 750,
-            onComplete: utils.cleanInlineStyles
-        });
-    }
-
-    async animate_update() {
-        const { animate, eases, utils } = await import("animejs");
-        animate(this.element, {
-            scale: [`100%`, `98%`, `100%`],
-            duration: 1000,
-            ease: eases.inBack(3),
-            onComplete: utils.cleanInlineStyles
-        });
-    }
 }
