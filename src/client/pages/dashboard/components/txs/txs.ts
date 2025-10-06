@@ -34,6 +34,7 @@ export class DashboardTxs {
 
         this.tx_items.unshift(tx_item);
         this.element_content.insertBefore(tx_item.box.element, this.element_content.firstChild);
+        return tx_item;
     }
 
     remove_block_txs(block_hash: string) {
