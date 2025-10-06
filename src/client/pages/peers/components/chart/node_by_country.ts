@@ -7,7 +7,7 @@ export class PeersChartNodesByCountry {
 
     constructor() {
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `NODES BY COUNTY`;
+        this.box_chart.element_title.innerHTML = `NODES BY COUNTRY`;
     }
 
     build_chart(peers_locations: PeerLocation[]) {
