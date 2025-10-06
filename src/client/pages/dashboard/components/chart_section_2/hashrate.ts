@@ -2,12 +2,12 @@ import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
 import { format_hashrate } from '../../../../utils/format_hashrate';
-import { DashboardPage } from '../../dashboards';
 
 interface DataPoint {
     x: number;
     y: number;
-    box?: DOMRect;
+    text?: { x: number; y: number; }
+    text_rect?: DOMRect;
 }
 
 export class DashboardHashRate {
@@ -34,20 +34,20 @@ export class DashboardHashRate {
                 return { x: block.height, y: parseInt(block.difficulty) };
             });
 
-        const margin = { top: 10, right: 10, bottom: 10, left: 10 };
-        const rect = this.box_chart.element_content.getBoundingClientRect();
-        const width = rect.width - margin.left - margin.right;
-        const height = 250 - margin.top - margin.bottom;
+        const chart_margin = { top: 10, right: 10, bottom: 10, left: 10 };
+        const chart_rect = this.box_chart.element_content.getBoundingClientRect();
+        const width = chart_rect.width - chart_margin.left - chart_margin.right;
+        const height = 250 - chart_margin.top - chart_margin.bottom;
 
         this.box_chart.element_content.replaceChildren();
         const svg = d3
             .select(this.box_chart.element_content)
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("width", width + chart_margin.left + chart_margin.right)
+            .attr("height", height + chart_margin.top + chart_margin.bottom)
             .append("g")
             .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")");
+                "translate(" + chart_margin.left + "," + chart_margin.top + ")");
 
         const x_scale = d3.scaleLinear()
             .domain(d3.extent(data, d => d.x) as [number, number])
@@ -89,38 +89,52 @@ export class DashboardHashRate {
         const min_data = data.reduce((a, b) => (a.y < b.y ? a : b));
         const max_data = data.reduce((a, b) => (a.y > b.y ? a : b));
 
-        const text = svg
+        const tooltip = svg
             .selectAll(`g`)
             .data<DataPoint>([min_data, max_data])
             .enter()
             .append(`g`);
 
-        text
+        tooltip
             .append(`text`)
-            .attr("x", d => x_scale(d.x))
-            .attr("y", d => y_scale(d.y))
             .text(d => format_hashrate(d.y, info.block_time_target))
             .each(function (d) {
                 const self = this as SVGTextElement;
-                const box = self.getBBox();
-                const margin = { top: 2, left: 10, bot: 2, right: 10 };
-                box.x = box.x - box.width / 2 - margin.left;
-                box.y = box.y - margin.top;
-                box.width = box.width + margin.left + margin.right;
-                box.height = box.height + margin.top + margin.bot;
 
-                d.box = box;
+                const text_box = self.getBBox();
+                const rect_margin = { top: 2, left: 10, bottom: 2, right: 10 };
+                const rect_width = text_box.width + rect_margin.left + rect_margin.right;
+                const rect_height = text_box.height + rect_margin.top + rect_margin.bottom;
+
+                const text_pos = { x: 0, y: 0 };
+                text_pos.x = Math.min(chart_rect.width - rect_width, Math.max(0, x_scale(d.x) - text_box.width / 2));
+                text_pos.y = Math.max(rect_height / 2, y_scale(d.y));
+                d.text = text_pos;
+
+                const text_rect = {} as DOMRect;
+                text_rect.x = text_pos.x - rect_margin.left + 2;
+                text_rect.y = text_pos.y - (rect_height / 2) - 5;
+                text_rect.width = rect_width;
+                text_rect.height = rect_height;
+
+                d.text_rect = text_rect;
+            })
+            .attr("x", d => {
+                return d.text ? d.text.x : 0;
+            })
+            .attr("y", d => {
+                return d.text ? d.text.y : 0;
             })
             .style('font-size', '1rem')
-            .style("text-anchor", "middle")
+            //.style("text-anchor", "middle") // using js to anchor text in the middle to bound text within the canvas
             .style('font-weight', `bold`)
             .style('fill', 'rgba(0, 0, 0, 1)');
 
-        text.insert(`rect`, ":first-child")
-            .attr("x", d => d.box ? d.box.x : 0)
-            .attr("y", d => d.box ? d.box.y : 0)
-            .attr("width", d => d.box ? d.box.width : 0)
-            .attr("height", d => d.box ? d.box.height : 0)
+        tooltip.insert(`rect`, ":first-child")
+            .attr("x", d => d.text_rect ? d.text_rect.x : 0)
+            .attr("y", d => d.text_rect ? d.text_rect.y : 0)
+            .attr("width", d => d.text_rect ? d.text_rect.width : 0)
+            .attr("height", d => d.text_rect ? d.text_rect.height : 0)
             .style('fill', 'rgba(2, 255, 209, 0.8)');
     }
 
