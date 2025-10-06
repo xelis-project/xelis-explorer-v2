@@ -9,7 +9,8 @@ import { OverlayLoading } from '../overlay_loading/overlay_loading';
 import { DAGBlockDetails } from './block_details/block_details';
 import { clamp_number } from '../../utils/clamp_number';
 import { HeightControl } from './height_control/height_control';
-import helvetiker_regular_font_data from './helvetiker_regular.typeface.json';
+import font_data from './noto_sans_regular.json';
+// import font_data from './helvetica_regular.json'; // does not have all unicode
 
 const three_lib_for_camera = {
     Vector2: THREE.Vector2,
@@ -47,7 +48,7 @@ export class DAG {
     block_mesh_hashes: Map<string, THREE.Group>;
     blocks_by_height: Map<number, Block[]>;
 
-    helvetiker_regular_font: Font;
+    font: Font;
     is_live: boolean;
     target_line: THREE.Line;
 
@@ -56,7 +57,8 @@ export class DAG {
 
         this.block_mesh_hashes = new Map();
         this.blocks_by_height = new Map();
-        this.helvetiker_regular_font = new Font(helvetiker_regular_font_data);
+        // @ts-ignore
+        this.font = new Font(font_data);
 
         this.block_details = new DAGBlockDetails();
         this.element.appendChild(this.block_details.element);
@@ -603,7 +605,7 @@ export class DAG {
         // hash
         {
             const geo = new TextGeometry(block.hash.substring(block.hash.length - 6), {
-                font: this.helvetiker_regular_font,
+                font: this.font,
                 size: 0.5,
                 depth: 0.5
             });
@@ -624,7 +626,7 @@ export class DAG {
         // height
         {
             const geo = new TextGeometry(block.height.toLocaleString(), {
-                font: this.helvetiker_regular_font,
+                font: this.font,
                 size: 0.5,
                 depth: 0.5
             });
@@ -647,7 +649,7 @@ export class DAG {
         {
             const first_letter = block.block_type.substring(0, 1).toUpperCase();
             const geo = new TextGeometry(first_letter, {
-                font: this.helvetiker_regular_font,
+                font: this.font,
                 size: 1,
                 depth: 0.5
             });
