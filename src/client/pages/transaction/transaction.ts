@@ -16,6 +16,7 @@ import { TransactionDeployContract } from "./components/deploy_contract/deploy_c
 import { TransactionInvokeContract } from "./components/invoke_contract/invoke_contract";
 
 import './transaction.css';
+import { TransactionContractOutputs } from "./components/contract_outputs/contract_outputs";
 
 interface TransactionPageServerData {
     transaction: TransactionResponse;
@@ -181,11 +182,27 @@ export class TransactionPage extends Page {
             if (transaction.data.deploy_contract) {
                 const transaction_deploy_contract = new TransactionDeployContract(transaction.hash, transaction.data.deploy_contract);
                 this.transaction_type_container.appendChild(transaction_deploy_contract.container.element);
+
+                const node = XelisNode.instance();
+                const outputs = await node.rpc.getContractOutputs({
+                    transaction: transaction.hash
+                });
+
+                const transaction_contract_outputs = new TransactionContractOutputs(outputs);
+                this.transaction_type_container.appendChild(transaction_contract_outputs.container.element);
             }
 
             if (transaction.data.invoke_contract) {
                 const transaction_invoke_contract = new TransactionInvokeContract(transaction.data.invoke_contract);
                 this.transaction_type_container.appendChild(transaction_invoke_contract.container.element);
+
+                const node = XelisNode.instance();
+                const outputs = await node.rpc.getContractOutputs({
+                    transaction: transaction.hash
+                });
+                console.log(outputs)
+                const transaction_contract_outputs = new TransactionContractOutputs(outputs);
+                this.transaction_type_container.appendChild(transaction_contract_outputs.container.element);
             }
         } else {
             this.set_element(NotFoundPage.instance().element);

@@ -20,11 +20,14 @@
 }
 
 .xe-transaction-sub-container-2 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
     flex: 1;
     animation: xe-transaction-sub-container-2-appear-animation .65s;
 }
 
-@keyframes xe-transaction-sub-container-2-appear-animation  {
+@keyframes xe-transaction-sub-container-2-appear-animation {
     0% {
         translate: 25% 0;
     }
