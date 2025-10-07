@@ -36,7 +36,7 @@ export const master = async (c: Context<App>, props: MasterProps) => {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${title ? `${title} - XELIS Explorer` : `XELIS Explorer`}</title>
+                <title>${title}</title>
                 <meta name="theme-color" content="#7afad3" />
                 ${description ? `<meta name="description" content="${description}">` : ``}
                 <link rel="icon" type="image/png" href="/favicon/favicon-48x48.png" sizes="48x48" />
