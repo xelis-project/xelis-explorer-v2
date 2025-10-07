@@ -5,6 +5,7 @@ import { format_xel } from "../../../../utils/format_xel";
 import { DepositsBox } from "../deploy_contract/deposits_box";
 
 import './invoke_contract.css';
+import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
 
 export class TransactionInvokeContract {
     container: Container;
@@ -46,7 +47,9 @@ export class TransactionInvokeContract {
         parameters_title_element.innerHTML = `PARAMETERS`;
         this.container.element.appendChild(parameters_title_element);
         const parameters_box = new Box();
-        parameters_box.element.innerHTML = JSON.stringify(invoke_contract.parameters, null, 2);
+        const parameters_json_viewer = new JsonViewer();
+        parameters_json_viewer.set_data(invoke_contract.parameters);
+        parameters_box.element.appendChild(parameters_json_viewer.element);
         this.container.element.appendChild(parameters_box.element);
     }
 }

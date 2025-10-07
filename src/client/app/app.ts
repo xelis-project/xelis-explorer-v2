@@ -4,6 +4,7 @@ import { Singleton } from "../utils/singleton";
 import { EventEmitter } from "../utils/event_emitter";
 import { TopLoadingBar } from "./top_loading_bar/top_loading_bar";
 import { NodeStatus } from "./node_status/node_status";
+import { JsonViewer } from "../components/json_viewer/json_viewer";
 
 import "reset-css";
 import "urlpattern-polyfill"; // URLPattern is a new web API we use polyfill for now
@@ -40,6 +41,7 @@ export class App extends Singleton {
 
         this.load_page();
         this.register_events();
+        JsonViewer.initialize_import();
     }
 
     go_to(url: string) {

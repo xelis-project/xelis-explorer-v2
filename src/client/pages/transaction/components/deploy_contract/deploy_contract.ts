@@ -5,6 +5,7 @@ import './deploy_contract.css';
 import { Box } from "../../../../components/box/box";
 import { DepositsBox } from "./deposits_box";
 import { format_xel } from "../../../../utils/format_xel";
+import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
 
 export class TransactionDeployContract {
     container: Container;
@@ -27,14 +28,19 @@ export class TransactionDeployContract {
         constants_title_element.innerHTML = `CONSTANTS`;
         this.container.element.appendChild(constants_title_element);
         const constants_box = new Box();
-        constants_box.element.innerHTML = JSON.stringify(deploy_contract.module.constants, null, 2);
+        const constants_json_viewer = new JsonViewer();
+        constants_json_viewer.set_data(deploy_contract.module.constants);
+
+        constants_box.element.appendChild(constants_json_viewer.element); //.innerHTML = JSON.stringify(deploy_contract.module.constants, null, 2);
         this.container.element.appendChild(constants_box.element);
 
         const chunks_title_element = document.createElement(`div`);
         chunks_title_element.innerHTML = `CHUNKS`;
         this.container.element.appendChild(chunks_title_element);
         const chunks_box = new Box();
-        chunks_box.element.innerHTML = JSON.stringify(deploy_contract.module.chunks, null, 2);
+        const chunks_json_viewer = new JsonViewer();
+        chunks_json_viewer.set_data(deploy_contract.module.chunks);
+        chunks_box.element.appendChild(chunks_json_viewer.element);
         this.container.element.appendChild(chunks_box.element);
 
         const hook_ids_title_element = document.createElement(`div`);
