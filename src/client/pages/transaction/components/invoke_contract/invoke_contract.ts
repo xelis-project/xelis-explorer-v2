@@ -3,9 +3,9 @@ import { Container } from "../../../../components/container/container";
 import { Box } from "../../../../components/box/box";
 import { format_xel } from "../../../../utils/format_xel";
 import { DepositsBox } from "../deploy_contract/deposits_box";
+import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
 
 import './invoke_contract.css';
-import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
 
 export class TransactionInvokeContract {
     container: Container;
@@ -26,9 +26,9 @@ export class TransactionInvokeContract {
 
         const container_element = document.createElement(`div`);
 
-        const chunk_id_element = document.createElement(`div`);
-        chunk_id_element.innerHTML = `<div>CHUNK ID</div><div>${invoke_contract.chunk_id}</div>`;
-        container_element.appendChild(chunk_id_element);
+        const entry_id_element = document.createElement(`div`);
+        entry_id_element.innerHTML = `<div>ENTRY ID</div><div>${invoke_contract.entry_id}</div>`;
+        container_element.appendChild(entry_id_element);
 
         const max_gas_element = document.createElement(`div`);
         max_gas_element.innerHTML = `<div>MAX GAS</div><div>${format_xel(invoke_contract.max_gas, true)}</div>`;

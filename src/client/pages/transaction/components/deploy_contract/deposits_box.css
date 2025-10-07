@@ -1,0 +1,12 @@
+.xe-deposits-box {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-deposits-box > div {
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    justify-content: space-between;
+}

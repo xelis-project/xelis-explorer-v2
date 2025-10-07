@@ -1,11 +1,11 @@
 import { DeployContractPayload } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
-
-import './deploy_contract.css';
 import { Box } from "../../../../components/box/box";
 import { DepositsBox } from "./deposits_box";
 import { format_xel } from "../../../../utils/format_xel";
 import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
+
+import './deploy_contract.css';
 
 export class TransactionDeployContract {
     container: Container;
@@ -47,10 +47,14 @@ export class TransactionDeployContract {
         hook_ids_title_element.innerHTML = `HOOK CHUNK IDS`
         this.container.element.appendChild(hook_ids_title_element);
         const hook_ids_box = new Box();
-        hook_ids_box.element.innerHTML = JSON.stringify(deploy_contract.module.entry_chunk_ids || [], null, 2);
+        hook_ids_box.element.innerHTML = JSON.stringify(deploy_contract.module.hook_chunk_ids || [], null, 2);
         this.container.element.appendChild(hook_ids_box.element);
 
         if (deploy_contract.invoke) {
+            const deposits_title_element = document.createElement(`div`);
+            deposits_title_element.innerHTML = `DEPOSITS`;
+            this.container.element.appendChild(deposits_title_element);
+
             const deposits_box = new DepositsBox(deploy_contract.invoke.deposits);
             this.container.element.appendChild(deposits_box.box.element);
 

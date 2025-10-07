@@ -4,11 +4,14 @@ import { reduce_text } from "../../../../utils/reduce_text";
 import { Box } from "../../../../components/box/box";
 import assets from "../../../../maps/assets";
 
+import './deposits_box.css';
+
 export class DepositsBox {
     box: Box;
 
     constructor(deposits: { [hash: string]: ContractDeposit }) {
         this.box = new Box();
+        this.box.element.classList.add(`xe-deposits-box`);
 
         Object.keys(deposits).forEach((hash, i) => {
             const deposit = deposits[hash];
@@ -25,9 +28,12 @@ export class DepositsBox {
                 }
             }
 
+            let asset_name = ``;
+            if (asset) asset_name = ` (${asset.name})`;
+
             deposit_element.innerHTML = `
-                <div>${i.toFixed(3)}</div>
-                <div>${reduce_text(hash)}${asset && `(${asset.name})`}</div>
+                <div>${i.toLocaleString(undefined, { minimumIntegerDigits: 3, notation: "compact" })}</div>
+                <div>${reduce_text(hash)}${asset_name}</div>
                 <div>${amount_string}</div>
             `;
 
