@@ -41,6 +41,10 @@ export class AccountsPage extends Page {
         this.misc_container_table.element.classList.add(`xe-accounts-table`, `scrollbar-1`, `scrollbar-1-bottom`);
         this.master.content.appendChild(this.misc_container_table.element);
 
+        const misc_title_element = document.createElement(`div`);
+        misc_title_element.innerHTML = `Miscellaneous`;
+        this.misc_container_table.element.appendChild(misc_title_element);
+
         this.misc_table = new Table();
         this.misc_table.set_clickable();
         this.misc_container_table.element.appendChild(this.misc_table.element);
@@ -51,6 +55,10 @@ export class AccountsPage extends Page {
         this.exchange_container_table.element.classList.add(`xe-accounts-table`, `scrollbar-1`, `scrollbar-1-bottom`);
         this.master.content.appendChild(this.exchange_container_table.element);
 
+        const exchange_title_element = document.createElement(`div`);
+        exchange_title_element.innerHTML = `Exchanges`;
+        this.exchange_container_table.element.appendChild(exchange_title_element);
+
         this.exchange_table = new Table();
         this.exchange_table.set_clickable();
         this.exchange_container_table.element.appendChild(this.exchange_table.element);
@@ -60,6 +68,10 @@ export class AccountsPage extends Page {
         this.pool_container_table = new Container();
         this.pool_container_table.element.classList.add(`xe-accounts-table`, `scrollbar-1`, `scrollbar-1-bottom`);
         this.master.content.appendChild(this.pool_container_table.element);
+
+        const pool_title_element = document.createElement(`div`);
+        pool_title_element.innerHTML = `Pools`;
+        this.pool_container_table.element.appendChild(pool_title_element);
 
         this.pool_table = new Table();
         this.pool_table.set_clickable();
@@ -93,11 +105,16 @@ export class AccountsPage extends Page {
             });
         }
         table.body_element.replaceChildren();
-        accounts.forEach((account_data) => {
-            const row = new AccountRow();
-            row.set(account_data);
-            table.prepend_row(row.element);
-        });
+
+        if (accounts.length > 0) {
+            accounts.forEach((account_data) => {
+                const row = new AccountRow();
+                row.set(account_data);
+                table.prepend_row(row.element);
+            });
+        } else {
+            table.set_empty(`No addresses`)
+        }
     }
 
     async load(parent: HTMLElement) {

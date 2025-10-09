@@ -1,10 +1,16 @@
-.xe-accounts {
-
-}
+.xe-accounts {}
 
 .xe-accounts-table {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
     animation: xe-accounts-table-appear-animation .4s;
     overflow-x: auto;
+}
+
+.xe-accounts-table>:first-child {
+    font-size: 1.3rem;
+    color: #02FFCF;
 }
 
 @keyframes xe-accounts-table-appear-animation {
