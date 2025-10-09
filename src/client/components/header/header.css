@@ -3,6 +3,7 @@
     gap: 1rem;
     flex-direction: row;
     align-items: center;
+    padding: 1rem 0;
     justify-content: space-between;
     animation: xe-header-appear-animation .75s;
 }
@@ -55,6 +56,10 @@
 }
 
 @media screen and (max-width: 900px) {
+    .xe-header {
+        padding: 0;
+    }
+
     .xe-header-links {
         position: fixed;
         background-color: rgba(0, 0, 0, 0.2);
