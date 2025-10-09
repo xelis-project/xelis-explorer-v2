@@ -134,14 +134,16 @@ export class BlockPage extends Page {
 
             const stable_height = await node.ws.methods.getStableHeight();
 
-            if (block.height > stable_height) {
+            if (block.height >= stable_height) {
                 this.page_data.block = await node.ws.methods.getBlockByHash({
                     hash: block.hash
                 });
 
                 const info = await node.ws.methods.getInfo();
                 this.set(this.page_data.block, info);
-            } else {
+            }
+
+            if (block.height <= stable_height) {
                 this.block_graph.dag.set_live(false);
             }
         }
