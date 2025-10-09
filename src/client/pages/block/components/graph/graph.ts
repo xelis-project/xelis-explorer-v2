@@ -51,8 +51,6 @@ export class BlockGraph {
         this.set_tips(block.tips);
         this.set_nonce(block.nonce);
         this.set_extra_nonce(block.extra_nonce);
-        await this.dag.load_blocks(block.height);
-        this.dag.update_size();
     }
 
     set_hash(hash: string) {

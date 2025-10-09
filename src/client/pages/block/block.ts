@@ -134,13 +134,15 @@ export class BlockPage extends Page {
 
             const stable_height = await node.ws.methods.getStableHeight();
 
-            if (block.height >= stable_height) {
+            if (block.height > stable_height) {
                 this.page_data.block = await node.ws.methods.getBlockByHash({
                     hash: block.hash
                 });
 
                 const info = await node.ws.methods.getInfo();
                 this.set(this.page_data.block, info);
+            } else {
+                this.block_graph.dag.set_live(false);
             }
         }
     }
@@ -193,6 +195,16 @@ export class BlockPage extends Page {
             this.set_element(this.master.element);
             await this.set(block, info);
             this.block_graph.dag.overlay_loading.set_loading(false);
+
+            this.block_graph.dag.update_size();
+
+            this.block_graph.dag.lock_block_height = undefined;
+            if (block.height > info.stableheight) {
+                this.block_graph.dag.lock_block_height = block.height;
+                this.block_graph.dag.set_live(true);
+            } else {
+                this.block_graph.dag.load_blocks(block.height);
+            }
         } else {
             this.set_element(NotFoundPage.instance().element);
         }

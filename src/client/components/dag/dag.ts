@@ -51,6 +51,7 @@ export class DAG {
     font: Font;
     is_live: boolean;
     target_line: THREE.Line;
+    lock_block_height?: number;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -161,7 +162,7 @@ export class DAG {
             const new_height = new_block.height;
             this.height_control.set_height(new_height);
             this.height_control.set_max_height(new_height)
-            this.move_to_block(new_height, true);
+            this.move_to_block(this.lock_block_height ? this.lock_block_height : new_block.height, true);
 
             new_block.tips.forEach((hash) => {
                 const block_mesh_target = this.block_mesh_hashes.get(hash);
