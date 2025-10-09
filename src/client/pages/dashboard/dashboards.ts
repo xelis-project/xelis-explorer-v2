@@ -93,13 +93,16 @@ export class DashboardPage extends Page {
         if (new_block) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
             if (!block_item) {
-                this.dashboard_blocks.prepend_block(new_block).animate_prepend();
                 this.dashboard_blocks.block_items.forEach((block_item) => {
                     block_item.animate_down();
                 });
-
+                const new_block_item = this.dashboard_blocks.prepend_block(new_block);
+                new_block_item.box.element.style.setProperty(`opacity`, `0`);
+                setTimeout(() => {
+                    new_block_item.box.element.style.setProperty(`opacity`, `1`);
+                    new_block_item.animate_prepend();
+                }, 350);
                 this.dashboard_blocks.remove_last_block();
-                
                 this.dashboard_txs.remove_block_txs(new_block.hash);
 
                 const update_txs = async () => {
