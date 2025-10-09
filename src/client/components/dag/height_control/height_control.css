@@ -56,12 +56,23 @@
     background-color: white;
 }
 
+.xe-dag-height-control-live-button.active {
+    animation: xe-dag-height-control-live-animation .75s infinite alternate;
+}
+
+@keyframes xe-dag-height-control-live-animation {
+    100% {
+        background-color: #02FFCF;
+        color: #161616;
+    }
+}
+
 .xe-dag-height-control-live-button.active::before {
     animation: xe-dag-height-control-live-button-animation .75s infinite alternate;
 }
 
 @keyframes xe-dag-height-control-live-button-animation {
     100% {
-        background-color: #02FFCF;
+        background-color: #161616;
     }
 }
