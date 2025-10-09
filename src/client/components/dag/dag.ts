@@ -257,6 +257,10 @@ export class DAG {
             const current_height = await node.rpc.getHeight();
             await this.load_blocks(current_height);
 
+            if (this.lock_block_height) {
+                this.move_to_block(this.lock_block_height, true);
+            }
+
             node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
             node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
             this.height_control.live_btn_element.classList.add(`active`);
