@@ -98,7 +98,7 @@ export class DAG {
 
         this.orthographic_camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 2000);
 
-        this.orthographic_camera.zoom = 25;
+        this.orthographic_camera.zoom = 20;
         this.orthographic_camera.position.set(0, 0, 1);
 
         this.controls = new CameraControls(this.orthographic_camera, this.renderer.domElement);
