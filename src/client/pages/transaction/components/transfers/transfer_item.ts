@@ -4,11 +4,10 @@ import { Box } from "../../../../components/box/box";
 import hashicon from 'hashicon';
 import { format_address } from "../../../../utils/format_address";
 import { reduce_text } from "../../../../utils/reduce_text";
-import assets from "../../../../maps/assets";
+import prettyBytes from "pretty-bytes";
+import { get_assets } from "../../../../data/assets";
 
 import './transfer_item.css';
-import prettyBytes from "pretty-bytes";
-
 
 export class TransactionTransferItem {
     box: Box;
@@ -61,6 +60,7 @@ export class TransactionTransferItem {
     }
 
     set_asset(asset_hash: string) {
+        const assets = get_assets();
         const asset = assets[asset_hash];
 
         this.asset_element.innerHTML = `

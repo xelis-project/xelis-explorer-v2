@@ -2,7 +2,7 @@ import { ContractDeposit } from "@xelis/sdk/daemon/types";
 import { format_asset } from "../../../../utils/format_asset";
 import { reduce_text } from "../../../../utils/reduce_text";
 import { Box } from "../../../../components/box/box";
-import assets from "../../../../maps/assets";
+import { get_assets } from "../../../../data/assets";
 
 import './deposits_box.css';
 
@@ -17,6 +17,7 @@ export class DepositsBox {
             const deposit = deposits[hash];
             const deposit_element = document.createElement(`div`);
 
+                    const assets = get_assets();
             let asset = assets[hash];
 
             let amount_string = `ENCRYPTED`;

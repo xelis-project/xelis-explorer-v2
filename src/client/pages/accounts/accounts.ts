@@ -3,7 +3,7 @@ import { Master } from "../../components/master/master";
 import { Table } from "../../components/table/table";
 import { Container } from "../../components/container/container";
 import { AccountRow, AccountRowData } from "./account_row/account_row";
-import addresses from "../../maps/addresses/addresses";
+import { get_addresses } from "../../data/addresses";
 import { fetch_accounts } from "../../fetch_helpers/fetch_accounts";
 
 import './accounts.css';
@@ -75,7 +75,8 @@ export class AccountsPage extends Page {
             const data = await fetch_accounts(addr_batch);
             data.forEach((item, i) => {
                 const addr = addr_batch[i];
-                const addr_details = addresses.all[addr];
+                const addresses = get_addresses();
+                const addr_info = addresses[addr];
 
                 const registration_topo = item[0];
                 const balance = item[1];
@@ -85,9 +86,9 @@ export class AccountsPage extends Page {
                     addr: addr,
                     in_topo: balance.topoheight,
                     out_topo: nonce.topoheight,
-                    name: addr_details.name,
+                    name: addr_info.name,
                     registration_topo,
-                    link: addr_details.link
+                    link: addr_info.link
                 });
             });
         }
@@ -103,9 +104,13 @@ export class AccountsPage extends Page {
         super.load(parent);
         this.set_window_title(AccountsPage.title);
 
-        const misc_addr_keys = Object.keys(addresses.miscellaneous);
-        const exchange_addr_keys = Object.keys(addresses.exchanges);
-        const pool_addr_keys = Object.keys(addresses.pools);
+        const miscellaneous = get_addresses("miscellaneous");
+        const exchanges = get_addresses("exchange");
+        const pools = get_addresses("pool");
+
+        const misc_addr_keys = Object.keys(miscellaneous);
+        const exchange_addr_keys = Object.keys(exchanges);
+        const pool_addr_keys = Object.keys(pools);
 
         this.misc_table.set_loading(misc_addr_keys.length);
         this.exchange_table.set_loading(exchange_addr_keys.length);

@@ -1,6 +1,6 @@
 import icons from "../../../../assets/svg/icons";
 import { Container } from "../../../../components/container/container";
-import addresses from "../../../../maps/addresses/addresses";
+import { get_addresses } from "../../../../data/addresses";
 
 import "./known_addr.css";
 
@@ -13,7 +13,8 @@ export class AccountKnownAddr {
     }
 
     set(addr: string) {
-        const address_details = addresses.all[addr];
+        const addresses = get_addresses();
+        const address_details = addresses[addr];
 
         if (address_details) {
             this.container.element.style.removeProperty(`display`);

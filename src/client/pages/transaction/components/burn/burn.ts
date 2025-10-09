@@ -2,12 +2,11 @@ import { Burn } from "@xelis/sdk/daemon/types";
 import { Box } from "../../../../components/box/box";
 import { Container } from "../../../../components/container/container";
 import icons from "../../../../assets/svg/icons";
-
-import './burn.css';
-import assets from "../../../../maps/assets";
+import { get_assets } from "../../../../data/assets";
 import { format_asset } from "../../../../utils/format_asset";
 import { reduce_text } from "../../../../utils/reduce_text";
 
+import './burn.css';
 
 export class TransactionBurn {
     container: Container;
@@ -26,6 +25,7 @@ export class TransactionBurn {
         this.box = new Box();
         this.container.element.appendChild(this.box.element);
 
+        const assets = get_assets();
         const asset = assets[burn.asset];
         if (asset) {
             this.box.element.classList.add(`xe-transaction-burn-box-1`);
