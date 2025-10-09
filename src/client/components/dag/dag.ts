@@ -98,13 +98,13 @@ export class DAG {
 
         this.orthographic_camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 2000);
 
-        this.orthographic_camera.zoom = 15;
+        this.orthographic_camera.zoom = 25;
         this.orthographic_camera.position.set(0, 0, 1);
 
         this.controls = new CameraControls(this.orthographic_camera, this.renderer.domElement);
         this.controls.truckSpeed = 1;
-        this.controls.maxZoom = 20;
-        this.controls.minZoom = 5;
+        this.controls.maxZoom = 30;
+        this.controls.minZoom = 10;
         this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK;
         this.controls.mouseButtons.middle = CameraControls.ACTION.ZOOM;
         this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK;
@@ -247,6 +247,8 @@ export class DAG {
     }
 
     async set_live(live: boolean) {
+        if (this.is_live === live) return;
+
         this.is_live = live;
         const node = XelisNode.instance();
 
