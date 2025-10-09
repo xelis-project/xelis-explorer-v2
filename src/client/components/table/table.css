@@ -35,6 +35,7 @@
 .xe-table-empty {
     background-color: rgba(2, 255, 209, 0.1);
     cursor: inherit;
+    color: #afafaf;
 }
 
 .xe-table-clickable tbody tr:hover td {
