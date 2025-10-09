@@ -8,10 +8,12 @@
         "build": "vite build --mode mainnet",
         "preview": "npm run build && vite preview",
         "deploy": "npm run build && wrangler deploy",
+        "build-testnet": "vite build --mode testnet",
+        "deploy-testnet": "npm run build-testnet && wrangler deploy",
         "cf-typegen": "wrangler types --env-interface CloudflareBindings"
     },
     "dependencies": {
-"@alenaksu/json-viewer": "^2.1.2",
+        "@alenaksu/json-viewer": "^2.1.2",
         "@xelis/sdk": "^0.11.15",
         "animejs": "^4.1.4",
         "camera-controls": "^3.1.0",
