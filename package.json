@@ -10,7 +10,8 @@
         "deploy": "npm run build && wrangler deploy",
         "build-testnet": "vite build --mode testnet",
         "deploy-testnet": "npm run build-testnet && wrangler deploy",
-        "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+        "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+        "find-txs": "npx tsx ./scripts/find_txs.ts"
     },
     "dependencies": {
         "@alenaksu/json-viewer": "^2.1.2",
