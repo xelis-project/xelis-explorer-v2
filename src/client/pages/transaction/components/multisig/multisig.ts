@@ -5,8 +5,6 @@ import { Container } from "../../../../components/container/container";
 import hashicon from 'hashicon';
 
 import './multisig.css';
-import Address from "@xelis/sdk/address/index";
-import { XelisNode } from "../../../../app/xelis_node";
 
 export class TransactionMultiSig {
     container: Container;
