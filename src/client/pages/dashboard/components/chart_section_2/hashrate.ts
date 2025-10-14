@@ -13,7 +13,7 @@ interface DataPoint {
 export class DashboardHashRate {
     box_chart: BoxChart;
 
-    blocks!: Block[];
+    blocks: Block[];
     info!: GetInfoResult;
     chart?: {
         node: d3.Selection<SVGGElement, unknown, null, undefined>;
@@ -25,6 +25,7 @@ export class DashboardHashRate {
     constructor() {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `HASHRATE`;
+        this.blocks = [];
 
         window.addEventListener(`resize`, () => {
             this.create_chart();
