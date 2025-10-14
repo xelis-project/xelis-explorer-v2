@@ -11,49 +11,67 @@ interface DataItem {
 
 export class DashboardPools {
     box_chart: BoxChart;
+    miners: Record<string, number>;
+    chart?: {
+        node: d3.Selection<SVGGElement, unknown, null, undefined>;
+        width: number;
+        height: number;
+    }
 
     constructor() {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `POOLS & MINERS`;
+        this.miners = {};
+
+        window.addEventListener(`resize`, () => {
+            this.create_chart();
+            this.update_chart();
+        });
     }
 
     set_miner_count(count: number) {
         this.box_chart.element_value.innerHTML = `${count.toLocaleString()}`;
     }
 
-    build_chart(miners: Record<string, number>) {
-        let data = Object.keys(miners).map((miner, i) => {
-            return {
-                label: format_address(miner),
-                value: miners[miner],
-            };
-        });
-
-        data = data.sort((a, b) => b.value - a.value).slice(0, 6);
-
+    create_chart() {
         const width = 150;
         const height = 150;
-        const radius = Math.min(width, height) / 2;
-
-        const donutInnerOffset = 25;
 
         this.box_chart.element_content.replaceChildren();
-        const svg = d3
+        const node = d3
             .select(this.box_chart.element_content)
             .append('svg')
             .attr('width', `100%`)
             .attr('height', height)
             .append('g')
-
             .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
-        const pieGenerator = d3.pie<DataItem>()
+        this.chart = { node, width, height };
+    }
+
+    update_chart() {
+        if (!this.chart) return;
+
+        const radius = Math.min(this.chart.width, this.chart.height) / 2;
+        const donutInnerOffset = 25;
+
+        let data = Object.keys(this.miners).map((miner, i) => {
+            return {
+                label: format_address(miner),
+                value: this.miners[miner],
+            };
+        });
+
+        data = data.sort((a, b) => b.value - a.value).slice(0, 6);
+
+
+        const pie_generator = d3.pie<DataItem>()
             .value(d => d.value)
             .sort(null);
 
-        const arcData = pieGenerator(data);
+        const arc_data = pie_generator(data);
 
-        const arcGenerator = d3.arc<d3.PieArcDatum<DataItem>>()
+        const arc_generator = d3.arc<d3.PieArcDatum<DataItem>>()
             .innerRadius(radius - donutInnerOffset)
             .outerRadius(radius);
 
@@ -61,17 +79,27 @@ export class DashboardPools {
             .domain(data.map(d => d.label))
             .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
-        const arcs = svg.selectAll('path')
-            .data(arcData)
-            .enter()
-            .append('path')
-            .attr('d', arcGenerator)
-            .attr('fill', d => color(d.data.label));
+        const arcs = this.chart.node.selectAll('path')
+            .data(arc_data);
+
+        arcs.exit().transition().remove();
+
+        arcs.enter()
+            .append(`path`)
+            .merge(arcs as any)
+            .transition()
+            .duration(500)
+            .attr('fill', d => color(d.data.label))
+            .attr('d', arc_generator);
 
         const legend_radius = 8;
         const legend_spacing = 15;
 
-        const legend = svg
+        this.chart.node
+            .selectAll(`.legend`)
+            .remove();
+
+        const legend = this.chart.node
             .selectAll('.legend')
             .data(data)
             .enter()
@@ -99,18 +127,20 @@ export class DashboardPools {
     }
 
     set(blocks: Block[]) {
-        const miners = {} as Record<string, number>;
+        this.miners = {};
 
         for (let i = 0; i < blocks.length; i++) {
             const { miner } = blocks[i];
-            if (miners[miner]) {
-                miners[miner] += 1;
+            if (this.miners[miner]) {
+                this.miners[miner] += 1;
             } else {
-                miners[miner] = 1;
+                this.miners[miner] = 1;
             }
         }
 
-        this.set_miner_count(Object.keys(miners).length);
-        this.build_chart(miners);
+        this.set_miner_count(Object.keys(this.miners).length);
+
+        if (!this.chart) this.create_chart();
+        this.update_chart();
     }
 }
