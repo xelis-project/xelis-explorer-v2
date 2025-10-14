@@ -1,0 +1,31 @@
+.xe-transaction-multisig {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    position: relative;
+}
+
+.xe-transaction-multisig>:nth-child(2),
+.xe-transaction-multisig>:nth-child(4) {
+    color: #afafaf;
+}
+
+.xe-transaction-multisig>:nth-child(3) {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.xe-transaction-multisig-participants {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-transaction-multisig-participants>div {
+    display: flex;
+    gap: 1rem;
+}
+
+.xe-transaction-multisig-participants>div>:nth-child(2) {
+    word-break: break-all;
+}

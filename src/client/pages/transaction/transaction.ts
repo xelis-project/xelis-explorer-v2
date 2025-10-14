@@ -15,6 +15,7 @@ import { TransactionBurn } from "./components/burn/burn";
 import { TransactionDeployContract } from "./components/deploy_contract/deploy_contract";
 import { TransactionInvokeContract } from "./components/invoke_contract/invoke_contract";
 import { TransactionContractLogs } from "./components/contract_logs/contract_logs";
+import { TransactionMultiSig } from "./components/multisig/multisig";
 
 import './transaction.css';
 
@@ -177,6 +178,11 @@ export class TransactionPage extends Page {
             if (transaction.data.burn) {
                 const transaction_burn = new TransactionBurn(transaction.data.burn);
                 this.transaction_type_container.appendChild(transaction_burn.container.element);
+            }
+
+            if (transaction.data.multi_sig) {
+                const transaction_multisig = new TransactionMultiSig(transaction.data.multi_sig);
+                this.transaction_type_container.appendChild(transaction_multisig.container.element);   
             }
 
             if (transaction.data.deploy_contract) {
