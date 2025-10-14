@@ -4,6 +4,20 @@
     flex-direction: column;
 }
 
+.xe-transaction-deploy-contract>:nth-child(3),
+.xe-transaction-deploy-contract>:nth-child(5),
+.xe-transaction-deploy-contract>:nth-child(7),
+.xe-transaction-deploy-contract>:nth-child(9),
+.xe-transaction-deploy-contract>:nth-child(11) {
+    color: #afafaf;
+}
+
+.xe-transaction-deploy-contract>:nth-child(12) {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
 .xe-transaction-deploy-contract>:nth-child(2) {
     font-size: 1.5rem;
     max-width: 30rem;

@@ -54,9 +54,13 @@ export class TransactionDeployContract {
             const deposits_box = new DepositsBox(deploy_contract.invoke.deposits);
             this.container.element.appendChild(deposits_box.box.element);
 
-            const max_gas_element = document.createElement(`div`);
-            max_gas_element.innerHTML = `<div>MAX GAS</div><div>${format_xel(deploy_contract.invoke.max_gas, true)}</div>`;
-            this.container.element.appendChild(max_gas_element);
+            const max_gas_title = document.createElement(`div`);
+            max_gas_title.innerHTML = `MAX GAS`;
+            this.container.element.appendChild(max_gas_title);
+
+            const max_gas_value = document.createElement(`div`);
+            max_gas_value.innerHTML = format_xel(deploy_contract.invoke.max_gas, true);
+            this.container.element.appendChild(max_gas_value);
         }
     }
 }
