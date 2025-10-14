@@ -14,9 +14,9 @@ import { TransactionTransfers } from "./components/transfers/transfers";
 import { TransactionBurn } from "./components/burn/burn";
 import { TransactionDeployContract } from "./components/deploy_contract/deploy_contract";
 import { TransactionInvokeContract } from "./components/invoke_contract/invoke_contract";
+import { TransactionContractLogs } from "./components/contract_logs/contract_logs";
 
 import './transaction.css';
-import { TransactionContractOutputs } from "./components/contract_outputs/contract_outputs";
 
 interface TransactionPageServerData {
     transaction: TransactionResponse;
@@ -184,12 +184,12 @@ export class TransactionPage extends Page {
                 this.transaction_type_container.appendChild(transaction_deploy_contract.container.element);
 
                 const node = XelisNode.instance();
-                const outputs = await node.rpc.getContractOutputs({
-                    transaction: transaction.hash
+                const contract_logs = await node.rpc.getContractLogs({
+                    caller: transaction.hash
                 });
 
-                const transaction_contract_outputs = new TransactionContractOutputs(outputs);
-                this.transaction_type_container.appendChild(transaction_contract_outputs.container.element);
+                const transaction_contract_logs = new TransactionContractLogs(contract_logs);
+                this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
             }
 
             if (transaction.data.invoke_contract) {
@@ -197,12 +197,12 @@ export class TransactionPage extends Page {
                 this.transaction_type_container.appendChild(transaction_invoke_contract.container.element);
 
                 const node = XelisNode.instance();
-                const outputs = await node.rpc.getContractOutputs({
-                    transaction: transaction.hash
+                const contract_logs = await node.rpc.getContractLogs({
+                    caller: transaction.hash
                 });
-                console.log(outputs)
-                const transaction_contract_outputs = new TransactionContractOutputs(outputs);
-                this.transaction_type_container.appendChild(transaction_contract_outputs.container.element);
+
+                const transaction_contract_logs = new TransactionContractLogs(contract_logs);
+                this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
             }
         } else {
             this.set_element(NotFoundPage.instance().element);

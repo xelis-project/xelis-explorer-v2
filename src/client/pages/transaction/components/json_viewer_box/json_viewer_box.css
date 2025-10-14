@@ -1,0 +1,6 @@
+.xe-json-viewer-box {
+    padding: 0 1rem;
+    max-height: 12rem;
+    overflow: auto;
+    word-break: break-all;
+}

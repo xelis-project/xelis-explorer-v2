@@ -6,6 +6,7 @@ import { DepositsBox } from "../deploy_contract/deposits_box";
 import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
 
 import './invoke_contract.css';
+import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
 
 export class TransactionInvokeContract {
     container: Container;
@@ -46,10 +47,7 @@ export class TransactionInvokeContract {
         const parameters_title_element = document.createElement(`div`);
         parameters_title_element.innerHTML = `PARAMETERS`;
         this.container.element.appendChild(parameters_title_element);
-        const parameters_box = new Box();
-        const parameters_json_viewer = new JsonViewer();
-        parameters_json_viewer.set_data(invoke_contract.parameters);
-        parameters_box.element.appendChild(parameters_json_viewer.element);
-        this.container.element.appendChild(parameters_box.element);
+        const parameters_json_viewer_box = new JsonViewerBox(invoke_contract.parameters);
+        this.container.element.appendChild(parameters_json_viewer_box.box.element);
     }
 }
