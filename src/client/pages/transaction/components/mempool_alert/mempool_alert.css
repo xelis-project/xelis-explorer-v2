@@ -1,0 +1,25 @@
+.xe-transaction-mempool-alert {
+    animation: xe-transaction-mempool-alert-appear-animation .65s, xe-transaction-mempool-alert-loading .75s infinite alternate;
+}
+
+@keyframes xe-transaction-mempool-alert-appear-animation {
+    0% {
+        opacity: 0;
+        translate: 0 -100%;
+    }
+
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+@keyframes xe-transaction-mempool-alert-loading {
+    0% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

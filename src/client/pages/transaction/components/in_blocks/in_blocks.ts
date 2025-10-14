@@ -35,7 +35,7 @@ export class TransactionInBlocks {
 
     set_loading(loading: boolean) {
         if (loading) {
-            Box.list_loading(this.blocks_element, 3, `3rem`);
+            Box.list_loading(this.blocks_element, 1, `3rem`);
         } else {
             this.blocks_element.replaceChildren();
         }

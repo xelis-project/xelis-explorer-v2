@@ -6,9 +6,9 @@ import { Container } from "../../components/container/container";
 import { TxRow } from "./tx_row/tx_row";
 import { RPCEvent as DaemonRPCEvent, GetInfoResult, TransactionExecuted, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
+import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 
 import './transactions.css';
-import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 
 export class TransactionsPage extends Page {
     static pathname = "/transactions";
