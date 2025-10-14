@@ -69,7 +69,8 @@ export class MempoolPage extends Page {
             const top_block = this.page_data.top_block;
 
             if (top_block) {
-                const future_block = { height: top_block.height + 1, timestamp: new_tx.first_seen } as Block;
+                const timestamp = new_tx.first_seen * 1000;
+                const future_block = { height: top_block.height + 1, timestamp } as Block;
 
                 const node = XelisNode.instance();
                 const tx = await node.ws.methods.getTransaction(new_tx.hash);
