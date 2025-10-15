@@ -81,9 +81,23 @@ export class DashboardHashRate {
             .y(d => y_scale(d.y))
             .curve(d3.curveMonotoneX);
 
-        const color = d3.scaleLinear<string>()
-            .domain(data.map(d => d.y))
-            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
+        const min_data = data.reduce((a, b) => (a.y < b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
+        const max_data = data.reduce((a, b) => (a.y > b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
+        const defs = this.chart.node.append("defs");
+
+        const gradient = defs.append("linearGradient")
+            .attr("id", "grad_y")
+            .attr("gradientUnits", "userSpaceOnUse")
+            .attr("x1", 0).attr("x2", 0)
+            .attr("y1", y_scale(min_data.y))
+            .attr("y2", y_scale(max_data.y));
+
+        gradient.append("stop")
+            .attr("offset", "0%")
+            .attr("stop-color", "#02ffcf");
+        gradient.append("stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "#ff00aa");
 
         const path = this.chart.node
             .selectAll(`path`)
@@ -94,17 +108,12 @@ export class DashboardHashRate {
             .append('path')
             .attr('fill', `none`)
             .style('stroke-width', 5)
-            .attr('stroke', `rgba(2, 255, 209, 0.3)`)
+            .attr('stroke', `url(#grad_y)`)
             .attr('d', (d) => line(d));
 
         path.exit().remove();
 
-        this.chart.node.select(`path`)
-            .attr("transform", null)
-            .transition()
-            .duration(500)
-            .attr("transform", "translate(-10, 0)");
-
+        /* 
         this.chart.node
             .selectAll(`circle`)
             .data(data)
@@ -113,75 +122,63 @@ export class DashboardHashRate {
             .attr('cy', d => y_scale(d.y))
             .attr('r', 5)
             .attr('stroke', 'none')
-            //`.transition()
-            //.duration(500)
-            .attr('fill', d => color(d.y))
-            .attr("transform", null)
-            .transition()
-            .duration(500)
-            .attr("transform", "translate(-10,0)");
+            .attr('fill', d => color(d.y));
+        */
 
         // update tooltip
-        if (data.length > 0) {
-            const min_data = data.reduce((a, b) => (a.y < b.y ? a : b));
-            const max_data = data.reduce((a, b) => (a.y > b.y ? a : b));
+        const chart_rect_width = this.chart.rect.width;
+        this.chart.node
+            .selectAll(`.tooltip`)
+            .remove();
 
-            const chart_rect_width = this.chart.rect.width;
-            this.chart.node
-                .selectAll(`.tooltip`)
-                .remove();
+        const tooltip = this.chart.node
+            .selectAll(`.tooltip`)
+            .data<DataPoint>([min_data, max_data])
+            .enter()
+            .append(`g`)
+            .attr(`class`, `tooltip`);
 
-            const tooltip = this.chart.node
-                .selectAll(`.tooltip`)
-                .data<DataPoint>([min_data, max_data])
-                .enter()
-                .append(`g`)
-                .attr(`class`, `tooltip`);
+        tooltip
+            .append(`text`)
+            .text(d => format_hashrate(d.y, this.info.block_time_target))
+            .each(function (d) {
+                const self = this as SVGTextElement;
 
-            tooltip
-                .append(`text`)
-                .text(d => format_hashrate(d.y, this.info.block_time_target))
-                .each(function (d) {
-                    const self = this as SVGTextElement;
+                const text_box = self.getBBox();
+                const rect_margin = { top: 2, left: 10, bottom: 2, right: 10 };
+                const rect_width = text_box.width + rect_margin.left + rect_margin.right;
+                const rect_height = text_box.height + rect_margin.top + rect_margin.bottom;
 
-                    const text_box = self.getBBox();
-                    const rect_margin = { top: 2, left: 10, bottom: 2, right: 10 };
-                    const rect_width = text_box.width + rect_margin.left + rect_margin.right;
-                    const rect_height = text_box.height + rect_margin.top + rect_margin.bottom;
+                const text_pos = { x: 0, y: 0 };
+                text_pos.x = Math.min(chart_rect_width - rect_width - 10, Math.max(0, x_scale(d.x) - text_box.width / 2));
+                text_pos.y = Math.max(rect_height / 2, y_scale(d.y));
+                d.text = text_pos;
 
-                    const text_pos = { x: 0, y: 0 };
-                    text_pos.x = Math.min(chart_rect_width - rect_width - 10, Math.max(0, x_scale(d.x) - text_box.width / 2));
-                    text_pos.y = Math.max(rect_height / 2, y_scale(d.y));
-                    d.text = text_pos;
+                const text_rect = {} as DOMRect;
+                text_rect.x = text_pos.x - rect_margin.left + 2;
+                text_rect.y = text_pos.y - (rect_height / 2) - 5;
+                text_rect.width = rect_width;
+                text_rect.height = rect_height;
 
-                    const text_rect = {} as DOMRect;
-                    text_rect.x = text_pos.x - rect_margin.left + 2;
-                    text_rect.y = text_pos.y - (rect_height / 2) - 5;
-                    text_rect.width = rect_width;
-                    text_rect.height = rect_height;
+                d.text_rect = text_rect;
+            })
+            .attr("x", d => {
+                return d.text ? d.text.x : 0;
+            })
+            .attr("y", d => {
+                return d.text ? d.text.y : 0;
+            })
+            .style('font-size', '1rem')
+            //.style("text-anchor", "middle") // using js to anchor text in the middle to bound text within the canvas
+            .style('font-weight', `bold`)
+            .style('fill', 'rgba(0, 0, 0, 1)');
 
-                    d.text_rect = text_rect;
-                })
-                .attr("x", d => {
-                    return d.text ? d.text.x : 0;
-                })
-                .attr("y", d => {
-                    return d.text ? d.text.y : 0;
-                })
-                .style('font-size', '1rem')
-                //.style("text-anchor", "middle") // using js to anchor text in the middle to bound text within the canvas
-                .style('font-weight', `bold`)
-                .style('fill', 'rgba(0, 0, 0, 1)')
-                .attr(`transform`, `translate(-10, 0)`);
-
-            tooltip.insert(`rect`, ":first-child")
-                .attr("x", d => d.text_rect ? d.text_rect.x : 0)
-                .attr("y", d => d.text_rect ? d.text_rect.y : 0)
-                .attr("width", d => d.text_rect ? d.text_rect.width : 0)
-                .attr("height", d => d.text_rect ? d.text_rect.height : 0)
-                .style('fill', 'rgba(2, 255, 209)')
-                .attr(`transform`, `translate(-10, 0)`);
-        }
+        tooltip.insert(`rect`, ":first-child")
+            .attr("x", d => d.text_rect ? d.text_rect.x : 0)
+            .attr("y", d => d.text_rect ? d.text_rect.y : 0)
+            .attr("width", d => d.text_rect ? d.text_rect.width : 0)
+            .attr("height", d => d.text_rect ? d.text_rect.height : 0)
+            .style('fill', 'rgba(2, 255, 209)');
     }
 
     set(info: GetInfoResult, blocks: Block[]) {
