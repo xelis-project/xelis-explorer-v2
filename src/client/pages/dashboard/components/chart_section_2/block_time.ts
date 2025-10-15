@@ -6,25 +6,53 @@ import prettyMilliseconds from 'pretty-ms';
 
 export class DashboardBlockTime {
     box_chart: BoxChart;
+    chart?: {
+        node: d3.Selection<SVGGElement, unknown, null, undefined>;
+        width: number;
+        height: number;
+    }
+    blocks: Block[];
+    info!: GetInfoResult;
 
     constructor() {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `BLOCK TIME`;
+        this.blocks = [];
+
+        window.addEventListener(`resize`, () => {
+            this.create_chart();
+            this.update_chart();
+        });
     }
 
     set_avg_time(avg_time: number) {
         this.box_chart.element_value.innerHTML = `${prettyMilliseconds(avg_time, { compact: true })} avg`;
     }
 
-    build_chart(blocks: Block[]) {
+    create_chart() {
         const margin = { top: 10, right: 0, bottom: 10, left: 30 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 150 - margin.top - margin.bottom;
 
+        this.box_chart.element_content.replaceChildren();
+        const node = d3
+            .select(this.box_chart.element_content)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        this.chart = { node, width, height };
+    }
+
+    update_chart() {
+        if (!this.chart) return;
+
         const data = [];
 
-        const sorted_blocks = [...blocks];
+        const sorted_blocks = [...this.blocks];
         sorted_blocks.sort((a, b) => b.height - a.height);
         for (let i = 0; i < sorted_blocks.length; i++) {
             const prev_block = sorted_blocks[i + 1];
@@ -36,31 +64,25 @@ export class DashboardBlockTime {
             }
         }
 
-        this.box_chart.element_content.replaceChildren();
-        const svg = d3
-            .select(this.box_chart.element_content)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
+        const min_data = data.reduce((a, b) => (a.y < b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
+        const max_data = data.reduce((a, b) => (a.y > b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
         const color = d3.scaleLinear<string>()
-            .domain(data.map(d => d.y))
-            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
+            .domain([min_data.y, max_data.y])
+            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.7), 2));
 
         const x_scale = d3
             .scaleBand<number>()
             .domain(data.map((d) => d.x))
-            .range([0, width])
+            .range([0, this.chart.width])
             .padding(0.2);
 
         const y_scale = d3
             .scaleLinear()
             .domain([0, d3.max(data, (d) => d.y)!])
-            .range([height, 0]);
+            .range([this.chart.height, 0]);
 
-        svg
+        const height = this.chart.height;
+        const bars = this.chart.node
             .selectAll(".bar")
             .data(data)
             .join("rect")
@@ -72,15 +94,27 @@ export class DashboardBlockTime {
             .attr("height", (d) => height - y_scale(d.y))
             .attr("fill", d => color(d.y));
 
-        svg.append("g")
-            .call(d3.axisLeft(y_scale).tickFormat(function (d) {
+        const legend = this.chart.node
+            .selectAll(`.legend`)
+            .data([{}]);
+
+        legend.exit().remove();
+
+        legend
+            .enter()
+            .append("g")
+            .attr(`class`, `legend`)
+            .call(d3.axisLeft(y_scale).tickFormat((d) => {
                 return prettyMilliseconds(d as number, { colonNotation: true });
-            }).ticks(10))
-            .attr(`stroke`, `rgba(2, 255, 209, 0.3)`);
+            }).ticks(10));
     }
 
     set(info: GetInfoResult, blocks: Block[]) {
+        this.info = info;
+        this.blocks = blocks;
         this.set_avg_time(info.average_block_time);
-        this.build_chart(blocks);
+
+        if (!this.chart) this.create_chart();
+        this.update_chart();
     }
 }
