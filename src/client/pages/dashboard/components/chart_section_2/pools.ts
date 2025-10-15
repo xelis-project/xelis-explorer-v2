@@ -34,17 +34,17 @@ export class DashboardPools {
     }
 
     create_chart() {
-        const width = 150;
-        const height = 150;
+        const width = 400;
+        const height = 160;
 
         this.box_chart.element_content.replaceChildren();
         const node = d3
             .select(this.box_chart.element_content)
             .append('svg')
-            .attr('width', `100%`)
+            .attr('width', width)
             .attr('height', height)
             .append('g')
-            .attr('transform', `translate(${width / 2}, ${height / 2})`);
+            .attr('transform', `translate(100, ${height / 2})`);
 
         this.chart = { node, width, height };
     }
@@ -64,7 +64,6 @@ export class DashboardPools {
 
         data = data.sort((a, b) => b.value - a.value).slice(0, 6);
 
-
         const pie_generator = d3.pie<DataItem>()
             .value(d => d.value)
             .sort(null);
@@ -77,7 +76,7 @@ export class DashboardPools {
 
         const color = d3.scaleOrdinal<string>()
             .domain(data.map(d => d.label))
-            .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
+            .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#ff00aa`, `#02ffcf`)(t * 0.8), data.length) : [`#ff00aa`]);
 
         const arcs = this.chart.node.selectAll('path')
             .data(arc_data);
@@ -108,7 +107,7 @@ export class DashboardPools {
             .attr('transform', (d, i) => {
                 var height = legend_radius + legend_spacing;
                 var offset = height * color.domain().length / 2;
-                var x = 100;
+                var x = 120;
                 var y = (i * height) - offset;
                 return `translate(${x}, ${y})`;
             });
