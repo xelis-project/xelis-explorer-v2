@@ -76,7 +76,7 @@ export class DashboardPools {
 
         const color = d3.scaleOrdinal<string>()
             .domain(data.map(d => d.label))
-            .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#ff00aa`, `#02ffcf`)(t * 0.8), data.length) : [`#ff00aa`]);
+            .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#ff00aa`, `#02ffcf`)(t * 0.8), data.length) : [`#02ffcf`]);
 
         const arcs = this.chart.node.selectAll('path')
             .data(arc_data);
