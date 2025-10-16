@@ -29,7 +29,7 @@ export class DashboardBlocksTxs {
     }
 
     create_chart() {
-        const margin = { top: 10, right: 0, bottom: 10, left: 30 };
+        const margin = { top: 10, right: 10, bottom: 10, left: 10 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 75 - margin.top - margin.bottom;
