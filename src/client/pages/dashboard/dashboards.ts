@@ -17,6 +17,7 @@ import { parse_addr } from "../../utils/parse_addr";
 import { fetch_geo_location } from "../../utils/fetch_geo_location";
 import { PeerLocation } from "../../components/peers_map/peers_map";
 import { Box } from "../../components/box/box";
+import { DashboardChartSection1 } from "./components/chart_section_1/chart_section_1";
 
 import './dashboard.css';
 
@@ -28,6 +29,7 @@ export class DashboardPage extends Page {
     dashboard_blocks: DashboardBlocks;
     dashboard_txs: DashboardTxs;
     dashboard_search: DashboardSearch;
+    dashboard_chart_section_1: DashboardChartSection1;
     dashboard_chart_section_2: DashboardChartSection2;
     dashboard_peers: DashboardPeers;
     dashboard_dag: DashboardDAG;
@@ -67,6 +69,9 @@ export class DashboardPage extends Page {
 
         this.dashboard_search = new DashboardSearch();
         sub_container_1.appendChild(this.dashboard_search.container.element);
+
+        this.dashboard_chart_section_1 = new DashboardChartSection1();
+        sub_container_1.appendChild(this.dashboard_chart_section_1.container.element);
 
         this.dashboard_chart_section_2 = new DashboardChartSection2();
         sub_container_1.appendChild(this.dashboard_chart_section_2.container.element);
@@ -120,6 +125,7 @@ export class DashboardPage extends Page {
                 this.page_data.blocks = this.dashboard_blocks.block_items.map(x => x.data!);
                 await this.load_top_stats();
                 const { info, blocks } = this.page_data;
+                this.dashboard_chart_section_1.blocks_txs.set(blocks);
                 this.dashboard_chart_section_2.pools.set(blocks);
                 if (info) {
                     this.dashboard_chart_section_2.hashrate.set(info, blocks);
@@ -266,6 +272,7 @@ export class DashboardPage extends Page {
         const blocks = await fetch_blocks(info.height, 100);
 
         this.page_data.blocks = blocks;
+        this.dashboard_chart_section_1.blocks_txs.set(blocks);
         this.dashboard_chart_section_2.hashrate.set(info, blocks);
         this.dashboard_chart_section_2.block_time.set(info, blocks);
         this.dashboard_chart_section_2.pools.set(blocks);
@@ -315,6 +322,7 @@ export class DashboardPage extends Page {
         Box.boxes_loading(this.dashboard_top_stats.container.element, true);
         Box.list_loading(this.dashboard_blocks.element_content, 20, `5rem`);
         Box.list_loading(this.dashboard_txs.element_content, 20, `5rem`);
+        Box.boxes_loading(this.dashboard_chart_section_1.container.element, true);
         Box.boxes_loading(this.dashboard_chart_section_2.container.element, true);
 
         this.load_dag();
@@ -327,6 +335,7 @@ export class DashboardPage extends Page {
         await this.load_blocks();
         this.load_blocks_txs();
 
+        Box.boxes_loading(this.dashboard_chart_section_1.container.element, false);
         Box.boxes_loading(this.dashboard_chart_section_2.container.element, false);
     }
 
