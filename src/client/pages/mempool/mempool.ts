@@ -1,4 +1,4 @@
-import { Block, RPCEvent as DaemonRPCEvent, MempoolTransactionSummary, Transaction } from "@xelis/sdk/daemon/types";
+import { Block, RPCEvent as DaemonRPCEvent, MempoolTransactionSummary, Transaction, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { XelisNode } from "../../app/xelis_node";
 import { Master } from "../../components/master/master";
 import { TxBlock } from "../../components/tx_item/tx_item";
@@ -126,11 +126,17 @@ export class MempoolPage extends Page {
         const mempool_txs = await node.rpc.getMemPool();
         this.page_data.mempool_txs = mempool_txs.transactions;
 
+        const txs_block = mempool_txs.transactions.map((tx) => {
+            const timestamp = (tx.first_seen || 0) * 1000;
+            return { tx: tx as Transaction, block: { height: top_block.height + 1, timestamp } } as TxBlock;
+        });
+
         const blocks = await fetch_blocks(top_block.height, 25);
         this.page_data.blocks = blocks;
 
         this.mempool_summary.set(this.page_data.mempool_txs, top_block);
-        this.mempool_txs_list.set(this.page_data.mempool_txs as any);
+
+        this.mempool_txs_list.set(txs_block);
         if (this.page_data.mempool_txs.length === 0) this.mempool_txs_list.set_empty(true);
         this.mempool_chart.blocks_txs.set(blocks);
 
