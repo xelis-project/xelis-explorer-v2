@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
-import prettyMilliseconds from 'pretty-ms';
+import { Block, BlockType, GetInfoResult } from '@xelis/sdk/daemon/types';
 
 export class DashboardBlocksTxs {
     box_chart: BoxChart;
@@ -49,12 +48,14 @@ export class DashboardBlocksTxs {
     update_chart() {
         if (!this.chart) return;
 
-        let data = [] as { x: number; y: number }[];
-        this.blocks.forEach((b) => {
-            const height_block = data.find(d => d.x === b.height);
-            if (!height_block) data.push({ x: b.height, y: b.txs_hashes.length });
-        });
-        data = data.sort((a, b) => a.x - b.x);
+        const filtered_blocks = this.blocks
+            .filter((b) => {
+                return b.block_type === BlockType.Normal || b.block_type === BlockType.Sync;
+            });
+
+        let data = filtered_blocks
+            .map((b, i) => ({ x: b.height, y: b.txs_hashes.length }))
+            .sort((a, b) => a.x - b.x);
 
         const min_data = data.reduce((a, b) => (a.y < b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
         const max_data = data.reduce((a, b) => (a.y > b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
