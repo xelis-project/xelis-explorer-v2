@@ -1,27 +1,34 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block } from '@xelis/sdk/daemon/types';
+import { Block, BlockType } from '@xelis/sdk/daemon/types';
 
 export class MempoolChartBlocksTxs {
     box_chart: BoxChart;
+    chart?: {
+        node: d3.Selection<SVGGElement, unknown, null, undefined>;
+        width: number;
+        height: number;
+    }
+    blocks: Block[];
 
     constructor() {
+        this.blocks = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `PAST BLOCKS`;
     }
 
-    build_chart(blocks: Block[]) {
+    set_value(tx_count: number, tps: number) {
+        this.box_chart.element_value.innerHTML = `${tx_count} TXS | ${tps.toLocaleString(undefined, { maximumFractionDigits: 2 })} TPS`;
+    }
+
+    create_chart() {
         const margin = { top: 20, right: 0, bottom: 20, left: 0 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
-        const height = 200 - margin.top - margin.bottom;
-
-        const data = blocks.map((b, i) => {
-            return { label: blocks.length - i, value: b.txs_hashes.length };
-        });
+        const height = 150 - margin.top - margin.bottom;
 
         this.box_chart.element_content.replaceChildren();
-        const svg = d3
+        const node = d3
             .select(this.box_chart.element_content)
             .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -29,57 +36,100 @@ export class MempoolChartBlocksTxs {
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
+        this.chart = { node, width, height };
+    }
+
+    update_chart() {
+        if (!this.chart) return;
+
+        const filtered_blocks = this.blocks
+            .filter((b) => {
+                return b.block_type === BlockType.Normal || b.block_type === BlockType.Sync;
+            });
+
+        let data = filtered_blocks
+            .map((b, i) => ({ x: filtered_blocks.length - i, y: b.txs_hashes.length }))
+            .sort((a, b) => b.x - a.x);
+
         const x_scale = d3
             .scaleBand<number>()
-            .domain(data.map((d) => d.label))
-            .range([0, width])
+            .domain(data.map((d) => d.x))
+            .range([0, this.chart.width])
             .padding(0.2);
 
         const y_scale = d3
             .scaleLinear()
-            .domain([0, d3.max(data, (d) => d.value)!])
-            .range([height, 0]);
+            .domain([-1, d3.max(data, (d) => d.y)!])
+            .range([this.chart.height, 0]);
 
+        const min_data = data.reduce((a, b) => (a.y < b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
+        const max_data = data.reduce((a, b) => (a.y > b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
         const color = d3.scaleLinear<string>()
-            .domain(data.map(d => d.value))
-            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length));
+            .domain([min_data.y, max_data.y])
+            .range(d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.7), 2));
 
-        svg
+        const height = this.chart.height;
+        this.chart.node
             .selectAll(".bar")
             .data(data)
             .join("rect")
             .attr("class", "bar")
-            .attr("x", (d) => x_scale(d.label)!)
-            .attr("y", (d) => y_scale(d.value))
+            .attr("x", (d) => x_scale(d.x)!)
+            .attr("y", (d) => y_scale(d.y))
             .attr("rx", 3)
             .attr("width", x_scale.bandwidth())
-            .attr("height", (d) => height - y_scale(d.value))
-            .attr("fill", d => color(d.value));
+            .attr("height", (d) => height - y_scale(d.y))
+            .attr("fill", d => color(d.y));
 
-        svg.append("g")
+        this.chart.node
+            .selectAll(`.y-axis`)
+            .data([{}])
+            .enter()
+            .append("g")
+            .attr(`class`, `y-axis`)
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x_scale));
 
-        svg
-            .selectAll()
+        this.chart.node
+            .selectAll(`.tx-count`)
             .data(data)
-            .enter()
-            .append('text')
-            .attr('transform', d => `translate(${x_scale(d.label)! + x_scale.bandwidth() / 2}, ${y_scale(d.value) - 5})`)
-            .text(d => `${d.value}`)
-            .style('font-size', '1rem')
-            .style("text-anchor", "middle")
-            .style('font-weight', `bold`)
-            .style('fill', 'white');
-    }
-
-    set_tx_count(tx_count: number) {
-        this.box_chart.element_value.innerHTML = `${tx_count.toLocaleString()} TXS`;
+            .join(
+                enter => enter.append('text')
+                    .attr(`class`, `tx-count`)
+                    .attr('transform', d => `translate(${x_scale(d.x)! + x_scale.bandwidth() / 2}, ${y_scale(d.y) - 5})`)
+                    .text(d => {
+                        return d.y.toLocaleString(undefined, { notation: `compact`, compactDisplay: `short` });
+                    })
+                    .style('font-size', '.8rem')
+                    .style("text-anchor", "middle")
+                    .style('font-weight', `bold`)
+                    .style('fill', 'white'),
+                update => update
+                    .attr('transform', d => `translate(${x_scale(d.x)! + x_scale.bandwidth() / 2}, ${y_scale(d.y) - 5})`)
+                    .text(d => {
+                        return d.y.toLocaleString(undefined, { notation: `compact`, compactDisplay: `short` });
+                    })
+            );
     }
 
     set(blocks: Block[]) {
-        const total_txs = blocks.reduce((t, b) => t + b.txs_hashes.length, 0);
-        this.set_tx_count(total_txs);
-        this.build_chart(blocks);
+        this.blocks = blocks;
+
+        let min_timestamp = 0;
+        let max_timestamp = 0;
+        let total_txs = 0;
+        blocks.forEach((block) => {
+            total_txs += block.txs_hashes.length;
+            if (min_timestamp === 0 || block.timestamp < min_timestamp) min_timestamp = block.timestamp;
+            if (block.timestamp > max_timestamp) max_timestamp = block.timestamp;
+        });
+
+        const elapsed = max_timestamp - min_timestamp;
+        const tps = total_txs * 1000 / elapsed;
+
+        this.set_value(total_txs, tps);
+
+        if (!this.chart) this.create_chart();
+        this.update_chart();
     }
 }
