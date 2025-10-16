@@ -65,6 +65,7 @@ export class PeersChartNodesByCountry {
             .join("rect")
             .attr("x", (d) => x_scale(d.label)!)
             .attr("y", (d) => y_scale(d.value))
+            .attr("rx", 3)
             .attr("width", x_scale.bandwidth())
             .attr("height", (d) => height - y_scale(d.value))
             .attr("fill", d => color(d.label));
