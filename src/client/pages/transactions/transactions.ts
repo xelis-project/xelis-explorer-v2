@@ -101,6 +101,10 @@ export class TransactionsPage extends Page {
                 });
             }
         });
+
+        if (this.table.body_element.children.length === 0) {
+            this.table.set_empty("No recent transactions");
+        }
     }
 
     unload() {
