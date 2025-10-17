@@ -1,13 +1,11 @@
-import { Block, BlockType, GetInfoResult, Transaction, TransactionData, TransactionResponse } from "@xelis/sdk/daemon/types";
+import { Block, Transaction, TransactionData, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { format_address } from "../../../utils/format_address";
 //@ts-ignore
 import hashicon from "hashicon";
 import prettyBytes from "pretty-bytes";
 import { reduce_text } from "../../../utils/reduce_text";
 import { format_xel } from "../../../utils/format_xel";
-import { format_hashrate } from "../../../utils/format_hashrate";
 import prettyMilliseconds from "pretty-ms";
-import { BlockTypeBox } from "../../../components/block_type_box/block_type_box";
 import { Row } from "../../../components/table/row";
 
 import './tx_row.css';
