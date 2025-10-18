@@ -81,25 +81,21 @@ export class AccountsPage extends Page {
 
     async load_account_table(table: Table, addr_list: string[]) {
         let accounts = [] as AccountRowData[];
+        const addresses = get_addresses();
+
         for (let i = 0; i < addr_list.length; i += 6) {
-
             const addr_batch = addr_list.slice(i, i + 6);
-            const data = await fetch_accounts(addr_batch);
-            data.forEach((item, i) => {
-                const addr = addr_batch[i];
-                const addresses = get_addresses();
+            const accounts_info = await fetch_accounts(addr_batch);
+            accounts_info.forEach((account_info, a) => {
+                const addr = addr_batch[a];
                 const addr_info = addresses[addr];
-
-                const registration_topo = item[0];
-                const balance = item[1];
-                const nonce = item[2];
 
                 accounts.push({
                     addr: addr,
-                    in_topo: balance.topoheight,
-                    out_topo: nonce.topoheight,
+                    in_topo: account_info.balance.topoheight,
+                    out_topo: account_info.nonce.topoheight,
                     name: addr_info.name,
-                    registration_topo,
+                    registration_topo: account_info.registration_topo,
                     link: addr_info.link
                 });
             });
