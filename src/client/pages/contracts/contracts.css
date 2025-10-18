@@ -1,0 +1,18 @@
+.xe-contracts {
+
+}
+
+.xe-contracts-table {
+    animation: xe-contracts-table-appear-animation .4s;
+    overflow-x: auto;
+}
+
+@keyframes xe-contracts-table-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
