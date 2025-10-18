@@ -102,7 +102,7 @@ export class AccountHistoryListItem {
 
         if (history.mining) {
             const xel_amount = format_xel(history.mining.reward, true);
-            this.type_element.innerHTML = `MINNING (${xel_amount})`;
+            this.type_element.innerHTML = `MINING (${xel_amount})`;
         }
 
         if (history.burn) {
