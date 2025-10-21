@@ -125,8 +125,8 @@ export class PeersPage extends Page {
         this.peers_info.set(peers, info.height);
         this.peers_list.set(peers_locations);
 
-        this.peers_chart.nodes_by_version.build_chart(peers);
-        this.peers_chart.nodes_by_height.build_chart(peers);
-        this.peers_chart.nodes_by_country.build_chart(peers_locations);
+        this.peers_chart.nodes_by_version.set(peers);
+        this.peers_chart.nodes_by_height.set(peers);
+        this.peers_chart.nodes_by_country.set(peers_locations);
     }
 }

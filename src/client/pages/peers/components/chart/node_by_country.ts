@@ -4,21 +4,42 @@ import { PeerLocation } from '../../../../components/peers_map/peers_map';
 
 export class PeersChartNodesByCountry {
     box_chart: BoxChart;
+    chart?: {
+        node: d3.Selection<SVGGElement, unknown, null, undefined>;
+        width: number;
+        height: number;
+    };
+    peers_locations: PeerLocation[];
 
     constructor() {
+        this.peers_locations = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `NODES BY COUNTRY`;
     }
 
-    build_chart(peers_locations: PeerLocation[]) {
+    create_chart() {
         const margin = { top: 20, right: 0, bottom: 20, left: 0 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 150 - margin.top - margin.bottom;
 
-        const peers_country = {} as Record<string, number>;
+        this.box_chart.element_content.replaceChildren();
+        const node = d3
+            .select(this.box_chart.element_content)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        peers_locations.forEach((peer_location) => {
+        this.chart = { node, width, height };
+    }
+
+    update_chart() {
+        if (!this.chart) return;
+
+        const peers_country = {} as Record<string, number>;
+        this.peers_locations.forEach((peer_location) => {
             const { geo_location } = peer_location;
             let country = geo_location.country || `Unknown`;
 
@@ -35,31 +56,23 @@ export class PeersChartNodesByCountry {
 
         data = data.sort((a, b) => b.value - a.value).slice(0, 10);
 
-        this.box_chart.element_content.replaceChildren();
-        const svg = d3
-            .select(this.box_chart.element_content)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
         const x_scale = d3
             .scaleBand<string>()
             .domain(data.map((d) => d.label))
-            .range([0, width])
+            .range([0, this.chart.width])
             .padding(0.2);
 
         const y_scale = d3
             .scaleLinear()
             .domain([0, d3.max(data, (d) => d.value)!])
-            .range([height, 0]);
+            .range([this.chart.height, 0]);
 
         const color = d3.scaleOrdinal<string>()
             .domain(data.map(d => d.label))
             .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
-        svg
+        const height = this.chart.height;
+        this.chart.node
             .selectAll()
             .data(data)
             .join("rect")
@@ -70,11 +83,11 @@ export class PeersChartNodesByCountry {
             .attr("height", (d) => height - y_scale(d.value))
             .attr("fill", d => color(d.label));
 
-        svg.append("g")
+        this.chart.node.append("g")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x_scale));
 
-        svg
+        this.chart.node
             .selectAll()
             .data(data)
             .enter()
@@ -85,5 +98,11 @@ export class PeersChartNodesByCountry {
             .style("text-anchor", "middle")
             .style('font-weight', `bold`)
             .style('fill', 'white');
+    }
+
+    set(peers_locations: PeerLocation[]) {
+        this.peers_locations = peers_locations;
+        if (!this.chart) this.create_chart();
+        this.update_chart();
     }
 }

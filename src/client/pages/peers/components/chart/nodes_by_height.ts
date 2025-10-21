@@ -9,16 +9,40 @@ interface DataItem {
 
 export class PeersChartNodesByHeight {
     box_chart: BoxChart;
+    chart?: {
+        node: d3.Selection<SVGGElement, unknown, null, undefined>;
+        width: number;
+        height: number;
+    };
+    peers: Peer[];
 
     constructor() {
+        this.peers = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `NODES BY HEIGHT`;
     }
 
-    build_chart(peers: Peer[]) {
+    create_chart() {
+        const width = 150;
+        const height = 150;
+
+        this.box_chart.element_content.replaceChildren();
+        const node = d3
+            .select(this.box_chart.element_content)
+            .append('svg')
+            .attr('width', `100%`)
+            .attr('height', height)
+            .append('g')
+            .attr('transform', `translate(${width / 2}, ${height / 2})`);
+        this.chart = { node, width, height };
+    }
+
+    update_chart() {
+        if (!this.chart) return;
+
         const peers_height = {} as Record<string, number>;
 
-        peers.forEach((peer, i) => {
+        this.peers.forEach((peer, i) => {
             if (peers_height[peer.height]) {
                 peers_height[peer.height]++;
             } else {
@@ -32,20 +56,8 @@ export class PeersChartNodesByHeight {
 
         data = data.sort((a, b) => b.value - a.value).slice(0, 5);
 
-        const width = 150;
-        const height = 150;
-        const radius = Math.min(width, height) / 2;
-
+        const radius = Math.min(this.chart.width, this.chart.height) / 2;
         const donutInnerOffset = 25;
-
-        this.box_chart.element_content.replaceChildren();
-        const svg = d3
-            .select(this.box_chart.element_content)
-            .append('svg')
-            .attr('width', `100%`)
-            .attr('height', height)
-            .append('g')
-            .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
         const pieGenerator = d3.pie<DataItem>()
             .value(d => d.value)
@@ -61,7 +73,7 @@ export class PeersChartNodesByHeight {
             .domain(data.map(d => d.label))
             .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
-        const arcs = svg.selectAll('path')
+        const arcs = this.chart.node.selectAll('path')
             .data(arcData)
             .enter()
             .append('path')
@@ -71,7 +83,7 @@ export class PeersChartNodesByHeight {
         const legend_radius = 8;
         const legend_spacing = 15;
 
-        const legend = svg
+        const legend = this.chart.node
             .selectAll('.legend')
             .data(arcData)
             .enter()
@@ -96,5 +108,11 @@ export class PeersChartNodesByHeight {
             .attr('y', legend_radius / 2)
             .style(`fill`, d => color(d.data.label))
             .text((d) => `${d.data.label} (${d.data.value})`);
+    }
+
+    set(peers: Peer[]) {
+        this.peers = peers;
+        if (!this.chart) this.create_chart();
+        this.update_chart();
     }
 }
