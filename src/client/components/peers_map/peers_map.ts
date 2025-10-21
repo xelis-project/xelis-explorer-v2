@@ -95,7 +95,9 @@ export class PeersMap {
             }
         });
 
-        Object.keys(group_markers).forEach(async (key) => {
+        const group_marker_keys = Object.keys(group_markers);
+        for (let i = 0; i < group_marker_keys.length; i++) {
+            const key = group_marker_keys[i];
             const peers_locations = group_markers[key];
             const first_peer_location = peers_locations[0];
             const { geo_location } = first_peer_location;
@@ -109,7 +111,7 @@ export class PeersMap {
                 peer_marker.bindPopup(new_popup, { closeButton: false });
                 this.peer_markers[marker_key] = { marker: peer_marker, geo_location, peers };
             }
-        });
+        }
     }
 
     build_marker_popup(geo_location: GeoLocationData, peers: Peer[]) {
