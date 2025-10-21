@@ -1,5 +1,5 @@
 import { XelisNode } from "../../app/xelis_node";
-import { RPCEvent as DaemonRPCEvent, Peer } from "@xelis/sdk/daemon/types";
+import { RPCEvent as DaemonRPCEvent, P2PStatusResult, Peer } from "@xelis/sdk/daemon/types";
 import { Master } from "../../components/master/master";
 import { PeersMap } from "./components/map/map";
 import { Page } from "../page";
@@ -26,9 +26,11 @@ export class PeersPage extends Page {
     peers_info: PeersInfo;
     peers_search: PeersSearch;
     peers_list: PeersList;
+    peer_count: number;
 
     constructor() {
         super();
+        this.peer_count = 0;
         this.master = new Master();
         this.master.content.classList.add(`xe-peers`);
         this.element.appendChild(this.master.element);
@@ -70,14 +72,16 @@ export class PeersPage extends Page {
             const peer_location = { peer: new_peer, geo_location } as PeerLocation;
             this.peers_map.map.add_peer_marker(peer_location);
             this.peers_list.prepend_peer(peer_location);
+            this.peers_map.map.set_peer_count(++this.peer_count);
         }
     }
 
     on_peer_disconnected = (peer_id?: string, err?: Error) => {
-        console.log("peer_disconnected")
+        console.log("peer_disconnected");
         if (peer_id) {
             this.peers_map.map.remove_peer_marker(peer_id);
             this.peers_list.remove_peer(peer_id);
+            this.peers_map.map.set_peer_count(--this.peer_count);
         }
     }
 
@@ -111,6 +115,7 @@ export class PeersPage extends Page {
         const peers_result = await node.rpc.getPeers();
         const { peers } = peers_result;
 
+        this.peer_count = peers.length;
         const peers_locations = await this.peers_map.map.fetch_peers_locations(peers);
         this.peers_map.map.set(peers_locations);
         this.peers_map.map.overlay_loading.set_loading(false);
