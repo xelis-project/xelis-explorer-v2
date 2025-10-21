@@ -76,11 +76,11 @@ export class PeersPage extends Page {
         }
     }
 
-    on_peer_disconnected = (peer_id?: string, err?: Error) => {
+    on_peer_disconnected = (peer?: Peer, err?: Error) => {
         console.log("peer_disconnected");
-        if (peer_id) {
-            this.peers_map.map.remove_peer_marker(peer_id);
-            this.peers_list.remove_peer(peer_id);
+        if (peer) {
+            this.peers_map.map.remove_peer_marker(peer.id);
+            this.peers_list.remove_peer(peer.id);
             this.peers_map.map.set_peer_count(--this.peer_count);
         }
     }

@@ -217,7 +217,7 @@ export class DashboardPage extends Page {
         }
     }
 
-    on_peer_disconnected = (peer_id?: string, err?: Error) => {
+    on_peer_disconnected = (peer?: Peer, err?: Error) => {
         console.log("peer_disconnected");
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
@@ -225,8 +225,8 @@ export class DashboardPage extends Page {
             this.dashboard_top_stats.set_peer_count(p2p_status.peer_count);
         }
 
-        if (peer_id) {
-            this.dashboard_peers.peers_map.remove_peer_marker(peer_id);
+        if (peer) {
+            this.dashboard_peers.peers_map.remove_peer_marker(peer.id);
         }
     }
 
