@@ -204,7 +204,7 @@ export class DashboardPage extends Page {
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
             p2p_status.peer_count += 1;
-            this.dashboard_top_stats.set_peers(p2p_status.peer_count);
+            this.dashboard_top_stats.set_peer_count(p2p_status.peer_count);
         }
 
         if (new_peer) {
@@ -222,7 +222,7 @@ export class DashboardPage extends Page {
         const p2p_status = this.page_data.p2p_status;
         if (p2p_status) {
             p2p_status.peer_count -= 1;
-            this.dashboard_top_stats.set_peers(p2p_status.peer_count);
+            this.dashboard_top_stats.set_peer_count(p2p_status.peer_count);
         }
 
         if (peer_id) {

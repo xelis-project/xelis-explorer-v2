@@ -158,7 +158,7 @@ export class DashboardTopStats {
         this.item_mempool.element_value.innerHTML = `${tx_count.toLocaleString()}`;
     }
 
-    set_peers(peer_count: number) {
+    set_peer_count(peer_count: number) {
         this.item_peers.element_value.innerHTML = `${peer_count.toLocaleString()}`;
     }
 
@@ -202,6 +202,6 @@ export class DashboardTopStats {
         this.set_last_update();
         this.set_info(data.info);
         this.set_db_size(data.size.size_bytes);
-        this.set_peers(data.p2p_status.peer_count);
+        this.set_peer_count(data.p2p_status.peer_count);
     }
 }
