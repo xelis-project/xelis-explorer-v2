@@ -44,7 +44,7 @@ export class ContractsPage extends Page {
         this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
 
-        const titles = ["HASH", "NAME", "BALANCE", "REGISTERED TOPO"];
+        const titles = ["HASH", "NAME", "BALANCE", "TOPOHEIGHT (BALANCE)", "REGISTERED"];
         this.table.set_head_row(titles);
     }
 
@@ -67,11 +67,7 @@ export class ContractsPage extends Page {
                 const contract = contracts[hash];
 
                 const contract_row = new ContractRow();
-                contract_row.set({
-                    name: contract.name,
-                    balance: contract_info.balance,
-                    transaction: contract_info.transaction
-                });
+                contract_row.set(contract.name, contract_info);
 
                 this.table.prepend_row(contract_row.element);
             });
