@@ -54,12 +54,14 @@ export class ContractsPage extends Page {
 
         const contracts = get_contracts();
 
-        this.table.set_loading(100);
         this.table.body_element.replaceChildren();
 
         const contracts_list = Object.keys(contracts);
-        for (let i = 0; i < contracts_list.length; i += 6) {
-            const contract_batch = contracts_list.slice(i, i + 6);
+        this.table.set_loading(contracts_list.length);
+
+        const contract_rows = [] as ContractRow[];
+        for (let i = 0; i < contracts_list.length; i += 10) {
+            const contract_batch = contracts_list.slice(i, i + 10);
             const contracts_info = await fetch_contracts(contract_batch);
 
             contracts_info.forEach((contract_info, a) => {
@@ -68,10 +70,16 @@ export class ContractsPage extends Page {
 
                 const contract_row = new ContractRow();
                 contract_row.set(contract.name, contract_info);
+                contract_rows.push(contract_row);
 
-                this.table.prepend_row(contract_row.element);
+
             });
         }
+
+        this.table.body_element.replaceChildren();
+        contract_rows.forEach((row) => {
+            this.table.prepend_row(row.element);
+        });
 
         if (this.table.body_element.children.length === 0) {
             this.table.set_empty("No contracts");
