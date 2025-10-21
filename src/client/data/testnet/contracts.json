@@ -1,6 +1,14 @@
 {
-    "11eeb595cfc3e7079dce73448e00352c84e84172b5bf1f266ca45e9dd10f6ce5": {
-        "name": "???",
+    "ec38db5a95a8af350a79164cebdfcc41fa2369ab83f3f063699b1c61fbb80d96": {
+        "name": "FORGE DAO",
+        "description": ""
+    },
+    "70994366655826ebaec367b502dc75675aefd258445abde0f4d7c252f88a1c7c": {
+        "name": "FORGE SWAP",
+        "description": ""
+    },
+    "dc6226db1f34e19e5d57bad60e922f07a507153f3efa02b052c79a8f40a706db": {
+        "name": "FORGE LAUNCHPAD",
         "description": ""
     }
 }
