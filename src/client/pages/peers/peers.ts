@@ -117,7 +117,7 @@ export class PeersPage extends Page {
 
         this.peer_count = peers.length;
         const peers_locations = await this.peers_map.map.fetch_peers_locations(peers);
-        this.peers_map.map.set(peers_locations);
+        await this.peers_map.map.set(peers_locations);
         this.peers_map.map.overlay_loading.set_loading(false);
         Box.boxes_loading(this.peers_chart.container.element, false);
         this.peers_info.set_loading(false);
