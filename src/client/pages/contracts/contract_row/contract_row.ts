@@ -16,6 +16,7 @@ export class ContractRow extends Row {
         console.log(transaction)
         this.set_hash(transaction.hash);
         this.set_name(name);
+        //@ts-ignore
         this.set_xel_balance(contract_info.balance ? contract_info.balance.data : 0);
         this.set_xel_balance_topo(contract_info.balance);
         this.set_registered(contract_info.block.timestamp);
