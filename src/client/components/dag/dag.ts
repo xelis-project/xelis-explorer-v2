@@ -161,7 +161,7 @@ export class DAG {
 
             const new_height = new_block.height;
             this.height_control.set_height(new_height);
-            this.height_control.set_max_height(new_height)
+            this.height_control.set_max_height(new_height);
             this.move_to_block(this.lock_block_height ? this.lock_block_height : new_block.height, true);
 
             new_block.tips.forEach((hash) => {
@@ -339,8 +339,8 @@ export class DAG {
         const node = XelisNode.instance();
 
         const max_height = await node.rpc.getHeight();
-        this.height_control.set_max_height(max_height);
         this.height_control.set_height(height);
+        this.height_control.set_max_height(max_height);
 
         const start_height = Math.max(0, height - 25);
         const end_height = Math.min(max_height, height + 25);
