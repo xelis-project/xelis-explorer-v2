@@ -50,11 +50,6 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
 
         this.height_slider_element = document.createElement(`div`);
 
-        const format_from = (value: string) => {
-            const value_str = value.toString().replaceAll(`,`, ``);
-            return parseInt(value_str);
-        }
-
         const format_to = (value: number) => {
             return value.toLocaleString(undefined, { maximumFractionDigits: 0 });
         }
@@ -73,17 +68,17 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
                 format: {
                     to: format_to
                 }
-            },
-            format: {
-                from: format_from,
-                to: format_to
             }
         });
 
-        this.height_slider.on(`set`, (value) => {
-            const value_str = value.toString().replaceAll(`,`, ``);
-            this.height_input_element.value = `${value_str}`;
-            this.emit(`new_height`, parseInt(value_str));
+        this.height_slider.on(`set`, (values) => {
+            if (values.length === 1 && typeof values[0] === `string`) {
+                const int_value = parseInt(values[0]);
+                this.height_input_element.value = `${int_value}`;
+                this.emit(`new_height`, int_value);
+            } else {
+                throw "height slider invalid set format";
+            }
         });
 
         this.element.appendChild(this.height_slider_element);
