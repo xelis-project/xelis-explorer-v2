@@ -99,17 +99,17 @@ export class AccountPage extends Page {
             res.forEach((result, i) => {
                 if (result instanceof Error) {
                     throw result;
-                } else {
-                    switch (i) {
-                        case 0: // getBlockAtTopoheight
-                            const last_balance_block = result as Block;
-                            server_data.last_activity_timestamp = last_balance_block.timestamp;
-                            break;
-                        case 1: // getBlockAtTopoheight
-                            const registration_block = result as Block;
-                            server_data.registration_timestamp = registration_block.timestamp;
-                            break;
-                    }
+                }
+
+                switch (i) {
+                    case 0: // getBlockAtTopoheight
+                        const last_balance_block = result as Block;
+                        server_data.last_activity_timestamp = last_balance_block.timestamp;
+                        break;
+                    case 1: // getBlockAtTopoheight
+                        const registration_block = result as Block;
+                        server_data.registration_timestamp = registration_block.timestamp;
+                        break;
                 }
             });
         }
@@ -207,11 +207,6 @@ export class AccountPage extends Page {
         const { addr } = this.page_data;
         if (!addr) return;
 
-        this.incoming_history_list.list_element.replaceChildren();
-        this.outgoing_history_list.list_element.replaceChildren();
-        Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
-        Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
-
         const xelis_node = XelisNode.instance();
 
         const incoming = await xelis_node.rpc.getAccountHistory({
@@ -276,7 +271,10 @@ export class AccountPage extends Page {
 
             this.account_info.set(addr, server_data);
             this.account_known_addr.set(addr);
-            this.load_history();
+
+            Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
+            Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
+            await this.load_history();
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
