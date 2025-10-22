@@ -14,7 +14,7 @@ export class DashboardHashRate {
     box_chart: BoxChart;
 
     blocks: Block[];
-    info!: GetInfoResult;
+    info?: GetInfoResult;
     chart?: {
         node: d3.Selection<SVGGElement, unknown, null, undefined>;
         width: number;
@@ -59,7 +59,7 @@ export class DashboardHashRate {
     }
 
     update_chart() {
-        if (!this.chart) return;
+        if (!this.chart || !this.info) return;
 
         const data = this.blocks
             .filter((item, i) => this.blocks.map(x => x.height).indexOf(item.height) === i) // no duplicate height - remove side block
@@ -113,18 +113,6 @@ export class DashboardHashRate {
 
         path.exit().remove();
 
-        /* 
-        this.chart.node
-            .selectAll(`circle`)
-            .data(data)
-            .join(`circle`)
-            .attr('cx', d => x_scale(d.x))
-            .attr('cy', d => y_scale(d.y))
-            .attr('r', 5)
-            .attr('stroke', 'none')
-            .attr('fill', d => color(d.y));
-        */
-
         // update tooltip
         const chart_rect_width = this.chart.rect.width;
         this.chart.node
@@ -138,9 +126,10 @@ export class DashboardHashRate {
             .append(`g`)
             .attr(`class`, `tooltip`);
 
+        const info = this.info;
         tooltip
             .append(`text`)
-            .text(d => format_hashrate(d.y, this.info.block_time_target))
+            .text(d => format_hashrate(d.y, info.block_time_target))
             .each(function (d) {
                 const self = this as SVGTextElement;
 
@@ -186,11 +175,20 @@ export class DashboardHashRate {
         this.blocks = blocks;
 
         this.set_hashrate(info);
-
-        if (!this.chart) {
-            this.create_chart();
-        }
-
         this.update_chart();
+    }
+
+    on_resize() {
+        this.create_chart();
+        this.update_chart();
+    }
+
+    load() {
+        window.addEventListener(`resize`, () => this.on_resize());
+        this.on_resize();
+    }
+
+    unload() {
+        window.removeEventListener(`resize`, () => this.on_resize());
     }
 }

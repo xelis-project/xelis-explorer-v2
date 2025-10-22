@@ -20,6 +20,11 @@ export class PeersChartNodesByVersion {
         this.peers = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `NODES BY VERSION`;
+
+        window.addEventListener(`resize`, () => {
+            this.create_chart();
+            this.update_chart();
+        });
     }
 
     create_chart() {
@@ -125,7 +130,20 @@ export class PeersChartNodesByVersion {
 
     set(peers: Peer[]) {
         this.peers = peers;
-        if (!this.chart) this.create_chart();
         this.update_chart();
+    }
+
+    on_resize() {
+        this.create_chart();
+        this.update_chart();
+    }
+
+    load() {
+        window.addEventListener(`resize`, () => this.on_resize());
+        this.on_resize();
+    }
+
+    unload() {
+        window.removeEventListener(`resize`, () => this.on_resize());
     }
 }

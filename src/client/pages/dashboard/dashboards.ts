@@ -317,6 +317,13 @@ export class DashboardPage extends Page {
         super.load(parent);
         this.set_window_title(DashboardPage.title);
 
+        // the chart load ordering is important
+        // loading pool chart first define the width for the others
+        this.dashboard_chart_section_2.pools.load();
+        this.dashboard_chart_section_2.block_time.load();
+        this.dashboard_chart_section_2.hashrate.load();
+        this.dashboard_chart_section_1.blocks_txs.load();
+
         this.listen_node_events();
 
         Box.boxes_loading(this.dashboard_top_stats.container.element, true);
@@ -342,6 +349,12 @@ export class DashboardPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
+
+        this.dashboard_chart_section_1.blocks_txs.unload();
+        this.dashboard_chart_section_2.block_time.unload();
+        this.dashboard_chart_section_2.hashrate.unload();
+        this.dashboard_chart_section_2.pools.unload();
+
         this.dashboard_dag.dag.clear_node_events();
     }
 }

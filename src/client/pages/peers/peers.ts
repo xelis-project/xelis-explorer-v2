@@ -101,6 +101,10 @@ export class PeersPage extends Page {
         super.load(parent);
         this.set_window_title(PeersPage.title);
 
+        this.peers_chart.nodes_by_height.load();
+        this.peers_chart.nodes_by_country.load();
+        this.peers_chart.nodes_by_version.load();
+
         const node = XelisNode.instance();
 
         this.listen_node_events();
@@ -128,5 +132,12 @@ export class PeersPage extends Page {
         this.peers_chart.nodes_by_version.set(peers);
         this.peers_chart.nodes_by_height.set(peers);
         this.peers_chart.nodes_by_country.set(peers_locations);
+    }
+
+    unload() {
+        super.unload();
+        this.peers_chart.nodes_by_height.unload();
+        this.peers_chart.nodes_by_country.unload();
+        this.peers_chart.nodes_by_version.unload();
     }
 }

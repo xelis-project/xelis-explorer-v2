@@ -16,14 +16,9 @@ export class DashboardBlocksTxs {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `LAST 100 BLOCKS`;
         this.blocks = [];
-
-        window.addEventListener(`resize`, () => {
-            this.create_chart();
-            this.update_chart();
-        });
     }
 
-    set_value(tx_count:number, tps: number) {
+    set_value(tx_count: number, tps: number) {
         this.box_chart.element_value.innerHTML = `${tx_count} TXS | ${tps.toLocaleString(undefined, { maximumFractionDigits: 2 })} TPS`;
     }
 
@@ -104,8 +99,20 @@ export class DashboardBlocksTxs {
         const tps = total_txs * 1000 / elapsed;
 
         this.set_value(total_txs, tps);
-
-        if (!this.chart) this.create_chart();
         this.update_chart();
+    }
+
+    on_resize() {
+        this.create_chart();
+        this.update_chart();
+    }
+
+    load() {
+        window.addEventListener(`resize`, () => this.on_resize());
+        this.on_resize();
+    }
+
+    unload() {
+        window.removeEventListener(`resize`, () => this.on_resize());
     }
 }

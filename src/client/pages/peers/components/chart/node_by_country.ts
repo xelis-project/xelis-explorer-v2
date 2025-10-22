@@ -15,6 +15,11 @@ export class PeersChartNodesByCountry {
         this.peers_locations = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `NODES BY COUNTRY`;
+
+        window.addEventListener(`resize`, () => {
+            this.create_chart();
+            this.update_chart();
+        });
     }
 
     create_chart() {
@@ -102,7 +107,20 @@ export class PeersChartNodesByCountry {
 
     set(peers_locations: PeerLocation[]) {
         this.peers_locations = peers_locations;
-        if (!this.chart) this.create_chart();
         this.update_chart();
+    }
+
+    on_resize() {
+        this.create_chart();
+        this.update_chart();
+    }
+
+    load() {
+        window.addEventListener(`resize`, () => this.on_resize());
+        this.on_resize();
+    }
+
+    unload() {
+        window.removeEventListener(`resize`, () => this.on_resize());
     }
 }

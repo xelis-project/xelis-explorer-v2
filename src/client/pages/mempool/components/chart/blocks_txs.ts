@@ -15,6 +15,11 @@ export class MempoolChartBlocksTxs {
         this.blocks = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `PAST BLOCKS`;
+
+        window.addEventListener(`resize`, () => {
+            this.create_chart();
+            this.update_chart();
+        });
     }
 
     set_value(tx_count: number, tps: number) {
@@ -128,8 +133,21 @@ export class MempoolChartBlocksTxs {
         const tps = total_txs * 1000 / elapsed;
 
         this.set_value(total_txs, tps);
-
-        if (!this.chart) this.create_chart();
         this.update_chart();
+    }
+
+        
+    on_resize() {
+        this.create_chart();
+        this.update_chart();
+    }
+
+    load() {
+        window.addEventListener(`resize`, () => this.on_resize());
+        this.on_resize();
+    }
+
+    unload() {
+        window.removeEventListener(`resize`, () => this.on_resize());
     }
 }
