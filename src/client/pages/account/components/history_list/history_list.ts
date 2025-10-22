@@ -20,7 +20,7 @@ export class AccountHistoryList {
         this.empty_element = document.createElement(`div`);
         this.empty_element.classList.add(`xe-mempool-txs-list-empty`);
         this.empty_element.innerHTML = `${icons.empty_box()}<div>No activity.</div>`;
-  
+
         this.list_element = document.createElement(`div`);
         this.container.element.appendChild(this.list_element);
     }
@@ -30,8 +30,7 @@ export class AccountHistoryList {
         if (history_list.length > 0) {
             history_list.forEach(history_item => this.prepend_history(history_item));
         } else {
-      this.container.element.appendChild(this.empty_element);
-
+            this.container.element.appendChild(this.empty_element);
         }
     }
 
