@@ -15,20 +15,16 @@ export class PeersChartNodesByCountry {
         this.peers_locations = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `NODES BY COUNTRY`;
-
-        window.addEventListener(`resize`, () => {
-            this.create_chart();
-            this.update_chart();
-        });
     }
 
     create_chart() {
+        this.box_chart.element_content.replaceChildren();
+
         const margin = { top: 20, right: 0, bottom: 20, left: 0 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 150 - margin.top - margin.bottom;
 
-        this.box_chart.element_content.replaceChildren();
         const node = d3
             .select(this.box_chart.element_content)
             .append("svg")
