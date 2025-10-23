@@ -1,0 +1,52 @@
+.xe-select {
+    position: relative;
+    user-select: none;
+    display: inline-block;
+}
+
+.xe-select-list {
+    position: absolute;
+    visibility: hidden;
+    z-index: 1;
+}
+
+.xe-select-list.open {
+    visibility: visible;
+}
+
+/* Style 1 */
+.xe-select {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-select button {
+    background: rgba(15, 239, 196, 0.08);
+    border: none;
+    color: #02FFCF;
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: .5rem;
+}
+
+.xe-select .xe-select-list {
+    color: #02FFCF;
+    padding: .5rem 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #032a22;
+    margin-top: .5rem;
+    border-radius: .5rem;
+}
+
+.xe-select .xe-select-list>div {
+    cursor: pointer;
+    padding: .5rem 1rem;
+}
+
+.xe-select .xe-select-list>div:hover {
+    background-color: #02FFCF;
+    color: black;
+}
