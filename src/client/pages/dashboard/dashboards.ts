@@ -307,12 +307,6 @@ export class DashboardPage extends Page {
         this.dashboard_peers.peers_map.overlay_loading.set_loading(false);
     }
 
-    async load_dag() {
-        this.dashboard_dag.dag.overlay_loading.set_loading(true);
-        await this.dashboard_dag.dag.set_live(true);
-        this.dashboard_dag.dag.overlay_loading.set_loading(false);
-    }
-
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(DashboardPage.title);
@@ -332,7 +326,7 @@ export class DashboardPage extends Page {
         Box.boxes_loading(this.dashboard_chart_section_1.container.element, true);
         Box.boxes_loading(this.dashboard_chart_section_2.container.element, true);
 
-        this.load_dag();
+        this.dashboard_dag.load();
         this.load_peers();
 
         await this.load_top_stats()
@@ -355,6 +349,6 @@ export class DashboardPage extends Page {
         this.dashboard_chart_section_2.hashrate.unload();
         this.dashboard_chart_section_2.pools.unload();
 
-        this.dashboard_dag.dag.clear_node_events();
+        this.dashboard_dag.unload();
     }
 }

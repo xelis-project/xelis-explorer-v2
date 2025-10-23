@@ -20,26 +20,22 @@ export class PeersChartNodesByVersion {
         this.peers = [];
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `NODES BY VERSION`;
-
-        window.addEventListener(`resize`, () => {
-            this.create_chart();
-            this.update_chart();
-        });
     }
 
     create_chart() {
+        this.box_chart.element_content.replaceChildren();
+
         const width = 150;
         const height = 150;
 
-        this.box_chart.element_content.replaceChildren();
         const node = d3
             .select(this.box_chart.element_content)
             .append('svg')
             .attr('width', `100%`)
             .attr('height', height)
             .append('g')
-
             .attr('transform', `translate(${width / 2}, ${height / 2})`);
+
         this.chart = { node, width, height };
     }
 

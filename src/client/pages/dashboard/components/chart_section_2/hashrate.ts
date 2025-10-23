@@ -26,11 +26,6 @@ export class DashboardHashRate {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `HASHRATE`;
         this.blocks = [];
-
-        window.addEventListener(`resize`, () => {
-            this.create_chart();
-            this.update_chart();
-        });
     }
 
     set_hashrate(info: GetInfoResult) {
@@ -49,7 +44,7 @@ export class DashboardHashRate {
         const node = d3
             .select(this.box_chart.element_content)
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", `100%`)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",

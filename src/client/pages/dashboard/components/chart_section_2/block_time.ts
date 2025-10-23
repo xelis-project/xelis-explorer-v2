@@ -17,11 +17,6 @@ export class DashboardBlockTime {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `BLOCK TIME`;
         this.blocks = [];
-
-        window.addEventListener(`resize`, () => {
-            this.create_chart();
-            this.update_chart();
-        });
     }
 
     set_avg_time(avg_time: number) {
@@ -29,12 +24,13 @@ export class DashboardBlockTime {
     }
 
     create_chart() {
+        this.box_chart.element_content.replaceChildren();
+
         const margin = { top: 10, right: 0, bottom: 10, left: 30 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 150 - margin.top - margin.bottom;
 
-        this.box_chart.element_content.replaceChildren();
         const node = d3
             .select(this.box_chart.element_content)
             .append("svg")
@@ -114,7 +110,7 @@ export class DashboardBlockTime {
         this.set_avg_time(info.average_block_time);
         this.update_chart();
     }
-    
+
     on_resize() {
         this.create_chart();
         this.update_chart();

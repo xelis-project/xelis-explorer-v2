@@ -22,11 +22,6 @@ export class DashboardPools {
         this.box_chart = new BoxChart();
         this.box_chart.element_title.innerHTML = `POOLS & MINERS`;
         this.miners = {};
-
-        window.addEventListener(`resize`, () => {
-            this.create_chart();
-            this.update_chart();
-        });
     }
 
     set_miner_count(count: number) {
@@ -34,14 +29,16 @@ export class DashboardPools {
     }
 
     create_chart() {
-        const width = 400;
+        this.box_chart.element_content.replaceChildren();
+
+        const rect = this.box_chart.element_content.getBoundingClientRect();
+        const width = 400 //rect.width;
         const height = 160;
 
-        this.box_chart.element_content.replaceChildren();
         const node = d3
             .select(this.box_chart.element_content)
             .append('svg')
-            .attr('width', width)
+            .attr('width', `100%`)
             .attr('height', height)
             .append('g')
             .attr('transform', `translate(100, ${height / 2})`);

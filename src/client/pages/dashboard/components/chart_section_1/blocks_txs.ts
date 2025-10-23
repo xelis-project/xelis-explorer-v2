@@ -23,16 +23,17 @@ export class DashboardBlocksTxs {
     }
 
     create_chart() {
+        this.box_chart.element_content.replaceChildren();
+
         const margin = { top: 10, right: 10, bottom: 10, left: 10 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
         const height = 75 - margin.top - margin.bottom;
 
-        this.box_chart.element_content.replaceChildren();
         const node = d3
             .select(this.box_chart.element_content)
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", `100%`)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);

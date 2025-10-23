@@ -18,6 +18,27 @@ export class DashboardDAG {
         this.dag = new DAG();
         this.dag.element.classList.add(`xe-dashboard-dag-dag`);
         this.container.element.appendChild(this.dag.element);
-        setTimeout(() => this.dag.update_size());
+    }
+
+    on_resize() {
+        // this code below is intended to properly resize the dag
+        this.container.element.removeChild(this.dag.element);
+        this.dag.update_size();
+        this.container.element.appendChild(this.dag.element);
+        this.dag.update_size();
+    }
+
+    async load() {
+        window.addEventListener(`resize`, () => this.on_resize());
+        this.on_resize();
+
+        this.dag.overlay_loading.set_loading(true);
+        await this.dag.set_live(true);
+        this.dag.overlay_loading.set_loading(false);
+    }
+
+    unload() {
+        window.removeEventListener(`resize`, () => this.on_resize());
+        this.dag.clear_node_events();
     }
 }

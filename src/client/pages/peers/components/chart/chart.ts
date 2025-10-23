@@ -1,5 +1,5 @@
 import { Container } from "../../../../components/container/container";
-import { PeersChartNodesByCountry } from "./node_by_country";
+import { PeersChartNodesByCountry } from "./nodes_by_country";
 import { PeersChartNodesByHeight } from "./nodes_by_height";
 import { PeersChartNodesByVersion } from "./nodes_by_version";
 
