@@ -28,10 +28,19 @@ export class Header {
         this.element = document.createElement(`div`);
         this.element.classList.add(`xe-header`);
 
+        const left_element = document.createElement(`div`);
+        left_element.classList.add(`xe-header-left`);
+        this.element.appendChild(left_element);
+
         const logo = document.createElement(`div`);
         logo.classList.add(`xe-header-logo`);
         logo.innerHTML = `${svg_xelis_logo()} XELIS EXPLORER`;
-        this.element.appendChild(logo);
+        left_element.appendChild(logo);
+
+        const text = document.createElement(`div`);
+        text.classList.add(`xe-header-text`);
+        text.innerHTML = `Track and verify transactions on the XELIS network.`;
+        left_element.appendChild(text);
 
         const mobile_menu_button = document.createElement(`button`);
         mobile_menu_button.classList.add(`xe-header-mobile-menu-button`);

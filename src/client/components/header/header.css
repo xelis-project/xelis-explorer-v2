@@ -139,6 +139,23 @@
     }
 }
 
+.xe-header-left {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-header-text {
+    max-width: 15rem;
+    color: #afafaf;
+}
+
+@media screen and (max-width: 900px) {
+    .xe-header-text {
+        display: none;
+    }
+}
+
 .xe-header-logo {
     display: flex;
     gap: 1rem;
