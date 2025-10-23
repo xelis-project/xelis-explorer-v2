@@ -17,7 +17,8 @@ export const menu_links = {
     "/contracts": { text: "CONTRACTS", icon: icons.contract() },
     "/mempool": { text: "MEMPOOL", icon: icons.compute() },
     "/dag": { text: "DAG", icon: icons.block_graph() },
-    "/peers": { text: "PEERS", icon: icons.network() }
+    "/peers": { text: "PEERS", icon: icons.network() },
+    "/settings": { text: "SETTINGS", icon: icons.cog() },
 } as Record<string, LinkDef>;
 
 export class Header {
@@ -77,13 +78,6 @@ export class Header {
             link.innerHTML = `${link_def.icon}${text}`;
             this.links_element.appendChild(link);
         });
-
-        const settings_btn = document.createElement(`button`);
-        settings_btn.innerHTML = `${icons.cog()} SETTINGS`;
-        settings_btn.addEventListener(`click`, () => {
-
-        });
-        this.links_element.appendChild(settings_btn);
 
         const app = App.instance();
         app.events.add_listener("page_load", () => {
