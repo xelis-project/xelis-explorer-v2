@@ -73,10 +73,12 @@ export class PeersChartNodesByCountry {
             .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
         const height = this.chart.height;
-        this.chart.node
-            .selectAll()
+
+        const bars = this.chart.node
+            .selectAll(`.bar`)
             .data(data)
             .join("rect")
+            .attr("class", "bar")
             .attr("x", (d) => x_scale(d.label)!)
             .attr("y", (d) => y_scale(d.value))
             .attr("rx", 3)
@@ -84,15 +86,26 @@ export class PeersChartNodesByCountry {
             .attr("height", (d) => height - y_scale(d.value))
             .attr("fill", d => color(d.label));
 
-        this.chart.node.append("g")
+        this.chart.node
+            .selectAll(`.legend`)
+            .remove();
+
+        this.chart.node
+            .append("g")
+            .attr("class", "legend")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(x_scale));
 
         this.chart.node
-            .selectAll()
+            .selectAll(`.node-count`)
+            .remove();
+
+        this.chart.node
+            .selectAll(`.node-count`)
             .data(data)
             .enter()
             .append('text')
+            .attr(`class`, `node-count`)
             .attr('transform', d => `translate(${x_scale(d.label)! + x_scale.bandwidth() / 2}, ${y_scale(d.value) - 5})`)
             .text(d => `${d.value}`)
             .style('font-size', '1rem')

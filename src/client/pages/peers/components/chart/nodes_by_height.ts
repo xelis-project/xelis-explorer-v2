@@ -60,14 +60,14 @@ export class PeersChartNodesByHeight {
         const radius = Math.min(this.chart.width, this.chart.height) / 2;
         const donutInnerOffset = 25;
 
-        const pieGenerator = d3.pie<DataItem>()
+        const pie_generator = d3.pie<DataItem>()
             .value(d => d.value)
             .sort(null);
 
-        const arcData = pieGenerator(data);
+        const arc_data = pie_generator(data);
 
-        const arcGenerator = d3.arc<d3.PieArcDatum<DataItem>>()
-            .innerRadius(radius - donutInnerOffset)  // Creates the hole
+        const arc_generator = d3.arc<d3.PieArcDatum<DataItem>>()
+            .innerRadius(radius - donutInnerOffset)
             .outerRadius(radius);
 
         const color = d3.scaleOrdinal<string>()
@@ -75,18 +75,28 @@ export class PeersChartNodesByHeight {
             .range(data.length > 1 ? d3.quantize(t => d3.interpolateRgb(`#02ffcf`, `#ff00aa`)(t * 0.5), data.length) : [`#02ffcf`]);
 
         const arcs = this.chart.node.selectAll('path')
-            .data(arcData)
-            .enter()
-            .append('path')
-            .attr('d', arcGenerator)
-            .attr('fill', d => color(d.data.label));
+            .data(arc_data);
+
+        arcs.exit().transition().remove();
+
+        arcs.enter()
+            .append(`path`)
+            .merge(arcs as any)
+            .transition()
+            .duration(500)
+            .attr('fill', d => color(d.data.label))
+            .attr('d', arc_generator);
 
         const legend_radius = 8;
         const legend_spacing = 15;
 
+        this.chart.node
+            .selectAll(`.legend`)
+            .remove();
+
         const legend = this.chart.node
             .selectAll('.legend')
-            .data(arcData)
+            .data(arc_data)
             .enter()
             .append('g')
             .attr('class', 'legend')
