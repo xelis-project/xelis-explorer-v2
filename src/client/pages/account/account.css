@@ -10,7 +10,7 @@
     min-height: 12rem;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
     .xe-account-container-1 {
         flex-direction: column;
     }
