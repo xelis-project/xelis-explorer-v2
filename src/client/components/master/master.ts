@@ -1,6 +1,5 @@
 import { Background } from "../background/background";
 import { Header } from "../header/header";
-import { Settings } from "../settings/settings";
 
 import './master.css';
 
