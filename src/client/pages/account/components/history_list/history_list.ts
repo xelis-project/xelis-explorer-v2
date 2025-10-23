@@ -36,10 +36,11 @@ export class AccountHistoryList {
 
     prepend_history(history: AccountHistory) {
         let link = undefined;
-        if (history.outgoing || history.incoming) {
-            link = `/tx/${history.hash}`;
-        } else if (history.mining) {
+
+        if (history.mining) {
             link = `/block/${history.hash}`;
+        } else {
+            link = `/tx/${history.hash}`;
         }
 
         const history_item = new AccountHistoryListItem(link);
