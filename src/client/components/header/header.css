@@ -104,7 +104,9 @@
         box-shadow: 0px 0px 100px 10px black;
         translate: 100% 0;
         width: 15rem;
+        opacity: 0;
         justify-content: start;
+        align-items: stretch;
     }
 
     .xe-header-links>* {
@@ -124,17 +126,20 @@
     @keyframes xe-header-links-open-animation {
         100% {
             translate: 0 0;
+            opacity: 1;
         }
     }
 
     .xe-header-links.close {
         translate: 0 0;
+        opacity: 1;
         animation: xe-header-links-close-animation .25s forwards ease-out;
     }
 
     @keyframes xe-header-links-close-animation {
         100% {
             translate: 100% 0;
+            opacity: 0;
         }
     }
 }
