@@ -1,5 +1,4 @@
 import { XelisNode } from "../../app/xelis_node";
-import { RPCEvent as DaemonRPCEvent, P2PStatusResult, Peer } from "@xelis/sdk/daemon/types";
 import { Master } from "../../components/master/master";
 import { PeersMap } from "./components/map/map";
 import { Page } from "../page";
@@ -7,12 +6,10 @@ import { PeersInfo } from "./components/info/info";
 import { PeersSearch } from "./components/search/search";
 import { PeersList } from "./components/list/list";
 import { PeersChart } from "./components/chart/chart";
-import { fetch_geo_location } from "../../utils/fetch_geo_location";
-import { parse_addr } from "../../utils/parse_addr";
-import { PeerLocation } from "../../components/peers_map/peers_map";
+import { Box } from "../../components/box/box";
 
 import './peers.css';
-import { Box } from "../../components/box/box";
+import { PeerLocation } from "../../components/peers_map/peers_map";
 
 export class PeersPage extends Page {
     static pathname = "/peers";
@@ -61,40 +58,54 @@ export class PeersPage extends Page {
         sub_container_2.appendChild(this.peers_list.container.element);
     }
 
-    on_peer_connected = async (new_peer?: Peer, err?: Error) => {
-        console.log("peer_connected");
-
-        if (new_peer) {
-            const addr = parse_addr(new_peer.addr);
-            const res = await fetch_geo_location([addr.ip]);
-            const geo_location = res[addr.ip];
-
-            const peer_location = { peer: new_peer, geo_location } as PeerLocation;
-            this.peers_map.map.add_peer_marker(peer_location);
-            this.peers_list.prepend_peer(peer_location);
-            this.peers_map.map.set_peer_count(++this.peer_count);
-        }
-    }
-
-    on_peer_disconnected = (peer?: Peer, err?: Error) => {
-        console.log("peer_disconnected");
-        if (peer) {
-            this.peers_map.map.remove_peer_marker(peer.id);
-            this.peers_list.remove_peer(peer.id);
-            this.peers_map.map.set_peer_count(--this.peer_count);
-        }
-    }
-
-    clear_node_events() {
+    // we use interval updated instead of websocket peer state change events otherwise it's too much
+    update_interval_id?: number;
+    async on_update() {
         const node = XelisNode.instance();
-        node.ws.methods.closeListener(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
-        node.ws.methods.closeListener(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
-    }
+        const info = await node.ws.methods.getInfo();
+        const peers_result = await node.ws.methods.getPeers();
+        const { peers } = peers_result;
 
-    async listen_node_events() {
-        const node = XelisNode.instance();
-        node.ws.methods.listen(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
-        node.ws.methods.listen(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
+        peers.forEach(peer => {
+            for (let i = 0; i < this.peers_list.peer_items.length; i++) {
+                const peer_item = this.peers_list.peer_items[i];
+                if (peer_item.data && peer_item.data.peer.id === peer.id) {
+                    peer_item.data.peer = peer;
+                    this.peers_list.peer_items[i] = peer_item;
+                    break;
+                }
+            }
+        });
+
+        const new_peers = peers.filter(peer => {
+            const peer_item = this.peers_list.peer_items.find(p => {
+                return p.data && p.data.peer.id === peer.id;
+            });
+            if (!peer_item) return true;
+            return false;
+        });
+
+        let peers_locations = this.peers_list.peer_items.map(item => item.data!);
+        // remove old locations
+        peers_locations = peers_locations.filter(item => {
+            const peer = peers.find(p => p.id === item.peer.id);
+            if (peer) return true;
+            return false;
+        });
+
+        // only fetch new peers
+        if (new_peers.length > 0) {
+            const new_peers_locations = await this.peers_map.map.fetch_peers_locations(new_peers);
+            peers_locations = [...peers_locations, ...new_peers_locations];
+        }
+
+        this.peers_info.set(peers, info.height);
+        this.peers_list.set(peers_locations);
+        this.peers_map.map.set(peers_locations);
+
+        this.peers_chart.nodes_by_version.set(peers);
+        this.peers_chart.nodes_by_height.set(peers);
+        this.peers_chart.nodes_by_country.set(peers_locations);
     }
 
     async load(parent: HTMLElement) {
@@ -107,15 +118,12 @@ export class PeersPage extends Page {
 
         const node = XelisNode.instance();
 
-        this.listen_node_events();
-
         this.peers_map.map.overlay_loading.set_loading(true);
         Box.boxes_loading(this.peers_chart.container.element, true);
         Box.list_loading(this.peers_list.element_content, 20, `8rem`);
         this.peers_info.set_loading(true);
 
         const info = await node.rpc.getInfo();
-
         const peers_result = await node.rpc.getPeers();
         const { peers } = peers_result;
 
@@ -132,6 +140,8 @@ export class PeersPage extends Page {
         this.peers_chart.nodes_by_version.set(peers);
         this.peers_chart.nodes_by_height.set(peers);
         this.peers_chart.nodes_by_country.set(peers_locations);
+
+        this.update_interval_id = window.setInterval(() => this.on_update(), 5000);
     }
 
     unload() {
@@ -139,5 +149,6 @@ export class PeersPage extends Page {
         this.peers_chart.nodes_by_height.unload();
         this.peers_chart.nodes_by_country.unload();
         this.peers_chart.nodes_by_version.unload();
+        window.clearInterval(this.update_interval_id);
     }
 }
