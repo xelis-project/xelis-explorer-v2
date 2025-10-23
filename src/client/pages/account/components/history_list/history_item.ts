@@ -110,7 +110,7 @@ export class AccountHistoryListItem {
             this.type_element.innerHTML = `BURN (${xel_amount})`;
         }
 
-        if (history.deploy_contract) {
+        if (Reflect.has(history, `deploy_contract`)) {
             this.type_element.innerHTML = `DEPLOY CONTRACT`;
         }
 
