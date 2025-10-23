@@ -65,16 +65,18 @@ export class PeersSearch {
                         return;
                     }
 
-                    const country = data.geo_location.country;
-                    if (country.toLowerCase().indexOf(value) !== -1) {
-                        filter_peer_ids.push(data.peer.id);
-                        return;
-                    }
+                    if (data.geo_location.success) {
+                        const country = data.geo_location.country;
+                        if (country.toLowerCase().indexOf(value) !== -1) {
+                            filter_peer_ids.push(data.peer.id);
+                            return;
+                        }
 
-                    const city = data.geo_location.city;
-                    if (city.toLowerCase().indexOf(value) !== -1) {
-                        filter_peer_ids.push(data.peer.id);
-                        return;
+                        const city = data.geo_location.city;
+                        if (city.toLowerCase().indexOf(value) !== -1) {
+                            filter_peer_ids.push(data.peer.id);
+                            return;
+                        }
                     }
                 }
             });
