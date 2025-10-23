@@ -1,0 +1,26 @@
+.xe-settings {
+    animation: xe-settings-appear-animation .4s;
+}
+
+@keyframes xe-settings-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-settings>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.xe-settings-line {
+    height: .05rem;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 1rem;
+}

@@ -12,6 +12,7 @@ import { MempoolPage } from "../pages/mempool/mempool";
 import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
 import { PeersPage } from "../pages/peers/peers";
+import { SettingsPage } from "../pages/settings/settings";
 import { TransactionPage } from "../pages/transaction/transaction";
 import { TransactionsPage } from "../pages/transactions/transactions";
 
@@ -29,7 +30,8 @@ export const pages = [
     TransactionsPage,
     AccountsPage,
     ContractPage,
-    ContractsPage
+    ContractsPage,
+    SettingsPage
 ];
 
 export const match_route = (url: URL): typeof Page => {
