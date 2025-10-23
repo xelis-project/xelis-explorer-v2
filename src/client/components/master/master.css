@@ -7,13 +7,21 @@
         linear-gradient(to bottom, rgba(255, 255, 255, 0.01) .1rem, rgba(255, 255, 255, 0.02) .1rem);
 }
 
-.xe-master-content {
+.xe-master-layout {
     max-width: 80rem;
     width: 100%;
     margin: 0 auto;
-    padding: 1rem 1rem 10rem 1rem;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+    padding: 2rem;
     box-sizing: border-box;
+    position: relative;
+}
+
+.xe-master-content {
     display: flex;
     gap: 1rem;
     flex-direction: column;
+    width: 100%;
 }

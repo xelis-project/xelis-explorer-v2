@@ -1,12 +1,16 @@
 import { Background } from "../background/background";
 import { Header } from "../header/header";
+import { Settings } from "../settings/settings";
 
 import './master.css';
 
 export class Master {
     element: HTMLDivElement;
+
     background: Background;
     header: Header;
+
+    layout: HTMLDivElement;
     content: HTMLDivElement;
 
     constructor() {
@@ -16,11 +20,15 @@ export class Master {
         this.background = new Background();
         this.element.appendChild(this.background.element);
 
-        this.content = document.createElement(`div`);
-        this.content.classList.add(`xe-master-content`);
-        this.element.appendChild(this.content);
+        this.layout = document.createElement(`div`);
+        this.layout.classList.add(`xe-master-layout`);
+        this.element.appendChild(this.layout);
 
         this.header = new Header();
-        this.content.appendChild(this.header.element);
+        this.layout.appendChild(this.header.element);
+
+        this.content = document.createElement(`div`);
+        this.content.classList.add(`xe-master-content`);
+        this.layout.appendChild(this.content);
     }
 }
