@@ -61,6 +61,7 @@ export class PeersList {
 
     set(peers_locations: PeerLocation[]) {
         this.element_content.replaceChildren();
+        this.peer_items = [];
         peers_locations.forEach((peer_location) => {
             this.prepend_peer(peer_location);
         });
