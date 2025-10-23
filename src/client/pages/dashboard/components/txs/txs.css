@@ -3,8 +3,7 @@
     gap: 1rem;
     flex-direction: column;
     overflow-y: scroll;
-    height: 100%;
-    max-height: 55rem;
+    height: 55rem;
     overflow-x: hidden;
     animation: xe-dashboard-txs-appear-animation .65s;
 }
