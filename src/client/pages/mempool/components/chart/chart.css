@@ -5,10 +5,6 @@
     animation: xe-mempool-chart-animation .75s;
 }
 
-.xe-mempool-chart>:nth-child(1) {
-    min-height: 15rem;
-}
-
 @keyframes xe-mempool-chart-animation {
     0% {
         translate: -25% 0;

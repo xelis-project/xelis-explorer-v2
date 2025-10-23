@@ -24,10 +24,10 @@ export class MempoolChartBlocksTxs {
     create_chart() {
         this.box_chart.element_content.replaceChildren();
 
-        const margin = { top: 20, right: 0, bottom: 20, left: 0 };
+        const margin = { top: 20, right: 0, bottom: 0, left: 0 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
-        const height = 150 - margin.top - margin.bottom;
+        const height = 125 - margin.top - margin.bottom;
 
         const node = d3
             .select(this.box_chart.element_content)
@@ -81,15 +81,6 @@ export class MempoolChartBlocksTxs {
             .attr("width", x_scale.bandwidth())
             .attr("height", (d) => height - y_scale(d.y))
             .attr("fill", d => color(d.y));
-
-        this.chart.node
-            .selectAll(`.y-axis`)
-            .data([{}])
-            .enter()
-            .append("g")
-            .attr(`class`, `y-axis`)
-            .attr("transform", `translate(0,${height})`)
-            .call(d3.axisBottom(x_scale));
 
         this.chart.node
             .selectAll(`.tx-count`)
