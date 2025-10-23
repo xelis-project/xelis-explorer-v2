@@ -3,7 +3,7 @@
     overflow-x: hidden;
     display: flex;
     height: 100%;
-    max-height: 55rem;
+    max-height: 45rem;
     gap: 1rem;
     flex-direction: column;
     animation: xe-peers-list-animation .65s;
