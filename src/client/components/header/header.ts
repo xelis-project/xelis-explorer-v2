@@ -69,6 +69,13 @@ export class Header {
             this.links_element.appendChild(link);
         });
 
+        const settings_btn = document.createElement(`button`);
+        settings_btn.innerHTML = `${icons.cog()} SETTINGS`;
+        settings_btn.addEventListener(`click`, () => {
+
+        });
+        this.links_element.appendChild(settings_btn);
+
         const app = App.instance();
         app.events.add_listener("page_load", () => {
             this.highlight_menu_link();
@@ -76,8 +83,9 @@ export class Header {
     }
 
     highlight_menu_link() {
-        for (let i = 0; i < this.links_element.children.length; i++) {
-            const link = this.links_element.children[i] as HTMLLinkElement;
+        const anchors = this.links_element.querySelectorAll(`a`);
+        for (let i = 0; i < anchors.length; i++) {
+            const link = this.links_element.children[i] as HTMLAnchorElement;
             link.classList.remove(`active`);
 
             const link_url = new URL(link.href);

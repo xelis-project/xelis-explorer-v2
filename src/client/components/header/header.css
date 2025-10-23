@@ -2,10 +2,9 @@
     display: flex;
     gap: 1rem;
     flex-direction: row;
-    align-items: center;
-    padding: 1rem 0;
-    justify-content: space-between;
+    align-items: start;
     animation: xe-header-appear-animation .75s;
+    justify-content: space-between;
 }
 
 @keyframes xe-header-appear-animation {
@@ -26,19 +25,25 @@
     column-gap: .5rem;
     flex-direction: row;
     user-select: none;
+    align-items: end;
     flex-wrap: wrap;
     justify-content: end;
+    max-width: 45rem;
 }
 
-.xe-header-links a {
+.xe-header-links>* {
     color: white;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
+    font-family: Jura;
+    opacity: 1;
     display: flex;
     gap: .5rem;
     align-items: center;
     transition: translate .15s;
+    border: none;
+    cursor: pointer;
 
     background-color: rgba(0, 0, 0, 0.2);
     padding: .5rem .75rem;
@@ -47,7 +52,7 @@
     backdrop-filter: blur(5px);
 }
 
-.xe-header-links a svg {
+.xe-header-links>* svg {
     width: 1rem;
     height: 1rem;
     background-color: #02FFCF;
@@ -56,23 +61,23 @@
     border-radius: .5rem;
 }
 
-.xe-header-links a.active {
+.xe-header-links>*.active {
     background-color: #02FFCF;
     color: black;
 }
 
-.xe-header-links a.active svg {
+.xe-header-links>*.active svg {
     background-color: rgb(20, 20, 20);
     color: white;
 }
 
-.xe-header-links a:hover {
+.xe-header-links>*:hover {
     color: black;
-    translate: 0 -4%;
+    translate: 0 -3%;
     background-color: #02FFCF;
 }
 
-.xe-header-links a:hover svg {
+.xe-header-links>*:hover svg {
     background-color: rgb(20, 20, 20);
     color: white;
 }
@@ -101,12 +106,12 @@
         justify-content: start;
     }
 
-    .xe-header-links a {
+    .xe-header-links>* {
         padding: .75rem;
         border-radius: 1rem;
     }
 
-    .xe-header-links a:hover {
+    .xe-header-links>*:hover {
         translate: 2% 0;
     }
 
