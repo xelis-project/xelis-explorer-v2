@@ -2,9 +2,10 @@ import { Page } from "../page";
 import { Master } from "../../components/master/master";
 import { Container } from "../../components/container/container";
 import { SettingsItem } from "./settings_item/settings_item";
-import { supported_languages } from "../../app/localization/localization";
+import { supported_languages, validate_lang_key } from "../../app/localization/localization";
 import { Select } from "../../components/select/select";
 import { Checkbox } from "../../components/checkbox/checkbox";
+import { Settings } from "../../app/settings";
 
 import './settings.css';
 
@@ -16,6 +17,8 @@ export class SettingsPage extends Page {
 
     constructor() {
         super();
+
+        const settings = Settings.instance();
 
         this.master = new Master();
         this.master.content.classList.add(`xe-settings`);
@@ -41,11 +44,19 @@ export class SettingsPage extends Page {
                 <i class="fi fi-${lang.flag}"></i>
                 <div>${lang.title.toUpperCase()}</div>
             `);
+
+            if (settings.language === lang.key) {
+                language_select.set_value(`
+                   <i class="fi fi-${lang.flag}"></i>
+                    <div>${lang.title.toUpperCase()}</div>
+                `);
+            }
         });
-        language_select.set_value(`
-            <i class="fi fi-us"></i>
-            <div>ENGLISH</div>
-        `);
+
+        language_select.add_listener(`change`, (key) => {
+            settings.language = validate_lang_key(key);
+            settings.save();
+        });
 
         language_item.input_element.appendChild(language_select.element);
 

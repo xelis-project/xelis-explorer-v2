@@ -13,6 +13,12 @@ export const supported_languages = [
     { title: "French", key: "fr", flag: "fr" },
 ] as { title: string, key: Locale, flag: string }[];
 
+export const validate_lang_key = (key?: string): Locale => {
+    const lang = supported_languages.find(x => x.key === key);
+    if (lang) return lang.key;
+    return "en";
+}
+
 export class Localization extends Singleton {
     locale: Locale;
     vars: Record<string, string[]>;

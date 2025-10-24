@@ -12,7 +12,10 @@ const app = new Hono<App>();
 app.use(
   languageDetector({
     supportedLanguages: supported_languages.map(x => x.key),
-    fallbackLanguage: 'en'
+    fallbackLanguage: 'en',
+    cookieOptions: {
+      httpOnly: false
+    }
   })
 );
 app.use(trimTrailingSlash());
