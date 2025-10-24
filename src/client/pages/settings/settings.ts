@@ -2,10 +2,11 @@ import { Page } from "../page";
 import { Master } from "../../components/master/master";
 import { Container } from "../../components/container/container";
 import { SettingsItem } from "./settings_item/settings_item";
-
-import './settings.css';
 import { supported_languages } from "../../app/localization/localization";
 import { Select } from "../../components/select/select";
+import { Checkbox } from "../../components/checkbox/checkbox";
+
+import './settings.css';
 
 export class SettingsPage extends Page {
     static pathname = "/settings";
@@ -29,29 +30,49 @@ export class SettingsPage extends Page {
             container.element.appendChild(line);
         }
 
-        const language_item = new SettingsItem(`LANGUAGE`, `Choose desired language`);
+        const language_item = new SettingsItem();
+        language_item.title_element.innerHTML = `LANGUAGE`;
+        language_item.description_element.innerHTML = `Choose desired language`;
         container.element.appendChild(language_item.element);
 
         const language_select = new Select();
         supported_languages.forEach((lang) => {
-            language_select.add_item(lang.key, lang.title.toUpperCase());
+            language_select.add_item(lang.key, `
+                <i class="fi fi-${lang.flag}"></i>
+                <div>${lang.title.toUpperCase()}</div>
+            `);
         });
-        language_select.set_value(`ENGLISH`);
+        language_select.set_value(`
+            <i class="fi fi-us"></i>
+            <div>ENGLISH</div>
+        `);
 
         language_item.input_element.appendChild(language_select.element);
 
         append_line();
 
-        const hash_display_item = new SettingsItem(`HASH DISPLAY`, `Choose desired hash truncation format`);
-        container.element.appendChild(hash_display_item.element);
+        const hash_format_item = new SettingsItem();
+        hash_format_item.title_element.innerHTML = `HASH FORMAT`;
+        hash_format_item.description_element.innerHTML = `Choose desired hash truncation format`;
+        container.element.appendChild(hash_format_item.element);
 
-        const hash_display_select = new Select();
-        hash_display_select.add_item(`FRONT`, `FRONT (...00000000)`);
-        hash_display_select.add_item(`MIDDLE`, `MIDDLE (0000...0000)`);
-        hash_display_select.add_item(`BACK`, `BACK (00000000...)`);
-        hash_display_select.set_value(`MIDDLE`);
+        const hash_format_select = new Select();
+        hash_format_select.add_item(`FRONT`, `FRONT (...00000000)`);
+        hash_format_select.add_item(`MIDDLE`, `MIDDLE (0000...0000)`);
+        hash_format_select.add_item(`BACK`, `BACK (00000000...)`);
+        hash_format_select.set_value(`MIDDLE (0000...0000)`);
 
-        hash_display_item.input_element.appendChild(hash_display_select.element);
+        hash_format_item.input_element.appendChild(hash_format_select.element);
+
+        append_line();
+
+        const enable_hashicon_item = new SettingsItem();
+        enable_hashicon_item.title_element.innerHTML = `DISPLAY HASHICON`;
+        enable_hashicon_item.description_element.innerHTML = `Enable/disable hashicon display`;
+        container.element.appendChild(enable_hashicon_item.element);
+
+        const checkbox = new Checkbox();
+        enable_hashicon_item.input_element.appendChild(checkbox.element);
     }
 
     async load(parent: HTMLElement) {

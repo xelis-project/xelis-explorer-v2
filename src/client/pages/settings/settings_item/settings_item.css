@@ -15,7 +15,7 @@
 
 @keyframes xe-settings-item-1-animation {
     0% {
-        translate: 25% 0;
+        translate: -25% 0;
     }
 
     100% {
