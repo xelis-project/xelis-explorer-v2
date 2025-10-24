@@ -9,7 +9,6 @@ import { PeersChart } from "./components/chart/chart";
 import { Box } from "../../components/box/box";
 
 import './peers.css';
-import { PeerLocation } from "../../components/peers_map/peers_map";
 
 export class PeersPage extends Page {
     static pathname = "/peers";
