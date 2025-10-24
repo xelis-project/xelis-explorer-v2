@@ -29,6 +29,15 @@
     font-size: 1rem;
     cursor: pointer;
     border-radius: .5rem;
+    transition: .25s translate;
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.xe-select button:hover {
+    translate: -3% 0;
 }
 
 .xe-select .xe-select-list {
@@ -39,11 +48,30 @@
     background-color: #032a22;
     margin-top: .5rem;
     border-radius: .5rem;
+    right: 0;
+    top: 2rem;
+}
+
+.xe-select .xe-select-list.open {
+    animation: xe-select-list-appear .25s forwards;
+    translate: 0 -25%;
+    opacity: 0;
+}
+
+@keyframes xe-select-list-appear {
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
 }
 
 .xe-select .xe-select-list>div {
     cursor: pointer;
     padding: .5rem 1rem;
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
 }
 
 .xe-select .xe-select-list>div:hover {
