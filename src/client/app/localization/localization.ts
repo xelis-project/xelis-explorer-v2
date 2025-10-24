@@ -9,9 +9,9 @@ export const translations = {
 export type Locale = "en" | "fr";
 
 export const supported_languages = [
-    { title: "English", key: "en" },
-    { title: "French", key: "fr" },
-] as { title: string, key: Locale }[];
+    { title: "English", key: "en", flag: "us" },
+    { title: "French", key: "fr", flag: "fr" },
+] as { title: string, key: Locale, flag: string }[];
 
 export class Localization extends Singleton {
     locale: Locale;
