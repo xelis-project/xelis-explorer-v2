@@ -61,11 +61,11 @@ export class Header {
             if (!this.links_element.classList.contains(`open`)) return;
             if (mobile_menu_button.contains(target)) return;
 
-            if (!this.links_element.contains(target)) {
-                this.links_element.classList.remove(`open`);
-                this.links_element.classList.add(`close`);
-                setTimeout(() => this.links_element.classList.remove(`close`), 250);
-            }
+            //if (!this.links_element.contains(target)) {
+            this.links_element.classList.remove(`open`);
+            this.links_element.classList.add(`close`);
+            setTimeout(() => this.links_element.classList.remove(`close`), 250);
+            //}
         });
 
         this.element.appendChild(this.links_element);
