@@ -5,7 +5,7 @@ import { SettingsItem } from "./settings_item/settings_item";
 import { supported_languages, validate_lang_key } from "../../app/localization/localization";
 import { Select } from "../../components/select/select";
 import { Checkbox } from "../../components/checkbox/checkbox";
-import { Settings } from "../../app/settings";
+import { Settings, SettingsHashFormat, SettingsMenuType } from "../../app/settings";
 
 import './settings.css';
 
@@ -67,11 +67,24 @@ export class SettingsPage extends Page {
         hash_format_item.description_element.innerHTML = `Choose desired hash truncation format`;
         container.element.appendChild(hash_format_item.element);
 
+        const hash_formats = {
+            "front": "FRONT (...00000000)",
+            "middle": "MIDDLE (0000...0000)",
+            "back": "BACK (00000000...)",
+        } as Record<string, string>;
+
         const hash_format_select = new Select();
-        hash_format_select.add_item(`FRONT`, `FRONT (...00000000)`);
-        hash_format_select.add_item(`MIDDLE`, `MIDDLE (0000...0000)`);
-        hash_format_select.add_item(`BACK`, `BACK (00000000...)`);
-        hash_format_select.set_value(`MIDDLE (0000...0000)`);
+        Object.keys(hash_formats).forEach((key) => {
+            hash_format_select.add_item(key, hash_formats[key]);
+        });
+        hash_format_select.set_value(hash_formats[settings.hash_format]);
+
+        hash_format_select.add_listener(`change`, (key) => {
+            if (key) {
+                settings.hash_format = key as SettingsHashFormat;
+                settings.save();
+            }
+        });
 
         hash_format_item.input_element.appendChild(hash_format_select.element);
 
@@ -83,7 +96,40 @@ export class SettingsPage extends Page {
         container.element.appendChild(enable_hashicon_item.element);
 
         const checkbox = new Checkbox();
+        checkbox.input_element.checked = settings.display_hashicon;
+        checkbox.input_element.addEventListener(`change`, (e) => {
+            const element = e.target as HTMLInputElement;
+            settings.display_hashicon = element.checked;
+            settings.save();
+        });
         enable_hashicon_item.input_element.appendChild(checkbox.element);
+
+        append_line();
+
+        const menu_type_item = new SettingsItem();
+        menu_type_item.title_element.innerHTML = `MENU TYPE`;
+        menu_type_item.description_element.innerHTML = `Display standard header menu or collapsed menu`;
+        container.element.appendChild(menu_type_item.element);
+
+        const menu_types = {
+            "header_menu": "HEADER MENU",
+            "collapsed_menu": "COLLAPSED MENU"
+        } as Record<string, string>;
+
+        const menu_type_select = new Select();
+        menu_type_select.add_item(`header_menu`, `HEADER MENU`);
+        menu_type_select.add_item(`collapsed_menu`, `COLLAPSED MENU`);
+
+        menu_type_select.set_value(menu_types[settings.menu_type]);
+
+        menu_type_select.add_listener(`change`, (key) => {
+            if (key) {
+                settings.menu_type = key as SettingsMenuType;
+                settings.save();
+            }
+        });
+
+        menu_type_item.input_element.appendChild(menu_type_select.element);
     }
 
     async load(parent: HTMLElement) {
