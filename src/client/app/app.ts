@@ -2,8 +2,8 @@ import { Page } from "../pages/page";
 import { match_route } from "./router";
 import { Singleton } from "../utils/singleton";
 import { EventEmitter } from "../utils/event_emitter";
-import { TopLoadingBar } from "./top_loading_bar/top_loading_bar";
-import { NodeStatus } from "./node_status/node_status";
+import { TopLoadingBar } from "../components/top_loading_bar/top_loading_bar";
+import { NodeStatus } from "../components/node_status/node_status";
 import { JsonViewer } from "../components/json_viewer/json_viewer";
 
 import "reset-css";

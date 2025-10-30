@@ -1,5 +1,6 @@
 import icons from '../../assets/svg/icons';
-import { XelisNode } from '../xelis_node';
+import { XelisNode } from '../../app/xelis_node';
+
 import './node_status.css';
 
 export class NodeStatus {
