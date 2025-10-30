@@ -3,9 +3,9 @@ import { Box } from "../../../../components/box/box";
 //@ts-ignore
 import hashicon from 'hashicon';
 import { format_address } from "../../../../utils/format_address";
-import { reduce_text } from "../../../../utils/reduce_text";
 import prettyBytes from "pretty-bytes";
 import { get_assets } from "../../../../data/assets";
+import { format_hash } from "../../../../utils/format_hash";
 
 import './transfer_item.css';
 
@@ -64,7 +64,7 @@ export class TransactionTransferItem {
         const asset = assets[asset_hash];
 
         this.asset_element.innerHTML = `
-            <div>${reduce_text(asset_hash)}${asset ? ` (${asset.ticker})` : ``}</div>
+            <div>${format_hash(asset_hash)}${asset ? ` (${asset.ticker})` : ``}</div>
             <div>ASSET</div>
         `;
     }

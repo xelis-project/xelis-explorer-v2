@@ -3,13 +3,13 @@ import { format_address } from "../../../utils/format_address";
 //@ts-ignore
 import hashicon from "hashicon";
 import prettyBytes from "pretty-bytes";
-import { reduce_text } from "../../../utils/reduce_text";
 import { format_xel } from "../../../utils/format_xel";
 import prettyMilliseconds from "pretty-ms";
 import { Row } from "../../../components/table/row";
+import { format_asset } from "../../../utils/format_asset";
+import { format_hash } from "../../../utils/format_hash";
 
 import './tx_row.css';
-import { format_asset } from "../../../utils/format_asset";
 
 export class TxRow extends Row {
     transaction?: Transaction;
@@ -36,7 +36,7 @@ export class TxRow extends Row {
     }
 
     set_hash(hash: string) {
-        this.value_cells[1].innerHTML = reduce_text(hash);
+        this.value_cells[1].innerHTML = format_hash(hash);
     }
 
     set_type(data: TransactionData) {
@@ -46,7 +46,7 @@ export class TxRow extends Row {
         } else if (data.deploy_contract) {
             value = `Deploy Contract`;
         } else if (data.invoke_contract) {
-            value = `Invoke Contract (${reduce_text(data.invoke_contract.contract)})`;
+            value = `Invoke Contract (${format_hash(data.invoke_contract.contract)})`;
         } else if (data.multi_sig) {
             value = `Multi Sig ${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`;
         } else if (data.transfers) {
@@ -80,7 +80,7 @@ export class TxRow extends Row {
     }
 
     set_executed_in_block(executed_in_block?: string) {
-        this.value_cells[6].innerHTML = executed_in_block ? reduce_text(executed_in_block) : `--`;
+        this.value_cells[6].innerHTML = executed_in_block ? format_hash(executed_in_block) : `--`;
     }
 
     age_interval_id?: number;

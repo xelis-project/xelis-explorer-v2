@@ -2,9 +2,9 @@
 import hashicon from "hashicon";
 import { Row } from "../../../components/table/row";
 import { format_address } from "../../../utils/format_address";
+import { format_hash } from "../../../utils/format_hash";
 
 import './account_row.css';
-import { reduce_text } from "../../../utils/reduce_text";
 
 export interface AccountRowData {
     addr: string;
@@ -48,7 +48,7 @@ export class AccountRow extends Row {
     }
 
     set_addr(addr: string) {
-        this.value_cells[1].innerHTML = `${reduce_text(addr)}`;
+        this.value_cells[1].innerHTML = `${format_hash(addr)}`;
     }
 
     set_linka(link?: string) {

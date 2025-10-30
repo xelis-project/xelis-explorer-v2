@@ -1,7 +1,5 @@
 import { Block, Transaction, TransactionData } from '@xelis/sdk/daemon/types';
 import { Box } from '../box/box';
-import './tx_item.css';
-import { reduce_text } from '../../utils/reduce_text';
 import prettyMilliseconds from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';
 //@ts-ignore
@@ -9,6 +7,9 @@ import hashicon from "hashicon";
 import { format_address } from '../../utils/format_address';
 import { format_xel } from '../../utils/format_xel';
 import { format_asset } from '../../utils/format_asset';
+import { format_hash } from '../../utils/format_hash';
+
+import './tx_item.css';
 
 export interface TxBlock {
     block: Block;
@@ -78,7 +79,7 @@ export class TxItem {
     }
 
     set_hash(hash: string) {
-        this.element_hash.innerHTML = `${reduce_text(hash)}`;
+        this.element_hash.innerHTML = `${format_hash(hash)}`;
     }
 
     age_interval_id?: number;
@@ -120,7 +121,7 @@ export class TxItem {
         } else if (data.deploy_contract) {
             value = `Deploy Contract`;
         } else if (data.invoke_contract) {
-            value = `Invoke Contract (${reduce_text(data.invoke_contract.contract)})`;
+            value = `Invoke Contract (${format_hash(data.invoke_contract.contract)})`;
         } else if (data.multi_sig) {
             value = `Multi Sig ${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`;
         } else if (data.transfers) {

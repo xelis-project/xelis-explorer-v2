@@ -1,12 +1,12 @@
 import { format_address } from "../../../../utils/format_address";
 //@ts-ignore
 import hashicon from 'hashicon';
-import { reduce_text } from "../../../../utils/reduce_text";
 import { format_xel } from "../../../../utils/format_xel";
 import { Transaction, TransactionData } from "@xelis/sdk/daemon/types";
 import prettyBytes from "pretty-bytes";
 import { format_asset } from "../../../../utils/format_asset";
 import { Row } from "../../../../components/table/row";
+import { format_hash } from "../../../../utils/format_hash";
 
 export class TxRow extends Row {
     constructor() {
@@ -24,7 +24,7 @@ export class TxRow extends Row {
     }
 
     set_hash(hash: string) {
-        this.value_cells[0].innerHTML = `${reduce_text(hash)}`;
+        this.value_cells[0].innerHTML = `${format_hash(hash)}`;
     }
 
     set_type(data: TransactionData) {
@@ -34,7 +34,7 @@ export class TxRow extends Row {
         } else if (data.deploy_contract) {
             value = `Deploy Contract`;
         } else if (data.invoke_contract) {
-            value = `Invoke Contract (${reduce_text(data.invoke_contract.contract)})`;
+            value = `Invoke Contract (${format_hash(data.invoke_contract.contract)})`;
         } else if (data.multi_sig) {
             value = `Multi Sig ${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`;
         } else if (data.transfers) {

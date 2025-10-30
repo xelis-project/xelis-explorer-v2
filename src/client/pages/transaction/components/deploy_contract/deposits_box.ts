@@ -1,8 +1,8 @@
 import { ContractDeposit } from "@xelis/sdk/daemon/types";
 import { format_asset } from "../../../../utils/format_asset";
-import { reduce_text } from "../../../../utils/reduce_text";
 import { Box } from "../../../../components/box/box";
 import { get_assets } from "../../../../data/assets";
+import { format_hash } from "../../../../utils/format_hash";
 
 import './deposits_box.css';
 
@@ -34,7 +34,7 @@ export class DepositsBox {
 
             deposit_element.innerHTML = `
                 <div>${i.toLocaleString(undefined, { minimumIntegerDigits: 3, notation: "compact" })}</div>
-                <div>${reduce_text(hash)}${asset_name}</div>
+                <div>${format_hash(hash)}${asset_name}</div>
                 <div>${amount_string}</div>
             `;
 

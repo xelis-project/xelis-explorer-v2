@@ -1,8 +1,8 @@
 import { GetContractBalanceResult } from "@xelis/sdk/daemon/types";
-import { reduce_text } from "../../../utils/reduce_text";
 import { format_xel } from "../../../utils/format_xel";
 import { Row } from "../../../components/table/row";
 import { ContractInfo } from "../../../fetch_helpers/fetch_contracts";
+import { format_hash } from "../../../utils/format_hash";
 
 import './contract_row.css';
 
@@ -25,7 +25,7 @@ export class ContractRow extends Row {
     }
 
     set_hash(hash: string) {
-        this.value_cells[0].innerHTML = reduce_text(hash);
+        this.value_cells[0].innerHTML = format_hash(hash);
     }
 
     set_name(name: string) {

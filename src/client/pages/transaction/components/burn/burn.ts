@@ -4,7 +4,7 @@ import { Container } from "../../../../components/container/container";
 import icons from "../../../../assets/svg/icons";
 import { get_assets } from "../../../../data/assets";
 import { format_asset } from "../../../../utils/format_asset";
-import { reduce_text } from "../../../../utils/reduce_text";
+import { format_hash } from "../../../../utils/format_hash";
 
 import './burn.css';
 
@@ -32,7 +32,7 @@ export class TransactionBurn {
             this.box.element.innerHTML = `
                 ${icons.burn()}
                 <div>
-                    <div>${reduce_text(burn.asset)}</div>
+                    <div>${format_hash(burn.asset)}</div>
                     <div>${asset.name}</div>
                 </div>
                 <div>${format_asset(burn.asset, burn.amount, true)}</div>
@@ -41,7 +41,7 @@ export class TransactionBurn {
             this.box.element.classList.add(`xe-transaction-burn-box-2`);
             this.box.element.innerHTML = `
                 ${icons.burn()}
-                <div>${reduce_text(burn.asset)}</div>
+                <div>${format_hash(burn.asset)}</div>
                 <div>
                     <div>${burn.amount}</div>
                     <div>ATOMIC AMOUNT</div>

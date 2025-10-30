@@ -1,11 +1,11 @@
 import prettyMilliseconds from "pretty-ms";
 import { Box } from "../../../../components/box/box";
-import { reduce_text } from "../../../../utils/reduce_text";
 import { AccountHistory } from "@xelis/sdk/daemon/types";
 import { format_xel } from "../../../../utils/format_xel";
 import { format_address } from "../../../../utils/format_address";
 // @ts-ignore
 import hashicon from 'hashicon';
+import { format_hash } from "../../../../utils/format_hash";
 
 import './history_item.css';
 
@@ -48,7 +48,7 @@ export class AccountHistoryListItem {
     }
 
     set_hash(hash: string) {
-        this.hash_element.innerHTML = reduce_text(hash);
+        this.hash_element.innerHTML = format_hash(hash);
     }
 
     set_topoheight(topoheight: number) {
@@ -115,7 +115,7 @@ export class AccountHistoryListItem {
         }
 
         if (history.invoke_contract) {
-            const contract_hash = reduce_text(history.invoke_contract.contract);
+            const contract_hash = format_hash(history.invoke_contract.contract);
             this.type_element.innerHTML = `INVOKE CONTRACT (${contract_hash})`;
         }
 

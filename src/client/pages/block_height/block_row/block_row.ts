@@ -3,11 +3,11 @@ import { format_address } from "../../../utils/format_address";
 //@ts-ignore
 import hashicon from "hashicon";
 import prettyBytes from "pretty-bytes";
-import { reduce_text } from "../../../utils/reduce_text";
 import { format_xel } from "../../../utils/format_xel";
 import prettyMilliseconds from "pretty-ms";
 import { BlockTypeBox } from "../../../components/block_type_box/block_type_box";
 import { Row } from "../../../components/table/row";
+import { format_hash } from "../../../utils/format_hash";
 
 import './block_row.css';
 
@@ -32,7 +32,7 @@ export class BlockRow extends Row {
     }
 
     set_hash(hash: string) {
-        this.value_cells[0].innerHTML = reduce_text(hash);
+        this.value_cells[0].innerHTML = format_hash(hash);
     }
 
     set_topoheight(topoheight?: number) {
