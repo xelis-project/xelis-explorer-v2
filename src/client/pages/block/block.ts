@@ -205,6 +205,7 @@ export class BlockPage extends Page {
                 this.block_graph.dag.lock_block_height = block.height;
                 this.block_graph.dag.set_live(true);
             } else {
+                this.block_graph.dag.set_live(false);
                 this.block_graph.dag.load_blocks(block.height);
             }
         } else {
