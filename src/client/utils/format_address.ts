@@ -1,5 +1,5 @@
 import { get_addresses } from "../data/addresses";
-import { reduce_text } from "./reduce_text";
+import { format_hash } from "./format_hash";
 
 export const format_address = (address: string) => {
     const addresses = get_addresses();
@@ -8,5 +8,5 @@ export const format_address = (address: string) => {
         return addr.name;
     }
     
-    return reduce_text(address);
+    return format_hash(address);
 }
