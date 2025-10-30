@@ -56,6 +56,7 @@ export class SettingsPage extends Page {
         language_select.add_listener(`change`, (key) => {
             settings.language = validate_lang_key(key);
             settings.save();
+            location.reload();
         });
 
         language_item.input_element.appendChild(language_select.element);
@@ -110,6 +111,7 @@ export class SettingsPage extends Page {
             if (key) {
                 settings.menu_type = key as SettingsMenuType;
                 settings.save();
+                location.reload();
             }
         });
 
