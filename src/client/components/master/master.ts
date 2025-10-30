@@ -1,4 +1,6 @@
+import { Settings } from "../../app/settings";
 import { Background } from "../background/background";
+import { CollapsedMenu } from "../collapsed_menu/collapsed_menu";
 import { Header } from "../header/header";
 
 import './master.css';
@@ -8,6 +10,7 @@ export class Master {
 
     background: Background;
     header: Header;
+    collapsed_menu: CollapsedMenu;
 
     layout: HTMLDivElement;
     content: HTMLDivElement;
@@ -16,15 +19,24 @@ export class Master {
         this.element = document.createElement(`div`);
         this.element.classList.add(`xe-master`);
 
+        const settings = Settings.instance();
+
         this.background = new Background();
         this.element.appendChild(this.background.element);
+
+        this.collapsed_menu = new CollapsedMenu();
+        if (settings.menu_type === `collapsed_menu`) {
+            this.element.appendChild(this.collapsed_menu.element);
+        }
 
         this.layout = document.createElement(`div`);
         this.layout.classList.add(`xe-master-layout`);
         this.element.appendChild(this.layout);
 
         this.header = new Header();
-        this.layout.appendChild(this.header.element);
+        if (settings.menu_type === `header_menu`) {
+            this.layout.appendChild(this.header.element);
+        }
 
         this.content = document.createElement(`div`);
         this.content.classList.add(`xe-master-content`);
