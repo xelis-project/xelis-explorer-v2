@@ -75,6 +75,7 @@
     color: black;
     translate: 0 -3%;
     background-color: #02FFCF;
+    opacity: 1;
 }
 
 .xe-header-links>*:hover svg {
@@ -90,28 +91,27 @@
 
     .xe-header-links {
         position: fixed;
-        background-color: rgba(0, 0, 0, 0.2);
+        background: linear-gradient(to right, transparent, 60%, black);
         top: 0;
         right: 0;
         bottom: 0;
         height: 100%;
         flex-direction: column;
-        gap: .75rem;
+        gap: .5rem;
         padding: 1rem;
         z-index: 999;
-        backdrop-filter: blur(30px);
-        font-size: 1.5rem;
-        box-shadow: 0px 0px 100px 10px black;
         translate: 100% 0;
-        width: 15rem;
+        width: 25rem;
         opacity: 0;
         justify-content: start;
-        align-items: stretch;
+        align-items: end;
     }
 
     .xe-header-links>* {
         padding: .75rem;
         border-radius: 1rem;
+        font-size: 1.1rem;
+        background-color: rgba(0, 0, 0, 1);
     }
 
     .xe-header-links>*:hover {
