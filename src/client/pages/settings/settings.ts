@@ -90,22 +90,6 @@ export class SettingsPage extends Page {
 
         append_line();
 
-        const enable_hashicon_item = new SettingsItem();
-        enable_hashicon_item.title_element.innerHTML = `DISPLAY HASHICON`;
-        enable_hashicon_item.description_element.innerHTML = `Enable/disable hashicon display`;
-        container.element.appendChild(enable_hashicon_item.element);
-
-        const checkbox = new Checkbox();
-        checkbox.input_element.checked = settings.display_hashicon;
-        checkbox.input_element.addEventListener(`change`, (e) => {
-            const element = e.target as HTMLInputElement;
-            settings.display_hashicon = element.checked;
-            settings.save();
-        });
-        enable_hashicon_item.input_element.appendChild(checkbox.element);
-
-        append_line();
-
         const menu_type_item = new SettingsItem();
         menu_type_item.title_element.innerHTML = `MENU TYPE`;
         menu_type_item.description_element.innerHTML = `Display standard header menu or collapsed menu`;

@@ -15,7 +15,6 @@ export function valid_menu_types(value: string) {
 export class Settings extends Singleton {
     language: Locale;
     hash_format: SettingsHashFormat;
-    display_hashicon: boolean;
     menu_type: SettingsMenuType;
 
     constructor() {
@@ -32,14 +31,6 @@ export class Settings extends Singleton {
             this.hash_format = hash_format as SettingsHashFormat;
         } else {
             this.hash_format = "middle";
-        }
-
-        // display hashicon
-        const display_hashicon = localStorage.getItem(`display_hashicon`);
-        if (display_hashicon === `false`) {
-            this.display_hashicon = false;
-        } else {
-            this.display_hashicon = true;
         }
 
         // menu type
@@ -63,7 +54,6 @@ export class Settings extends Singleton {
         });
 
         localStorage.setItem(`hash_format`, this.hash_format);
-        localStorage.setItem(`display_hashicon`, this.display_hashicon ? `true` : `false`);
         localStorage.setItem(`menu_type`, this.menu_type);
     }
 }
