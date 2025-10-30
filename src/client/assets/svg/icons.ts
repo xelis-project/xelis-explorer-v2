@@ -160,9 +160,17 @@ export const cog = () => {
     `;
 }
 
+export const menu_alt = () => {
+    return ` 
+        <svg fill="currentColor" width="800px" height="800px" viewBox="-5 -7 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin">
+            <path d='M1 0h5a1 1 0 1 1 0 2H1a1 1 0 1 1 0-2zm7 8h5a1 1 0 0 1 0 2H8a1 1 0 1 1 0-2zM1 4h12a1 1 0 0 1 0 2H1a1 1 0 1 1 0-2z' />
+        </svg>
+    `;
+}
+
 export default { 
     question_mark_shield, tag, exchange, 
     home, empty_box, menu, dashboard, blocks,
     contract, compute, block_graph, network,
-    search, connect, user, burn, cog
+    search, connect, user, burn, cog, menu_alt
 };
