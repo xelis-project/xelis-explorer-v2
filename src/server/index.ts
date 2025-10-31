@@ -1,17 +1,17 @@
 import { Hono } from "hono";
 import { trimTrailingSlash } from "hono/trailing-slash";
 import { languageDetector } from "hono/language";
+import { get_supported_languages } from "../client/localization/supported_languages";
 
 import handleIndex from './routes/index';
-import { supported_languages } from "../client/app/localization/localization";
 
-export type App = { Bindings: CloudflareBindings };
+export type ServerApp = { Bindings: CloudflareBindings };
 
-const app = new Hono<App>();
+const app = new Hono<ServerApp>();
 
 app.use(
   languageDetector({
-    supportedLanguages: supported_languages.map(x => x.key),
+    supportedLanguages: get_supported_languages().map(x => x.key),
     fallbackLanguage: 'en',
     cookieOptions: {
       httpOnly: false

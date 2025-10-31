@@ -1,5 +1,6 @@
 import icons from "../../../../assets/svg/icons";
 import { Container } from "../../../../components/container/container";
+import { localization } from "../../../../localization/localization";
 
 import './balance.css';
 
@@ -24,7 +25,7 @@ export class AccountBalance {
 
         const text = document.createElement(`div`);
         text.classList.add(`xe-account-balance-text`);
-        text.innerHTML = `BALANCE<br>ENCRYPTED`;
+        text.innerHTML = localization.get_text(`BALANCE ENCRYPTED`);
         this.container.element.appendChild(text);
     }
 }

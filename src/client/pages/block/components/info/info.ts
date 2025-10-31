@@ -6,6 +6,7 @@ import { BlockTypeBox } from "../../../../components/block_type_box/block_type_b
 import { Box } from "../../../../components/box/box";
 
 import './info.css';
+import { localization } from "../../../../localization/localization";
 
 export class BlockInfo {
     container: Container
@@ -95,7 +96,7 @@ export class BlockInfo {
         sub_container.appendChild(height_element);
 
         const text_element = document.createElement(`div`);
-        text_element.innerHTML = `${block_type.toUpperCase()} BLOCK`;
+        text_element.innerHTML = localization.get_text(`{} BLOCK`, [block_type.toUpperCase()]);
         sub_container.appendChild(text_element);
     }
 
@@ -116,11 +117,11 @@ export class BlockInfo {
 
     set_confirmations(height: number, current_height: number) {
         const confirmations = current_height - height;
-        this.confirmations_element.innerHTML = `${confirmations.toLocaleString()} confirmations`;
+        this.confirmations_element.innerHTML = localization.get_text(`{} confirmations`, [confirmations.toLocaleString()]);;
     }
 
     set_version(version: number) {
-        this.version_element.innerHTML = `Version ${version}`;
+        this.version_element.innerHTML = localization.get_text(`Version {}`, [version.toLocaleString()]);
     }
 
     set_size(size_in_bytes: number) {

@@ -1,10 +1,10 @@
 import { EventEmitter } from "../../utils/event_emitter";
 
+import './select.css';
+
 interface SelectEventMap {
     change: string;
 }
-
-import './select.css';
 
 export class Select extends EventEmitter<SelectEventMap> {
     element: HTMLElement;

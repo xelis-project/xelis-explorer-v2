@@ -1,8 +1,11 @@
 import * as nouislider from 'nouislider';
 import { EventEmitter } from '../../../utils/event_emitter';
+import { localization } from '../../../localization/localization';
 // import 'nouislider/dist/nouislider.css';
+
 import './dag_slider.css';
 import './height_control.css';
+
 interface HeightControlEventMap {
     new_height: number;
 }
@@ -26,11 +29,11 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
 
         this.live_btn_element = document.createElement(`button`);
         this.live_btn_element.classList.add(`xe-dag-height-control-live-button`);
-        this.live_btn_element.innerHTML = `LIVE`;
+        this.live_btn_element.innerHTML = localization.get_text(`LIVE`);
         inputs_container.appendChild(this.live_btn_element);
 
         const title_element = document.createElement(`label`);
-        title_element.innerHTML = `HEIGHT`;
+        title_element.innerHTML = localization.get_text(`HEIGHT`);
         inputs_container.appendChild(title_element);
 
         this.height_input_element = document.createElement(`input`);

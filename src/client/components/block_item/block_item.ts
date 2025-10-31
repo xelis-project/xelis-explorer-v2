@@ -6,7 +6,7 @@ import { format_address } from "../../utils/format_address";
 import { Box } from "../box/box";
 //@ts-ignore
 import hashicon from "hashicon";
-import { Localization } from "../../app/localization/localization";
+import { localization } from "../../localization/localization";
 import { BlockTypeBox } from "../block_type_box/block_type_box";
 
 import "./block_item.css";
@@ -85,11 +85,10 @@ export class BlockItem {
     }
 
     set_height(height: number) {
-        this.element_height.innerHTML = `BLOCK ${height.toLocaleString()}`;
+        this.element_height.innerHTML = localization.get_text(`BLOCK {}`, [height.toLocaleString()]);
     }
 
     set_tx_count(tx_count: number, tx_max: number) {
-        const localization = Localization.instance();
         this.element_txs.innerHTML = localization.get_text(`{} transactions`, [tx_count.toLocaleString()]);
     }
 
@@ -111,7 +110,7 @@ export class BlockItem {
         container.appendChild(block_box_type.element);
 
         const text = document.createElement(`div`);
-        text.innerHTML = `${block_type.toUpperCase()} BLOCK`;
+        text.innerHTML = localization.get_text(`{} BLOCK`, [block_type.toUpperCase()]);
         container.appendChild(text);
 
         this.element_type.replaceChildren();

@@ -1,12 +1,13 @@
 import { Context } from "hono";
 import { Page } from "../page";
-import { App as ServerApp } from "../../../server";
+import { ServerApp } from "../../../server";
 import { XelisNode } from "../../app/xelis_node";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { Master } from "../../components/master/master";
-import { Block, RPCEvent as DaemonRPCEvent, RPCMethod as DaemonRPCMethod, GetBlockByHashParams, GetContractModuleParams, GetContractModuleResult, TransactionExecuted, TransactionResponse } from "@xelis/sdk/daemon/types";
+import { RPCMethod as DaemonRPCMethod, GetContractModuleParams, GetContractModuleResult, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { NotFoundPage } from "../not_found/not_found";
+import { localization } from "../../localization/localization";
 
 import './contract.css';
 
@@ -74,7 +75,7 @@ export class ContractPage extends Page {
         const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
 
         const contract_hash = id;
-        this.title = `Contract ${contract_hash}`;
+        this.title = localization.get_text(`Contract {}`, [contract_hash]);
 
         try {
             this.server_data = await this.load_server_data(daemon, contract_hash);

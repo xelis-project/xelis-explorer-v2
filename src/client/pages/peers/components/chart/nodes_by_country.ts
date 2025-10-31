@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { PeerLocation } from '../../../../components/peers_map/peers_map';
+import { localization } from '../../../../localization/localization';
 
 export class PeersChartNodesByCountry {
     box_chart: BoxChart;
@@ -14,7 +15,7 @@ export class PeersChartNodesByCountry {
     constructor() {
         this.peers_locations = [];
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `NODES BY COUNTRY`;
+        this.box_chart.element_title.innerHTML = localization.get_text(`NODES BY COUNTRY`);
     }
 
     create_chart() {

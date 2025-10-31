@@ -8,6 +8,7 @@ import hashicon from 'hashicon';
 import { format_address } from '../../../utils/format_address';
 
 import './block_details.css';
+import { localization } from '../../../localization/localization';
 
 export class DAGBlockDetails {
     element: HTMLDivElement;
@@ -162,31 +163,31 @@ export class DAGBlockDetails {
     }
 
     set_version(version: number) {
-        this.set_item(this.element_version, `VERSION`, `${version}`);
+        this.set_item(this.element_version, localization.get_text(`VERSION`), version.toLocaleString());
     }
 
     set_hash(hash: string) {
-        this.set_item(this.element_hash, `HASH`, hash);
+        this.set_item(this.element_hash, localization.get_text(`HASH`), hash);
     }
 
     set_block_type(block_type: string) {
-        this.set_item(this.element_block_type, `TYPE`, block_type);
+        this.set_item(this.element_block_type, localization.get_text(`TYPE`), block_type);
     }
 
     set_timestamp(timestamp: number) {
-        this.set_item(this.element_timestamp, `TIMESTAMP`, `
-            <div>LOCAL: ${new Date(timestamp).toLocaleString()}</div>
+        this.set_item(this.element_timestamp, localization.get_text(`TIMESTAMP`), `
+            <div>${localization.get_text(`LOCAL`)}: ${new Date(timestamp).toLocaleString()}</div>
             <div>UNIX: ${timestamp}</div>
             <div>UTC: ${new Date(timestamp).toUTCString()}</div>
         `);
     }
 
     set_topoheight(topoheight?: number) {
-        this.set_item(this.element_topoheight, `TOPOHEIGHT`, topoheight ? topoheight.toLocaleString() : `--`);
+        this.set_item(this.element_topoheight, localization.get_text(`TOPOHEIGHT`), topoheight ? topoheight.toLocaleString() : `--`);
     }
 
     set_height(height: number) {
-        this.set_item(this.element_height, `HEIGHT`, height.toLocaleString());
+        this.set_item(this.element_height, localization.get_text(`HEIGHT`), height.toLocaleString());
     }
 
     set_miner(miner: string) {
@@ -200,49 +201,49 @@ export class DAGBlockDetails {
         miner_addr.innerHTML = format_address(miner);
         container.appendChild(miner_addr);
 
-        this.set_item(this.element_miner, `MINER`, container);
+        this.set_item(this.element_miner, localization.get_text(`MINER`), container);
     }
 
     set_fees(fees?: number) {
-        this.set_item(this.element_fees, `FEES`, fees ? format_xel(fees, true) : `--`);
+        this.set_item(this.element_fees, localization.get_text(`FEES`), fees ? format_xel(fees, true) : `--`);
     }
 
     set_reward(reward?: number) {
-        this.set_item(this.element_reward, `REWARD`, reward ? format_xel(reward, true) : `--`);
+        this.set_item(this.element_reward, localization.get_text(`REWARD`), reward ? format_xel(reward, true) : `--`);
     }
 
     set_supply(supply?: number) {
-        this.set_item(this.element_supply, `SUPPLY`, supply ? format_xel(supply, true) : `--`);
+        this.set_item(this.element_supply, localization.get_text(`SUPPLY`), supply ? format_xel(supply, true) : `--`);
     }
 
     set_tx_count(tx_count: number) {
-        this.set_item(this.element_tx_count, `TXS`, tx_count.toLocaleString());
+        this.set_item(this.element_tx_count, localization.get_text(`TXS`), tx_count.toLocaleString());
     }
 
     set_diff(difficulty: number) {
-        this.set_item(this.element_diff, `DIFF`, format_diff(difficulty));
+        this.set_item(this.element_diff, localization.get_text(`DIFF`), format_diff(difficulty));
     }
 
     set_hashrate(difficulty: number, block_time_target: number) {
-        this.set_item(this.element_hashrate, `HASHRATE`, format_hashrate(difficulty, block_time_target));
+        this.set_item(this.element_hashrate, localization.get_text(`HASHRATE`), format_hashrate(difficulty, block_time_target));
     }
 
     set_size(size_in_bytes: number) {
-        this.set_item(this.element_size, `SIZE`, prettyBytes(size_in_bytes));
+        this.set_item(this.element_size, localization.get_text(`SIZE`), prettyBytes(size_in_bytes));
     }
 
     set_nonce(nonce: number) {
-        this.set_item(this.element_nonce, `NONCE`, `${nonce}`);
+        this.set_item(this.element_nonce, localization.get_text(`NONCE`), `${nonce}`);
     }
 
     set_extra_nonce(extra_nonce: string) {
-        this.set_item(this.element_extra_nonce, `EXTRA NONCE`, extra_nonce);
+        this.set_item(this.element_extra_nonce, localization.get_text(`EXTRA NONCE`), extra_nonce);
     }
 
     set_tips(tips: string[]) {
         const value = tips.map((tip, i) => {
             return `<div>${i}: ${tip}</div>`;
         }).join(``);
-        this.set_item(this.element_tips, `TIPS`, value);
+        this.set_item(this.element_tips, localization.get_text(`TIPS`), value);
     }
 }

@@ -1,20 +1,23 @@
 import { Page } from "../page";
 import { Master } from "../../components/master/master";
-import { XelisNode } from "../../app/xelis_node";
 import { Table } from "../../components/table/table";
 import { Container } from "../../components/container/container";
 import { ContractRow } from "./contract_row/contract_row";
-import { GetContractBalanceParams, GetInfoResult, RPCMethod } from "@xelis/sdk/daemon/types";
+import { GetInfoResult } from "@xelis/sdk/daemon/types";
 import { get_contracts } from "../../data/contracts";
-import { RPCRequest } from "@xelis/sdk/rpc/types";
-import { XELIS_ASSET } from "@xelis/sdk/config";
+import { fetch_contracts } from "../../fetch_helpers/fetch_contracts";
+import { localization } from "../../localization/localization";
+import { ServerApp } from "../../../server";
+import { Context } from "hono";
 
 import './contracts.css';
-import { fetch_contracts } from "../../fetch_helpers/fetch_contracts";
 
 export class ContractsPage extends Page {
     static pathname = "/contracts";
-    static title = "Contracts";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Contracts`);
+    }
 
     master: Master;
 
@@ -44,13 +47,19 @@ export class ContractsPage extends Page {
         this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
 
-        const titles = ["HASH", "NAME", "BALANCE", "TOPOHEIGHT (BALANCE)", "REGISTERED"];
+        const titles = [
+            localization.get_text(`HASH`),
+            localization.get_text(`NAME`),
+            localization.get_text(`BALANCE`),
+            localization.get_text(`TOPOHEIGHT (BALANCE)`),
+            localization.get_text(`REGISTERED`)
+        ];
         this.table.set_head_row(titles);
     }
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(ContractsPage.title);
+        this.set_window_title(`Contracts`);
 
         const contracts = get_contracts();
 
@@ -82,7 +91,7 @@ export class ContractsPage extends Page {
         });
 
         if (this.table.body_element.children.length === 0) {
-            this.table.set_empty("No contracts");
+            this.table.set_empty(localization.get_text(`No contracts`));
         }
     }
 

@@ -2,6 +2,7 @@ import { PeerLocation } from "../../../../components/peers_map/peers_map";
 import { Container } from "../../../../components/container/container";
 import { PeerItem } from "../../../../components/peer_item/peer_item";
 import { PeersPage } from "../../peers";
+import { localization } from "../../../../localization/localization";
 
 import './list.css';
 
@@ -18,7 +19,7 @@ export class PeersList {
         this.container.element.classList.add(`xe-peers-list`, `scrollbar-1`, `scrollbar-1-right`);
 
         this.element_title = document.createElement(`div`);
-        this.element_title.innerHTML = `PEERS`;
+        this.element_title.innerHTML = localization.get_text(`PEERS`);
         this.container.element.appendChild(this.element_title);
 
         this.element_content = document.createElement(`div`);

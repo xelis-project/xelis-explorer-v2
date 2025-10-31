@@ -1,8 +1,10 @@
 import { Block } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
-import './in_blocks.css';
 import { BlockItem } from '../../../../components/block_item/block_item';
 import { Box } from '../../../../components/box/box';
+import { localization } from '../../../../localization/localization';
+
+import './in_blocks.css';
 
 export class TransactionInBlocks {
     container: Container;
@@ -20,13 +22,13 @@ export class TransactionInBlocks {
 
         this.title_element = document.createElement(`div`);
         container_1.appendChild(this.title_element);
-        this.title_element.innerHTML = `IN BLOCKS`;
+        this.title_element.innerHTML = localization.get_text(`IN BLOCKS`);
 
         this.legend_element = document.createElement(`div`);
         this.legend_element.classList.add(`xe-transaction-in-blocks-legend`);
         container_1.appendChild(this.legend_element);
         this.legend_element.innerHTML = `
-            <div></div><div>EXECUTED IN BLOCK</div>
+            <div></div><div>${localization.get_text(`EXECUTED IN BLOCK`)}</div>
         `;
 
         this.blocks_element = document.createElement(`div`);

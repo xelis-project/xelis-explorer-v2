@@ -2,6 +2,7 @@ import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { format_xel } from "../../../../utils/format_xel";
 import { Box } from "../../../../components/box/box";
+import { localization } from "../../../../localization/localization";
 
 import './extra.css';
 
@@ -57,21 +58,21 @@ export class BlockExtra {
 
     set_supply(supply?: number) {
         this.supply_element.innerHTML = `
-            <div>SUPPLY</div>
+            <div>${localization.get_text(`SUPPLY`)}</div>
             <div>${supply ? format_xel(supply, true) : `--`}
         `;
     }
 
     set_dev_reward(dev_reward?: number) {
         this.dev_reward_element.innerHTML = `
-            <div>DEV REWARD</div>
+            <div>${localization.get_text(`DEV REWARD`)}</div>
             <div>${dev_reward ? format_xel(dev_reward, true) : `--`}</div>
         `;
     }
 
     set_local_time(timestamp: number) {
         this.local_time_element.innerHTML = `
-            <div>LOCAL</div>
+            <div>${localization.get_text(`LOCAL`)}</div>
             <div>${new Date(timestamp).toLocaleString()}</div>
         `;
     }

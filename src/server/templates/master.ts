@@ -1,6 +1,6 @@
 import { Context } from 'hono';
 import pretty from 'pretty';
-import { App } from '..';
+import { ServerApp } from '..';
 import { ManifestChunk } from 'vite';
 
 interface MasterProps {
@@ -11,7 +11,7 @@ interface MasterProps {
     lang: string;
 }
 
-export const master = async (c: Context<App>, props: MasterProps) => {
+export const master = async (c: Context<ServerApp>, props: MasterProps) => {
     let { head, body, title, lang, description } = props;
 
     let client_js_src = "src/client/index.ts";

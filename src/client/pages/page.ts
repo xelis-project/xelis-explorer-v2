@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { App as ServerApp } from "../../server";
+import { ServerApp } from "../../server";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { Singleton } from "../utils/singleton";
 

@@ -7,12 +7,18 @@ import { TxRow } from "./tx_row/tx_row";
 import { RPCEvent as DaemonRPCEvent, GetInfoResult, TransactionExecuted, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
 import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
+import { localization } from "../../localization/localization";
+import { Context } from "hono";
+import { ServerApp } from "../../../server";
 
 import './transactions.css';
 
 export class TransactionsPage extends Page {
     static pathname = "/transactions";
-    static title = "Transactions";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Transactions`);
+    }
 
     master: Master;
 
@@ -42,7 +48,16 @@ export class TransactionsPage extends Page {
         this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
 
-        const titles = ["HEIGHT", "HASH", "TYPE", "SIGNER", "SIZE", "FEE", "EXECUTED IN", "AGE"];
+        const titles = [
+            localization.get_text(`HEIGHT`),
+            localization.get_text(`HASH`),
+            localization.get_text(`TYPE`),
+            localization.get_text(`SIGNER`),
+            localization.get_text(`SIZE`),
+            localization.get_text(`FEE`),
+            localization.get_text(`EXECUTED IN`),
+            localization.get_text(`AGE`)
+        ];
         this.table.set_head_row(titles);
     }
 
@@ -78,7 +93,7 @@ export class TransactionsPage extends Page {
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(TransactionsPage.title);
+        this.set_window_title(localization.get_text(`Transactions`));
         this.listen_node_events();
         const node = XelisNode.instance();
 
@@ -103,7 +118,7 @@ export class TransactionsPage extends Page {
         });
 
         if (this.table.body_element.children.length === 0) {
-            this.table.set_empty("No recent transactions");
+            this.table.set_empty(localization.get_text(`No recent transactions`));
         }
     }
 

@@ -1,8 +1,8 @@
-import './collapsed_menu.css';
-
-import { menu_links } from '../header/header';
-import { Localization } from '../../app/localization/localization';
+import { get_menu_links } from '../header/header';
+import { localization } from '../../localization/localization';
 import icons from '../../assets/svg/icons';
+
+import './collapsed_menu.css';
 
 export class CollapsedMenu {
     element: HTMLElement;
@@ -32,11 +32,12 @@ export class CollapsedMenu {
         this.links_element.classList.add(`xe-collapsed-menu-links`);
         this.element.appendChild(this.links_element);
 
+        const menu_links = get_menu_links();
         Object.keys(menu_links).forEach(key => {
             const link_def = menu_links[key];
             const link = document.createElement(`a`);
             link.href = key;
-            const text = Localization.instance().get_text(link_def.text);
+            const text = link_def.text;
             link.innerHTML = `${link_def.icon}${text}`;
             this.links_element.appendChild(link);
         });

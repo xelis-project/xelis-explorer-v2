@@ -5,13 +5,14 @@ import { XELIS_DECIMALS } from '@xelis/sdk/config';
 import { format_xel } from '../../../../utils/format_xel';
 import { Box } from '../../../../components/box/box';
 import { StatsItem } from './stats_item';
-
-import './top_stats.css';
 import { format_diff } from '../../../../utils/format_diff';
 import { format_hashrate } from '../../../../utils/format_hashrate';
 import prettyMilliseconds from 'pretty-ms';
 import { DiskSize, GetInfoResult, P2PStatusResult } from '@xelis/sdk/daemon/types';
 import prettyBytes from 'pretty-bytes';
+import { localization } from '../../../../localization/localization';
+
+import './top_stats.css';
 
 export interface DashboardTopStatsData {
     info: GetInfoResult;
@@ -62,23 +63,23 @@ export class DashboardTopStats {
         this.box_1 = new Box();
         this.container.element.appendChild(this.box_1.element);
 
-        this.item_max_supply = new StatsItem(`MAX SUPPLY`);
+        this.item_max_supply = new StatsItem(localization.get_text(`MAX SUPPLY`));
         this.box_1.element.appendChild(this.item_max_supply.element);
-        this.item_circ_supply = new StatsItem(`CIRC SUPPLY`);
+        this.item_circ_supply = new StatsItem(localization.get_text(`CIRC SUPPLY`));
         this.box_1.element.appendChild(this.item_circ_supply.element);
-        this.item_mined = new StatsItem(`MINED`);
+        this.item_mined = new StatsItem(localization.get_text(`MINED`));
         this.box_1.element.appendChild(this.item_mined.element);
-        this.item_block_reward = new StatsItem(`BLOCK REWARD`);
+        this.item_block_reward = new StatsItem(localization.get_text(`BLOCK REWARD`));
         this.box_1.element.appendChild(this.item_block_reward.element);
-        this.item_daily_emission = new StatsItem(`DAILY EMISSION`);
+        this.item_daily_emission = new StatsItem(localization.get_text(`DAILY EMISSION`));
         this.box_1.element.appendChild(this.item_daily_emission.element);
 
         this.box_2 = new Box();
         this.container.element.appendChild(this.box_2.element);
 
-        this.item_topo = new StatsItem(`TOPO`);
+        this.item_topo = new StatsItem(localization.get_text(`TOPO`));
         this.box_2.element.appendChild(this.item_topo.element);
-        this.item_height = new StatsItem(`HEIGHT`);
+        this.item_height = new StatsItem(localization.get_text(`HEIGHT`));
         this.box_2.element.appendChild(this.item_height.element);
         //this.item_stable = new StatsItem(`STABLE`);
         //this.box_2.element.appendChild(this.item_stable.element);
@@ -86,21 +87,21 @@ export class DashboardTopStats {
         this.box_3 = new Box();
         this.container.element.appendChild(this.box_3.element);
 
-        this.item_diff = new StatsItem(`DIFF`);
+        this.item_diff = new StatsItem(localization.get_text(`DIFF`));
         this.box_3.element.appendChild(this.item_diff.element);
-        this.item_hashrate = new StatsItem(`HASHRATE`);
+        this.item_hashrate = new StatsItem(localization.get_text(`HASHRATE`));
         this.box_3.element.appendChild(this.item_hashrate.element);
-        this.item_avg_time = new StatsItem(`BLOCK TIME`);
+        this.item_avg_time = new StatsItem(localization.get_text(`BLOCK TIME`));
         this.box_3.element.appendChild(this.item_avg_time.element);
 
         this.box_4 = new Box();
         this.container.element.appendChild(this.box_4.element);
 
-        this.item_mempool = new StatsItem(`MPOOL`);
+        this.item_mempool = new StatsItem(localization.get_text(`MPOOL`));
         this.box_4.element.appendChild(this.item_mempool.element);
-        this.item_peers = new StatsItem(`PEERS`);
+        this.item_peers = new StatsItem(localization.get_text(`PEERS`));
         this.box_4.element.appendChild(this.item_peers.element);
-        this.item_db_size = new StatsItem(`DB SIZE`);
+        this.item_db_size = new StatsItem(localization.get_text(`DB SIZE`));
         this.box_4.element.appendChild(this.item_db_size.element);
     }
 

@@ -18,12 +18,18 @@ import { fetch_geo_location } from "../../utils/fetch_geo_location";
 import { PeerLocation } from "../../components/peers_map/peers_map";
 import { Box } from "../../components/box/box";
 import { DashboardChartSection1 } from "./components/chart_section_1/chart_section_1";
+import { localization } from "../../localization/localization";
+import { ServerApp } from "../../../server";
+import { Context } from "hono";
 
 import './dashboard.css';
 
 export class DashboardPage extends Page {
     static pathname = "/";
-    static title = "Dashboard";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Dashboard`);
+    }
 
     dashboard_top_stats: DashboardTopStats;
     dashboard_blocks: DashboardBlocks;
@@ -309,7 +315,8 @@ export class DashboardPage extends Page {
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(DashboardPage.title);
+
+        this.set_window_title(localization.get_text(`Dashboard`));
 
         // the chart load ordering is important
         // loading pool chart first define the width for the others

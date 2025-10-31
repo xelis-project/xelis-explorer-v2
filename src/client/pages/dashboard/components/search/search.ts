@@ -1,4 +1,5 @@
 import { App } from "../../../../app/app";
+import { localization } from "../../../../localization/localization";
 import { XelisNode } from "../../../../app/xelis_node";
 import icons from "../../../../assets/svg/icons";
 import { Container } from "../../../../components/container/container";
@@ -17,10 +18,9 @@ export class DashboardSearch {
 
         const form_element = document.createElement(`form`);
         this.container.element.appendChild(form_element);
-
         this.text_input = new TextInput();
         this.text_input.element.name = `dashboard_search_input`;
-        this.text_input.element.placeholder = `Search block, transaction or account address`;
+        this.text_input.element.placeholder = localization.get_text(`Search block, transaction or account address`);
         form_element.appendChild(this.text_input.element);
 
         const search_button = document.createElement(`button`);

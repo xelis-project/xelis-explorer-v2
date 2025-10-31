@@ -1,3 +1,4 @@
+import { localization } from "../../../../localization/localization";
 import { Container } from "../../../../components/container/container";
 import { TextInput } from "../../../../components/text_input/text_input";
 import { PeersPage } from "../../peers";
@@ -17,7 +18,7 @@ export class PeersSearch {
 
         this.text_input = new TextInput();
         this.text_input.element.name = `peers_search_input`;
-        this.text_input.element.placeholder = `Search ip, version, country, city or tag`;
+        this.text_input.element.placeholder = localization.get_text(`Search ip, version, country, city or tag`);
         form.appendChild(this.text_input.element);
 
         let search_timeout_id: number | undefined;

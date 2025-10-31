@@ -1,8 +1,9 @@
 import { TransactionResponse } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
+import { Box } from '../../../../components/box/box';
+import { localization } from '../../../../localization/localization';
 
 import './extra.css';
-import { Box } from '../../../../components/box/box';
 
 export class TransactionExtra {
     container: Container;
@@ -63,42 +64,42 @@ export class TransactionExtra {
 
     set_ref_topo(ref_topo: number) {
         this.ref_topo_element.innerHTML = `
-            <div>REF TOPO</div>
+            <div>${localization.get_text(`REF TOPO`)}</div>
             <a href="/topo/${ref_topo}">${ref_topo.toLocaleString()}</a>
         `;
     }
 
     set_ref_hash(ref_hash: string) {
         this.ref_hash_element.innerHTML = `
-            <div>REF HASH</div>
+            <div>${localization.get_text(`REF HASH`)}</div>
             <a href="/block/${ref_hash}">${ref_hash}</a>
         `;
     }
 
     set_signature(signature: string) {
         this.signature_element.innerHTML = `
-            <div>SIGNATURE</div>
+            <div>${localization.get_text(`SIGNATURE`)}</div>
             <div>${signature}<div>
         `;
     }
 
     set_nonce(nonce: number) {
         this.nonce_element.innerHTML = `
-            <div>NONCE</div>
+            <div>${localization.get_text(`NONCE`)}</div>
             <div>${nonce.toLocaleString()}<div>
         `;
     }
 
     set_in_mempool(in_mempool: boolean) {
         this.in_mempool_element.innerHTML = `
-            <div>IN MEMPOOL</div>
+            <div>${localization.get_text(`IN MEMPOOL`)}</div>
             <div>${in_mempool ? `YES` : `NO`}<div>
         `;
     }
 
     set_version(version: number) {
         this.version_element.innerHTML = `
-            <div>VERSION</div>
+            <div>${localization.get_text(`VERSION`)}</div>
             <div>${version}<div>
         `;
     }

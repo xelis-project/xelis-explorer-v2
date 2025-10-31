@@ -3,6 +3,7 @@ import { Container } from "../../../../components/container/container";
 import { format_diff } from "../../../../utils/format_diff";
 import { format_hashrate } from "../../../../utils/format_hashrate";
 import { Box } from "../../../../components/box/box";
+import { localization } from "../../../../localization/localization";
 
 import './hashrate.css';
 
@@ -41,21 +42,21 @@ export class BlockHashrate {
 
     set_hashrate(difficulty: number, block_time_target: number) {
         this.hashrate_element.innerHTML = `
-            <div>HASHRATE</div>
+            <div>${localization.get_text(`HASHRATE`)}</div>
             <div>${format_hashrate(difficulty, block_time_target)}</div>
         `;
     }
 
     set_diff(difficulty: number) {
         this.diff_element.innerHTML = `
-            <div>DIFF</div>
+            <div>${localization.get_text(`DIFF`)}</div>
             <div>${format_diff(difficulty)}</div>
         `;
     }
 
     set_cum_diff(cum_difficulty: number) {
         this.cum_diff_element.innerHTML = `
-            <div>CUM DIFF</div>
+            <div>${localization.get_text(`CUM DIFF`)}</div>
             <div>${format_diff(cum_difficulty)}</div>
         `;
     }

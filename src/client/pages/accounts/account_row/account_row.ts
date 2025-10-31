@@ -3,6 +3,7 @@ import hashicon from "hashicon";
 import { Row } from "../../../components/table/row";
 import { format_address } from "../../../utils/format_address";
 import { format_hash } from "../../../utils/format_hash";
+import { localization } from "../../../localization/localization";
 
 import './account_row.css';
 
@@ -68,6 +69,6 @@ export class AccountRow extends Row {
     }
 
     set_balance() {
-        this.value_cells[6].innerHTML = `ENCRYPTED`;
+        this.value_cells[6].innerHTML = localization.get_text(`ENCRYPTED`);
     }
 }

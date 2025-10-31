@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { Block, BlockType, GetInfoResult } from '@xelis/sdk/daemon/types';
+import { localization } from '../../../../localization/localization';
 
 export class DashboardBlocksTxs {
     box_chart: BoxChart;
@@ -14,7 +15,7 @@ export class DashboardBlocksTxs {
 
     constructor() {
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `LAST 100 BLOCKS`;
+        this.box_chart.element_title.innerHTML = localization.get_text(`LAST 100 BLOCKS`);
         this.blocks = [];
     }
 

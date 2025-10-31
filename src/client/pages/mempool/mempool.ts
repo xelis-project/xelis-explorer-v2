@@ -8,13 +8,19 @@ import { MempoolChart } from "./components/chart/chart";
 import { MempoolTxsList } from "./components/list/list";
 import { MempoolSearch } from "./components/search/search";
 import { MempoolSummary } from "./components/summary/summary";
+import { Box } from "../../components/box/box";
+import { ServerApp } from "../../../server";
+import { Context } from "hono";
+import { localization } from "../../localization/localization";
 
 import './mempool.css';
-import { Box } from "../../components/box/box";
 
 export class MempoolPage extends Page {
     static pathname = "/mempool";
-    static title = "Mempool";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Mempool`);
+    }
 
     master: Master;
 
@@ -112,7 +118,7 @@ export class MempoolPage extends Page {
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(MempoolPage.title);
+        this.set_window_title(localization.get_text(`Mempool`));
 
         this.mempool_chart.blocks_txs.load();
         Box.boxes_loading(this.mempool_chart.container.element, true);

@@ -4,6 +4,7 @@ import hashicon from "hashicon";
 import QRCode from 'qrcode';
 import { AccountServerData } from "../../account";
 import prettyMilliseconds from "pretty-ms";
+import { localization } from "../../../../localization/localization";
 
 import './info.css';
 
@@ -74,7 +75,7 @@ export class AccountInfo {
     set_last_activity(topoheight: number, timestamp: number) {
         const set_last_activity = () => {
             this.last_activity_element.innerHTML = `
-                <div>LAST ACTIVITY</div>
+                <div>${localization.get_text(`LAST ACTIVITY`)}</div>
                 <div>${topoheight.toLocaleString()} (${prettyMilliseconds(Date.now() - timestamp, { compact: true })})</div>
                 <div>${new Date(timestamp).toLocaleString()}</div>
             `;

@@ -1,6 +1,7 @@
 import { Singleton } from "../utils/singleton";
-import { Locale, Localization, validate_lang_key } from "./localization/localization";
+import { Locale, localization } from "../localization/localization";
 import Cookies from 'js-cookie';
+import { validate_lang_key } from "../localization/supported_languages";
 
 export type SettingsHashFormat = "front" | "middle" | "back";
 export const hash_formats = ["front", "middle", "back"];
@@ -22,7 +23,6 @@ export class Settings extends Singleton {
 
         // language
         this.language = validate_lang_key(Cookies.get(`language`));
-        const localization = Localization.instance();
         localization.locale = this.language;
 
         // hash format
@@ -43,8 +43,6 @@ export class Settings extends Singleton {
     }
 
     save() {
-        const localization = Localization.instance();
-        localization.locale = this.language;
         Cookies.set(`language`, this.language, {
             path: '/',
             sameSite: 'Strict',

@@ -6,6 +6,7 @@ import { format_address } from "../../../../utils/format_address";
 // @ts-ignore
 import hashicon from 'hashicon';
 import { format_hash } from "../../../../utils/format_hash";
+import { localization } from "../../../../localization/localization";
 
 import './history_item.css';
 
@@ -73,7 +74,7 @@ export class AccountHistoryListItem {
             this.type_element.classList.add(`xe-account-list-item-outgoing`);
             this.type_element.replaceChildren();
             const text = document.createElement(`div`);
-            text.innerHTML = `IN TRANSFER`;
+            text.innerHTML = localization.get_text(`IN TRANSFER`);
             this.type_element.appendChild(text);
             this.type_element.appendChild(to_icon);
             const addr_text = document.createElement(`div`);
@@ -87,7 +88,7 @@ export class AccountHistoryListItem {
             this.type_element.classList.add(`xe-account-list-item-outgoing`);
             this.type_element.replaceChildren();
             const text = document.createElement(`div`);
-            text.innerHTML = `OUT TRANSFER`;
+            text.innerHTML = localization.get_text(`OUT TRANSFER`);
             this.type_element.appendChild(text);
             this.type_element.appendChild(to_icon);
             const addr_text = document.createElement(`div`);
@@ -97,31 +98,31 @@ export class AccountHistoryListItem {
 
         if (history.dev_fee) {
             const xel_amount = format_xel(history.dev_fee.reward, true);
-            this.type_element.innerHTML = `DEV FEE (${xel_amount})`;
+            this.type_element.innerHTML = localization.get_text(`DEV FEE ({})`, [xel_amount]);
         }
 
         if (history.mining) {
             const xel_amount = format_xel(history.mining.reward, true);
-            this.type_element.innerHTML = `MINING (${xel_amount})`;
+            this.type_element.innerHTML = localization.get_text(`MINING ({})`, [xel_amount]);
         }
 
         if (history.burn) {
             const xel_amount = format_xel(history.burn.amount, true);
-            this.type_element.innerHTML = `BURN (${xel_amount})`;
+            this.type_element.innerHTML = localization.get_text(`BURN ({})`, [xel_amount]);
         }
 
         if (Reflect.has(history, `deploy_contract`)) {
-            this.type_element.innerHTML = `DEPLOY CONTRACT`;
+            this.type_element.innerHTML = localization.get_text(`DEPLOY CONTRACT`);
         }
 
         if (history.invoke_contract) {
             const contract_hash = format_hash(history.invoke_contract.contract);
-            this.type_element.innerHTML = `INVOKE CONTRACT (${contract_hash})`;
+            this.type_element.innerHTML = localization.get_text(`INVOKE CONTRACT ({})`, [contract_hash]);
         }
 
         if (history.multi_sig) {
             const state = `${history.multi_sig.participants.length} / ${history.multi_sig.threshold}`;
-            this.type_element.innerHTML = `MULTISIG (${state})`;
+            this.type_element.innerHTML = localization.get_text(`MULTISIG ({})`, [state]);
         }
     }
 }

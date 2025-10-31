@@ -1,12 +1,18 @@
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { Page } from "../page";
 import { Master } from "../../components/master/master";
+import { localization } from "../../localization/localization";
+import { ServerApp } from "../../../server";
+import { Context } from "hono";
 
 import './not_found.css';
 
 export class NotFoundPage extends Page {
-    static title = "Page Not Found";
     static status: ContentfulStatusCode = 404;
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Page Not Found`);
+    }
 
     master: Master;
 
@@ -34,16 +40,16 @@ export class NotFoundPage extends Page {
         container.appendChild(sub_container);
 
         const title_element = document.createElement(`div`);
-        title_element.innerHTML = "INTERFACE NOT FOUND";
+        title_element.innerHTML = localization.get_text(`INTERFACE NOT FOUND`);
         sub_container.appendChild(title_element);
 
         const description_element = document.createElement(`div`);
-        description_element.innerHTML = "The interface you are looking for does not exists or was deleted.";
+        description_element.innerHTML = localization.get_text(`The interface you are looking for does not exists or was deleted.`);
         sub_container.appendChild(description_element);
     }
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(NotFoundPage.title);
+        this.set_window_title(localization.get_text(`Page Not Found`));
     }
 }

@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { DashboardPage } from '../../dashboards';
 import { format_address } from '../../../../utils/format_address';
 import { Block } from '@xelis/sdk/daemon/types';
+import { localization } from '../../../../localization/localization';
 
 interface DataItem {
     label: string;
@@ -20,7 +20,7 @@ export class DashboardPools {
 
     constructor() {
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `POOLS & MINERS`;
+        this.box_chart.element_title.innerHTML = localization.get_text(`POOLS & MINERS`);
         this.miners = {};
     }
 

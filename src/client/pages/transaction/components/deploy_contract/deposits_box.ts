@@ -3,6 +3,7 @@ import { format_asset } from "../../../../utils/format_asset";
 import { Box } from "../../../../components/box/box";
 import { get_assets } from "../../../../data/assets";
 import { format_hash } from "../../../../utils/format_hash";
+import { localization } from "../../../../localization/localization";
 
 import './deposits_box.css';
 
@@ -20,12 +21,12 @@ export class DepositsBox {
                     const assets = get_assets();
             let asset = assets[hash];
 
-            let amount_string = `ENCRYPTED`;
+            let amount_string = localization.get_text(`ENCRYPTED`);
             if (deposit.public) {
                 if (asset) {
                     amount_string = format_asset(hash, deposit.public, true);
                 } else {
-                    amount_string = `${deposit.public} (ATOMIC)`;
+                    amount_string = localization.get_text(`{} (ATOMIC)`, [deposit.public.toLocaleString()]);
                 }
             }
 

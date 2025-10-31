@@ -1,3 +1,4 @@
+import { localization } from "../../../../localization/localization";
 import { Container } from "../../../../components/container/container";
 import { TextInput } from "../../../../components/text_input/text_input";
 import { MempoolPage } from "../../mempool";
@@ -17,7 +18,7 @@ export class MempoolSearch {
 
         this.text_input = new TextInput();
         this.text_input.element.name = `mempool_search_input`;
-        this.text_input.element.placeholder = `Search transaction (account address or tx hash)`;
+        this.text_input.element.placeholder = localization.get_text(`Search transaction (account address or tx hash)`);
         form.appendChild(this.text_input.element);
 
         let search_timeout_id: number | undefined;

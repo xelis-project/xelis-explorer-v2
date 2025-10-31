@@ -5,6 +5,7 @@ import hashicon from 'hashicon';
 import { format_xel } from "../../../../utils/format_xel";
 import { Block } from "@xelis/sdk/daemon/types";
 import { Box } from "../../../../components/box/box";
+import { localization } from "../../../../localization/localization";
 
 import './miner.css';
 
@@ -52,13 +53,13 @@ export class BlockMiner {
         sub_container.appendChild(miner_addr);
 
         const text = document.createElement(`div`);
-        text.innerHTML = `MINER`;
+        text.innerHTML = localization.get_text(`MINER`);
         sub_container.appendChild(text);
     }
 
     set_reward(reward?: number) {
         this.reward_element.innerHTML = `
-            <div>MINING REWARD</div>
+            <div>${localization.get_text(`MINING REWARD`)}</div>
             <div>${reward ? format_xel(reward, true) : `--`}</div>
         `;
     }

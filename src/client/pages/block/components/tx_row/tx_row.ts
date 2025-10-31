@@ -7,6 +7,7 @@ import prettyBytes from "pretty-bytes";
 import { format_asset } from "../../../../utils/format_asset";
 import { Row } from "../../../../components/table/row";
 import { format_hash } from "../../../../utils/format_hash";
+import { localization } from "../../../../localization/localization";
 
 export class TxRow extends Row {
     constructor() {
@@ -38,7 +39,8 @@ export class TxRow extends Row {
         } else if (data.multi_sig) {
             value = `Multi Sig ${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`;
         } else if (data.transfers) {
-            value = `${data.transfers.length} transfer`;
+            const transfer_count = data.transfers.length;
+            value = localization.get_text(`{} transfers`, [transfer_count.toLocaleString()]);
         }
 
         this.value_cells[1].innerHTML = value;

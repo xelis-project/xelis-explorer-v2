@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
 import { format_hashrate } from '../../../../utils/format_hashrate';
+import { localization } from '../../../../localization/localization';
 
 interface DataPoint {
     x: number;
@@ -24,7 +25,7 @@ export class DashboardHashRate {
 
     constructor() {
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `HASHRATE`;
+        this.box_chart.element_title.innerHTML = localization.get_text(`HASHRATE`);
         this.blocks = [];
     }
 

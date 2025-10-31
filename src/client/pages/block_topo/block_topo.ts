@@ -1,10 +1,11 @@
 import { Page } from "../page";
 import { Context } from "hono";
-import { App as ServerApp } from "../../../server";
+import { ServerApp } from "../../../server";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { XelisNode } from "../../app/xelis_node";
 import { BlockPage, BlockPageServerData } from "../block/block";
 import { NotFoundPage } from "../not_found/not_found";
+import { localization } from "../../localization/localization";
 
 export class BlockTopoPage extends Page {
     static pathname = "/topo/:id";
@@ -29,7 +30,7 @@ export class BlockTopoPage extends Page {
         const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
 
         const block_topoheight = parseInt(id);
-        this.title = `Block Topo ${block_topoheight.toLocaleString()}`;
+        this.title = localization.get_text(`Block Topo {}`, [block_topoheight.toLocaleString()]);
 
         try {
             const block = await daemon.getBlockAtTopoheight({

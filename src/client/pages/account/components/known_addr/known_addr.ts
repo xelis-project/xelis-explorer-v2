@@ -1,6 +1,7 @@
 import icons from "../../../../assets/svg/icons";
 import { Container } from "../../../../components/container/container";
 import { get_addresses } from "../../../../data/addresses";
+import { localization } from "../../../../localization/localization";
 
 import "./known_addr.css";
 
@@ -22,8 +23,8 @@ export class AccountKnownAddr {
             this.container.element.innerHTML = `
             ${icons.tag()}
             <div>
-                <div>This is a known address: <span>${name}</span></div>
-                ${link && `<div>You can visit the website at <a href="${link}" target="_blank">${link}</a>.</div>`}
+                <div>${localization.get_text(`This is a known address: {}`, [`<span>${name}</span>`])}</div>
+                ${link && `<div>${localization.get_text(`You can visit the website at {}.`, [`<a href="${link}" target="_blank">${link}</a>`])}</div>`}
             </div>
         `;
         } else {

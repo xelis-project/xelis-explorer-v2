@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { App as ServerApp } from "../../../server";
+import { ServerApp } from "../../../server";
 import { Page } from "../page";
 import { Block, GetInfoResult, RPCEvent as DaemonRPCEvent } from "@xelis/sdk/daemon/types";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
@@ -14,6 +14,7 @@ import { BlockTxs } from "./components/txs/txs";
 import { BlockGraph } from "./components/graph/graph";
 
 import './block.css';
+import { localization } from "../../localization/localization";
 
 export interface BlockPageServerData {
     block: Block;
@@ -32,7 +33,6 @@ export class BlockPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         let block_hash = this.get_pattern_id(c.req.url);
-        this.title = `Block ${block_hash}`;
         this.server_data = undefined;
 
         if (!block_hash) {
@@ -41,6 +41,7 @@ export class BlockPage extends Page {
         }
 
         const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        this.title = localization.get_text(`Block {}`, [block_hash]);
 
         try {
             const block = await daemon.getBlockByHash({

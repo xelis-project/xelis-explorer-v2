@@ -1,3 +1,4 @@
+import { localization } from '../../../../localization/localization';
 import icons from '../../../../assets/svg/icons';
 import { Container } from '../../../../components/container/container';
 import { TxBlock, TxItem } from '../../../../components/tx_item/tx_item';
@@ -18,7 +19,7 @@ export class DashboardTxs {
         this.tx_items = [];
 
         this.element_title = document.createElement(`div`);
-        this.element_title.innerHTML = `TRANSACTIONS`;
+        this.element_title.innerHTML = localization.get_text(`TRANSACTIONS`);
         this.container.element.appendChild(this.element_title);
 
         this.element_content = document.createElement(`div`);
@@ -26,7 +27,7 @@ export class DashboardTxs {
 
         this.empty_element = document.createElement(`div`);
         this.empty_element.classList.add(`xe-dashboard-txs-list-empty`);
-        this.empty_element.innerHTML = `${icons.exchange()}<div>No transactions</div>`;
+        this.empty_element.innerHTML = `${icons.exchange()}<div>${localization.get_text(`No transactions`)}</div>`;
     }
 
     set(txs_blocks: TxBlock[]) {

@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { Page } from "../page";
-import { App as ServerApp } from "../../../server";
+import { ServerApp } from "../../../server";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { XelisNode } from "../../app/xelis_node";
 import { Master } from "../../components/master/master";
@@ -13,6 +13,7 @@ import { AccountBalance } from "./components/balance/balance";
 import { NotFoundPage } from "../not_found/not_found";
 import { AccountKnownAddr } from "./components/known_addr/known_addr";
 import { Box } from "../../components/box/box";
+import { localization } from "../../localization/localization";
 
 import "./account.css";
 
@@ -129,7 +130,7 @@ export class AccountPage extends Page {
         const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
 
         const addr = id;
-        this.title = `Account ${addr}`;
+        this.title = localization.get_text(`Account {}`, [addr]);
 
         try {
             this.server_data = await this.load_server_data(daemon, addr);

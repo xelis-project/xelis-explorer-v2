@@ -4,15 +4,20 @@ import { XelisNode } from "../../app/xelis_node";
 import { Table } from "../../components/table/table";
 import { Container } from "../../components/container/container";
 import { BlockRow } from "./block_row/block_row";
-import { App } from "../../app/app";
 import { Block, BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, GetInfoResult } from "@xelis/sdk/daemon/types";
 import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
+import { localization } from "../../localization/localization";
+import { Context } from "hono";
+import { ServerApp } from "../../../server";
 
 import './blocks.css';
 
 export class BlocksPage extends Page {
     static pathname = "/blocks";
-    static title = "Blocks";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Blocks`);
+    }
 
     master: Master;
 
@@ -29,7 +34,6 @@ export class BlocksPage extends Page {
 
         this.block_rows = [];
         this.page_data = {};
-
         this.master = new Master();
         this.element.appendChild(this.master.element);
         this.master.content.classList.add(`xe-blocks`);
@@ -42,7 +46,18 @@ export class BlocksPage extends Page {
         this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
 
-        const titles = ["TOPO HEIGHT", "HEIGHT", "BLOCK", "POOL / MINER", "SIZE", "TX COUNT", "HASH", "REWARD", "DIFF", "AGE"];
+        const titles = [
+            localization.get_text(`TOPO HEIGHT`),
+            localization.get_text(`HEIGHT`),
+            localization.get_text(`BLOCK`),
+            localization.get_text(`POOL / MINER`),
+            localization.get_text(`SIZE`),
+            localization.get_text(`TX COUNT`),
+            localization.get_text(`HASH`),
+            localization.get_text(`REWARD`),
+            localization.get_text(`DIFF`),
+            localization.get_text(`AGE`),
+        ];
         this.table.set_head_row(titles);
     }
 
@@ -134,7 +149,8 @@ export class BlocksPage extends Page {
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(BlocksPage.title);
+        this.set_window_title(localization.get_text(`Blocks`));
+
         this.listen_node_events();
         const node = XelisNode.instance();
 

@@ -1,8 +1,7 @@
 import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { BlockItem } from "../../../../components/block_item/block_item";
-import { DashboardPage } from "../../dashboards";
-import { App } from "../../../../app/app";
+import { localization } from "../../../../localization/localization";
 
 import "./blocks.css";
 
@@ -18,9 +17,8 @@ export class DashboardBlocks {
         this.container.element.classList.add(`xe-dashboard-blocks`, `scrollbar-1`, `scrollbar-1-right`);
 
         this.block_items = [];
-
         this.element_title = document.createElement(`div`);
-        this.element_title.innerHTML = `BLOCKS`;
+        this.element_title.innerHTML = localization.get_text(`BLOCKS`);
         this.container.element.appendChild(this.element_title);
 
         this.element_content = document.createElement(`div`);

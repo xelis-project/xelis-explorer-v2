@@ -1,7 +1,8 @@
 import { App } from '../../app/app';
-import { Localization } from '../../app/localization/localization';
+import { localization } from '../../localization/localization';
 import icons from '../../assets/svg/icons';
 import { svg_xelis_logo } from '../../assets/svg/xelis';
+
 import './header.css';
 
 interface LinkDef {
@@ -9,17 +10,19 @@ interface LinkDef {
     icon: string;
 }
 
-export const menu_links = {
-    "/": { text: "DASHBOARD", icon: icons.dashboard() },
-    "/blocks": { text: "BLOCKS", icon: icons.blocks() },
-    "/transactions": { text: "TRANSACTIONS", icon: icons.exchange() },
-    "/accounts": { text: "ACCOUNTS", icon: icons.user() },
-    "/contracts": { text: "CONTRACTS", icon: icons.contract() },
-    "/mempool": { text: "MEMPOOL", icon: icons.compute() },
-    "/dag": { text: "DAG", icon: icons.block_graph() },
-    "/peers": { text: "PEERS", icon: icons.network() },
-    "/settings": { text: "SETTINGS", icon: icons.cog() },
-} as Record<string, LinkDef>;
+export const get_menu_links = () => {
+    return {
+        "/": { text: localization.get_text(`DASHBOARD`), icon: icons.dashboard() },
+        "/blocks": { text: localization.get_text(`BLOCKS`), icon: icons.blocks() },
+        "/transactions": { text: localization.get_text(`TRANSACTIONS`), icon: icons.exchange() },
+        "/accounts": { text: localization.get_text(`ACCOUNTS`), icon: icons.user() },
+        "/contracts": { text: localization.get_text(`CONTRACTS`), icon: icons.contract() },
+        "/mempool": { text: localization.get_text(`MEMPOOL`), icon: icons.compute() },
+        "/dag": { text: localization.get_text(`DAG`), icon: icons.block_graph() },
+        "/peers": { text: localization.get_text(`PEERS`), icon: icons.network() },
+        "/settings": { text: localization.get_text(`SETTINGS`), icon: icons.cog() },
+    } as Record<string, LinkDef>;
+}
 
 export class Header {
     element: HTMLDivElement;
@@ -70,11 +73,12 @@ export class Header {
 
         this.element.appendChild(this.links_element);
 
+        const menu_links = get_menu_links();
         Object.keys(menu_links).forEach((key) => {
             const link_def = menu_links[key];
             const link = document.createElement(`a`);
             link.href = key;
-            const text = Localization.instance().get_text(link_def.text);
+            const text = link_def.text;
             link.innerHTML = `${link_def.icon}${text}`;
             this.links_element.appendChild(link);
         });

@@ -1,3 +1,4 @@
+import { localization } from "../../../../localization/localization";
 import icons from "../../../../assets/svg/icons";
 import { Container } from "../../../../components/container/container";
 import { TxBlock, TxItem } from "../../../../components/tx_item/tx_item";
@@ -11,13 +12,12 @@ export class MempoolTxsList {
 
     constructor() {
         this.tx_items = [];
-
         this.container = new Container();
         this.container.element.classList.add(`xe-mempool-txs-list`, `scrollbar-1`, `scrollbar-1-right`);
 
         this.empty_element = document.createElement(`div`);
         this.empty_element.classList.add(`xe-mempool-txs-list-empty`);
-        this.empty_element.innerHTML = `${icons.exchange()}<div>No transactions in mempool</div>`;
+        this.empty_element.innerHTML = `${icons.exchange()}<div>${localization.get_text(`No transactions in mempool`)}</div>`;
     }
 
     set_empty(empty: boolean) {

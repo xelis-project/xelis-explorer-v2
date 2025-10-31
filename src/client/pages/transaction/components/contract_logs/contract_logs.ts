@@ -1,10 +1,9 @@
 import { ContractLog } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
-import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
-import { Box } from "../../../../components/box/box";
+import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
+import { localization } from "../../../../localization/localization";
 
 import './contract_logs.css';
-import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
 
 export class TransactionContractLogs {
     container: Container;
@@ -14,7 +13,7 @@ export class TransactionContractLogs {
         this.container.element.classList.add(`xe-transaction-contract-outputs`);
 
         const title_element = document.createElement(`div`);
-        title_element.innerHTML = `CONTRACT LOGS`;
+        title_element.innerHTML = localization.get_text(`CONTRACT LOGS`);
         this.container.element.appendChild(title_element);
 
         const json_viewer_box = new JsonViewerBox(contract_logs);

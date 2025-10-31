@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { Peer } from '@xelis/sdk/daemon/types';
+import { localization } from '../../../../localization/localization';
 
 interface DataItem {
     label: string;
@@ -19,7 +20,7 @@ export class PeersChartNodesByHeight {
     constructor() {
         this.peers = [];
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `NODES BY HEIGHT`;
+        this.box_chart.element_title.innerHTML = localization.get_text(`NODES BY HEIGHT`);
     }
 
     create_chart() {

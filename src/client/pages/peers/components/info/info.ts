@@ -1,8 +1,9 @@
 import { Peer } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
+import { Box } from "../../../../components/box/box";
+import { localization } from "../../../../localization/localization";
 
 import './info.css';
-import { Box } from "../../../../components/box/box";
 
 export class PeersInfo {
     container: Container
@@ -64,28 +65,28 @@ export class PeersInfo {
 
     set_sync(value: number) {
         this.sync_element.innerHTML = `
-            <div>SYNC</div>
+            <div>${localization.get_text(`SYNC`)}</div>
             <div>${value}</div>
         `;
     }
 
     set_desync(value: number) {
         this.desync_element.innerHTML = `
-            <div>DESYNC</div>
+            <div>${localization.get_text(`DESYNC`)}</div>
             <div>${value}</div>
         `;
     }
 
     set_full_ledger(value: number) {
         this.full_ledger_element.innerHTML = `
-            <div>FULL LEDGER</div>
+            <div>${localization.get_text(`FULL LEDGER`)}</div>
             <div>${value}</div>
         `;
     }
 
     set_pruned_ledger(value: number) {
         this.pruned_ledger_element.innerHTML = `
-            <div>PRUNED LEDGER</div>
+            <div>${localization.get_text(`PRUNED LEDGER`)}</div>
             <div>${value}</div>
         `;
     }

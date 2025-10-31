@@ -1,41 +1,31 @@
-import { Singleton } from "../../utils/singleton";
-
+import en from './locales/en';
 import fr from './locales/fr';
+import es from './locales/es';
 
-export const translations = {
-    "fr": fr,
-} as Record<Locale, Record<string, string>>;
+export type Locale = "en" | "fr" | "es";
 
-export type Locale = "en" | "fr";
-
-export const supported_languages = [
-    { title: "English", key: "en", flag: "us" },
-    { title: "French", key: "fr", flag: "fr" },
-] as { title: string, key: Locale, flag: string }[];
-
-export const validate_lang_key = (key?: string): Locale => {
-    const lang = supported_languages.find(x => x.key === key);
-    if (lang) return lang.key;
-    return "en";
-}
-
-export class Localization extends Singleton {
+class Localization {
     locale: Locale;
     vars: Record<string, string[]>;
+    translations: Record<string, Record<string, string>>;
 
     constructor() {
-        super();
         this.locale = "en";
         this.vars = {};
+        this.translations = {
+            "en": en,
+            "fr": fr,
+            "es": es
+        };
     }
 
     get_text(en_text: string, vars?: string[]) {
         let localized_text = en_text;
 
         if (this.locale !== `en`) {
-            const lang_text = translations[this.locale][en_text];
+            const lang_text = this.translations[this.locale][en_text];
             if (lang_text) localized_text = lang_text;
-            console.warn(`Localized text not found: ${en_text}`);
+            else console.warn(`Localized text not found: ${en_text}`);
         }
 
         if (vars) {
@@ -70,3 +60,5 @@ export class Localization extends Singleton {
         traverse(document.body);
     }
 }
+
+export const localization = new Localization();

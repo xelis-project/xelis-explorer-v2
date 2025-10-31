@@ -2,6 +2,7 @@ import prettyMilliseconds from "pretty-ms";
 import { Box } from "../../../../components/box/box";
 import { format_xel } from "../../../../utils/format_xel";
 import prettyBytes from "pretty-bytes";
+import { localization } from "../../../../localization/localization";
 
 import './info.css';
 
@@ -62,21 +63,21 @@ export class MempoolInfo {
 
     set_fees(fees: number) {
         this.total_fees_element.innerHTML = `
-            <div>FEES</div>
+            <div>${localization.get_text(`FEES`)}</div>
             <div>${format_xel(fees, true)}
         `;
     }
 
     set_size(size_in_bytes: number) {
         this.total_size_element.innerHTML = `
-            <div>SIZE</div>
+            <div>${localization.get_text(`SIZE`)}</div>
             <div>${prettyBytes(size_in_bytes)}
         `;
     }
 
     set_height(height: number) {
         this.height_element.innerHTML = `
-            <div>HEIGHT</div>
+            <div>${localization.get_text(`HEIGHT`)}</div>
             <div>${height.toLocaleString()}
         `;
     }

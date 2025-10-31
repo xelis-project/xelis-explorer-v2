@@ -8,6 +8,7 @@ import { format_address } from '../../utils/format_address';
 import { format_xel } from '../../utils/format_xel';
 import { format_asset } from '../../utils/format_asset';
 import { format_hash } from '../../utils/format_hash';
+import { localization } from '../../localization/localization';
 
 import './tx_item.css';
 
@@ -117,15 +118,16 @@ export class TxItem {
     set_type(data: TransactionData) {
         let value = ``;
         if (data.burn) {
-            value = `Burn ${format_asset(data.burn.asset, data.burn.amount, true)}`;
+            value = localization.get_text(`Burn {}`, [format_asset(data.burn.asset, data.burn.amount, true)]);
         } else if (data.deploy_contract) {
-            value = `Deploy Contract`;
+            value = localization.get_text(`Deploy Contract`);
         } else if (data.invoke_contract) {
-            value = `Invoke Contract (${format_hash(data.invoke_contract.contract)})`;
+            value = localization.get_text(`Invoke Contract ({})`, [format_hash(data.invoke_contract.contract)]);
         } else if (data.multi_sig) {
-            value = `Multi Sig ${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`;
+            value = localization.get_text(`Multi Sig {}`, [`${data.multi_sig.participants.length} / ${data.multi_sig.threshold}`]);
         } else if (data.transfers) {
-            value = `${data.transfers.length} transfer`;
+            const transfer_count = data.transfers.length;
+            value = localization.get_text(`{} transfers`, [transfer_count.toLocaleString()]);
         }
 
         this.element_type.innerHTML = value;

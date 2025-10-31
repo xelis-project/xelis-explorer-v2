@@ -1,3 +1,4 @@
+import { localization } from "../../../../localization/localization";
 import { Container } from "../../../../components/container/container";
 import { DAG } from "../../../../components/dag/dag";
 
@@ -12,7 +13,7 @@ export class DashboardDAG {
         this.container.element.classList.add(`xe-dashboard-dag`);
 
         const title_element = document.createElement(`div`);
-        title_element.innerHTML = `DAG Graph Inspector`;
+        title_element.innerHTML = localization.get_text(`DAG Graph Inspector`);
         this.container.element.appendChild(title_element);
 
         this.dag = new DAG();

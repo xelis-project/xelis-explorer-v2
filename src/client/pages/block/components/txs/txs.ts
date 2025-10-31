@@ -6,6 +6,7 @@ import { TxRow } from "../tx_row/tx_row";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 
 import './txs.css';
+import { localization } from "../../../../localization/localization";
 
 export class BlockTxs {
     container: Container;
@@ -19,7 +20,13 @@ export class BlockTxs {
         this.table.set_clickable();
         this.container.element.appendChild(this.table.element);
 
-        const titles = ["HASH", "TYPE", "SIGNER", "SIZE", "FEE"];
+        const titles = [
+            localization.get_text(`HASH`),
+            localization.get_text(`TYPE`),
+            localization.get_text(`SIGNER`),
+            localization.get_text(`SIZE`),
+            localization.get_text(`FEE`)
+        ];
         this.table.set_head_row(titles);
     }
 
@@ -53,7 +60,7 @@ export class BlockTxs {
                 this.table.prepend_row(tx_row.element);
             });
         } else {
-            this.table.set_empty(`No transactions`);
+            this.table.set_empty(localization.get_text(`No transactions`));
         }
     }
 }

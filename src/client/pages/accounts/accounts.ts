@@ -5,12 +5,18 @@ import { Container } from "../../components/container/container";
 import { AccountRow, AccountRowData } from "./account_row/account_row";
 import { get_addresses } from "../../data/addresses";
 import { fetch_accounts } from "../../fetch_helpers/fetch_accounts";
+import { localization } from "../../localization/localization";
+import { ServerApp } from "../../../server";
+import { Context } from "hono";
 
 import './accounts.css';
 
 export class AccountsPage extends Page {
     static pathname = "/accounts";
-    static title = "Accounts";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Accounts`);
+    }
 
     master: Master;
 
@@ -34,7 +40,15 @@ export class AccountsPage extends Page {
         this.element.appendChild(this.master.element);
         this.master.content.classList.add(`xe-accounts`);
 
-        const titles = ["NAME", "ADDRESS", "LINK", "REGISTRATION TOPO", "IN TOPO", "OUT TOPO", "BALANCE"];
+        const titles = [
+            localization.get_text(`NAME`),
+            localization.get_text(`ADDRESS`),
+            localization.get_text(`LINK`),
+            localization.get_text(`REGISTRATION TOPO`),
+            localization.get_text(`IN TOPO`),
+            localization.get_text(`OUT TOPO`),
+            localization.get_text(`BALANCE`)
+        ];
 
         // misc table
         this.misc_container_table = new Container();
@@ -42,7 +56,7 @@ export class AccountsPage extends Page {
         this.master.content.appendChild(this.misc_container_table.element);
 
         const misc_title_element = document.createElement(`div`);
-        misc_title_element.innerHTML = `Miscellaneous`;
+        misc_title_element.innerHTML = localization.get_text(`Miscellaneous`);
         this.misc_container_table.element.appendChild(misc_title_element);
 
         this.misc_table = new Table();
@@ -56,7 +70,7 @@ export class AccountsPage extends Page {
         this.master.content.appendChild(this.exchange_container_table.element);
 
         const exchange_title_element = document.createElement(`div`);
-        exchange_title_element.innerHTML = `Exchanges`;
+        exchange_title_element.innerHTML = localization.get_text(`Exchanges`);
         this.exchange_container_table.element.appendChild(exchange_title_element);
 
         this.exchange_table = new Table();
@@ -70,7 +84,7 @@ export class AccountsPage extends Page {
         this.master.content.appendChild(this.pool_container_table.element);
 
         const pool_title_element = document.createElement(`div`);
-        pool_title_element.innerHTML = `Pools`;
+        pool_title_element.innerHTML = localization.get_text(`Pools`);
         this.pool_container_table.element.appendChild(pool_title_element);
 
         this.pool_table = new Table();
@@ -109,13 +123,13 @@ export class AccountsPage extends Page {
                 table.prepend_row(row.element);
             });
         } else {
-            table.set_empty(`No addresses`)
+            table.set_empty(localization.get_text(`No addresses`));
         }
     }
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(AccountsPage.title);
+        this.set_window_title(localization.get_text(`Accounts`));
 
         const miscellaneous = get_addresses("miscellaneous");
         const exchanges = get_addresses("exchange");

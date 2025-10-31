@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { Page } from "../page";
-import { App as ServerApp } from "../../../server";
+import { ServerApp } from "../../../server";
 import { XelisNode } from "../../app/xelis_node";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { Block } from "@xelis/sdk/daemon/types";
@@ -9,7 +9,7 @@ import { Master } from "../../components/master/master";
 import { Container } from "../../components/container/container";
 import { Table } from "../../components/table/table";
 import { BlockRow } from "./block_row/block_row";
-import { App } from "../../app/app";
+import { localization } from "../../localization/localization";
 
 import './block_height.css';
 
@@ -40,7 +40,7 @@ export class BlockHeightPage extends Page {
         const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
 
         const block_height = parseInt(id);
-        this.title = `Block Height ${block_height.toLocaleString()}`;
+        this.title = localization.get_text(`Block Height {}`, [block_height.toLocaleString()]);
 
         try {
             const blocks = await daemon.getBlocksAtHeight({
@@ -78,7 +78,16 @@ export class BlockHeightPage extends Page {
         this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
 
-        const titles = ["HASH", "TOPOHEIGHT", "BLOCK", "TX COUNT", "SIZE", "REWARD", "POOL / MINER", "AGE"];
+        const titles = [
+            localization.get_text(`HASH`),
+            localization.get_text(`TOPOHEIGHT`),
+            localization.get_text(`BLOCK`),
+            localization.get_text(`TX COUNT`),
+            localization.get_text(`SIZE`),
+            localization.get_text(`REWARD`),
+            localization.get_text(`POOL / MINER`),
+            localization.get_text(`AGE`)
+        ];
         this.table.set_head_row(titles);
     }
 

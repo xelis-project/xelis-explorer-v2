@@ -32,7 +32,7 @@ export class DAGPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
         this.dag.update_size();
-        this.set_window_title(DAGPage.title);
+        this.set_window_title(`DAG`);
 
         const query = new URLSearchParams(location.search);
         const height_query = query.get(`height`);

@@ -1,5 +1,6 @@
 import icons from '../../assets/svg/icons';
 import { XelisNode } from '../../app/xelis_node';
+import { localization } from '../../localization/localization';
 
 import './node_status.css';
 
@@ -21,7 +22,7 @@ export class NodeStatus {
         reconnect_container.appendChild(reconnect_text_element);
 
         const reconnect_button_element = document.createElement(`button`);
-        reconnect_button_element.innerHTML = `${icons.connect()} RECONNECT`;
+        reconnect_button_element.innerHTML = `${icons.connect()} ${localization.get_text(`RECONNECT`)}`;
         reconnect_button_element.addEventListener(`click`, () => {
             location.reload();
         });
@@ -35,7 +36,7 @@ export class NodeStatus {
             console.log(`ERROR: `, e);
 
             if (!this.element.contains(reconnect_button_element)) {
-                reconnect_text_element.innerHTML = `An error occured with the node websocket connection.`;
+                reconnect_text_element.innerHTML = localization.get_text(`An error occured with the node websocket connection.`);
                 this.element.appendChild(reconnect_element);
             }
         });
@@ -44,7 +45,7 @@ export class NodeStatus {
             console.log(`CLOSE: `, e);
 
             if (!this.element.contains(reconnect_button_element)) {
-                reconnect_text_element.innerHTML = `The node websocket connection closed.`;
+                reconnect_text_element.innerHTML = localization.get_text(`The node websocket connection closed.`);
                 this.element.appendChild(reconnect_element);
             }
         });

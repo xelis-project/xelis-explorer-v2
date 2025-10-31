@@ -5,6 +5,7 @@ import icons from "../../../../assets/svg/icons";
 import { get_assets } from "../../../../data/assets";
 import { format_asset } from "../../../../utils/format_asset";
 import { format_hash } from "../../../../utils/format_hash";
+import { localization } from "../../../../localization/localization";
 
 import './burn.css';
 
@@ -19,7 +20,7 @@ export class TransactionBurn {
         this.container.element.classList.add(`xe-transaction-burn`);
 
         this.title_element = document.createElement(`div`);
-        this.title_element.innerHTML = `BURN`;
+        this.title_element.innerHTML = localization.get_text(`BURN`);
         this.container.element.appendChild(this.title_element);
 
         this.box = new Box();
@@ -44,7 +45,7 @@ export class TransactionBurn {
                 <div>${format_hash(burn.asset)}</div>
                 <div>
                     <div>${burn.amount}</div>
-                    <div>ATOMIC AMOUNT</div>
+                    <div>${localization.get_text(`ATOMIC AMOUNT`)}</div>
                 </div>
             `;
         }

@@ -1,3 +1,5 @@
+import { localization } from '../../../../localization/localization';
+
 import './tx_type_bars.css';
 
 export class MempoolTxTypeBars {
@@ -53,22 +55,22 @@ export class MempoolTxTypeBars {
     }
 
     set_transfer_count(count: number, max: number) {
-        this.set_item(this.transfers_element, "TRANSFERS", count, max);
+        this.set_item(this.transfers_element, localization.get_text(`TRANSFERS`), count, max);
     }
 
     set_contract_invoke_count(count: number, max: number) {
-        this.set_item(this.invokes_element, "CONTRACT INVOKES", count, max);
+        this.set_item(this.invokes_element, localization.get_text(`CONTRACT INVOKES`), count, max);
     }
 
     set_multisig_count(count: number, max: number) {
-        this.set_item(this.multisigs_element, "MULTISIGS", count, max);
+        this.set_item(this.multisigs_element, localization.get_text(`MULTISIGS`), count, max);
     }
 
     set_contract_deploy_count(count: number, max: number) {
-        this.set_item(this.deploys_element, "CONTRACT DEPLOYS", count, max);
+        this.set_item(this.deploys_element, localization.get_text(`CONTRACT DEPLOYS`), count, max);
     }
 
     set_burn_count(count: number, max: number) {
-        this.set_item(this.burns_element, "BURNS", count, max);
+        this.set_item(this.burns_element, localization.get_text(`BURNS`), count, max);
     }
 }

@@ -2,6 +2,7 @@ import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { DAG } from "../../../../components/dag/dag";
 import { Box } from "../../../../components/box/box";
+import { localization } from "../../../../localization/localization";
 
 import './graph.css';
 
@@ -55,7 +56,7 @@ export class BlockGraph {
 
     set_hash(hash: string) {
         this.hash_element.innerHTML = `
-            <div>HASH</div>
+            <div>${localization.get_text(`HASH`)}</div>
             <div>${hash}</div>
         `;
     }
@@ -64,7 +65,7 @@ export class BlockGraph {
         this.tips_element.replaceChildren();
 
         const text = document.createElement(`div`);
-        text.innerHTML = `TIPS`;
+        text.innerHTML = localization.get_text(`TIPS`);
         this.tips_element.appendChild(text);
 
         const tips_container = document.createElement(`div`);
@@ -78,14 +79,14 @@ export class BlockGraph {
 
     set_nonce(nonce: number) {
         this.nonce_element.innerHTML = `
-            <div>NONCE</div>
+            <div>${localization.get_text(`NONCE`)}</div>
             <div>${nonce}</div>
         `;
     }
 
     set_extra_nonce(extra_nonce: string) {
         this.extra_nonce_element.innerHTML = `
-            <div>EXTRA NONCE</div>
+            <div>${localization.get_text(`EXTRA NONCE`)}</div>
             <div>${extra_nonce}</div>
         `;
     }

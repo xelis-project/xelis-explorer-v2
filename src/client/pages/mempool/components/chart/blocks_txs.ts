@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
 import { Block, BlockType } from '@xelis/sdk/daemon/types';
+import { localization } from '../../../../localization/localization';
 
 export class MempoolChartBlocksTxs {
     box_chart: BoxChart;
@@ -14,7 +15,7 @@ export class MempoolChartBlocksTxs {
     constructor() {
         this.blocks = [];
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = `PAST BLOCKS`;
+        this.box_chart.element_title.innerHTML = localization.get_text(`PAST BLOCKS`);
     }
 
     set_value(tx_count: number, tps: number) {
