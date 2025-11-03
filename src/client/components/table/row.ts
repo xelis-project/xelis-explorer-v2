@@ -64,7 +64,7 @@ export class Row {
         animate(this.element, {
             translateY: [`-100%`, `0`],
             duration: 500,
-            ease: eases.linear(),
+            ease: eases.linear,
             onComplete: utils.cleanInlineStyles
         });
     }
