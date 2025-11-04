@@ -1,0 +1,35 @@
+.xe-contract-info {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    animation: xe-contract-info-appear-animation .75s;
+}
+
+@keyframes xe-contract-info-appear-animation {
+    0% {
+        opacity: 0;
+        translate: 0 -25%;
+    }
+
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.xe-contract-info>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+
+}
+
+.xe-contract-info>:nth-child(1)>:nth-child(1) {
+    font-size: 1.5rem;
+    word-break: break-all;
+}
+
+.xe-contract-info>:nth-child(1) svg {
+    width: 3rem;
+    height: 3rem;
+}

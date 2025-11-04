@@ -1,0 +1,30 @@
+.xe-contract-assets {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    animation: xe-contract-assets-appear-animation .75s;
+}
+
+@keyframes xe-contract-assets-appear-animation {
+    0% {
+        opacity: 0;
+        translate: 25% 0;
+    }
+
+    100% {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+
+.xe-contract-assets-list {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.xe-contract-assets-list>div {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}

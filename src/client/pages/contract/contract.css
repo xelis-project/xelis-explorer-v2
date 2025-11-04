@@ -1,3 +1,19 @@
 .xe-contract {
-    
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.xe-contract>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    flex: 1;
+}
+
+.xe-contract>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    flex: 1;
 }

@@ -8,8 +8,11 @@ import { RPCMethod as DaemonRPCMethod, GetContractModuleParams, GetContractModul
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { NotFoundPage } from "../not_found/not_found";
 import { localization } from "../../localization/localization";
+import { XELIS_ASSET } from "@xelis/sdk/config";
 
 import './contract.css';
+import { ContractAssets } from "./components/assets/assets";
+import { ContractInfo } from "./components/info/info";
 
 interface ContractPageServerData {
     transaction?: TransactionResponse;
@@ -88,6 +91,8 @@ export class ContractPage extends Page {
     page_data: {
         server_data?: ContractPageServerData;
     };
+    contract_info: ContractInfo;
+    contract_assets: ContractAssets;
 
     constructor() {
         super();
@@ -96,6 +101,18 @@ export class ContractPage extends Page {
         this.master = new Master();
         this.master.content.classList.add(`xe-contract`);
         this.element.appendChild(this.master.element);
+
+        const sub_container_1 = document.createElement(`div`);
+        this.master.content.appendChild(sub_container_1);
+
+        this.contract_info = new ContractInfo();
+        sub_container_1.appendChild(this.contract_info.container.element);
+
+        const sub_container_2 = document.createElement(`div`);
+        this.master.content.appendChild(sub_container_2);
+
+        this.contract_assets = new ContractAssets();
+        sub_container_2.appendChild(this.contract_assets.container.element);
     }
 
     async load_contract() {
@@ -127,7 +144,32 @@ export class ContractPage extends Page {
         const { server_data } = this.page_data;
         if (server_data && server_data.contract_module && server_data.transaction) {
             this.set_element(this.master.element);
+            
+            const contract_hash = server_data.transaction.hash;
 
+            /*
+            TODO
+            const node = XelisNode.instance();
+
+            node.rpc.getContractData({
+                contract: "",
+                key: ""
+            });
+
+            node.rpc.getContractLogs({
+                caller: ""
+            });
+
+            node.rpc.getContractOutputs({
+                address: "",
+                topoheight: 0
+            });
+
+            node.rpc.getContractScheduledExecutionsAtTopoheight({})
+            */
+
+            this.contract_info.set(contract_hash, server_data.contract_module);
+            this.contract_assets.load(contract_hash);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
