@@ -1,18 +1,18 @@
 import { Singleton } from "../utils/singleton";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import DaemonWS from '@xelis/sdk/daemon/websocket';
+import { Settings } from "./settings";
 
 export class XelisNode extends Singleton {
     rpc: DaemonRPC;
     ws: DaemonWS;
 
-    static rpc_node_endpoint: string = import.meta.env.VITE_XELIS_NODE_RPC;
-    static ws_node_endpoint: string = import.meta.env.VITE_XELIS_NODE_WS;
-
     constructor() {
         super();
-        this.rpc = new DaemonRPC(XelisNode.rpc_node_endpoint);
+
+        const settings = Settings.instance();
+        this.rpc = new DaemonRPC(settings.node_http_connection);
         this.rpc.timeout = 5000;
-        this.ws = new DaemonWS(XelisNode.ws_node_endpoint);
+        this.ws = new DaemonWS(settings.node_ws_connection);
     }
 }

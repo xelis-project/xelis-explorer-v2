@@ -76,7 +76,7 @@ export class TransactionPage extends Page {
 
         this.server_data = undefined;
 
-        const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        const daemon = new DaemonRPC(c.get(`node_endpoint`));
 
         const tx_hash = id;
         this.title = localization.get_text(`Transaction {}`, [tx_hash]);

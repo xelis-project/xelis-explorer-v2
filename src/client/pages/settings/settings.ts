@@ -8,6 +8,9 @@ import { Settings, SettingsHashFormat, SettingsMenuType } from "../../app/settin
 import { get_supported_languages, validate_lang_key } from "../../localization/supported_languages";
 import { Context } from "hono";
 import { ServerApp } from "../../../server";
+import DaemonRPC from '@xelis/sdk/daemon/rpc';
+import DaemonWS from '@xelis/sdk/daemon/websocket';
+import icons from "../../assets/svg/icons";
 
 import './settings.css';
 
@@ -38,9 +41,11 @@ export class SettingsPage extends Page {
             container.element.appendChild(line);
         }
 
+        // language setting
+
         const language_item = new SettingsItem();
         language_item.title_element.innerHTML = localization.get_text(`LANGUAGE`);
-        language_item.description_element.innerHTML = localization.get_text(`Choose desired language`);
+        language_item.description_element.innerHTML = localization.get_text(`Choose desired language.`);
         container.element.appendChild(language_item.element);
 
         const language_select = new Select();
@@ -68,9 +73,116 @@ export class SettingsPage extends Page {
 
         append_line();
 
+        // node connection setting (http)
+
+        const http_node_connection_item = new SettingsItem();
+        http_node_connection_item.title_element.innerHTML = localization.get_text(`HTTP NODE CONNECTION`);
+        http_node_connection_item.description_element.innerHTML = localization.get_text(`Specify the URL of your own node. The explorer will use it to fetch initial data and perform other requests.
+`);
+        container.element.appendChild(http_node_connection_item.element);
+
+        const http_connection_input = document.createElement(`input`);
+        http_connection_input.type = `text`;
+        http_connection_input.classList.add(`xe-settings-text`);
+        http_connection_input.style.width = `20rem`
+        http_connection_input.value = settings.node_http_connection;
+
+        const http_connection_save = document.createElement(`button`);
+        http_connection_save.classList.add(`xe-settings-btn`);
+        http_connection_save.innerHTML = icons.save();
+        http_connection_save.title = localization.get_text(`Change and save the new node connection.`);
+
+        http_connection_save.addEventListener(`click`, async (e) => {
+            try {
+                const new_endpoint = http_connection_input.value;
+                const daemon = new DaemonRPC(new_endpoint);
+                const info = await daemon.getInfo();
+                alert(`Connection successful. Node: ${info.network} - ${info.version}`);
+
+                settings.node_http_connection = new_endpoint;
+                settings.save();
+            } catch (e) {
+                alert(e);
+            }
+        });
+
+        const http_connection_reset = document.createElement(`button`);
+        http_connection_reset.classList.add(`xe-settings-btn`);
+        http_connection_reset.innerHTML = icons.reset();
+        http_connection_reset.title = localization.get_text(`Reset to default seed node.`);
+
+        http_connection_reset.addEventListener(`click`, () => {
+            settings.clear_node_http_connection();
+            location.reload();
+        });
+
+        http_node_connection_item.input_element.classList.add(`xe-settings-item-input`);
+        http_node_connection_item.input_element.appendChild(http_connection_input);
+        http_node_connection_item.input_element.appendChild(http_connection_save);
+        http_node_connection_item.input_element.appendChild(http_connection_reset);
+
+        append_line();
+
+        // node connection setting (websocket)
+
+        const ws_node_connection_item = new SettingsItem();
+        ws_node_connection_item.title_element.innerHTML = localization.get_text(`WEBSOCKET NODE CONNECTION`);
+        ws_node_connection_item.description_element.innerHTML = localization.get_text(`Specify the WebSocket endpoint of your own node. The explorer uses this connection to receive live updates.`);
+        container.element.appendChild(ws_node_connection_item.element);
+
+        const ws_connection_input = document.createElement(`input`);
+        ws_connection_input.type = `text`;
+        ws_connection_input.classList.add(`xe-settings-text`);
+        ws_connection_input.style.width = `20rem`
+        ws_connection_input.value = settings.node_ws_connection;
+
+        const ws_connection_save = document.createElement(`button`);
+        ws_connection_save.classList.add(`xe-settings-btn`);
+        ws_connection_save.innerHTML = icons.save();
+        ws_connection_save.title = localization.get_text(`Change and save the new node connection.`);
+
+        ws_connection_save.addEventListener(`click`, () => {
+            try {
+                const new_endpoint = ws_connection_input.value;
+                const daemon = new DaemonWS(new_endpoint);
+                daemon.socket.addEventListener(`open`, async () => {
+                    const info = await daemon.methods.getInfo();
+                    alert(`Connection successful. Node ${info.network} - ${info.version}`);
+                    daemon.socket.close();
+
+                    settings.node_ws_connection = new_endpoint;
+                    settings.save();
+                });
+                daemon.socket.addEventListener(`error`, (e) => {
+                    alert(`An error occurred while trying to connect.`);
+                });
+            } catch (e) {
+                alert(e);
+            }
+        });
+
+        const ws_connection_reset = document.createElement(`button`);
+        ws_connection_reset.classList.add(`xe-settings-btn`);
+        ws_connection_reset.innerHTML = icons.reset();
+        ws_connection_reset.title = localization.get_text(`Reset to default seed node.`);
+
+        ws_connection_reset.addEventListener(`click`, () => {
+            settings.del_storage_item(`node_ws_connection`);
+            location.reload();
+        });
+
+        ws_node_connection_item.input_element.classList.add(`xe-settings-item-input`);
+        ws_node_connection_item.input_element.appendChild(ws_connection_input);
+        ws_node_connection_item.input_element.appendChild(ws_connection_save);
+        ws_node_connection_item.input_element.appendChild(ws_connection_reset);
+
+        append_line();
+
+        // hash format setting
+
         const hash_format_item = new SettingsItem();
         hash_format_item.title_element.innerHTML = localization.get_text(`HASH FORMAT`);
-        hash_format_item.description_element.innerHTML = localization.get_text(`Choose desired hash truncation format`);
+        hash_format_item.description_element.innerHTML = localization.get_text(`Choose desired hash truncation format.`);
         container.element.appendChild(hash_format_item.element);
 
         const hash_formats = {
@@ -96,9 +208,11 @@ export class SettingsPage extends Page {
 
         append_line();
 
+        // menu type setting
+
         const menu_type_item = new SettingsItem();
         menu_type_item.title_element.innerHTML = localization.get_text(`MENU TYPE`);
-        menu_type_item.description_element.innerHTML = localization.get_text(`Display standard header menu or collapsed menu`);
+        menu_type_item.description_element.innerHTML = localization.get_text(`Display standard header menu or collapsed menu.`);
         container.element.appendChild(menu_type_item.element);
 
         const menu_types = {

@@ -40,7 +40,7 @@ export class BlockPage extends Page {
             return;
         }
 
-        const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        const daemon = new DaemonRPC(c.get(`node_endpoint`));
         this.title = localization.get_text(`Block {}`, [block_hash]);
 
         try {

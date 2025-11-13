@@ -127,7 +127,7 @@ export class AccountPage extends Page {
 
         this.server_data = undefined;
 
-        const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        const daemon = new DaemonRPC(c.get(`node_endpoint`));
 
         const addr = id;
         this.title = localization.get_text(`Account {}`, [addr]);

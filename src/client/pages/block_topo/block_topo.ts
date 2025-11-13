@@ -27,7 +27,7 @@ export class BlockTopoPage extends Page {
 
         this.server_data = undefined;
 
-        const daemon = new DaemonRPC(XelisNode.rpc_node_endpoint);
+        const daemon = new DaemonRPC(c.get(`node_endpoint`));
 
         const block_topoheight = parseInt(id);
         this.title = localization.get_text(`Block Topo {}`, [block_topoheight.toLocaleString()]);
