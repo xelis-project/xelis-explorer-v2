@@ -21,7 +21,8 @@ export class DAGBlockDetails {
     element_topoheight: HTMLDivElement;
     element_height: HTMLDivElement;
     element_miner: HTMLDivElement;
-    element_fees: HTMLDivElement;
+    element_total_fees: HTMLDivElement;
+    element_total_fees_burned: HTMLDivElement;
     element_reward: HTMLDivElement;
     element_supply: HTMLDivElement;
     element_tx_count: HTMLDivElement;
@@ -59,8 +60,11 @@ export class DAGBlockDetails {
         this.element_miner = document.createElement(`div`);
         this.element.appendChild(this.element_miner);
 
-        this.element_fees = document.createElement(`div`);
-        this.element.appendChild(this.element_fees);
+        this.element_total_fees = document.createElement(`div`);
+        this.element.appendChild(this.element_total_fees);
+
+        this.element_total_fees_burned = document.createElement(`div`);
+        this.element.appendChild(this.element_total_fees_burned);
 
         this.element_reward = document.createElement(`div`);
         this.element.appendChild(this.element_reward);
@@ -133,7 +137,8 @@ export class DAGBlockDetails {
         this.set_miner(block.miner);
         this.set_topoheight(block.topoheight);
         this.set_height(block.height);
-        this.set_fees(block.total_fees);
+        this.set_total_fees(block.total_fees);
+        this.set_total_fees_burned(block.total_fees_burned);
         this.set_reward(block.reward);
         this.set_tx_count(block.txs_hashes.length);
         this.set_supply(block.supply);
@@ -204,8 +209,12 @@ export class DAGBlockDetails {
         this.set_item(this.element_miner, localization.get_text(`MINER`), container);
     }
 
-    set_fees(fees?: number) {
-        this.set_item(this.element_fees, localization.get_text(`FEES`), fees ? format_xel(fees, true) : `--`);
+    set_total_fees(fees?: number) {
+        this.set_item(this.element_total_fees, localization.get_text(`TOTAL FEES`), fees ? format_xel(fees, true) : `--`);
+    }
+
+    set_total_fees_burned(fees_burned?: number) {
+        this.set_item(this.element_total_fees_burned, localization.get_text(`TOTAL FEES BURNED`), fees_burned ? format_xel(fees_burned, true) : `--`);
     }
 
     set_reward(reward?: number) {
