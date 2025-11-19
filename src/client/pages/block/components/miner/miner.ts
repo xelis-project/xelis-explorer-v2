@@ -12,7 +12,6 @@ import './miner.css';
 export class BlockMiner {
     container: Container;
     miner_element: HTMLAnchorElement;
-    reward_element: HTMLDivElement;
 
     constructor() {
         this.container = new Container();
@@ -21,20 +20,14 @@ export class BlockMiner {
         this.miner_element = document.createElement(`a`);
         this.miner_element.classList.add(`xe-block-miner-miner`);
         this.container.element.appendChild(this.miner_element);
-
-        this.reward_element = document.createElement(`div`);
-        this.reward_element.classList.add(`xe-block-miner-reward`);
-        this.container.element.appendChild(this.reward_element);
     }
 
     set_loading(loading: boolean) {
         Box.content_loading(this.miner_element, loading);
-        Box.content_loading(this.reward_element, loading);
     }
 
     set(block: Block) {
         this.set_miner(block.miner);
-        this.set_reward(block.miner_reward);
     }
 
     set_miner(miner: string) {
@@ -55,12 +48,5 @@ export class BlockMiner {
         const text = document.createElement(`div`);
         text.innerHTML = localization.get_text(`MINER`);
         sub_container.appendChild(text);
-    }
-
-    set_reward(reward?: number) {
-        this.reward_element.innerHTML = `
-            <div>${localization.get_text(`MINING REWARD`)}</div>
-            <div>${reward ? format_xel(reward, true) : `--`}</div>
-        `;
     }
 }

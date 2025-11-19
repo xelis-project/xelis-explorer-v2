@@ -12,9 +12,10 @@ import { BlockHashrate } from "./components/hashrate/hashrate";
 import { BlockExtra } from "./components/extra/extra";
 import { BlockTxs } from "./components/txs/txs";
 import { BlockGraph } from "./components/graph/graph";
+import { localization } from "../../localization/localization";
+import { BlockRewards } from './components/rewards/rewards';
 
 import './block.css';
-import { localization } from "../../localization/localization";
 
 export interface BlockPageServerData {
     block: Block;
@@ -63,6 +64,7 @@ export class BlockPage extends Page {
     block_extra: BlockExtra;
     block_graph: BlockGraph;
     block_txs: BlockTxs;
+    block_rewards: BlockRewards;
 
     constructor() {
         super();
@@ -82,6 +84,8 @@ export class BlockPage extends Page {
         sub_container_1.appendChild(this.block_info.container.element);
         this.block_miner = new BlockMiner();
         sub_container_1.appendChild(this.block_miner.container.element);
+        this.block_rewards = new BlockRewards();
+        sub_container_1.appendChild(this.block_rewards.container.element);
         this.block_hashrate = new BlockHashrate();
         sub_container_1.appendChild(this.block_hashrate.container.element);
         this.block_extra = new BlockExtra();
@@ -175,6 +179,7 @@ export class BlockPage extends Page {
         this.block_hashrate.set(block, info);
         this.block_extra.set(block);
         this.block_txs.load(block);
+        this.block_rewards.set(block);
         await this.block_graph.set(block);
     }
 

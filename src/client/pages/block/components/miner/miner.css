@@ -48,18 +48,3 @@
     font-size: .9rem;
     color: #afafaf;
 }
-
-.xe-block-miner-reward {
-    display: flex;
-    gap: .25rem;
-    flex-direction: column;
-}
-
-.xe-block-miner-reward>:nth-child(1) {
-    color: #afafaf;
-    font-size: .9rem;
-}
-
-.xe-block-miner-reward>:nth-child(2) {
-    font-size: 1.4rem;
-}

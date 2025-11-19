@@ -10,7 +10,6 @@ export class BlockExtra {
     container: Container;
 
     supply_element: HTMLDivElement;
-    dev_reward_element: HTMLDivElement;
 
     local_time_element: HTMLDivElement;
     unix_time_element: HTMLDivElement;
@@ -24,9 +23,8 @@ export class BlockExtra {
         container_1.classList.add(`xe-block-extra-container-1`);
         this.container.element.appendChild(container_1);
         this.supply_element = document.createElement(`div`);
+        this.supply_element.title = localization.get_text(`Total Supply at this height.`);
         container_1.appendChild(this.supply_element);
-        this.dev_reward_element = document.createElement(`div`);
-        container_1.appendChild(this.dev_reward_element);
 
         const container_2 = document.createElement(`div`);
         container_2.classList.add(`xe-block-extra-container-2`);
@@ -41,8 +39,6 @@ export class BlockExtra {
 
     set_loading(loading: boolean) {
         Box.content_loading(this.supply_element, loading);
-        Box.content_loading(this.dev_reward_element, loading);
-
         Box.content_loading(this.local_time_element, loading);
         Box.content_loading(this.unix_time_element, loading);
         Box.content_loading(this.utc_time_element, loading);
@@ -50,7 +46,6 @@ export class BlockExtra {
 
     set(block: Block) {
         this.set_supply(block.supply);
-        this.set_dev_reward(block.dev_reward);
         this.set_local_time(block.timestamp);
         this.set_unix_time(block.timestamp);
         this.set_utc_time(block.timestamp);
@@ -58,15 +53,8 @@ export class BlockExtra {
 
     set_supply(supply?: number) {
         this.supply_element.innerHTML = `
-            <div>${localization.get_text(`SUPPLY`)}</div>
+            <div>${localization.get_text(`TOTAL SUPPLY`)}</div>
             <div>${supply ? format_xel(supply, true) : `--`}
-        `;
-    }
-
-    set_dev_reward(dev_reward?: number) {
-        this.dev_reward_element.innerHTML = `
-            <div>${localization.get_text(`DEV REWARD`)}</div>
-            <div>${dev_reward ? format_xel(dev_reward, true) : `--`}</div>
         `;
     }
 
