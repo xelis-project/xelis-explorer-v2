@@ -75,7 +75,7 @@ export class BlockItem {
 
     set(block: Block) {
         this.data = block;
-        this.set_height(block.height);
+        this.set_topoheight(block.topoheight);
         this.set_tx_count((block.txs_hashes || []).length, 0);
         this.set_miner(block.miner);
         this.set_type(block.block_type);
@@ -84,8 +84,8 @@ export class BlockItem {
         this.set_reward(block.reward);
     }
 
-    set_height(height: number) {
-        this.element_height.innerHTML = localization.get_text(`BLOCK {}`, [height.toLocaleString()]);
+    set_topoheight(topoheight?: number) {
+        this.element_height.innerHTML = localization.get_text(`BLOCK {}`, [topoheight ? topoheight.toLocaleString() : `?`]);
     }
 
     set_tx_count(tx_count: number, tx_max: number) {

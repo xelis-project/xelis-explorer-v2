@@ -71,17 +71,17 @@ export class BlockInfo {
     }
 
     set(block: Block, info: GetInfoResult) {
-        this.set_height_type(block.height, block.block_type);
+        this.set_height_type(block.block_type, block.topoheight);
         this.set_age(block.timestamp);
         this.set_size(block.total_size_in_bytes);
         this.set_tx_count(block.txs_hashes.length);
         this.set_confirmations(block.height, info.height);
         this.set_version(block.version);
-        this.set_topo(block.topoheight);
+        this.set_height(block.height);
         this.set_last_update();
     }
 
-    set_height_type(height: number, block_type: BlockType) {
+    set_height_type(block_type: BlockType, topoheight?: number) {
         this.height_type_element.replaceChildren();
 
         const block_type_box = new BlockTypeBox();
@@ -91,17 +91,17 @@ export class BlockInfo {
         const sub_container = document.createElement(`div`);
         this.height_type_element.appendChild(sub_container);
 
-        const height_element = document.createElement(`div`);
-        height_element.innerHTML = `${height.toLocaleString()}`;
-        sub_container.appendChild(height_element);
+        const topo_element = document.createElement(`div`);
+        topo_element.innerHTML = `${topoheight ? topoheight.toLocaleString() : `?`}`;
+        sub_container.appendChild(topo_element);
 
         const text_element = document.createElement(`div`);
         text_element.innerHTML = localization.get_text(`{} BLOCK`, [block_type.toUpperCase()]);
         sub_container.appendChild(text_element);
     }
 
-    set_topo(topoheight?: number) {
-        this.topo_element.innerHTML = topoheight ? `${topoheight.toLocaleString()} TOPO` : `--`;
+    set_height(height: number) {
+        this.topo_element.innerHTML = `${height.toLocaleString()} HEIGHT`;
     }
 
     age_interval_id?: number;
