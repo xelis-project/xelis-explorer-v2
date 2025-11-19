@@ -1,14 +1,18 @@
 {
-    "2e0f97dbd00c29fa229b90f7e7bfe9251e3e47df470da92f10ff4f59811e9e45": {
+    "5da87b59e87a8f909c5fb196ce8ad196b5b71bfafdb69e4d978dac514801c97d": {
         "name": "FORGE DAO",
         "description": ""
     },
-    "df543b60d9eaf81d73db978b16e0d58d49cc61998e3ec8a2f72f0a0536292dae": {
-        "name": "FORGE SWAP",
+    "04445e5b39fbeee950560f1fd316dc5fd30770f5d3ad2f05e838b8ba660a00f0": {
+        "name": "FORGE DEX",
         "description": ""
     },
-    "dfecff429c431fa1a17f1ed0a463b4fe3d3bba6920a5e52733fb31620b2f8d5a": {
+    "0cff4ca0de9c5a607dfc11a6a26a2492f4ff46fe234166ef955211fd8ed8e7a0": {
         "name": "FORGE GEN",
+        "description": ""
+    },
+    "de76dedaadda1e7873671a49862afd755212bba30fd77df82df2a52b78628464": {
+        "name": "FORGE LOCK",
         "description": ""
     }
 }
