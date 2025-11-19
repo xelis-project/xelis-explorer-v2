@@ -1,0 +1,32 @@
+.xe-block-fees {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    animation: xe-block-fees-appear-animation 0.7s;
+}
+
+@keyframes xe-block-fees-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-block-fees>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+    min-height: 1rem;
+}
+
+.xe-block-fees>div>:nth-child(1) {
+    font-size: .9rem;
+    color: #afafaf;
+}
+
+.xe-block-fees>div>:nth-child(2) {
+    font-size: 1.4rem;
+}
