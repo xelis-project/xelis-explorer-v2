@@ -222,6 +222,6 @@ export class BlockPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
-        this.block_graph.dag.clear_node_events();
+        this.block_graph.dag.clear();
     }
 }

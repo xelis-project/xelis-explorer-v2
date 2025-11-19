@@ -272,6 +272,11 @@ export class DAG {
         }
     }
 
+    clear() {
+        this.block_details.hide();
+        this.clear_node_events();
+    }
+
     clear_node_events() {
         const node = XelisNode.instance();
         node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
