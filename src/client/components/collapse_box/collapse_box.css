@@ -1,0 +1,42 @@
+.xe-tab {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    text-decoration: none;
+    color: white;
+    position: relative;
+}
+
+.xe-tab>:nth-child(1) {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    user-select: none;
+    padding: .75rem 1rem;
+}
+
+.xe-tab>:nth-child(1) svg {
+    width: 2rem;
+    height: 1.5rem;
+    rotate: 180deg;
+    translate: 0 .2rem;
+    transition: rotate .25s;
+}
+
+.xe-tab.collapsed>:nth-child(1) svg {
+    rotate: 0deg;
+}
+
+.xe-tab>:nth-child(2) {
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+
+}
+
+.xe-tab.collapsed>:nth-child(2) {
+    position: absolute;
+    visibility: hidden;
+}
