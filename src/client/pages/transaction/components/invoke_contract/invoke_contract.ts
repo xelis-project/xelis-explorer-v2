@@ -3,10 +3,10 @@ import { Container } from "../../../../components/container/container";
 import { Box } from "../../../../components/box/box";
 import { format_xel } from "../../../../utils/format_xel";
 import { DepositsBox } from "../deploy_contract/deposits_box";
-import { JsonViewer } from "../../../../components/json_viewer/json_viewer";
+import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
+import { localization } from "../../../../localization/localization";
 
 import './invoke_contract.css';
-import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
 
 export class TransactionInvokeContract {
     container: Container;
@@ -35,19 +35,60 @@ export class TransactionInvokeContract {
         max_gas_element.innerHTML = `<div>MAX GAS</div><div>${format_xel(invoke_contract.max_gas, true)}</div>`;
         container_element.appendChild(max_gas_element);
 
-        this.container.element.appendChild(container_element);
+        const permission_element = document.createElement(`div`);
+
+        if (typeof invoke_contract.permission === `string`) {
+            permission_element.innerHTML = `<div>PERMISSION</div><div>${invoke_contract.permission}</div>`;
+            container_element.appendChild(permission_element);
+            this.container.element.appendChild(container_element);
+        } else if ("specific" in invoke_contract.permission) {
+            permission_element.innerHTML = `<div>PERMISSION</div><div>specific</div>`;
+            container_element.appendChild(permission_element);
+            this.container.element.appendChild(container_element);
+
+            const permission_title_element = document.createElement(`div`);
+            permission_title_element.innerHTML = `PERMISSION LIST`;
+            this.container.element.appendChild(permission_title_element);
+
+            const permission_json_viewer_box = new JsonViewerBox(invoke_contract.permission.specific);
+            this.container.element.appendChild(permission_json_viewer_box.box.element);
+        } else if ("exclude" in invoke_contract.permission) {
+            permission_element.innerHTML = `<div>PERMISSION</div><div>exclude</div>`;
+            container_element.appendChild(permission_element);
+            this.container.element.appendChild(container_element);
+
+            const permission_title_element = document.createElement(`div`);
+            permission_title_element.innerHTML = `PERMISSION LIST`;
+            this.container.element.appendChild(permission_title_element);
+
+            const permission_json_viewer_box = new JsonViewerBox(invoke_contract.permission.exclude);
+            this.container.element.appendChild(permission_json_viewer_box.box.element);
+        }
 
         const deposits_title_element = document.createElement(`div`);
         deposits_title_element.innerHTML = `DEPOSITS`;
         this.container.element.appendChild(deposits_title_element);
 
-        const deposits_box = new DepositsBox(invoke_contract.deposits);
-        this.container.element.appendChild(deposits_box.box.element);
+        if (Object.keys(invoke_contract.deposits).length > 0) {
+            const deposits_box = new DepositsBox(invoke_contract.deposits);
+            this.container.element.appendChild(deposits_box.box.element);
+        } else {
+            const box = new Box();
+            box.element.innerHTML = localization.get_text(`None.`);
+            this.container.element.appendChild(box.element);
+        }
 
         const parameters_title_element = document.createElement(`div`);
         parameters_title_element.innerHTML = `PARAMETERS`;
         this.container.element.appendChild(parameters_title_element);
-        const parameters_json_viewer_box = new JsonViewerBox(invoke_contract.parameters);
-        this.container.element.appendChild(parameters_json_viewer_box.box.element);
+
+        if (invoke_contract.parameters.length > 0) {
+            const parameters_json_viewer_box = new JsonViewerBox(invoke_contract.parameters);
+            this.container.element.appendChild(parameters_json_viewer_box.box.element);
+        } else {
+            const box = new Box();
+            box.element.innerHTML = localization.get_text(`No params provided.`);
+            this.container.element.appendChild(box.element);
+        }
     }
 }
