@@ -184,10 +184,18 @@ export const save = () => {
     `;
 }
 
+export const caret_down = () => {
+    return `    
+        <svg fill="currentColor" width="800px" height="800px" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+            <path d="M213.65674,101.657l-80,79.99976a7.99945,7.99945,0,0,1-11.31348,0l-80-79.99976A8,8,0,0,1,48,88H208a8,8,0,0,1,5.65674,13.657Z" />
+        </svg>
+    `;
+}
+
 export default {
     question_mark_shield, tag, exchange,
     home, empty_box, menu, dashboard, blocks,
     contract, compute, block_graph, network,
     search, connect, user, burn, cog, menu_alt,
-    reset, save
+    reset, save, caret_down
 };
