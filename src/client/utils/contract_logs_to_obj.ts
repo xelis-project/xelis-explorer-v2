@@ -1,8 +1,7 @@
 import {
     ContractLog, ContractLogBurn, ContractLogExitCode, ContractLogGasInjection, ContractLogMint,
-    ContractLogNewAsset, ContractLogRefundDeposits, ContractLogRefundGas, ContractLogScheduledExecution,
-    ContractLogTransfer,
-    ContractLogTransferContract
+    ContractLogNewAsset, ContractLogRefundGas, ContractLogScheduledExecution,
+    ContractLogTransfer, ContractLogTransferContract
 } from "@xelis/sdk/daemon/types";
 
 interface ContractLogs {
