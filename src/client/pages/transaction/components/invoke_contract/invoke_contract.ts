@@ -21,7 +21,8 @@ export class TransactionInvokeContract {
         this.title_element.innerHTML = `INVOKE CONTRACT`;
         this.container.element.appendChild(this.title_element);
 
-        const hash_element = document.createElement(`div`);
+        const hash_element = document.createElement(`a`);
+        hash_element.href = `/tx/${invoke_contract.contract}`;
         hash_element.innerHTML = invoke_contract.contract;
         this.container.element.appendChild(hash_element);
 
