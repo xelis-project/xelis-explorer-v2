@@ -3,3 +3,17 @@
     gap: 1rem;
     flex-direction: column;
 }
+
+.xe-transaction-contract-outputs table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.xe-transaction-contract-outputs table td:first-child {
+    font-weight: bold;
+}
+
+.xe-transaction-contract-outputs table td {
+    border: thin solid rgba(255, 255, 255, 0.1);
+    padding: .5rem;
+}

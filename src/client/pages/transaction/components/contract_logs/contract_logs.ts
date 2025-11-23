@@ -49,11 +49,11 @@ export class TransactionContractLogs {
                     <tr>
                     <tr>
                         <td>ASSET</td>
-                        <td>${format_hash(burn.asset)}</td>
+                        <td><a href="/tx/${burn.asset}">${format_hash(burn.asset)}</a></td>
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(burn.contract)}</td>
+                        <td><a href="/tx/${burn.contract}">${format_hash(burn.contract)}</a></td>
                     <tr>
                 </table>
             `;
@@ -74,7 +74,7 @@ export class TransactionContractLogs {
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(gas_injection.contract)}</td>
+                        <td><a href="/tx/${gas_injection.contract}">${format_hash(gas_injection.contract)}</a></td>
                     <tr>
                 </table>
             `;
@@ -97,11 +97,11 @@ export class TransactionContractLogs {
                     <tr>
                     <tr>
                         <td>ASSET</td>
-                        <td>${format_hash(mint.asset)}</td>
+                        <td><a href="/tx/${mint.asset}">${format_hash(mint.asset)}</a></td>
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(mint.contract)}</td>
+                        <td><a href="/tx/${mint.asset}">${format_hash(mint.contract)}</a></td>
                     <tr>
                 </table>
             `;
@@ -119,11 +119,11 @@ export class TransactionContractLogs {
                 <table>
                     <tr>
                         <td>ASSET</td>
-                        <td>${format_hash(new_asset.asset)}</td>
+                        <td><a href="/tx/${new_asset.asset}">${format_hash(new_asset.asset)}</a></td>
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(new_asset.contract)}</td>
+                        <td><a href="/tx/${new_asset.contract}">${format_hash(new_asset.contract)}</a></td>
                     <tr>
                 </table>
             `;
@@ -163,7 +163,7 @@ export class TransactionContractLogs {
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(scheduled_execution.contract)}</td>
+                        <td><a href="/tx/${scheduled_execution.contract}">${format_hash(scheduled_execution.contract)}</a></td>
                     <tr>
                     <tr>
                         <td>KIND</td>
@@ -189,15 +189,15 @@ export class TransactionContractLogs {
                     <tr>
                     <tr>
                         <td>ASSET</td>
-                        <td>${format_hash(transfer.asset)}</td>
+                        <td><a href="/tx/${transfer.asset}">${format_hash(transfer.asset)}</a></td>
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(transfer.contract)}</td>
+                        <td><a href="/tx/${transfer.contract}">${format_hash(transfer.contract)}</a></td>
                     <tr>
                     <tr>
                         <td>DESTINATION</td>
-                        <td>${transfer.destination}</td>
+                        <td><a href="/account/${transfer.destination}">${format_hash(transfer.destination)}</a></td>
                     <tr>
                 </table>
             `;
@@ -219,15 +219,15 @@ export class TransactionContractLogs {
                     <tr>
                     <tr>
                         <td>ASSET</td>
-                        <td>${format_hash(transfer_contract.asset)}</td>
+                        <td><a href="/tx/${transfer_contract.asset}">${format_hash(transfer_contract.asset)}</a></td>
                     <tr>
                     <tr>
                         <td>CONTRACT</td>
-                        <td>${format_hash(transfer_contract.contract)}</td>
+                        <td><a href="/tx/${transfer_contract.contract}">${format_hash(transfer_contract.contract)}</a></td>
                     <tr>
                     <tr>
                         <td>DESTINATION</td>
-                        <td>${transfer_contract.destination}</td>
+                        <td><a href="/tx/${transfer_contract.destination}">${format_hash(transfer_contract.destination)}</a></td>
                     <tr>
                 </table>
             `;
