@@ -26,11 +26,11 @@
     flex: 1;
     min-height: 1.5rem;
     text-decoration: none;
-    transition: scale .25s;
+    transition: translate .25s;
 }
 
 .xe-block-miner-miner:hover {
-    scale: .95;
+    translate: 2% 0;
 }
 
 .xe-block-miner-miner> :nth-child(2) {
