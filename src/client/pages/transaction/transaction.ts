@@ -18,6 +18,7 @@ import { TransactionContractLogs } from "./components/contract_logs/contract_log
 import { TransactionMultiSig } from "./components/multisig/multisig";
 import { TransactionMempoolAlert } from "./components/mempool_alert/mempool_alert";
 import { localization } from "../../localization/localization";
+import { Container } from "../../components/container/container";
 
 import './transaction.css';
 
@@ -219,26 +220,38 @@ export class TransactionPage extends Page {
             const transaction_deploy_contract = new TransactionDeployContract(transaction.hash, transaction.data.deploy_contract);
             this.transaction_type_container.appendChild(transaction_deploy_contract.container.element);
 
-            const node = XelisNode.instance();
-            const contract_logs = await node.rpc.getContractLogs({
-                caller: transaction.hash
-            });
+            try {
+                const node = XelisNode.instance();
+                const contract_logs = await node.rpc.getContractLogs({
+                    caller: transaction.hash
+                });
 
-            const transaction_contract_logs = new TransactionContractLogs(contract_logs);
-            this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
+                const transaction_contract_logs = new TransactionContractLogs(contract_logs);
+                this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
+            } catch (e) {
+                const container = new Container();
+                container.element.innerHTML = `${e}`
+                this.transaction_type_container.appendChild(container.element);
+            }
         }
 
         if (transaction.data.invoke_contract) {
             const transaction_invoke_contract = new TransactionInvokeContract(transaction.data.invoke_contract);
             this.transaction_type_container.appendChild(transaction_invoke_contract.container.element);
 
-            const node = XelisNode.instance();
-            const contract_logs = await node.rpc.getContractLogs({
-                caller: transaction.hash
-            });
+            try {
+                const node = XelisNode.instance();
+                const contract_logs = await node.rpc.getContractLogs({
+                    caller: transaction.hash
+                });
 
-            const transaction_contract_logs = new TransactionContractLogs(contract_logs);
-            this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
+                const transaction_contract_logs = new TransactionContractLogs(contract_logs);
+                this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
+            } catch (e) {
+                const container = new Container();
+                container.element.innerHTML = `${e}`
+                this.transaction_type_container.appendChild(container.element);
+            }
         }
     }
 
