@@ -20,7 +20,7 @@ export class DashboardSearch {
         this.container.element.appendChild(form_element);
         this.text_input = new TextInput();
         this.text_input.element.name = `dashboard_search_input`;
-        this.text_input.element.placeholder = localization.get_text(`Search block, transaction or account address`);
+        this.text_input.element.placeholder = localization.get_text(`Search block topo, transaction hash, block hash or account address.`);
         form_element.appendChild(this.text_input.element);
 
         const search_button = document.createElement(`button`);
@@ -47,6 +47,8 @@ export class DashboardSearch {
             }
 
             if (search_value.length === 64) {
+                let error = false;
+
                 try {
                     const tx = await node.rpc.getTransaction(search_value);
                     if (tx) {
@@ -54,7 +56,7 @@ export class DashboardSearch {
                         return;
                     }
                 } catch {
-
+                    error = true;
                 }
 
                 try {
@@ -66,11 +68,16 @@ export class DashboardSearch {
                         return;
                     }
                 } catch {
+                    error = true;
+                }
 
+                if (error) {
+                    alert('Invalid or unknown transaction / block.');
+                    return;
                 }
             }
 
-            if (search_value.startsWith(`xel:`)) { // TODO: xet
+            if (search_value.startsWith(`xel:`) || search_value.startsWith(`xet:`)) {
                 try {
                     const addr = await node.rpc.validateAddress({
                         address: search_value,
@@ -82,9 +89,12 @@ export class DashboardSearch {
                         return;
                     }
                 } catch {
-
+                    alert('Invalid or unknown account.');
+                    return;
                 }
             }
+
+            alert('Invalid search value. You can provide block topo, block hash, transaction hash or account address.');
         }
     }
 }
