@@ -56,7 +56,7 @@ export class BlockHashrate {
 
     set_cum_diff(cum_difficulty: number) {
         this.cum_diff_element.innerHTML = `
-            <div>${localization.get_text(`CUM DIFF`)}</div>
+            <div>${localization.get_text(`C DIFF`)}</div>
             <div>${format_diff(cum_difficulty)}</div>
         `;
     }
