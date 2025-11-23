@@ -6,6 +6,7 @@
     align-items: center;
     color: black;
     font-weight: bold;
+    user-select: none;
 }
 
 .xe-block-type-box::after {
