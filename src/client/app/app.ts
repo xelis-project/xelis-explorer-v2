@@ -26,6 +26,8 @@ export class App extends Singleton {
     top_loading_bar: TopLoadingBar;
     node_status: NodeStatus;
 
+    load_page_timeout?: number;
+
     constructor() {
         super();
         this.events = new EventEmitter();
@@ -54,12 +56,13 @@ export class App extends Singleton {
     }
 
     load_page() {
-        const url = new URL(window.location.href);
-        const page_type = match_route(url);
-        if (this.current_page) this.current_page.unload();
-        this.current_page = page_type.instance();
+        const switch_page = async () => {
+            const url = new URL(window.location.href);
+            const page_type = match_route(url);
 
-        const load_page = async () => {
+            if (this.current_page) this.current_page.unload();
+            this.current_page = page_type.instance();
+
             if (this.current_page) {
                 this.top_loading_bar.start();
                 await this.current_page.load(this.root);
@@ -67,8 +70,12 @@ export class App extends Singleton {
             }
         }
 
-        load_page();
-        this.events.emit("page_load");
+        // avoid spamming page load by clicking anchors rapidly causing loading/render glitches
+        window.clearTimeout(this.load_page_timeout);
+        this.load_page_timeout = window.setTimeout(() => {
+            switch_page();
+            this.events.emit("page_load");
+        }, 100);
     }
 
     on_pop_state = (_e: PopStateEvent) => {
