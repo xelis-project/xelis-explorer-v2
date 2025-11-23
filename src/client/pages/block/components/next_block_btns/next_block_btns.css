@@ -1,0 +1,49 @@
+.xe-block-next-block-btns {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.xe-block-next-block-btns a {
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    border: none;
+    cursor: pointer;
+    transition: translate .25s, background-color .2s;
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    background-color: rgba(2, 255, 209, 0.07);
+    color: white;
+    font-weight: bold;
+    font-family: 'Jura';
+    font-size: .9rem;
+    text-decoration: none;
+    user-select: none;
+}
+
+.xe-block-next-block-btns a svg {
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+    max-width: 1.5rem;
+    max-height: 1.5rem;
+}
+
+.xe-block-next-block-btns a:nth-child(1) svg {
+    rotate: 90deg;
+}
+
+.xe-block-next-block-btns a:nth-child(1):hover {
+    translate: 1% 0;
+    background-color: rgba(2, 255, 209, 0.2);
+}
+
+.xe-block-next-block-btns a:nth-child(2) svg {
+    rotate: 270deg;
+}
+
+.xe-block-next-block-btns a:nth-child(2):hover {
+    translate: -1% 0;
+    background-color: rgba(2, 255, 209, 0.2);
+}
