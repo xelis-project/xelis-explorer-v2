@@ -16,7 +16,7 @@ export class BlockInfo {
     height_type_element: HTMLDivElement;
     age_element: HTMLDivElement;
 
-    topo_element: HTMLDivElement;
+    height_element: HTMLAnchorElement;
     size_element: HTMLDivElement;
     tx_count_element: HTMLDivElement;
 
@@ -51,8 +51,8 @@ export class BlockInfo {
 
         this.sub_container_2 = document.createElement(`div`);
         container_2.appendChild(this.sub_container_2);
-        this.topo_element = document.createElement(`div`);
-        this.sub_container_2.appendChild(this.topo_element);
+        this.height_element = document.createElement(`a`);
+        this.sub_container_2.appendChild(this.height_element);
         this.size_element = document.createElement(`div`);
         this.sub_container_2.appendChild(this.size_element);
         this.tx_count_element = document.createElement(`div`);
@@ -101,7 +101,9 @@ export class BlockInfo {
     }
 
     set_height(height: number) {
-        this.topo_element.innerHTML = `${height.toLocaleString()} HEIGHT`;
+        this.height_element.innerHTML = `${height.toLocaleString()}`;
+        this.height_element.title = `HEIGHT ${height.toLocaleString()}`;
+        this.height_element.href = `/height/${height}`;
     }
 
     age_interval_id?: number;
