@@ -29,14 +29,14 @@ export class BlockFees {
     }
 
     set(block: Block) {
-        this.set_total_fees(block.total_fees);
+        this.set_total_fees_paid(block.total_fees, block.total_fees_burned);
         this.set_total_fees_burned(block.total_fees_burned);
     }
 
-    set_total_fees(total_fees?: number) {
+    set_total_fees_paid(total_fees?: number, total_fees_burned?: number) {
         this.total_fees_element.innerHTML = `
-            <div>${localization.get_text(`TOTAL FEES`)}</div>
-            <div>${total_fees ? format_xel(total_fees, true) : `--`}</div>
+            <div>${localization.get_text(`TOTAL FEES PAID`)}</div>
+            <div>${total_fees && total_fees_burned ? format_xel(total_fees + total_fees_burned, true) : `--`}</div>
         `;
     }
 
