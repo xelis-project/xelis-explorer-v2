@@ -15,6 +15,7 @@ import { BlockGraph } from "./components/graph/graph";
 import { localization } from "../../localization/localization";
 import { BlockRewards } from './components/rewards/rewards';
 import { BlockFees } from "./components/fees/fees";
+import { BlockNextBlockBtns } from "./components/next_block_btns/next_block_btns";
 
 import './block.css';
 
@@ -67,6 +68,7 @@ export class BlockPage extends Page {
     block_txs: BlockTxs;
     block_rewards: BlockRewards;
     block_fees: BlockFees;
+    block_next_block_btns: BlockNextBlockBtns;
 
     constructor() {
         super();
@@ -81,6 +83,9 @@ export class BlockPage extends Page {
 
         const sub_container_1 = document.createElement(`div`);
         container_1.appendChild(sub_container_1);
+
+        this.block_next_block_btns = new BlockNextBlockBtns();
+        sub_container_1.appendChild(this.block_next_block_btns.element);
 
         this.block_info = new BlockInfo();
         sub_container_1.appendChild(this.block_info.container.element);
@@ -103,6 +108,7 @@ export class BlockPage extends Page {
 
         this.block_txs = new BlockTxs();
         this.master.content.appendChild(this.block_txs.container.element);
+        this.master.element.appendChild(this.block_txs.tx_data_hover.element);
     }
 
     async load_block() {
@@ -185,7 +191,20 @@ export class BlockPage extends Page {
         this.block_txs.load(block);
         this.block_rewards.set(block);
         this.block_fees.set(block);
+        this.block_next_block_btns.set(info, block.topoheight);
         await this.block_graph.set(block);
+
+        this.block_graph.dag.overlay_loading.set_loading(false);
+        this.block_graph.dag.update_size();
+
+        this.block_graph.dag.lock_block_height = undefined;
+        if (block.height > info.stableheight) {
+            this.block_graph.dag.lock_block_height = block.height;
+            this.block_graph.dag.set_live(true);
+        } else {
+            this.block_graph.dag.set_live(false);
+            await this.block_graph.dag.load_blocks(block.height);
+        }
     }
 
     async load(parent: HTMLElement) {
@@ -207,18 +226,6 @@ export class BlockPage extends Page {
         if (block) {
             this.set_element(this.master.element);
             await this.set(block, info);
-            this.block_graph.dag.overlay_loading.set_loading(false);
-
-            this.block_graph.dag.update_size();
-
-            this.block_graph.dag.lock_block_height = undefined;
-            if (block.height > info.stableheight) {
-                this.block_graph.dag.lock_block_height = block.height;
-                this.block_graph.dag.set_live(true);
-            } else {
-                this.block_graph.dag.set_live(false);
-                this.block_graph.dag.load_blocks(block.height);
-            }
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
