@@ -112,6 +112,9 @@ export class SettingsPage extends Page {
         http_connection_reset.title = localization.get_text(`Reset to default seed node.`);
 
         http_connection_reset.addEventListener(`click`, () => {
+            const yes = window.confirm(`Are you sure you want to reset the http node connection?`);
+            if (!yes) return;
+
             settings.clear_node_http_connection();
             location.reload();
         });
@@ -167,6 +170,9 @@ export class SettingsPage extends Page {
         ws_connection_reset.title = localization.get_text(`Reset to default seed node.`);
 
         ws_connection_reset.addEventListener(`click`, () => {
+            const yes = window.confirm(`Are you sure you want to reset the websocket node connection?`);
+            if (!yes) return;
+
             settings.del_storage_item(`node_ws_connection`);
             location.reload();
         });
