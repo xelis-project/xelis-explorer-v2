@@ -1,0 +1,63 @@
+.xe-notification {
+    position: fixed;
+    right: 1rem;
+    top: 1rem;
+    z-index: 3;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.xe-notification-item {
+    padding: 1rem 1.5rem;
+    font-weight: bold;
+    transition: translate .25s;
+    translate: 100% 0 0;
+    border-radius: 1rem;
+    display: flex;
+    gap: .5rem;
+    flex-direction: row;
+    align-items: center;
+    max-width: 30rem;
+}
+
+.xe-notification-item.show {
+    translate: 0 0 0;
+}
+
+.xe-notification-item.error {
+    box-shadow: 0 0 100px rgba(255, 2, 44, 0.3);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: .15rem solid rgba(255, 2, 57, 0.5);
+    color: white;
+}
+
+.xe-notification-item.success {
+    box-shadow: 0 0 100px rgba(2, 255, 209, 0.3);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: .15rem solid rgba(2, 255, 209, 0.5);
+    color: white;
+}
+
+.xe-notification-close {
+    border: none;
+    background: none;
+    color: white;
+    cursor: pointer;
+    transition: translate .25s, opacity .25s;
+    opacity: .5;
+}
+
+.xe-notification-close:hover {
+    translate: 2% 0;
+    opacity: 1;
+}
+
+.xe-notification-close svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    translate: 0 .1rem;
+}
