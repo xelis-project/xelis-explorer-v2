@@ -9,6 +9,7 @@ export class NodeStatus {
 
     constructor() {
         this.element = document.createElement(`div`);
+        this.element.classList.add(`xe-node-status`);
 
         const node = XelisNode.instance();
 
