@@ -1,3 +1,18 @@
 .xe-block-height {
     
 }
+
+.xe-block-height-table {
+    animation: xe-block-height-table-appear-animation .4s;
+    overflow-x: auto;
+}
+
+@keyframes xe-block-height-table-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
