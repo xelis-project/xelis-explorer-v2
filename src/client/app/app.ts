@@ -5,6 +5,7 @@ import { EventEmitter } from "../utils/event_emitter";
 import { TopLoadingBar } from "../components/top_loading_bar/top_loading_bar";
 import { NodeStatus } from "../components/node_status/node_status";
 import { JsonViewer } from "../components/json_viewer/json_viewer";
+import { Notification } from "../components/notification/notification";
 
 import "reset-css";
 import "urlpattern-polyfill"; // URLPattern is a new web API we use polyfill for now
@@ -25,6 +26,7 @@ export class App extends Singleton {
 
     top_loading_bar: TopLoadingBar;
     node_status: NodeStatus;
+    notification: Notification;
 
     load_page_timeout?: number;
 
@@ -33,13 +35,16 @@ export class App extends Singleton {
         this.events = new EventEmitter();
         this.top_loading_bar = new TopLoadingBar();
         this.node_status = new NodeStatus();
+        this.notification = new Notification();
     }
 
     load(root: HTMLElement) {
         this.root = root;
         this.root.classList.add(`xe-app`);
+
         this.root.appendChild(this.top_loading_bar.element);
         this.root.appendChild(this.node_status.element);
+        this.root.appendChild(this.notification.element);
 
         this.load_page();
         this.register_events();
