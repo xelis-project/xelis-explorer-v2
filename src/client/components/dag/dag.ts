@@ -706,7 +706,7 @@ export class DAG {
 
         // topoheight
         {
-            const topo = block.topoheight ? block.topoheight.toLocaleString() : `????`;
+            const topo = block.topoheight !== undefined ? block.topoheight.toLocaleString() : `????`;
             const geo = new TextGeometry(topo, {
                 font: this.font,
                 size: 0.5,

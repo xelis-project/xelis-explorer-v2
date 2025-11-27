@@ -137,7 +137,7 @@ export class DAGBlockDetails {
 
     set(block: Block) {
         this.block_link.href = `/block/${block.hash}`;
-        this.block_link.innerHTML = localization.get_text(`BLOCK ${block.topoheight ? block.topoheight.toLocaleString() : `????`}`);
+        this.block_link.innerHTML = localization.get_text(`BLOCK ${block.topoheight !== undefined ? block.topoheight.toLocaleString() : `????`}`);
         this.set_hash(block.hash);
         this.set_block_type(block.block_type);
         this.set_miner(block.miner);
