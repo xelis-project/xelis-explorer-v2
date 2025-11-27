@@ -48,6 +48,7 @@ export class Page extends Singleton {
     constructor() {
         super();
         this.element = document.createElement(`div`);
+        this.element.classList.add(`xe-page`);
     }
 
     set_window_title(title: string) {
