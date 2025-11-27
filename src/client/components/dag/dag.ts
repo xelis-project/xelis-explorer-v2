@@ -362,6 +362,7 @@ export class DAG {
         this.block_group.clear();
         this.block_mesh_hashes.clear();
         this.blocks_by_height.clear();
+        this.height_group.clear();
         this.target_line.visible = false;
 
         const node = XelisNode.instance();
