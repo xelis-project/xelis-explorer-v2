@@ -14,6 +14,7 @@ import { NotFoundPage } from "../not_found/not_found";
 import { AccountKnownAddr } from "./components/known_addr/known_addr";
 import { Box } from "../../components/box/box";
 import { localization } from "../../localization/localization";
+import { AccountAssets } from "./components/assets/assets";
 
 import "./account.css";
 
@@ -150,6 +151,7 @@ export class AccountPage extends Page {
     account_known_addr: AccountKnownAddr;
     incoming_history_list: AccountHistoryList;
     outgoing_history_list: AccountHistoryList;
+    account_assets: AccountAssets;
 
     constructor() {
         super();
@@ -175,11 +177,14 @@ export class AccountPage extends Page {
         container_2.classList.add(`xe-account-container-2`);
         this.master.content.appendChild(container_2);
 
-        this.incoming_history_list = new AccountHistoryList(`Incoming`);
+        this.incoming_history_list = new AccountHistoryList(`INCOMING`);
         container_2.appendChild(this.incoming_history_list.container.element);
 
-        this.outgoing_history_list = new AccountHistoryList(`Outgoing`);
+        this.outgoing_history_list = new AccountHistoryList(`OUTGOING`);
         container_2.appendChild(this.outgoing_history_list.container.element);
+
+        this.account_assets = new AccountAssets();
+        container_2.appendChild(this.account_assets.container.element);
     }
 
     async load_account() {
@@ -229,6 +234,14 @@ export class AccountPage extends Page {
         this.outgoing_history_list.set(outgoing);
     }
 
+    async load_assets() {
+        const { addr } = this.page_data;
+        if (!addr) return;
+
+        const xelis_node = XelisNode.instance();
+        const assets = await xelis_node.rpc.getAccountAssets({ address: addr });
+    }
+
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
@@ -276,6 +289,7 @@ export class AccountPage extends Page {
             Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
             Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
             await this.load_history();
+            await this.load_assets();
         } else {
             this.set_element(NotFoundPage.instance().element);
         }

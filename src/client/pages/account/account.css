@@ -28,6 +28,14 @@
     }
 }
 
-.xe-account-container-2>div {
-    flex: 1;
+.xe-account-container-2>:nth-child(1) {
+    flex: 2;
+}
+
+.xe-account-container-2>:nth-child(2) {
+    flex: 2;
+}
+
+.xe-account-container-2>:nth-child(3) {
+    flex: 1.5;
 }

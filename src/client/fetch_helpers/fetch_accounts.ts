@@ -4,6 +4,7 @@ import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { XELIS_ASSET } from "@xelis/sdk/config";
 
 interface AccountInfo {
+    addr: string;
     registration_topo: number;
     balance: GetBalanceResult;
     nonce: GetNonceResult;
@@ -48,6 +49,7 @@ export const fetch_accounts = async (addrs: string[]) => {
         switch(data_index) {
             case 0:
                 accounts[account_index] = {
+                    addr: addrs[account_index],
                     registration_topo: result
                 } as AccountInfo;
                 break;

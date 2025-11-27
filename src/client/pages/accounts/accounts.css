@@ -8,11 +8,6 @@
     overflow-x: auto;
 }
 
-.xe-accounts-table>:first-child {
-    font-size: 1.3rem;
-    color: #02FFCF;
-}
-
 @keyframes xe-accounts-table-appear-animation {
     0% {
         translate: 0 25%;
@@ -21,4 +16,10 @@
     100% {
         translate: 0 0;
     }
+}
+
+.xe-accounts-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
 }
