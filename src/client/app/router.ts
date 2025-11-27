@@ -8,6 +8,7 @@ import { ContractPage } from "../pages/contract/contract";
 import { ContractsPage } from "../pages/contracts/contracts";
 import { DAGPage } from "../pages/dag/dag";
 import { DashboardPage } from "../pages/dashboard/dashboards";
+import { KnownAccountsPage } from "../pages/known_accounts/known_accounts";
 import { MempoolPage } from "../pages/mempool/mempool";
 import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
@@ -26,6 +27,7 @@ export const pages = [
     BlockTopoPage,
     BlockHeightPage,
     AccountPage,
+    KnownAccountsPage,
     TransactionPage,
     TransactionsPage,
     AccountsPage,
