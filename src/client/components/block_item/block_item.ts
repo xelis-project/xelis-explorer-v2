@@ -85,7 +85,7 @@ export class BlockItem {
     }
 
     set_topoheight(topoheight?: number) {
-        this.element_height.innerHTML = localization.get_text(`BLOCK {}`, [topoheight ? topoheight.toLocaleString() : `?`]);
+        this.element_height.innerHTML = localization.get_text(`BLOCK {}`, [topoheight ? topoheight.toLocaleString() : `????`]);
     }
 
     set_tx_count(tx_count: number, tx_max: number) {

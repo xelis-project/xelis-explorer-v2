@@ -92,7 +92,7 @@ export class BlockInfo {
         this.height_type_element.appendChild(sub_container);
 
         const topo_element = document.createElement(`div`);
-        topo_element.innerHTML = `${topoheight ? topoheight.toLocaleString() : `?`}`;
+        topo_element.innerHTML = `${topoheight ? topoheight.toLocaleString() : `????`}`;
         sub_container.appendChild(topo_element);
 
         const text_element = document.createElement(`div`);
