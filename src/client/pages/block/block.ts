@@ -200,6 +200,7 @@ export class BlockPage extends Page {
         this.block_graph.dag.lock_block_height = undefined;
         if (block.height > info.stableheight) {
             this.block_graph.dag.lock_block_height = block.height;
+            this.block_graph.dag.move_to_block(block.height, true);
             this.block_graph.dag.set_live(true);
         } else {
             this.block_graph.dag.set_live(false);
