@@ -28,7 +28,5 @@ export class Background {
         //circuit.innerHTML = svg_circuit();
         this.element.appendChild(circuit.element);
         //circuit.load();
-
-        document.body.style.overflowX = `hidden`;
     }
 }

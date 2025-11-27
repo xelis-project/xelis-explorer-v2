@@ -9,6 +9,11 @@ body {
     font-size: calc(10px + 0.5vw);
 }
 
+body {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
 a {
     color: #F4D35E;
     transition: opacity .25s;
