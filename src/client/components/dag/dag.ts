@@ -39,6 +39,7 @@ export class DAG {
 
     block_group: THREE.Group;
     tip_line_group: THREE.Group;
+    height_group: THREE.Group;
 
     overlay_loading: OverlayLoading;
     block_details: DAGBlockDetails;
@@ -52,6 +53,8 @@ export class DAG {
     is_live: boolean;
     target_line: THREE.Line;
     lock_block_height?: number;
+
+    block_spacing = 5;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -124,6 +127,9 @@ export class DAG {
         this.block_group = new THREE.Group();
         this.scene.add(this.block_group);
 
+        this.height_group = new THREE.Group();
+        this.scene.add(this.height_group);
+
         this.target_line = this.create_target_line();
         this.scene.add(this.target_line);
 
@@ -141,6 +147,12 @@ export class DAG {
         console.log("new_block", new_block);
 
         if (new_block) {
+            if (!this.blocks_by_height.get(new_block.height)) {
+                const height_mesh = this.create_height_mesh(new_block.height);
+                height_mesh.position.set(this.blocks_by_height.size * this.block_spacing, -4, 0);
+                this.height_group.add(height_mesh);
+            }
+
             this.add_block_to_height(new_block);
 
             if (this.blocks_by_height.size >= 25) {
@@ -150,19 +162,20 @@ export class DAG {
 
             const block_mesh = this.create_block_mesh(new_block);
             const blocks_at_height = this.blocks_by_height.get(new_block.height);
+            this.block_group.add(block_mesh);
+
             if (blocks_at_height) {
                 const block_count = blocks_at_height.length - 1;
                 const center_y = block_count * 5; //(block_count * 5) - (block_count / 2 * 5);
-                block_mesh.position.set((this.blocks_by_height.size - 1) * 4, center_y, 0);
+                block_mesh.position.set((this.blocks_by_height.size - 1) * this.block_spacing, center_y, 0);
             }
 
-            this.block_group.add(block_mesh);
             // this.animate_block_appear(block_mesh); applied in on_block_ordered
 
             const new_height = new_block.height;
             this.height_control.set_height(new_height);
             this.height_control.set_max_height(new_height);
-            this.move_to_block(this.lock_block_height ? this.lock_block_height : new_block.height, true);
+            this.move_to_height(this.lock_block_height ? this.lock_block_height : new_block.height, true);
 
             new_block.tips.forEach((hash) => {
                 const block_mesh_target = this.block_mesh_hashes.get(hash);
@@ -201,6 +214,16 @@ export class DAG {
     }
 
     delete_blocks_at_height(height: number) {
+        this.height_group.children.forEach((height_mesh) => {
+            if (height_mesh.userData.height === height) {
+                this.height_group.remove(height_mesh);
+            }
+        });
+
+        this.height_group.children.forEach((height_mesh) => {
+            height_mesh.position.sub(new THREE.Vector3(this.block_spacing, 0, 0));
+        });
+
         const blocks_to_delete = this.blocks_by_height.get(height);
         if (blocks_to_delete) {
             blocks_to_delete.forEach((block) => {
@@ -219,11 +242,11 @@ export class DAG {
             this.tip_line_group.remove(...tip_lines_to_delete);
 
             this.block_group.children.forEach((block_mesh) => {
-                block_mesh.position.sub(new THREE.Vector3(4, 0, 0));
+                block_mesh.position.sub(new THREE.Vector3(this.block_spacing, 0, 0));
             });
 
             this.tip_line_group.children.forEach((tip_line_mesh) => {
-                tip_line_mesh.position.sub(new THREE.Vector3(4, 0, 0));
+                tip_line_mesh.position.sub(new THREE.Vector3(this.block_spacing, 0, 0));
             });
         }
     }
@@ -258,7 +281,7 @@ export class DAG {
             await this.load_blocks(current_height);
 
             if (this.lock_block_height) {
-                this.move_to_block(this.lock_block_height, true);
+                this.move_to_height(this.lock_block_height, true);
             }
 
             node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
@@ -387,9 +410,14 @@ export class DAG {
             height_blocks.forEach((block, y) => {
                 const block_mesh = this.create_block_mesh(block);
                 const center_y = (y * 5) //- (height_blocks.length / 2 * 5);
-                block_mesh.position.set(x * 4, center_y, 0);
+                block_mesh.position.set(x * this.block_spacing, center_y, 0);
                 this.block_group.add(block_mesh);
             });
+
+            const first_block = height_blocks[0];
+            const height_mesh = this.create_height_mesh(first_block.height);
+            height_mesh.position.set(x * this.block_spacing, -4, 0);
+            this.height_group.add(height_mesh);
 
             x++;
         });
@@ -407,10 +435,10 @@ export class DAG {
         });
 
         this.target_line.visible = true;
-        this.move_to_block(height, false);
+        this.move_to_height(height, false);
     }
 
-    move_to_block(height: number, enable_transition: boolean) {
+    move_to_height(height: number, enable_transition: boolean) {
         const block_mesh = this.block_group.children.find((b) => {
             return b.userData.block.height === height;
         });
@@ -546,6 +574,46 @@ export class DAG {
                 }
             }
         });
+    }
+
+    create_height_mesh(height: number) {
+        const height_group = new THREE.Group();
+        height_group.userData.height = height;
+
+        // height
+        const height_geo = new TextGeometry(height.toLocaleString(), {
+            font: this.font,
+            size: 0.5,
+            depth: 0.5
+        });
+
+        const height_mat = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(`white`),
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+        const height_mesh = new THREE.Mesh(height_geo, height_mat);
+        height_geo.computeBoundingBox();
+
+        let back_width = 0;
+        if (height_geo.boundingBox) {
+            height_mesh.position.set(height_geo.boundingBox.max.x / -2, -.25, 0);
+            back_width = height_geo.boundingBox?.max.x - height_geo.boundingBox?.min.x + 1;
+        }
+
+        // back
+        const back_geo = new RoundedBoxGeometry(back_width, 1.25, 1, 10, 1);
+        const back_mat = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(`#111`),
+            transparent: true,
+            side: THREE.DoubleSide
+        });
+        const back_mesh = new THREE.Mesh(back_geo, back_mat);
+
+        height_group.add(back_mesh);
+        height_group.add(height_mesh);
+
+        return height_group;
     }
 
     create_block_mesh(block: Block) {
