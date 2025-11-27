@@ -9,7 +9,7 @@ export class CollapseBox {
 
     constructor() {
         this.element = document.createElement(`div`);
-        this.element.classList.add(`xe-tab`);
+        this.element.classList.add(`xe-collapse-box`);
 
         const title_wrap = document.createElement(`div`);
         this.element.appendChild(title_wrap);
