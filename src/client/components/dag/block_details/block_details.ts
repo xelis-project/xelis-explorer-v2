@@ -6,14 +6,15 @@ import { format_diff } from '../../../utils/format_diff';
 // @ts-ignore
 import hashicon from 'hashicon';
 import { format_address } from '../../../utils/format_address';
+import { localization } from '../../../localization/localization';
 
 import './block_details.css';
-import { localization } from '../../../localization/localization';
 
 export class DAGBlockDetails {
     element: HTMLDivElement;
     visible: boolean;
 
+    block_link: HTMLAnchorElement;
     element_hash: HTMLDivElement;
     element_block_type: HTMLDivElement;
     element_timestamp: HTMLDivElement;
@@ -38,6 +39,9 @@ export class DAGBlockDetails {
 
         this.element = document.createElement(`div`);
         this.element.classList.add(`xe-dag-block-details`, `scrollbar-1`, `scrollbar-1-right`);
+
+        this.block_link = document.createElement(`a`);
+        this.element.appendChild(this.block_link);
 
         this.element_hash = document.createElement(`div`);
         this.element.appendChild(this.element_hash);
@@ -132,6 +136,8 @@ export class DAGBlockDetails {
     }
 
     set(block: Block) {
+        this.block_link.href = `/block/${block.hash}`;
+        this.block_link.innerHTML = localization.get_text(`BLOCK ${block.topoheight ? block.topoheight.toLocaleString() : `????`}`);
         this.set_hash(block.hash);
         this.set_block_type(block.block_type);
         this.set_miner(block.miner);
