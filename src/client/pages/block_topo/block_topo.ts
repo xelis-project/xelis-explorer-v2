@@ -91,6 +91,7 @@ export class BlockTopoPage extends Page {
         if (block) {
             this.set_element(this.block_page.master.element);
             this.block_page.set(block, info);
+            this.block_page.set_dag(block, info);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }

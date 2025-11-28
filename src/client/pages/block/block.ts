@@ -192,6 +192,9 @@ export class BlockPage extends Page {
         this.block_rewards.set(block);
         this.block_fees.set(block);
         this.block_next_block_btns.set(info, block.topoheight);
+    }
+
+    async set_dag(block: Block, info: GetInfoResult) {
         await this.block_graph.set(block);
 
         this.block_graph.dag.overlay_loading.set_loading(false);
@@ -226,7 +229,8 @@ export class BlockPage extends Page {
         const { block } = this.page_data;
         if (block) {
             this.set_element(this.master.element);
-            await this.set(block, info);
+            this.set(block, info);
+            this.set_dag(block, info);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
@@ -236,5 +240,6 @@ export class BlockPage extends Page {
         super.unload();
         this.clear_node_events();
         this.block_graph.dag.clear();
+        this.block_txs.tx_data_hover.hide();
     }
 }
