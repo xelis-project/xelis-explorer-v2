@@ -1,19 +1,43 @@
-.xe-transaction-contract-outputs {
+.xe-transaction-contract-logs {
     display: flex;
     gap: 1rem;
     flex-direction: column;
 }
 
-.xe-transaction-contract-outputs table {
+.xe-transaction-contract-logs table {
     width: 100%;
     table-layout: fixed;
 }
 
-.xe-transaction-contract-outputs table td:first-child {
+.xe-transaction-contract-logs table td:first-child {
     font-weight: bold;
 }
 
-.xe-transaction-contract-outputs table td {
+.xe-transaction-contract-logs table td {
     border: thin solid rgba(255, 255, 255, 0.1);
     padding: .5rem;
+}
+
+.xe-transaction-contract-logs .exit-code {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}
+
+.xe-transaction-contract-logs .dot-success {
+    border: .15rem solid rgb(2, 255, 207);
+    max-width: .75rem;
+    max-height: .75rem;
+    min-width: .75rem;
+    min-height: .75rem;
+    border-radius: 100%;
+}
+
+.xe-transaction-contract-logs .dot-fail {
+    border: .15rem solid red;
+    max-width: .75rem;
+    max-height: .75rem;
+    min-width: .75rem;
+    min-height: .75rem;
+    border-radius: 100%;
 }

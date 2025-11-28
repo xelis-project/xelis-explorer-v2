@@ -6,9 +6,10 @@ import prettyBytes from "pretty-bytes";
 import { format_xel } from "../../../utils/format_xel";
 import prettyMilliseconds from "pretty-ms";
 import { Row } from "../../../components/table/row";
-import { format_asset } from "../../../utils/format_asset";
 import { format_hash } from "../../../utils/format_hash";
 import { localization } from "../../../localization/localization";
+import { XelisNode } from "../../../app/xelis_node";
+import { ws_format_asset } from "../../../utils/ws_format_asset";
 
 import './tx_row.css';
 
@@ -40,10 +41,13 @@ export class TxRow extends Row {
         this.value_cells[1].innerHTML = format_hash(hash);
     }
 
-    set_type(data: TransactionData) {
+    async set_type(data: TransactionData) {
+        const node = XelisNode.instance();
+
         let value = ``;
         if (data.burn) {
-            value = localization.get_text(`Burn {}`, [format_asset(data.burn.asset, data.burn.amount, true)]);
+            const asset_amount_string = await ws_format_asset(node.ws, data.burn.asset, data.burn.amount);
+            value = localization.get_text(`Burn {}`, [asset_amount_string]);
         } else if (data.deploy_contract) {
             value = localization.get_text(`Deploy Contract`);
         } else if (data.invoke_contract) {

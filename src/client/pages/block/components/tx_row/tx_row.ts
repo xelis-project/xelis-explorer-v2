@@ -4,10 +4,11 @@ import hashicon from 'hashicon';
 import { format_xel } from "../../../../utils/format_xel";
 import { Transaction, TransactionData } from "@xelis/sdk/daemon/types";
 import prettyBytes from "pretty-bytes";
-import { format_asset } from "../../../../utils/format_asset";
 import { Row } from "../../../../components/table/row";
 import { format_hash } from "../../../../utils/format_hash";
 import { localization } from "../../../../localization/localization";
+import { XelisNode } from "../../../../app/xelis_node";
+import { ws_format_asset } from "../../../../utils/ws_format_asset";
 
 export class TxRow extends Row {
     constructor() {
@@ -28,10 +29,13 @@ export class TxRow extends Row {
         this.value_cells[0].innerHTML = `${format_hash(hash)}`;
     }
 
-    set_type(data: TransactionData) {
+    async set_type(data: TransactionData) {
+        const node = XelisNode.instance();
+        
         let value = ``;
         if (data.burn) {
-            value = `Burn ${format_asset(data.burn.asset, data.burn.amount, true)}`;
+            const asset_amount_string = await ws_format_asset(node.ws, data.burn.asset, data.burn.amount);
+            value = `Burn ${asset_amount_string}`;
         } else if (data.deploy_contract) {
             value = `Deploy Contract`;
         } else if (data.invoke_contract) {

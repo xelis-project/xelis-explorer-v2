@@ -6,9 +6,10 @@ import prettyBytes from 'pretty-bytes';
 import hashicon from "hashicon";
 import { format_address } from '../../utils/format_address';
 import { format_xel } from '../../utils/format_xel';
-import { format_asset } from '../../utils/format_asset';
 import { format_hash } from '../../utils/format_hash';
 import { localization } from '../../localization/localization';
+import { ws_format_asset } from '../../utils/ws_format_asset';
+import { XelisNode } from '../../app/xelis_node';
 
 import './tx_item.css';
 
@@ -115,10 +116,13 @@ export class TxItem {
         this.element_fee.innerHTML = `${format_xel(fee, true)}`;
     }
 
-    set_type(data: TransactionData) {
+    async set_type(data: TransactionData) {
+        const node = XelisNode.instance();
+
         let value = ``;
         if (data.burn) {
-            value = localization.get_text(`Burn {}`, [format_asset(data.burn.asset, data.burn.amount, true)]);
+            const asset_amount_string = await ws_format_asset(node.ws, data.burn.asset, data.burn.amount);
+            value = localization.get_text(`Burn {}`, [asset_amount_string]);
         } else if (data.deploy_contract) {
             value = localization.get_text(`Deploy Contract`);
         } else if (data.invoke_contract) {

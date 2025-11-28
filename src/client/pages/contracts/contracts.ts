@@ -80,8 +80,6 @@ export class ContractsPage extends Page {
                 const contract_row = new ContractRow();
                 contract_row.set(contract.name, contract_info);
                 contract_rows.push(contract_row);
-
-
             });
         }
 

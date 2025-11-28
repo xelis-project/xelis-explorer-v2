@@ -32,34 +32,3 @@
     font-weight: bold;
     white-space: nowrap;
 }
-
-.xe-transaction-burn-box-2 {
-    display: flex;
-    gap: 1rem;
-    flex-direction: row;
-    align-items: center;
-}
-
-.xe-transaction-burn-box-2 svg {
-    width: 4rem;
-    height: 4rem;
-}
-
-.xe-transaction-burn-box-2>:nth-child(2) {
-    flex: 1;
-    font-size: 1.5rem;
-}
-
-.xe-transaction-burn-box-2>:nth-child(3) {
-    display: flex;
-    gap: .25rem;
-    flex-direction: column;
-}
-
-.xe-transaction-burn-box-2>:nth-child(3)>:first-child {
-    font-size: 2rem;
-}
-
-.xe-transaction-burn-box-2>:nth-child(3)>:nth-child(2) {
-    color: #afafaf;
-}

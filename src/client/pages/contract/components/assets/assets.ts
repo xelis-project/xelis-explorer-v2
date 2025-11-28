@@ -3,9 +3,9 @@ import { XelisNode } from '../../../../app/xelis_node';
 import { Container } from '../../../../components/container/container';
 import { fetch_contract_balances } from '../../../../fetch_helpers/fetch_contract_balances';
 import { format_hash } from '../../../../utils/format_hash';
-import { format_asset } from '../../../../utils/format_asset';
 import { Box } from '../../../../components/box/box';
 import { localization } from '../../../../localization/localization';
+import { ws_format_asset } from '../../../../utils/ws_format_asset';
 
 import './assets.css';
 
@@ -26,8 +26,9 @@ export class ContractAssets {
         this.container.element.appendChild(this.list_element);
     }
 
-    add_item(asset: string, balance: GetContractBalanceResult) {
+    async add_item(asset: string, balance: GetContractBalanceResult) {
         const box = new Box();
+        const node = XelisNode.instance();
 
         const asset_element = document.createElement(`div`);
         box.element.appendChild(asset_element);
@@ -39,7 +40,8 @@ export class ContractAssets {
 
         const balance_element = document.createElement(`div`);
         box.element.appendChild(balance_element);
-        balance_element.innerHTML = format_asset(asset, balance.data, true);
+        const asset_amount_string = await ws_format_asset(node.ws, asset, balance.data);
+        balance_element.innerHTML = asset_amount_string;
 
         this.list_element.appendChild(box.element);
     }
