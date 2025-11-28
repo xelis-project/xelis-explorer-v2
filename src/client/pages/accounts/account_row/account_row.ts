@@ -1,7 +1,8 @@
 //@ts-ignore
+import hashicon from 'hashicon';
 import { Row } from "../../../components/table/row";
-import { format_hash } from "../../../utils/format_hash";
 import { localization } from "../../../localization/localization";
+import { format_address } from "../../../utils/format_address";
 
 import './account_row.css';
 
@@ -26,7 +27,18 @@ export class AccountRow extends Row {
     }
 
     set_addr(addr: string) {
-        this.value_cells[0].innerHTML = `${format_hash(addr)}`;
+        const container = document.createElement(`div`);
+        container.classList.add(`xe-blocks-table-miner`);
+
+        const signer_icon = hashicon(addr, 25) as HTMLCanvasElement;
+        container.appendChild(signer_icon);
+
+        const signer_addr = document.createElement(`div`);
+        signer_addr.innerHTML = format_address(addr);
+        container.appendChild(signer_addr);
+
+        this.value_cells[0].replaceChildren();
+        this.value_cells[0].appendChild(container);
     }
 
     set_registration_topo(topo: number) {
