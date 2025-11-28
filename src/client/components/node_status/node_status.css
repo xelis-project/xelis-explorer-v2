@@ -48,6 +48,7 @@
     text-decoration: none;
     font-size: .8rem;
     font-family: 'Jura';
+    user-select: none;
 }
 
 .xe-node-status-reconnect-btn:hover {
