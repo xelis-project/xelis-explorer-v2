@@ -1,0 +1,34 @@
+.xe-tx-data-hover {
+    position: fixed;
+    background: #151515;
+    padding: 1rem;
+    translate: -50% 0;
+    transition: translate .25s;
+    word-break: break-all;
+    z-index: 1;
+    box-shadow: 0 0 50px 5px #0f0f0f;
+    width: 15rem;
+    height: 15rem;
+    border-radius: .5rem;
+    font-size: .8rem;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    overflow: auto;
+    visibility: hidden;
+}
+
+.xe-tx-data-hover>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-tx-data-hover>div>:nth-child(1) {
+    font-weight: 300;
+    opacity: .7;
+}
+
+.xe-tx-data-hover>div>:nth-child(2) {
+    word-break: break-all;
+}

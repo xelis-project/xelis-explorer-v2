@@ -4,17 +4,24 @@ import { Table } from "../../../../components/table/table";
 import { XelisNode } from "../../../../app/xelis_node";
 import { TxRow } from "../tx_row/tx_row";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
+import { localization } from "../../../../localization/localization";
+import { TxDataHover } from "../../../../components/tx_data_hover/tx_data_hover";
 
 import './txs.css';
-import { localization } from "../../../../localization/localization";
 
 export class BlockTxs {
     container: Container;
     table: Table;
+    tx_data_hover: TxDataHover;
+
+    tx_data_hover_timeout?: number;
 
     constructor() {
         this.container = new Container();
         this.container.element.classList.add(`xe-block-txs`);
+
+        this.tx_data_hover = new TxDataHover();
+        //this.container.element.appendChild(this.tx_data_hover.element);
 
         this.table = new Table();
         this.table.set_clickable();
@@ -57,6 +64,23 @@ export class BlockTxs {
             txs.forEach((tx) => {
                 const tx_row = new TxRow();
                 tx_row.set(tx);
+
+                tx_row.element.addEventListener(`mouseenter`, (e) => {
+                    if (this.tx_data_hover.visible) return;
+                    window.clearInterval(this.tx_data_hover_timeout);
+                    this.tx_data_hover_timeout = window.setTimeout(() => {
+                        this.tx_data_hover.set_pos(e.pageX + 300, e.pageY - (this.tx_data_hover.element.clientHeight / 2));
+                        this.tx_data_hover.show(tx.data);
+                    }, 500);
+                });
+
+                tx_row.element.addEventListener(`mouseleave`, (e) => {
+                    window.clearInterval(this.tx_data_hover_timeout);
+                    if (!this.tx_data_hover.element.contains(e.relatedTarget as Node)) {
+                        this.tx_data_hover.hide();
+                    }
+                });
+
                 this.table.prepend_row(tx_row.element);
             });
         } else {
