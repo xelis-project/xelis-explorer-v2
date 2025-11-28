@@ -8,11 +8,11 @@ export const fetch_blocks = async (end_height: number, count: number) => {
     const requests = [] as RPCRequest[];
     const batch_size = 20;
 
-    for (let i = end_height; i > (end_height - count); i -= batch_size) {
+    for (let i = end_height; i > Math.max(0, end_height - count); i -= batch_size) {
         requests.push({
             method: RPCMethod.GetBlocksRangeByHeight,
             params: {
-                start_height: Math.max(end_height - count, i - batch_size) + 1, // start height is inclusive we add 1
+                start_height: Math.max(-1, i - batch_size) + 1, // start height is inclusive we add 1
                 end_height: i
             } as HeightRangeParams
         });
