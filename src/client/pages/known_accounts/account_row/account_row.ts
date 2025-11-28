@@ -24,7 +24,7 @@ export class AccountRow extends Row {
     set(account_data: AccountRowData) {
         this.set_name(account_data.addr);
         this.set_addr(account_data.addr);
-        this.set_link(account_data.link);
+        this.set_entity_link(account_data.link);
         this.set_registration_topo(account_data.registration_topo);
         this.set_in_topo(account_data.in_topo);
         this.set_out_topo(account_data.out_topo);
@@ -52,7 +52,7 @@ export class AccountRow extends Row {
         this.value_cells[1].innerHTML = `${format_hash(addr)}`;
     }
 
-    set_link(link?: string) {
+    set_entity_link(link?: string) {
         this.value_cells[2].innerHTML = link ? `<a href="${link}" target="_blank">${link}</a>` : `--`;
     }
 
