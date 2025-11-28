@@ -23,11 +23,18 @@ export class NodeStatus {
         reconnect_container.appendChild(reconnect_text_element);
 
         const reconnect_button_element = document.createElement(`button`);
+        reconnect_button_element.classList.add(`xe-node-status-reconnect-btn`);
         reconnect_button_element.innerHTML = `${icons.connect()} ${localization.get_text(`RECONNECT`)}`;
         reconnect_button_element.addEventListener(`click`, () => {
             location.reload();
         });
         reconnect_container.appendChild(reconnect_button_element);
+
+        const settings_button_element = document.createElement(`a`);
+        settings_button_element.classList.add(`xe-node-status-reconnect-btn`);
+        settings_button_element.innerHTML = `${icons.cog()} ${localization.get_text(`SETTINGS`)}`;
+        settings_button_element.href = `/settings`;
+        reconnect_container.appendChild(settings_button_element);
 
         node.ws.socket.addEventListener(`open`, (e) => {
             console.log(`OPEN: `, e);
