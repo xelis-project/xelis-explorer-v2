@@ -11,6 +11,7 @@ import { ServerApp } from "../../../server";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import DaemonWS from '@xelis/sdk/daemon/websocket';
 import icons from "../../assets/svg/icons";
+import packageJSON from '../../../../package.json';
 
 import './settings.css';
 
@@ -242,6 +243,16 @@ export class SettingsPage extends Page {
         });
 
         menu_type_item.input_element.appendChild(menu_type_select.element);
+
+        append_line();
+
+        // display explorer app version
+
+        const settings_item = new SettingsItem();
+        settings_item.title_element.innerHTML = localization.get_text(`APP VERSION`);
+        settings_item.description_element.innerHTML = localization.get_text(`The current version running.`);
+        settings_item.input_element.innerHTML = `v${packageJSON.version}`;
+        container.element.appendChild(settings_item.element);
     }
 
     async load(parent: HTMLElement) {
