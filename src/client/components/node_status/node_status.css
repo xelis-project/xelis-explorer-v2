@@ -17,7 +17,7 @@
 }
 
 .xe-node-status-reconnect>div {
-    max-width: 80rem;
+    max-width: 50rem;
     margin: 0 auto;
     z-index: 1;
     padding: 1rem;
@@ -25,6 +25,13 @@
     gap: 1rem;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+}
+
+.xe-node-status-reconnect>div>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
 }
 
 .xe-node-status-reconnect-btn {
@@ -53,4 +60,25 @@
 .xe-node-status-reconnect-btn svg {
     width: 1rem;
     height: 1rem;
+}
+
+.xe-node-status-reconnect-hide {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: none;
+    border: none;
+    rotate: 180deg;
+    cursor: pointer;
+    color: white;
+    transition: translate .25s;
+}
+
+.xe-node-status-reconnect-hide:hover {
+    translate: 0 -5%;
+}
+
+.xe-node-status-reconnect-hide svg {
+    width: 2rem;
+    height: 2rem;
 }
