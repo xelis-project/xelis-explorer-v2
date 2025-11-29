@@ -8,6 +8,7 @@ import { localization } from "../../localization/localization";
 import { ServerApp } from "../../../server";
 import { Context } from "hono";
 import { XelisNode } from "../../app/xelis_node";
+import { Pagination } from "../../components/pagination/pagination";
 
 import './accounts.css';
 
@@ -21,6 +22,7 @@ export class AccountsPage extends Page {
     master: Master;
     container_table: Container;
     table: Table;
+    pagination: Pagination;
 
     account_rows: AccountRow[];
 
@@ -58,16 +60,29 @@ export class AccountsPage extends Page {
         this.table.set_clickable();
         this.container_table.element.appendChild(this.table.element);
         this.table.set_head_row(titles);
+
+        this.pagination = new Pagination();
+        this.pagination.current_page = 1;
+        this.pagination.sibling_count = 2;
+        this.pagination.page_size = 6;
+
+        this.pagination.add_listener(`page_change`, (page) => {
+            this.load_accounts();
+        });
+
+        this.master.content.appendChild(this.pagination.element);
     }
 
-    async load(parent: HTMLElement) {
-        super.load(parent);
-        this.set_window_title(localization.get_text(`Accounts`));
-
-
-        this.table.set_loading(10);
+    async load_accounts() {
         const xelis_node = XelisNode.instance();
-        const addresses = await xelis_node.rpc.getAccounts({ skip: 0, maximum: 20 });
+
+        const total_accounts = await xelis_node.rpc.countAccounts();
+        this.pagination.total_items = total_accounts;
+        this.pagination.render();
+
+        const maximum = this.pagination.page_size;
+        const skip = (this.pagination.current_page-1) * maximum;
+        const addresses = await xelis_node.rpc.getAccounts({ skip, maximum });
         const accounts = await fetch_accounts(addresses);
 
         this.table.body_element.replaceChildren();
@@ -87,6 +102,15 @@ export class AccountsPage extends Page {
         } else {
             this.table.set_empty(localization.get_text(`No addresses`));
         }
+    }
+
+    async load(parent: HTMLElement) {
+        super.load(parent);
+        this.set_window_title(localization.get_text(`Accounts`));
+
+
+        this.table.set_loading(6);
+        this.load_accounts();
     }
 
     unload() {
