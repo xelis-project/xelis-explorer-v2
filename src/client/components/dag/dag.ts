@@ -182,11 +182,11 @@ export class DAG {
             const height_mesh = this.height_mesh_map.get(new_height);
             const block_count = blocks_at_height ? blocks_at_height.length : 0;
             if (height_mesh) {
-                const center_y = -(block_count / 2 * 5 + 4);
+                const center_y = -(block_count / 2 * 5 + 2);
                 height_mesh.position.set(new_height * this.block_spacing, center_y, 0);
             } else {
                 const new_height_mesh = this.create_height_mesh(new_height);
-                const center_y = -(block_count / 2 * 5 + 4);
+                const center_y = -(block_count / 2 * 5 + 2);
                 new_height_mesh.position.set(new_height * this.block_spacing, center_y, 0);
                 this.height_group.add(new_height_mesh);
                 this.height_mesh_map.set(new_height, new_height_mesh);
@@ -197,7 +197,7 @@ export class DAG {
                 blocks_at_height.forEach((block, y) => {
                     const block_mesh = this.block_mesh_hashes.get(block.hash);
                     if (block_mesh) {
-                        const center_y = (y * 5) - (blocks_at_height.length / 2 * 5);
+                        const center_y = ((y * 5) - (blocks_at_height.length / 2 * 5)) + 2.5;
                         block_mesh.position.set(new_height * this.block_spacing, center_y, 0);
 
                         block.tips.forEach((hash) => {
@@ -440,14 +440,14 @@ export class DAG {
         this.blocks_by_height.forEach((height_blocks) => {
             height_blocks.forEach((block, y) => {
                 const block_mesh = this.create_block_mesh(block);
-                const center_y = (y * 5) - (height_blocks.length / 2 * 5);
+                const center_y = ((y * 5) - (height_blocks.length / 2 * 5)) + 2.5;
                 block_mesh.position.set(block.height * this.block_spacing, center_y, 0);
                 this.block_group.add(block_mesh);
             });
 
             const first_block = height_blocks[0];
             const height_mesh = this.create_height_mesh(first_block.height);
-            const center_y = -(height_blocks.length / 2 * 5 + 4);
+            const center_y = -(height_blocks.length / 2 * 5 + 2);
             height_mesh.position.set(first_block.height * this.block_spacing, center_y, 0);
             this.height_group.add(height_mesh);
         });
