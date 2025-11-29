@@ -47,6 +47,7 @@ export class DAG {
     block_details: DAGBlockDetails;
     height_control: HeightControl;
     hovered_block_box_mesh?: THREE.Mesh;
+    highlighted_block_box_mesh?: THREE.Mesh;
 
     block_mesh_hashes: Map<string, THREE.Group>;
     tip_mesh_hashes: Map<string, THREE.Line>;
@@ -492,24 +493,39 @@ export class DAG {
         return `${block_hash}${block_target_hash}`;
     }
 
-    highlight_tip_lines(block: Block) {
-        const hashes = block.tips.map(hash => this.create_tip_hash(block.hash, hash));
-
-        this.tip_line_group.children.forEach((tip_line) => {
-            const tip_line_mesh = tip_line as THREE.Mesh;
-            const tip_line_mat = tip_line_mesh.material as THREE.LineBasicMaterial;
-            if (hashes.indexOf(tip_line.userData.hash) !== -1) {
-                tip_line_mat.color.set(`white`);
-            }
-        });
+    set_tip_lines_color(block_mesh: THREE.Mesh, color: THREE.Color) {
+        if (block_mesh.parent) {
+            const block = block_mesh.parent.userData.block as Block;
+            const hashes = block.tips.map(hash => this.create_tip_hash(block.hash, hash));
+            this.tip_line_group.children.forEach((tip_line) => {
+                const tip_line_mesh = tip_line as THREE.Mesh;
+                const tip_line_mat = tip_line_mesh.material as THREE.LineBasicMaterial;
+                if (hashes.indexOf(tip_line.userData.hash) !== -1) {
+                    tip_line_mat.color.set(color);
+                }
+            });
+        }
     }
 
-    clear_highlight_tip_lines() {
-        this.tip_line_group.children.forEach((tip_line) => {
-            const tip_line_mesh = tip_line as THREE.Mesh;
-            const tip_line_mat = tip_line_mesh.material as THREE.LineBasicMaterial;
-            tip_line_mat.color.set(`#606060`);
-        });
+
+    highlight_block(block: Block) {
+        if (this.highlighted_block_box_mesh) {
+            const mat = this.highlighted_block_box_mesh.material as THREE.ShaderMaterial;
+            mat.uniforms.enable_outline.value = false;
+            this.set_tip_lines_color(this.highlighted_block_box_mesh, new THREE.Color(`#606060`));
+        }
+
+        const block_mesh = this.block_mesh_hashes.get(block.hash);
+        if (block_mesh) {
+            const box_mesh = block_mesh.getObjectByProperty(`name`, `box_mesh`) as THREE.Mesh | undefined;
+            if (box_mesh) {
+                this.highlighted_block_box_mesh = box_mesh;
+                const mat = box_mesh.material as THREE.ShaderMaterial;
+                mat.uniforms.outline_color.value = new THREE.Color(`white`);
+                mat.uniforms.enable_outline.value = true;
+                this.set_tip_lines_color(box_mesh, new THREE.Color(`white`));
+            }
+        }
     }
 
     intercept_block() {
@@ -519,18 +535,30 @@ export class DAG {
             if (!this.hovered_block_box_mesh) {
                 const intersection = intersects[0];
                 const box_mesh = intersection.object as THREE.Mesh;
+
+                if (this.highlighted_block_box_mesh === box_mesh) {
+                    return;
+                }
+
                 const mat = box_mesh.material as THREE.ShaderMaterial;
+                mat.uniforms.outline_color.value = new THREE.Color(`white`);
                 mat.uniforms.enable_outline.value = true;
                 // block_mesh.scale.set(0.95, 0.95, 0.95);
                 if (box_mesh.parent) {
-                    const block = box_mesh.parent.userData.block as Block;
-                    this.highlight_tip_lines(block);
+                    //const block = box_mesh.parent.userData.block as Block;
+                    //this.highlight_tip_lines(block);
+                    this.set_tip_lines_color(box_mesh, new THREE.Color(`white`));
                 }
 
                 this.hovered_block_box_mesh = box_mesh;
             }
         } else if (this.hovered_block_box_mesh) {
-            this.clear_highlight_tip_lines();
+            //this.clear_highlight_tip_lines();
+            //if (this.hovered_block_box_mesh.parent) {
+            //const block = this.hovered_block_box_mesh.parent.userData.block as Block;
+            this.set_tip_lines_color(this.hovered_block_box_mesh, new THREE.Color(`#606060`));
+            //}
+
             //this.hovered_block_mesh.scale.set(1, 1, 1);
             const mat = this.hovered_block_box_mesh.material as THREE.ShaderMaterial;
             mat.uniforms.enable_outline.value = false;
