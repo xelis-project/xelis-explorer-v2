@@ -204,11 +204,13 @@ export class BlockPage extends Page {
         if (block.height > info.stableheight) {
             this.block_graph.dag.lock_block_height = block.height;
             this.block_graph.dag.move_to_height(block.height, true);
-            this.block_graph.dag.set_live(true);
+            await this.block_graph.dag.set_live(true);
         } else {
-            this.block_graph.dag.set_live(false);
+            await this.block_graph.dag.set_live(false);
             await this.block_graph.dag.load_blocks(block.height);
         }
+
+        this.block_graph.dag.highlight_block(block);
     }
 
     async load(parent: HTMLElement) {
