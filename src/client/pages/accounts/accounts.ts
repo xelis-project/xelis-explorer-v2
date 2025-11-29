@@ -74,6 +74,9 @@ export class AccountsPage extends Page {
     }
 
     async load_accounts() {
+        this.table.body_element.replaceChildren();
+        this.table.set_loading(this.pagination.page_size);
+
         const xelis_node = XelisNode.instance();
 
         const total_accounts = await xelis_node.rpc.countAccounts();
@@ -81,7 +84,7 @@ export class AccountsPage extends Page {
         this.pagination.render();
 
         const maximum = this.pagination.page_size;
-        const skip = (this.pagination.current_page-1) * maximum;
+        const skip = (this.pagination.current_page - 1) * maximum;
         const addresses = await xelis_node.rpc.getAccounts({ skip, maximum });
         const accounts = await fetch_accounts(addresses);
 
@@ -109,7 +112,7 @@ export class AccountsPage extends Page {
         this.set_window_title(localization.get_text(`Accounts`));
 
 
-        this.table.set_loading(6);
+
         this.load_accounts();
     }
 
