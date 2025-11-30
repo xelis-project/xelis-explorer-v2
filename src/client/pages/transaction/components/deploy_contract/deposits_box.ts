@@ -20,7 +20,6 @@ export class DepositsBox {
             const deposit = deposits[asset_hash];
             const deposit_element = document.createElement(`div`);
 
-
             let asset_amount_string = localization.get_text(`ENCRYPTED`);
             if (deposit.public) {
                 asset_amount_string = await ws_format_asset(node.ws, asset_hash, deposit.public);
@@ -28,7 +27,7 @@ export class DepositsBox {
 
             deposit_element.innerHTML = `
                 <div>${i.toLocaleString(undefined, { minimumIntegerDigits: 3, notation: "compact" })}</div>
-                <div>${format_hash(asset_hash)}/div>
+                <div>${format_hash(asset_hash)}</div>
                 <div>${asset_amount_string}</div>
             `;
 
