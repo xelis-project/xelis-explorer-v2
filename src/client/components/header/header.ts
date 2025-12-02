@@ -17,6 +17,7 @@ export const get_menu_links = () => {
         "/transactions": { text: localization.get_text(`TRANSACTIONS`), icon: icons.exchange() },
         "/known-accounts": { text: localization.get_text(`ACCOUNTS`), icon: icons.user() },
         "/contracts": { text: localization.get_text(`CONTRACTS`), icon: icons.contract() },
+        "/assets": { text: localization.get_text(`ASSETS`), icon: icons.tokens() },
         "/mempool": { text: localization.get_text(`MEMPOOL`), icon: icons.compute() },
         "/dag": { text: localization.get_text(`DAG`), icon: icons.block_graph() },
         "/peers": { text: localization.get_text(`PEERS`), icon: icons.network() },
