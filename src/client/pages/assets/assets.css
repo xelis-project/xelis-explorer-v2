@@ -1,0 +1,18 @@
+.xe-assets {
+
+}
+
+.xe-assets-table {
+    animation: xe-assets-table-appear-animation .4s;
+    overflow-x: auto;
+}
+
+@keyframes xe-assets-table-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
