@@ -14,6 +14,8 @@ import font_data from './noto_sans_regular.json';
 import InfiniteGridHelper from './infinite_grid_helper.js';
 // import font_data from './helvetica_regular.json'; // does not have all unicode
 
+import './dag.css';
+
 const three_lib_for_camera = {
     Vector2: THREE.Vector2,
     Vector3: THREE.Vector3,
@@ -30,6 +32,7 @@ CameraControls.install({ THREE: three_lib_for_camera });
 
 export class DAG {
     element: HTMLDivElement;
+    canvas: HTMLCanvasElement;
 
     scene: THREE.Scene;
     renderer: THREE.WebGLRenderer;
@@ -58,19 +61,19 @@ export class DAG {
     is_live: boolean;
     target_line: THREE.Line;
     lock_block_height?: number;
+    load_height: number;
 
     block_spacing = 5;
 
     constructor() {
         this.element = document.createElement(`div`);
 
+        this.load_height = 0;
+
         this.block_mesh_hashes = new Map();
         this.tip_mesh_hashes = new Map();
         this.height_mesh_map = new Map();
         this.blocks_by_height = new Map();
-
-        // @ts-ignore
-        this.font = new Font(font_data);
 
         this.block_details = new DAGBlockDetails();
         this.element.appendChild(this.block_details.element);
@@ -78,25 +81,16 @@ export class DAG {
         this.overlay_loading = new OverlayLoading();
         this.element.appendChild(this.overlay_loading.element);
 
-        this.height_control = new HeightControl();
-        this.height_control.add_listener(`new_height`, (height) => {
-            if (height !== undefined) {
-                this.load_blocks(height);
-                this.set_live(false);
-            }
-        });
-
-        this.is_live = false;
-        this.height_control.live_btn_element.addEventListener(`click`, () => {
-            this.set_live(!this.is_live);
-        });
-
-        this.element.appendChild(this.height_control.element);
-
+        // @ts-ignore
+        this.font = new Font(font_data);
         this.clock = new THREE.Clock();
         this.scene = new THREE.Scene();
+        this.canvas = document.createElement(`canvas`);
         this.scene.background = new THREE.Color('#151515');
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            canvas: this.canvas
+        });
         this.renderer.setPixelRatio(window.devicePixelRatio);
 
         this.raycaster = new THREE.Raycaster();
@@ -150,6 +144,29 @@ export class DAG {
         window.addEventListener(`keypress`, () => {
             this.animate_block_appear(this.block_group.children[this.block_group.children.length - 1] as any);
         });
+
+        this.height_control = new HeightControl();
+        this.height_control.add_listener(`new_height`, (height) => {
+            if (height !== undefined) {
+                this.load_blocks(height);
+                this.set_live(false);
+            }
+        });
+
+        this.is_live = false;
+        this.height_control.live_btn_element.addEventListener(`click`, () => {
+            this.set_live(!this.is_live);
+        });
+
+        this.height_control.prev_height_element.addEventListener(`click`, async () => {
+            await this.load_blocks(this.load_height - 10);
+        });
+
+        this.height_control.next_height_element.addEventListener(`click`, async () => {
+            await this.load_blocks(this.load_height + 10);
+        });
+
+        this.element.appendChild(this.height_control.element);
     }
 
     on_new_block = async (new_block?: Block, err?: Error) => {
@@ -318,11 +335,15 @@ export class DAG {
             node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
             node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
             this.height_control.live_btn_element.classList.add(`active`);
+            this.height_control.next_height_element.style.display = `none`;
+            this.height_control.prev_height_element.style.display = `none`;
         }
         else {
             node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
             node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
             this.height_control.live_btn_element.classList.remove(`active`);
+            this.height_control.next_height_element.style.removeProperty(`display`);
+            this.height_control.prev_height_element.style.removeProperty(`display`);
         }
     }
 
@@ -387,14 +408,8 @@ export class DAG {
     }
 
     async load_blocks(height: number) {
-        // height = 434191; // height with a lot of side blocks
-        this.controls.normalizeRotations().reset(true);
-        this.tip_line_group.clear();
-        this.block_group.clear();
-        this.block_mesh_hashes.clear();
-        this.blocks_by_height.clear();
-        this.height_group.clear();
-        this.target_line.visible = false;
+        this.canvas.classList.add(`xe-dag-load-flash`);
+        this.load_height = height;
 
         const node = XelisNode.instance();
 
@@ -422,6 +437,14 @@ export class DAG {
         }
 
         const res = await node.rpc.batchRequest(requests);
+
+        this.controls.normalizeRotations().reset(true);
+        this.tip_line_group.clear();
+        this.block_group.clear();
+        this.block_mesh_hashes.clear();
+        this.blocks_by_height.clear();
+        this.height_group.clear();
+        this.target_line.visible = false;
 
         let blocks = [] as Block[];
         res.forEach((result, i) => {
@@ -466,6 +489,7 @@ export class DAG {
 
         this.target_line.visible = true;
         this.move_to_height(height, false);
+        this.canvas.classList.remove(`xe-dag-load-flash`);
     }
 
     move_to_height(height: number, enable_transition: boolean) {

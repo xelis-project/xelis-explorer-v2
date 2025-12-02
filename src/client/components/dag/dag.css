@@ -1,0 +1,15 @@
+.xe-dag {}
+
+.xe-dag-load-flash {
+    animation: xe-dag-load-flash-anim .5s alternate infinite;
+}
+
+@keyframes xe-dag-load-flash-anim {
+    0% {
+        opacity: .5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
