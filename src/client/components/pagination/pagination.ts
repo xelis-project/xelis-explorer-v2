@@ -35,10 +35,6 @@ export class Pagination extends EventEmitter<PaginationEventMap> {
 
         const total_pages = Math.ceil(this.total_items / this.page_size);
 
-        if (total_pages <= 1) {
-            return;
-        }
-
         // first btn
         if (this.show_first_last && this.current_page > 1) {
             this.append_page_btn(1, localization.get_text('First'));
