@@ -110,9 +110,6 @@ export class AccountsPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(localization.get_text(`Accounts`));
-
-
-
         this.load_accounts();
     }
 
