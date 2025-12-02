@@ -9,6 +9,8 @@ import { fetch_contracts } from "../../fetch_helpers/fetch_contracts";
 import { localization } from "../../localization/localization";
 import { ServerApp } from "../../../server";
 import { Context } from "hono";
+import { XelisNode } from "../../app/xelis_node";
+import { Pagination } from "../../components/pagination/pagination";
 
 import './contracts.css';
 
@@ -23,6 +25,7 @@ export class ContractsPage extends Page {
 
     container_table: Container;
     table: Table;
+    pagination: Pagination;
 
     contract_rows: ContractRow[];
     page_data: {
@@ -49,36 +52,49 @@ export class ContractsPage extends Page {
 
         const titles = [
             localization.get_text(`HASH`),
-            localization.get_text(`NAME`),
             localization.get_text(`BALANCE`),
             localization.get_text(`TOPOHEIGHT (BALANCE)`),
             localization.get_text(`REGISTERED`)
         ];
         this.table.set_head_row(titles);
+
+        this.pagination = new Pagination();
+        this.pagination.current_page = 1;
+        this.pagination.sibling_count = 2;
+        this.pagination.page_size = 6;
+
+        this.pagination.add_listener(`page_change`, (page) => {
+            this.load_contracts();
+        });
+
+        this.master.content.appendChild(this.pagination.element);
     }
 
-    async load(parent: HTMLElement) {
-        super.load(parent);
-        this.set_window_title(`Contracts`);
-
-        const contracts = get_contracts();
-
+    async load_contracts() {
         this.table.body_element.replaceChildren();
+        this.table.set_loading(10);
 
-        const contracts_list = Object.keys(contracts);
-        this.table.set_loading(contracts_list.length);
+        const xelis_node = XelisNode.instance();
+
+        const total_contracts = await xelis_node.rpc.countContracts();
+        this.pagination.total_items = total_contracts;
+        this.pagination.render();
+
+        const maximum = this.pagination.page_size;
+        const skip = (this.pagination.current_page - 1) * maximum;
+        const contracts = await xelis_node.rpc.getContracts({ skip, maximum });
 
         const contract_rows = [] as ContractRow[];
-        for (let i = 0; i < contracts_list.length; i += 10) {
-            const contract_batch = contracts_list.slice(i, i + 10);
+        for (let i = 0; i < contracts.length; i += 10) {
+            const contract_batch = contracts.slice(i, i + 10);
             const contracts_info = await fetch_contracts(contract_batch);
 
             contracts_info.forEach((contract_info, a) => {
                 const hash = contract_batch[a];
-                const contract = contracts[hash];
+                //const contract = contracts[hash];
 
                 const contract_row = new ContractRow();
-                contract_row.set(contract.name, contract_info);
+                contract_row.set(``, contract_info);
                 contract_rows.push(contract_row);
             });
         }
@@ -91,6 +107,12 @@ export class ContractsPage extends Page {
         if (this.table.body_element.children.length === 0) {
             this.table.set_empty(localization.get_text(`No contracts`));
         }
+    }
+
+    async load(parent: HTMLElement) {
+        super.load(parent);
+        this.set_window_title(`Contracts`);
+        this.load_contracts();
     }
 
     unload() {
