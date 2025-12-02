@@ -5,6 +5,7 @@ import { localization } from '../../../localization/localization';
 
 import './dag_slider.css';
 import './height_control.css';
+import icons from '../../../assets/svg/icons';
 
 interface HeightControlEventMap {
     new_height: number;
@@ -17,6 +18,8 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
     height_slider: nouislider.API;
     height_input_element: HTMLInputElement;
     live_btn_element: HTMLButtonElement;
+    prev_height_element: HTMLButtonElement;
+    next_height_element: HTMLButtonElement;
 
     constructor() {
         super();
@@ -27,9 +30,22 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
         const inputs_container = document.createElement(`div`);
         inputs_container.classList.add(`xe-dag-height-control-inputs`);
 
+        this.prev_height_element = document.createElement(`button`);
+        this.prev_height_element.classList.add(`xe-dag-height-control-btn-prev`);
+        this.prev_height_element.innerHTML = `${icons.caret_down()} -10`;
+        this.prev_height_element.title = localization.get_text(`Previous 10 height.`);
+        inputs_container.appendChild(this.prev_height_element);
+
+        this.next_height_element = document.createElement(`button`);
+        this.next_height_element.classList.add(`xe-dag-height-control-btn-next`);
+        this.next_height_element.innerHTML = `+10 ${icons.caret_down()}`;
+        this.next_height_element.title = localization.get_text(`Next 10 height.`);
+        inputs_container.appendChild(this.next_height_element);
+
         this.live_btn_element = document.createElement(`button`);
-        this.live_btn_element.classList.add(`xe-dag-height-control-live-button`);
+        this.live_btn_element.classList.add(`xe-dag-height-control-btn-live`);
         this.live_btn_element.innerHTML = localization.get_text(`LIVE`);
+        this.live_btn_element.title = localization.get_text(`Toggle LIVE mode.`);
         inputs_container.appendChild(this.live_btn_element);
 
         const title_element = document.createElement(`label`);

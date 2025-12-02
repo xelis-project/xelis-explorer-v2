@@ -29,7 +29,7 @@
     color: white;
 }
 
-.xe-dag-height-control-live-button {
+.xe-dag-height-control-inputs button {
     background-color: rgb(15, 15, 15);
     color: white;
     padding: .5rem .75rem;
@@ -42,13 +42,28 @@
     flex-direction: row;
     align-items: center;
     transition: translate .15s;
+    font-family: 'Jura';
 }
 
-.xe-dag-height-control-live-button:hover {
+.xe-dag-height-control-inputs button svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.xe-dag-height-control-inputs button:hover {
     translate: 0 -4%;
 }
 
-.xe-dag-height-control-live-button::before {
+
+.xe-dag-height-control-btn-prev svg {
+    rotate: 90deg;
+}
+
+.xe-dag-height-control-btn-next svg {
+    rotate: 270deg;
+}
+
+.xe-dag-height-control-btn-live::before {
     content: "";
     border-radius: 100%;
     width: .5rem;
@@ -56,22 +71,22 @@
     background-color: white;
 }
 
-.xe-dag-height-control-live-button.active {
-    animation: xe-dag-height-control-live-animation .75s infinite alternate;
+.xe-dag-height-control-btn-live.active {
+    animation: xe-dag-height-control-btn-live-animation .75s infinite alternate;
 }
 
-@keyframes xe-dag-height-control-live-animation {
+@keyframes xe-dag-height-control-btn-live-animation {
     100% {
         background-color: #02FFCF;
         color: #161616;
     }
 }
 
-.xe-dag-height-control-live-button.active::before {
-    animation: xe-dag-height-control-live-button-animation .75s infinite alternate;
+.xe-dag-height-control-btn-live.active::before {
+    animation: xe-dag-height-control-dot-live-animation .75s infinite alternate;
 }
 
-@keyframes xe-dag-height-control-live-button-animation {
+@keyframes xe-dag-height-control-dot-live-animation {
     100% {
         background-color: #161616;
     }
