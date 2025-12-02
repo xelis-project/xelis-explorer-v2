@@ -11,7 +11,11 @@ import { clamp_number } from '../../utils/clamp_number';
 import { HeightControl } from './height_control/height_control';
 import font_data from './noto_sans_regular.json';
 //@ts-ignore
+import { Text } from 'troika-three-text';
+//@ts-ignore
 import InfiniteGridHelper from './infinite_grid_helper.js';
+
+//import font_noto_sans_url from './noto_sans_regular.ttf?url';
 // import font_data from './helvetica_regular.json'; // does not have all unicode
 
 import './dag.css';
@@ -57,7 +61,7 @@ export class DAG {
     height_mesh_map: Map<number, THREE.Group>;
     blocks_by_height: Map<number, Block[]>;
 
-    font: Font;
+    //font: Font;
     is_live: boolean;
     target_line: THREE.Line;
     lock_block_height?: number;
@@ -82,7 +86,7 @@ export class DAG {
         this.element.appendChild(this.overlay_loading.element);
 
         // @ts-ignore
-        this.font = new Font(font_data);
+        //this.font = new Font(font_data);
         this.clock = new THREE.Clock();
         this.scene = new THREE.Scene();
         this.canvas = document.createElement(`canvas`);
@@ -122,7 +126,11 @@ export class DAG {
         // size1, size2, color, distance, axes = 'xzy'
         const grid = new InfiniteGridHelper(1, 5, new THREE.Color('black'), 50, 'xzy');
         grid.rotation.x = -Math.PI / 2;
+        grid.position.z = -4;
         this.scene.add(grid);
+
+        this.target_line = this.create_target_line();
+        this.scene.add(this.target_line);
 
         this.tip_line_group = new THREE.Group();
         this.scene.add(this.tip_line_group);
@@ -132,9 +140,6 @@ export class DAG {
 
         this.height_group = new THREE.Group();
         this.scene.add(this.height_group);
-
-        this.target_line = this.create_target_line();
-        this.scene.add(this.target_line);
 
         window.addEventListener('resize', this.on_resize);
 
@@ -419,6 +424,9 @@ export class DAG {
 
         const start_height = Math.max(0, height - 25);
         const end_height = Math.min(max_height, height + 25);
+
+        this.load_height = Math.max(0, Math.min(max_height, height));
+
         const requests = [] as RPCRequest[];
         for (let i = start_height; i < end_height; i += 20) {
             let start = i;
@@ -488,7 +496,7 @@ export class DAG {
         });
 
         this.target_line.visible = true;
-        this.move_to_height(height, false);
+        this.move_to_height(this.load_height, false);
         this.canvas.classList.remove(`xe-dag-load-flash`);
     }
 
@@ -569,19 +577,13 @@ export class DAG {
                 mat.uniforms.enable_outline.value = true;
                 // block_mesh.scale.set(0.95, 0.95, 0.95);
                 if (box_mesh.parent) {
-                    //const block = box_mesh.parent.userData.block as Block;
-                    //this.highlight_tip_lines(block);
                     this.set_tip_lines_color(box_mesh, new THREE.Color(`white`));
                 }
 
                 this.hovered_block_box_mesh = box_mesh;
             }
         } else if (this.hovered_block_box_mesh) {
-            //this.clear_highlight_tip_lines();
-            //if (this.hovered_block_box_mesh.parent) {
-            //const block = this.hovered_block_box_mesh.parent.userData.block as Block;
             this.set_tip_lines_color(this.hovered_block_box_mesh, new THREE.Color(`#606060`));
-            //}
 
             //this.hovered_block_mesh.scale.set(1, 1, 1);
             const mat = this.hovered_block_box_mesh.material as THREE.ShaderMaterial;
@@ -591,15 +593,15 @@ export class DAG {
     }
 
     create_target_line() {
-        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#606060`) });
+        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#2cffcf`) });
 
         const points = [
-            new THREE.Vector3(0, -1000, 0),
-            new THREE.Vector3(0, 1000, 0)
+            new THREE.Vector3(0, -10000, -3),
+            new THREE.Vector3(0, 10000, -3)
         ];
 
         const geo = new THREE.BufferGeometry().setFromPoints(points);
-        const line = new THREE.LineSegments(geo, mat);
+        const line = new THREE.Line(geo, mat);
         return line;
     }
 
@@ -615,6 +617,7 @@ export class DAG {
 
         const geo = new THREE.BufferGeometry().setFromPoints(points);
         const line = new THREE.Line(geo, mat);
+        line.position.z = -3;
         line.userData.hash = hash;
         line.userData.block_target_height = block_target.height;
         return line;
@@ -647,31 +650,28 @@ export class DAG {
         });
     }
 
+    get_width_text(text: string) {
+        const canvas = document.createElement(`canvas`);
+        const context = canvas.getContext(`2d`);
+        if (context) {
+            const metrics = context.measureText(text);
+            return metrics.width;
+        }
+        throw "missing 2d context";
+    }
+
     create_height_mesh(height: number) {
         const height_group = new THREE.Group();
         height_group.userData.height = height;
 
-        // height
-        const height_geo = new TextGeometry(height.toLocaleString(), {
-            font: this.font,
-            size: 0.5,
-            depth: 0.5
-        });
+        const text = new Text();
+        text.text = height.toLocaleString();
+        text.fontSize = .9;
+        text.position.set(0, .65, -1);
+        text.color = `white`;
+        text.anchorX = `center`;
 
-        const height_mat = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(`white`),
-            transparent: true,
-            side: THREE.DoubleSide
-        });
-        const height_mesh = new THREE.Mesh(height_geo, height_mat);
-        height_geo.computeBoundingBox();
-
-        let back_width = 0;
-        if (height_geo.boundingBox) {
-            height_mesh.position.set(height_geo.boundingBox.max.x / -2, -.25, 0);
-            back_width = height_geo.boundingBox?.max.x - height_geo.boundingBox?.min.x + 1;
-        }
-
+        const back_width = this.get_width_text(text.text) / 8;
         // back
         const back_geo = new RoundedBoxGeometry(back_width, 1.25, 1, 10, 1);
         const back_mat = new THREE.MeshBasicMaterial({
@@ -680,9 +680,9 @@ export class DAG {
             side: THREE.DoubleSide
         });
         const back_mesh = new THREE.Mesh(back_geo, back_mat);
-
+        back_mesh.position.z = -2;
         height_group.add(back_mesh);
-        height_group.add(height_mesh);
+        height_group.add(text);
 
         return height_group;
     }
@@ -750,74 +750,43 @@ export class DAG {
             transparent: true
         });
         const box = new THREE.Mesh(geo, mat);
+        box.position.z = -2;
         box.name = "box_mesh";
         block_mesh.add(box);
 
         // hash
         {
-            const geo = new TextGeometry(block.hash.substring(block.hash.length - 6), {
-                font: this.font,
-                size: 0.5,
-                depth: 0.5
-            });
-            const mat = new THREE.MeshBasicMaterial({
-                color: new THREE.Color(color),
-                transparent: true,
-                side: THREE.DoubleSide
-            });
-            const text_mesh = new THREE.Mesh(geo, mat);
-            geo.computeBoundingBox();
-            if (geo.boundingBox) {
-                text_mesh.position.set(geo.boundingBox.max.x / -2, 1.5, -0.25);
-            }
-
-            block_mesh.add(text_mesh);
+            const text = new Text();
+            text.text = block.hash.substring(block.hash.length - 6);
+            text.fontSize = .7;
+            text.color = color;
+            text.anchorX = `center`;
+            text.position.set(0, 2.25, -1);
+            block_mesh.add(text);
         }
 
         // topoheight
         {
             const topo = block.topoheight !== undefined ? block.topoheight.toLocaleString() : `????`;
-            const geo = new TextGeometry(topo, {
-                font: this.font,
-                size: 0.5,
-                depth: 0.5
-            });
-
-            const mat = new THREE.MeshBasicMaterial({
-                color: new THREE.Color(color),
-                transparent: true,
-                side: THREE.DoubleSide
-            });
-            const text_mesh = new THREE.Mesh(geo, mat);
-            geo.computeBoundingBox();
-            if (geo.boundingBox) {
-                text_mesh.position.set(geo.boundingBox.max.x / -2, -2, -0.25);
-            }
-
-            block_mesh.add(text_mesh);
+            const text = new Text();
+            text.text = topo;
+            text.fontSize = .7;
+            text.color = color;
+            text.anchorX = `center`;
+            text.position.set(0, -1.25, -1);
+            block_mesh.add(text);
         }
 
         // block type
         {
             const first_letter = block.block_type.substring(0, 1).toUpperCase();
-            const geo = new TextGeometry(first_letter, {
-                font: this.font,
-                size: 1,
-                depth: 0.5
-            });
-
-            const mat = new THREE.MeshBasicMaterial({
-                color: new THREE.Color(`black`),
-                transparent: true,
-                side: THREE.DoubleSide
-            });
-            const text_mesh = new THREE.Mesh(geo, mat);
-            geo.computeBoundingBox();
-            if (geo.boundingBox) {
-                text_mesh.position.set(geo.boundingBox.max.x / -2, geo.boundingBox.max.y / -2, -0.25);
-            }
-
-            block_mesh.add(text_mesh);
+            const text = new Text();
+            text.text = first_letter;
+            text.fontSize = 1.5;
+            text.color = `black`;
+            text.anchorX = `center`;
+            text.position.set(0, 1.1, -1);
+            block_mesh.add(text);
         }
 
         this.block_mesh_hashes.set(block.hash, block_mesh);
