@@ -48,7 +48,7 @@ export class Pagination extends EventEmitter<PaginationEventMap> {
         // page btns
         const sibling_count = this.sibling_count ?? 1;
         const start = Math.max(1, this.current_page - sibling_count);
-        const end = Math.min(total_pages - 1, this.current_page + sibling_count);
+        const end = Math.min(total_pages, this.current_page + sibling_count);
 
         for (let i = start; i <= end; i++) {
             this.append_page_btn(i, i.toString());
