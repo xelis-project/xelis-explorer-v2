@@ -119,19 +119,19 @@ export class DashboardTopStats {
     }
 
     set_txs_count(count: number) {
-        this.item_txs_count.element_value.innerHTML = `${count.toLocaleString()}`;
+        this.item_txs_count.element_value.innerHTML = `${humanNumber(count, x => x.toFixed(1))}`;
     }
 
     set_accounts_count(count: number) {
-        this.item_accounts_count.element_value.innerHTML = `${count.toLocaleString()}`;
+        this.item_accounts_count.element_value.innerHTML = `${humanNumber(count, x => x.toFixed(1))}`;
     }
 
     set_contracts_count(count: number) {
-        this.item_contracts_count.element_value.innerHTML = `${count.toLocaleString()}`;
+        this.item_contracts_count.element_value.innerHTML = `${humanNumber(count, x => x.toFixed(1))}`;
     }
 
     set_assets_count(count: number) {
-        this.item_assets_count.element_value.innerHTML = `${count.toLocaleString()}`;
+        this.item_assets_count.element_value.innerHTML = `${humanNumber(count, x => x.toFixed(1))}`;
     }
 
     set_max_supply(max_supply: number) {

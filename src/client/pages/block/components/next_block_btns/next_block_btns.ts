@@ -22,13 +22,13 @@ export class BlockNextBlockBtns {
         if (topoheight) {
             this.element.style.removeProperty(`display`);
             const previous_topo = Math.max(0, topoheight - 1);
-            this.previous_block.innerHTML = `${icons.caret_down()} Previous (${previous_topo})`;
+            this.previous_block.innerHTML = `${icons.caret_down()} Previous (${previous_topo.toLocaleString()})`;
             this.previous_block.href = `/topo/${previous_topo}`;
 
             const next_topo = topoheight + 1;
             if (info.topoheight >= next_topo) {
                 this.next_block.style.removeProperty(`display`);
-                this.next_block.innerHTML = `Next (${next_topo}) ${icons.caret_down()}`;
+                this.next_block.innerHTML = `Next (${next_topo.toLocaleString()}) ${icons.caret_down()}`;
                 this.next_block.href = `/topo/${next_topo}`;
             } else {
                 this.next_block.style.display = `none`;

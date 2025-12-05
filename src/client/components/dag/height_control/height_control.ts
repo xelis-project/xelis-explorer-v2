@@ -6,6 +6,7 @@ import { localization } from '../../../localization/localization';
 import './dag_slider.css';
 import './height_control.css';
 import icons from '../../../assets/svg/icons';
+import humanNumber from 'human-number';
 
 interface HeightControlEventMap {
     new_height: number;
@@ -70,7 +71,8 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
         this.height_slider_element = document.createElement(`div`);
 
         const format_to = (value: number) => {
-            return value.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            return humanNumber(value, x => x.toFixed(1));
+            // return value.toLocaleString(undefined, { maximumFractionDigits: 0 });
         }
 
         this.height_slider = nouislider.create(this.height_slider_element, {
