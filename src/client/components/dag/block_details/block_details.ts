@@ -3,8 +3,7 @@ import { format_xel } from '../../../utils/format_xel';
 import prettyBytes from 'pretty-bytes';
 import { format_hashrate } from '../../../utils/format_hashrate';
 import { format_diff } from '../../../utils/format_diff';
-// @ts-ignore
-import hashicon from 'hashicon';
+import { hashicon } from '@emeraldpay/hashicon';
 import { format_address } from '../../../utils/format_address';
 import { localization } from '../../../localization/localization';
 
@@ -205,7 +204,7 @@ export class DAGBlockDetails {
         const container = document.createElement(`div`);
         container.classList.add(`xe-blocks-table-miner`);
 
-        const miner_icon = hashicon(miner, 25) as HTMLCanvasElement;
+        const miner_icon = hashicon(miner, { size: 25 }) as HTMLCanvasElement;
         container.appendChild(miner_icon);
 
         const miner_addr = document.createElement(`div`);

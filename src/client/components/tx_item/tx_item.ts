@@ -2,8 +2,7 @@ import { Block, Transaction, TransactionData } from '@xelis/sdk/daemon/types';
 import { Box } from '../box/box';
 import prettyMilliseconds from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';
-//@ts-ignore
-import hashicon from "hashicon";
+import { hashicon } from "@emeraldpay/hashicon";
 import { format_address } from '../../utils/format_address';
 import { format_xel } from '../../utils/format_xel';
 import { format_hash } from '../../utils/format_hash';
@@ -100,7 +99,7 @@ export class TxItem {
     }
 
     set_signer(signer: string) {
-        const signer_icon = hashicon(signer, 25) as HTMLCanvasElement;
+        const signer_icon = hashicon(signer, { size: 25 }) as HTMLCanvasElement;
         this.element_signer.replaceChildren();
         this.element_signer.appendChild(signer_icon);
         const miner_text = document.createElement(`div`);

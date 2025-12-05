@@ -1,8 +1,6 @@
 import { Container } from "../../../../components/container/container";
 import { format_address } from "../../../../utils/format_address";
-//@ts-ignore
-import hashicon from 'hashicon';
-import { format_xel } from "../../../../utils/format_xel";
+import { hashicon } from '@emeraldpay/hashicon';
 import { Block } from "@xelis/sdk/daemon/types";
 import { Box } from "../../../../components/box/box";
 import { localization } from "../../../../localization/localization";

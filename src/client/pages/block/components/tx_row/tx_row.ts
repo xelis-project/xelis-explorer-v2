@@ -1,6 +1,5 @@
 import { format_address } from "../../../../utils/format_address";
-//@ts-ignore
-import hashicon from 'hashicon';
+import { hashicon } from '@emeraldpay/hashicon';
 import { format_xel } from "../../../../utils/format_xel";
 import { Transaction, TransactionData } from "@xelis/sdk/daemon/types";
 import prettyBytes from "pretty-bytes";
@@ -54,7 +53,7 @@ export class TxRow extends Row {
         const container = document.createElement(`div`);
         container.classList.add(`xe-blocks-table-miner`);
 
-        const signer_icon = hashicon(signer, 25) as HTMLCanvasElement;
+        const signer_icon = hashicon(signer, { size: 25 }) as HTMLCanvasElement;
         container.appendChild(signer_icon);
 
         const signer_addr = document.createElement(`div`);

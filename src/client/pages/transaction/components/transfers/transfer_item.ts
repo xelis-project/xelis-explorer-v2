@@ -1,7 +1,6 @@
 import { Transfer } from "@xelis/sdk/daemon/types";
 import { Box } from "../../../../components/box/box";
-//@ts-ignore
-import hashicon from 'hashicon';
+import { hashicon } from '@emeraldpay/hashicon';
 import { format_address } from "../../../../utils/format_address";
 import prettyBytes from "pretty-bytes";
 import { get_assets } from "../../../../data/assets";

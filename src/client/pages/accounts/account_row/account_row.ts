@@ -1,5 +1,4 @@
-//@ts-ignore
-import hashicon from 'hashicon';
+import { hashicon } from '@emeraldpay/hashicon';
 import { Row } from "../../../components/table/row";
 import { localization } from "../../../localization/localization";
 import { format_address } from "../../../utils/format_address";

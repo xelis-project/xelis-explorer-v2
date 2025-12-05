@@ -2,8 +2,7 @@ import { TransactionResponse } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
 import { format_xel } from '../../../../utils/format_xel';
 import prettyBytes from 'pretty-bytes';
-// @ts-ignore
-import hashicon from 'hashicon';
+import { hashicon } from '@emeraldpay/hashicon';
 import { format_address } from '../../../../utils/format_address';
 import icons from '../../../../assets/svg/icons';
 import { Box } from '../../../../components/box/box';
@@ -82,7 +81,7 @@ export class TransactionInfo {
     }
 
     set_signer(signer: string) {
-        const signer_icon = hashicon(signer, 40) as HTMLCanvasElement;
+        const signer_icon = hashicon(signer, { size: 40 }) as HTMLCanvasElement;
         this.signer_element.replaceChildren();
         this.signer_element.href = `/account/${signer}`;
         this.signer_element.appendChild(signer_icon);

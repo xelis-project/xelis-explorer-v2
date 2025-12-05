@@ -1,10 +1,5 @@
-import { GetContractModuleResult, TransactionResponse } from '@xelis/sdk/daemon/types';
+import { GetContractModuleResult } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
-import { format_xel } from '../../../../utils/format_xel';
-import prettyBytes from 'pretty-bytes';
-// @ts-ignore
-import hashicon from 'hashicon';
-import { format_address } from '../../../../utils/format_address';
 import icons from '../../../../assets/svg/icons';
 import { Box } from '../../../../components/box/box';
 import { localization } from '../../../../localization/localization';

@@ -1,6 +1,5 @@
 import { Container } from "../../../../components/container/container";
-//@ts-ignore
-import hashicon from "hashicon";
+import { hashicon } from '@emeraldpay/hashicon';
 import QRCode from 'qrcode';
 import { AccountServerData } from "../../account";
 import prettyMilliseconds from "pretty-ms";

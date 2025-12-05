@@ -3,8 +3,7 @@ import { Box } from "../../../../components/box/box";
 import { AccountHistory } from "@xelis/sdk/daemon/types";
 import { format_xel } from "../../../../utils/format_xel";
 import { format_address } from "../../../../utils/format_address";
-// @ts-ignore
-import hashicon from 'hashicon';
+import { hashicon } from '@emeraldpay/hashicon';
 import { format_hash } from "../../../../utils/format_hash";
 import { localization } from "../../../../localization/localization";
 
@@ -70,7 +69,7 @@ export class AccountHistoryListItem {
     set_type(history: AccountHistory) {
         if (history.incoming) {
             const addr = history.incoming.from;
-            const to_icon = hashicon(addr, 25) as HTMLCanvasElement;
+            const to_icon = hashicon(addr, { size: 25 }) as HTMLCanvasElement;
             this.type_element.classList.add(`xe-account-list-item-outgoing`);
             this.type_element.replaceChildren();
             const text = document.createElement(`div`);
@@ -84,7 +83,7 @@ export class AccountHistoryListItem {
 
         if (history.outgoing) {
             const addr = history.outgoing.to;
-            const to_icon = hashicon(addr, 25) as HTMLCanvasElement;
+            const to_icon = hashicon(addr, { size: 25 }) as HTMLCanvasElement;
             this.type_element.classList.add(`xe-account-list-item-outgoing`);
             this.type_element.replaceChildren();
             const text = document.createElement(`div`);

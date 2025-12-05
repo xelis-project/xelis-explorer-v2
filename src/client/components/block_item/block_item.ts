@@ -4,8 +4,7 @@ import prettyBytes from "pretty-bytes";
 import { format_xel } from "../../utils/format_xel";
 import { format_address } from "../../utils/format_address";
 import { Box } from "../box/box";
-//@ts-ignore
-import hashicon from "hashicon";
+import { hashicon } from "@emeraldpay/hashicon";
 import { localization } from "../../localization/localization";
 import { BlockTypeBox } from "../block_type_box/block_type_box";
 
@@ -93,7 +92,7 @@ export class BlockItem {
     }
 
     set_miner(miner: string) {
-        const miner_icon = hashicon(miner, 25) as HTMLCanvasElement;
+        const miner_icon = hashicon(miner, { size: 25 }) as HTMLCanvasElement;
         this.element_miner.replaceChildren();
         this.element_miner.appendChild(miner_icon);
         const miner_text = document.createElement(`div`);

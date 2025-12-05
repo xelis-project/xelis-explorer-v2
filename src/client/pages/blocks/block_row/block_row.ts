@@ -1,7 +1,6 @@
 import { Block, BlockType } from "@xelis/sdk/daemon/types";
 import { format_address } from "../../../utils/format_address";
-//@ts-ignore
-import hashicon from "hashicon";
+import { hashicon } from "@emeraldpay/hashicon";
 import prettyBytes from "pretty-bytes";
 import { format_xel } from "../../../utils/format_xel";
 import { format_hashrate } from "../../../utils/format_hashrate";

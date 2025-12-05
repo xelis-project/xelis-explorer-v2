@@ -1,8 +1,6 @@
 import { MultiSigPayload } from "@xelis/sdk/daemon/types";
 import { Box } from "../../../../components/box/box";
 import { Container } from "../../../../components/container/container";
-//@ts-ignore
-import hashicon from 'hashicon';
 
 import './multisig.css';
 
