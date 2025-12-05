@@ -43,12 +43,13 @@ export class Box {
         boxes.forEach(box => Box.set_loading(box, loading));
     }
 
-    static list_loading(element: HTMLElement, count: number, min_height: string) {
+    static list_loading(element: HTMLElement, count: number, min_height: string, min_width?: string) {
         element.replaceChildren();
         for (let i = 0; i < count; i++) {
             const box = new Box();
             box.set_loading(true);
             box.element.style.minHeight = min_height;
+            if (min_width) box.element.style.minWidth = min_width;
             element.appendChild(box.element);
         }
     }
