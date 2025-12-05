@@ -5,6 +5,7 @@
     gap: 1rem;
     flex-direction: column;
     animation: xe-account-list-animation 0.6s;
+    overflow-y: scroll;
 }
 
 @keyframes xe-account-list-animation {

@@ -57,9 +57,9 @@ export class AssetRow extends Row {
         if (owner === `none`) {
             display_value = `None`;
         } else if ("contract" in owner) {
-            display_value = ``;
+            display_value = `Contract (${format_hash(owner.contract)})`;
         } else if ("owner" in owner) {
-            display_value = ``;
+            display_value = `Account (${format_hash(owner.owner)})`;
         }
 
         this.value_cells[4].innerHTML = display_value;
