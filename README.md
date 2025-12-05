@@ -1,19 +1,28 @@
-WORK IN PROGRESS
+# XELIS EXPLORER
 
-# XELIS EXPLORER (V2 BABY)
-
-Real-time Blockchain Explorer for XELIS.
+The new real-time blockchain explorer for XELIS.
 
 <https://explorer.xelis.io>  
 
 - Real-time statistics with WebSockets.
 - Navigate all blocks of the entire blockchain (if node isn't pruned).
-- Block page.
-- Transaction page.
-- Accounts list page.
-- Account history page.
-- Live mempool.
 - BlockDAG viewer.
+- Live mempool.
+- Peers location and node status.
+- Transaction and contract informations.
+
+Pages  
+
+- Dashboard
+- Blocks / block
+- Transactions / transaction
+- Accounts / account
+- Mempool
+- Assets
+- Contracts / contract
+- Peers
+- DAG
+- Settings
 
 Testnet: <https://testnet-explorer.xelis.io>
 
@@ -37,12 +46,3 @@ npm run deploy
 ```txt
 npm run cf-typegen
 ```
-
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
-
-```ts
-// src/index.ts
-const app = new Hono<{ Bindings: CloudflareBindings }>()
-```
-
-## Production
