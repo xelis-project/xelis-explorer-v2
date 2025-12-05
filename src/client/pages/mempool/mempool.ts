@@ -93,14 +93,13 @@ export class MempoolPage extends Page {
 
     on_new_block = async (new_block?: Block, err?: Error) => {
         if (new_block) {
-            const { blocks, mempool_txs } = this.page_data;
-            blocks.shift();
-            blocks.push(new_block);
+            this.page_data.blocks.shift();
+            this.page_data.blocks.push(new_block);
 
             this.page_data.mempool_txs = [];
             this.mempool_txs_list.set_empty(true);
             this.mempool_chart.blocks_txs.set(this.page_data.blocks);
-            this.mempool_summary.set(mempool_txs, new_block);
+            this.mempool_summary.set(this.page_data.mempool_txs, new_block);
         }
     }
 
