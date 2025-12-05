@@ -179,6 +179,10 @@ export class DAG {
 
         if (new_block) {
             const new_height = new_block.height;
+            if(!this.block_mesh_hashes.get(new_block.hash)) {
+                // skip if block already added
+                return;
+            }
 
             this.add_block_to_height(new_block);
 
