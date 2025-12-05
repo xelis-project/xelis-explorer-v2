@@ -8,7 +8,9 @@
         "dev-mainnet": "npm run dev -- --mode mainnet",
         "build": "vite build --mode mainnet",
         "preview": "npm run build && vite preview",
+        "deploy": "npm run build && wrangler deploy",
         "build-testnet": "vite build --mode testnet",
+        "deploy-testnet": "cross-env CLOUDFLARE_ENV=testnet npm run build-testnet && wrangler deploy",
         "cf-typegen": "wrangler types --env-interface CloudflareBindings",
         "find-txs": "npx tsx ./scripts/find_txs.ts",
         "gen-lang": "npx tsx ./scripts/lang_dict.ts --src ./src --out ./lang.json"
@@ -47,6 +49,7 @@
         "@types/three": "^0.179.0",
         "@types/ws": "^8.18.1",
         "@types/yargs": "^17.0.34",
+        "cross-env": "^10.1.0",
         "node-dir": "^0.1.17",
         "typescript": "^5.9.3",
         "vite": "^7.1.12",
