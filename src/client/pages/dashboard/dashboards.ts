@@ -5,7 +5,7 @@ import { DashboardSearch } from "./components/search/search";
 import { DashboardTopStats } from "./components/top_stats/top_stats";
 import { DashboardChartSection2 } from "./components/chart_section_2/chart_section_2";
 import { DashboardTxs } from "./components/txs/txs";
-import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult, Peer } from '@xelis/sdk/daemon/types';
+import { BlockOrdered, BlockOrphaned, BlockType, RPCEvent as DaemonRPCEvent, DiskSize, GetInfoResult, P2PStatusResult, Peer, RPCMethod } from '@xelis/sdk/daemon/types';
 import { Block, MempoolTransactionSummary } from "@xelis/sdk/daemon/types";
 import { TxBlock } from "../../components/tx_item/tx_item";
 import { XelisNode } from "../../app/xelis_node";
@@ -21,6 +21,7 @@ import { DashboardChartSection1 } from "./components/chart_section_1/chart_secti
 import { localization } from "../../localization/localization";
 import { ServerApp } from "../../../server";
 import { Context } from "hono";
+import { fetch_top_stats } from "../../fetch_helpers/fetch_top_stats";
 
 import './dashboard.css';
 
@@ -258,17 +259,14 @@ export class DashboardPage extends Page {
 
     async load_top_stats() {
         const node = XelisNode.instance();
+        const top_stats = await fetch_top_stats(node);
 
-        const info = await node.rpc.getInfo();
-        const size = await node.rpc.getSizeOnDisk();
-        const p2p_status = await node.rpc.p2pStatus();
+        this.dashboard_top_stats.load(top_stats);
+        this.page_data.info = top_stats.info;
+        this.page_data.size = top_stats.size;
+        this.page_data.p2p_status = top_stats.p2p_status;
 
-        this.dashboard_top_stats.load({ info, size, p2p_status });
-        this.page_data.info = info;
-        this.page_data.size = size;
-        this.page_data.p2p_status = p2p_status;
-
-        this.dashboard_chart_section_2.hashrate.set_hashrate(info);
+        this.dashboard_chart_section_2.hashrate.set_hashrate(top_stats.info);
     }
 
     async load_blocks() {

@@ -8,17 +8,12 @@ import { StatsItem } from './stats_item';
 import { format_diff } from '../../../../utils/format_diff';
 import { format_hashrate } from '../../../../utils/format_hashrate';
 import prettyMilliseconds from 'pretty-ms';
-import { DiskSize, GetInfoResult, P2PStatusResult } from '@xelis/sdk/daemon/types';
+import { GetInfoResult } from '@xelis/sdk/daemon/types';
 import prettyBytes from 'pretty-bytes';
 import { localization } from '../../../../localization/localization';
+import { TopStatsData } from '../../../../fetch_helpers/fetch_top_stats';
 
 import './top_stats.css';
-
-export interface DashboardTopStatsData {
-    info: GetInfoResult;
-    size: DiskSize;
-    p2p_status: P2PStatusResult;
-}
 
 export class DashboardTopStats {
     element: HTMLDivElement;
@@ -47,6 +42,12 @@ export class DashboardTopStats {
     item_mempool: StatsItem;
     item_peers: StatsItem;
     item_db_size: StatsItem;
+
+    box_5: Box;
+    item_contracts_count: StatsItem;
+    item_assets_count: StatsItem;
+    item_txs_count: StatsItem;
+    item_accounts_count: StatsItem;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -103,6 +104,34 @@ export class DashboardTopStats {
         this.box_4.element.appendChild(this.item_peers.element);
         this.item_db_size = new StatsItem(localization.get_text(`DB SIZE`));
         this.box_4.element.appendChild(this.item_db_size.element);
+
+        this.box_5 = new Box();
+        this.container.element.appendChild(this.box_5.element);
+
+        this.item_txs_count = new StatsItem(localization.get_text(`TXS`));
+        this.box_5.element.appendChild(this.item_txs_count.element);
+        this.item_contracts_count = new StatsItem(localization.get_text(`CONTRACTS`));
+        this.box_5.element.appendChild(this.item_contracts_count.element);
+        this.item_assets_count = new StatsItem(localization.get_text(`ASSETS`));
+        this.box_5.element.appendChild(this.item_assets_count.element);
+        this.item_accounts_count = new StatsItem(localization.get_text(`ACCOUNTS`));
+        this.box_5.element.appendChild(this.item_accounts_count.element);
+    }
+
+    set_txs_count(count: number) {
+        this.item_txs_count.element_value.innerHTML = `${count.toLocaleString()}`;
+    }
+
+    set_accounts_count(count: number) {
+        this.item_accounts_count.element_value.innerHTML = `${count.toLocaleString()}`;
+    }
+
+    set_contracts_count(count: number) {
+        this.item_contracts_count.element_value.innerHTML = `${count.toLocaleString()}`;
+    }
+
+    set_assets_count(count: number) {
+        this.item_assets_count.element_value.innerHTML = `${count.toLocaleString()}`;
     }
 
     set_max_supply(max_supply: number) {
@@ -199,10 +228,14 @@ export class DashboardTopStats {
         this.last_update_interval_id = window.setInterval(set_timer, 1000);
     }
 
-    async load(data: DashboardTopStatsData) {
+    async load(data: TopStatsData) {
         this.set_last_update();
         this.set_info(data.info);
         this.set_db_size(data.size.size_bytes);
         this.set_peer_count(data.p2p_status.peer_count);
+        this.set_accounts_count(data.account_count);
+        this.set_assets_count(data.asset_count);
+        this.set_contracts_count(data.contract_count);
+        this.set_txs_count(data.tx_count);
     }
 }
