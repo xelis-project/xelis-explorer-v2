@@ -26,7 +26,7 @@
     min-height: 10rem;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1300px) {
     .xe-dashboard-chart-section-2>:nth-child(2) {
         flex-direction: column;
     }

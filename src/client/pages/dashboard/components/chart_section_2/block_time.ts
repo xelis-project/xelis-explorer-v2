@@ -30,7 +30,7 @@ export class DashboardBlockTime {
         const margin = { top: 10, right: 0, bottom: 10, left: 30 };
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = rect.width - margin.left - margin.right;
-        const height = 150 - margin.top - margin.bottom;
+        const height = 220 - margin.top - margin.bottom;
 
         const node = d3
             .select(this.box_chart.element_content)

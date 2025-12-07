@@ -33,7 +33,7 @@ export class DashboardPools {
 
         const rect = this.box_chart.element_content.getBoundingClientRect();
         const width = 400 //rect.width;
-        const height = 160;
+        const height = 200;
 
         const node = d3
             .select(this.box_chart.element_content)
@@ -89,7 +89,7 @@ export class DashboardPools {
             .attr('d', arc_generator);
 
         const legend_radius = 8;
-        const legend_spacing = 15;
+        const legend_spacing = 20;
 
         this.chart.node
             .selectAll(`.legend`)
