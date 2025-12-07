@@ -61,7 +61,7 @@ export class BlockRow extends Row {
         const container = document.createElement(`div`);
         container.classList.add(`xe-blocks-table-miner`);
 
-        const miner_icon = hashicon(miner, 25) as HTMLCanvasElement;
+        const miner_icon = hashicon(miner, { size: 25 }) as HTMLCanvasElement;
         container.appendChild(miner_icon);
 
         const miner_addr = document.createElement(`div`);

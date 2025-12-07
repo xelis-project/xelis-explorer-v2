@@ -49,7 +49,7 @@ export class TransactionTransferItem {
     }
 
     set_recipient(addr: string) {
-        const recipient_icon = hashicon(addr, 25) as HTMLCanvasElement;
+        const recipient_icon = hashicon(addr, { size: 25 }) as HTMLCanvasElement;
         this.recipient_element.replaceChildren();
         this.recipient_element.href = `/account/${addr}`;
         this.recipient_element.appendChild(recipient_icon);

@@ -61,7 +61,7 @@ export class AccountInfo {
     }
 
     set_hashicon(addr: string) {
-        const addr_icon = hashicon(addr, 90) as HTMLCanvasElement;
+        const addr_icon = hashicon(addr, { size: 90 }) as HTMLCanvasElement;
         this.hashicon_element.replaceChildren();
         this.hashicon_element.appendChild(addr_icon);
     }

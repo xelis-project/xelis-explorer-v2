@@ -33,7 +33,7 @@ export class BlockMiner {
 
         this.miner_element.href = `/account/${miner}`;
 
-        const miner_icon = hashicon(miner, 45) as HTMLCanvasElement;
+        const miner_icon = hashicon(miner, { size: 45 }) as HTMLCanvasElement;
         this.miner_element.appendChild(miner_icon);
 
         const sub_container = document.createElement(`div`);
