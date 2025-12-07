@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Font, TextGeometry, RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
+import { RoundedBoxGeometry } from 'three/examples/jsm/Addons.js';
 import { XelisNode } from '../../app/xelis_node';
 import { Block, RPCMethod as DaemonRPCMethod, HeightRangeParams, RPCEvent as DaemonRPCEvent, BlockOrdered, BlockType } from '@xelis/sdk/daemon/types';
 import { block_type_colors } from '../block_type_box/block_type_box';
@@ -9,14 +9,10 @@ import { OverlayLoading } from '../overlay_loading/overlay_loading';
 import { DAGBlockDetails } from './block_details/block_details';
 import { clamp_number } from '../../utils/clamp_number';
 import { HeightControl } from './height_control/height_control';
-import font_data from './noto_sans_regular.json';
 //@ts-ignore
 import { Text } from 'troika-three-text';
 //@ts-ignore
 import InfiniteGridHelper from './infinite_grid_helper.js';
-
-//import font_noto_sans_url from './noto_sans_regular.ttf?url';
-// import font_data from './helvetica_regular.json'; // does not have all unicode
 
 import './dag.css';
 
@@ -61,13 +57,12 @@ export class DAG {
     height_mesh_map: Map<number, THREE.Group>;
     blocks_by_height: Map<number, Block[]>;
 
-    //font: Font;
     is_live: boolean;
     target_line: THREE.Line;
     lock_block_height?: number;
     load_height: number;
 
-    block_spacing = 5;
+    block_spacing = 6;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -85,8 +80,6 @@ export class DAG {
         this.overlay_loading = new OverlayLoading();
         this.element.appendChild(this.overlay_loading.element);
 
-        // @ts-ignore
-        //this.font = new Font(font_data);
         this.clock = new THREE.Clock();
         this.scene = new THREE.Scene();
         this.canvas = document.createElement(`canvas`);
@@ -671,12 +664,12 @@ export class DAG {
 
         const text = new Text();
         text.text = height.toLocaleString();
-        text.fontSize = .9;
+        text.fontSize = .8;
         text.position.set(0, .65, -1);
         text.color = `white`;
         text.anchorX = `center`;
 
-        const back_width = this.get_width_text(text.text) / 8;
+        const back_width = this.get_width_text(text.text) / 10;
         // back
         const back_geo = new RoundedBoxGeometry(back_width, 1.25, 1, 10, 1);
         const back_mat = new THREE.MeshBasicMaterial({
