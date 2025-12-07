@@ -259,6 +259,7 @@ export class TransactionPage extends Page {
         super.load(parent);
 
         this.transaction_in_blocks.container.element.remove();
+        this.transaction_type_container.replaceChildren();
         this.set_loading(true);
         await this.load_transaction();
         this.set_loading(false);
