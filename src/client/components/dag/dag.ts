@@ -179,7 +179,7 @@ export class DAG {
 
         if (new_block) {
             const new_height = new_block.height;
-            if(!this.block_mesh_hashes.get(new_block.hash)) {
+            if (!this.block_mesh_hashes.get(new_block.hash)) {
                 // skip if block already added
                 return;
             }
@@ -472,19 +472,20 @@ export class DAG {
             this.add_block_to_height(block);
         }
 
-        this.blocks_by_height.forEach((height_blocks) => {
+        let i = 0;
+        this.blocks_by_height.forEach((height_blocks, block_height) => {
             height_blocks.forEach((block, y) => {
                 const block_mesh = this.create_block_mesh(block);
                 const center_y = ((y * 5) - (height_blocks.length / 2 * 5)) + 2.5;
-                block_mesh.position.set(block.height * this.block_spacing, center_y, 0);
+                block_mesh.position.set(i * this.block_spacing, center_y, 0);
                 this.block_group.add(block_mesh);
             });
 
-            const first_block = height_blocks[0];
-            const height_mesh = this.create_height_mesh(first_block.height);
+            const height_mesh = this.create_height_mesh(block_height);
             const center_y = -(height_blocks.length / 2 * 5 + 2);
-            height_mesh.position.set(first_block.height * this.block_spacing, center_y, 0);
+            height_mesh.position.set(i * this.block_spacing, center_y, 0);
             this.height_group.add(height_mesh);
+            i++;
         });
 
         this.block_group.children.forEach((block_mesh) => {
