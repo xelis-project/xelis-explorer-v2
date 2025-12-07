@@ -14,23 +14,25 @@
     height: 50rem;
     background-color: #02FFCF;
     filter: blur(100px);
-    opacity: .05;
+    opacity: .07;
     border-radius: 100%;
     position: absolute;
-    top: -5rem;
-    left: 0rem;
+    top: 0;
+    left: 50%;
+    translate: -100% 25%;
 }
 
 .xe-background-ellipse-2 {
     width: 70rem;
-    height: 50rem;
+    height: 70rem;
     background-color: #02FFCF;
     filter: blur(100px);
-    opacity: .1;
+    opacity: .03;
     border-radius: 100%;
     position: absolute;
-    top: 25rem;
-    right: 0rem;
+    top: 0;
+    left: 50%;
+    translate: -25% 80%;
 }
 
 .xe-background-ellipse-3 {
@@ -41,8 +43,9 @@
     opacity: .1;
     border-radius: 100%;
     position: absolute;
-    top: -50%;
-    right: 10%;
+    top: 0;
+    left: 50%;
+    translate: 0 -50%;
 }
 
 .xe-background-ellipse-4 {}
