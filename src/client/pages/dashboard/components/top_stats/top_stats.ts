@@ -66,7 +66,7 @@ export class DashboardTopStats {
 
         this.item_max_supply = new StatsItem(localization.get_text(`MAX SUPPLY`));
         this.box_1.element.appendChild(this.item_max_supply.element);
-        this.item_circ_supply = new StatsItem(localization.get_text(`CIRC SUPPLY`));
+        this.item_circ_supply = new StatsItem(localization.get_text(`CIRCULATING SUPPLY`));
         this.box_1.element.appendChild(this.item_circ_supply.element);
         this.item_mined = new StatsItem(localization.get_text(`MINED`));
         this.box_1.element.appendChild(this.item_mined.element);
@@ -78,7 +78,7 @@ export class DashboardTopStats {
         this.box_2 = new Box();
         this.container.element.appendChild(this.box_2.element);
 
-        this.item_topo = new StatsItem(localization.get_text(`TOPO`));
+        this.item_topo = new StatsItem(localization.get_text(`TOPOHEIGHT`));
         this.box_2.element.appendChild(this.item_topo.element);
         this.item_height = new StatsItem(localization.get_text(`HEIGHT`));
         this.box_2.element.appendChild(this.item_height.element);
@@ -88,7 +88,7 @@ export class DashboardTopStats {
         this.box_3 = new Box();
         this.container.element.appendChild(this.box_3.element);
 
-        this.item_diff = new StatsItem(localization.get_text(`DIFF`));
+        this.item_diff = new StatsItem(localization.get_text(`DIFFICULTY`));
         this.box_3.element.appendChild(this.item_diff.element);
         this.item_hashrate = new StatsItem(localization.get_text(`HASHRATE`));
         this.box_3.element.appendChild(this.item_hashrate.element);
@@ -98,7 +98,7 @@ export class DashboardTopStats {
         this.box_4 = new Box();
         this.container.element.appendChild(this.box_4.element);
 
-        this.item_mempool = new StatsItem(localization.get_text(`MPOOL`));
+        this.item_mempool = new StatsItem(localization.get_text(`MEMPOOL`));
         this.box_4.element.appendChild(this.item_mempool.element);
         this.item_peers = new StatsItem(localization.get_text(`PEERS`));
         this.box_4.element.appendChild(this.item_peers.element);
