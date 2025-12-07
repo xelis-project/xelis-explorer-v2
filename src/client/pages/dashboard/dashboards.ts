@@ -239,22 +239,22 @@ export class DashboardPage extends Page {
 
     clear_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
-        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
-        node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
-        node.ws.methods.closeListener(DaemonRPCEvent.TransactionAddedInMempool, this.on_transaction_added_in_mempool);
-        node.ws.methods.closeListener(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
-        node.ws.methods.closeListener(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
+        node.ws.methods.removeListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+        node.ws.methods.removeListener(DaemonRPCEvent.BlockOrphaned, null, this.on_block_orphaned);
+        node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+        node.ws.methods.removeListener(DaemonRPCEvent.TransactionAddedInMempool, null, this.on_transaction_added_in_mempool);
+        node.ws.methods.removeListener(DaemonRPCEvent.PeerConnected, null, this.on_peer_connected);
+        node.ws.methods.removeListener(DaemonRPCEvent.PeerDisconnected, null, this.on_peer_disconnected);
     }
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
-        node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
-        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
-        node.ws.methods.listen(DaemonRPCEvent.TransactionAddedInMempool, this.on_transaction_added_in_mempool);
-        node.ws.methods.listen(DaemonRPCEvent.PeerConnected, this.on_peer_connected);
-        node.ws.methods.listen(DaemonRPCEvent.PeerDisconnected, this.on_peer_disconnected);
+        node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+        node.ws.methods.addListener(DaemonRPCEvent.BlockOrphaned, null, this.on_block_orphaned);
+        node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+        node.ws.methods.addListener(DaemonRPCEvent.TransactionAddedInMempool, null, this.on_transaction_added_in_mempool);
+        node.ws.methods.addListener(DaemonRPCEvent.PeerConnected, null, this.on_peer_connected);
+        node.ws.methods.addListener(DaemonRPCEvent.PeerDisconnected, null, this.on_peer_disconnected);
     }
 
     async load_top_stats() {

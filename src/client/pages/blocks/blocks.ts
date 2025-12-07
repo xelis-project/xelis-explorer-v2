@@ -135,16 +135,16 @@ export class BlocksPage extends Page {
 
     clear_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
-        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
-        node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
+        node.ws.methods.removeListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+        node.ws.methods.removeListener(DaemonRPCEvent.BlockOrphaned, null, this.on_block_orphaned);
+        node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
     }
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
-        node.ws.methods.listen(DaemonRPCEvent.BlockOrphaned, this.on_block_orphaned);
-        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+        node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+        node.ws.methods.addListener(DaemonRPCEvent.BlockOrphaned, null, this.on_block_orphaned);
+        node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
     }
 
     async load(parent: HTMLElement) {

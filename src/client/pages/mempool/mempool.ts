@@ -105,14 +105,14 @@ export class MempoolPage extends Page {
 
     clear_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.closeListener(DaemonRPCEvent.TransactionAddedInMempool, this.on_transaction_added_in_mempool);
-        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+        node.ws.methods.removeListener(DaemonRPCEvent.TransactionAddedInMempool, null, this.on_transaction_added_in_mempool);
+        node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
     }
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.listen(DaemonRPCEvent.TransactionAddedInMempool, this.on_transaction_added_in_mempool);
-        node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
+        node.ws.methods.addListener(DaemonRPCEvent.TransactionAddedInMempool, null, this.on_transaction_added_in_mempool);
+        node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
     }
 
     async load(parent: HTMLElement) {

@@ -83,12 +83,12 @@ export class TransactionsPage extends Page {
 
     clear_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.closeListener(DaemonRPCEvent.TransactionExecuted, this.on_transaction_executed);
+        node.ws.methods.removeListener(DaemonRPCEvent.TransactionExecuted, null, this.on_transaction_executed);
     }
 
     async listen_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.listen(DaemonRPCEvent.TransactionExecuted, this.on_transaction_executed);
+        node.ws.methods.addListener(DaemonRPCEvent.TransactionExecuted, null, this.on_transaction_executed);
     }
 
     async load(parent: HTMLElement) {

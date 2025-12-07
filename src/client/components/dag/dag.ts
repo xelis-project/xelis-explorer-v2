@@ -334,15 +334,15 @@ export class DAG {
                 this.move_to_height(this.lock_block_height, true);
             }
 
-            node.ws.methods.listen(DaemonRPCEvent.NewBlock, this.on_new_block);
-            node.ws.methods.listen(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+            node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+            node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
             this.height_control.live_btn_element.classList.add(`active`);
             this.height_control.next_height_element.style.display = `none`;
             this.height_control.prev_height_element.style.display = `none`;
         }
         else {
-            node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
-            node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+            node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+            node.ws.methods.removeListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
             this.height_control.live_btn_element.classList.remove(`active`);
             this.height_control.next_height_element.style.removeProperty(`display`);
             this.height_control.prev_height_element.style.removeProperty(`display`);
@@ -356,8 +356,8 @@ export class DAG {
 
     clear_node_events() {
         const node = XelisNode.instance();
-        node.ws.methods.closeListener(DaemonRPCEvent.NewBlock, this.on_new_block);
-        node.ws.methods.closeListener(DaemonRPCEvent.BlockOrdered, this.on_block_ordered);
+        node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+        node.ws.methods.removeListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
     }
 
     update_size() {
