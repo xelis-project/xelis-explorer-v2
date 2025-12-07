@@ -6,6 +6,7 @@
     box-sizing: border-box;
     border: none;
     border-radius: 1rem;
+    font-size: .9rem;
 }
 
 .xe-text-input:focus {
