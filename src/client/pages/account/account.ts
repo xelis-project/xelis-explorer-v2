@@ -8,16 +8,15 @@ import { AccountInfo } from "./components/info/info";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { Block, RPCMethod as DaemonRPCMethod, RPCEvent as DaemonRPCEvent, GetBalanceParams, GetBalanceResult, GetNonceParams, ValidateAddressParams, ValidateAddressResult, GetNonceResult, VersionedNonce, GetBlockAtTopoheightParams, AssetWithData, AssetData } from "@xelis/sdk/daemon/types";
 import { XELIS_ASSET } from "@xelis/sdk/config";
-import { AccountHistoryList } from "./components/history_list/history_list";
 import { AccountBalance } from "./components/balance/balance";
 import { NotFoundPage } from "../not_found/not_found";
 import { AccountKnownAddr } from "./components/known_addr/known_addr";
 import { Box } from "../../components/box/box";
 import { localization } from "../../localization/localization";
 import { AccountAssets } from "./components/assets/assets";
+import { AccountHistory } from "./components/history/history";
 
 import "./account.css";
-import { ws_format_asset } from "../../utils/ws_format_asset";
 
 export interface AccountServerData {
     is_integrated: boolean;
@@ -143,6 +142,7 @@ export class AccountPage extends Page {
 
     page_data: {
         addr?: string;
+        assets: AssetWithData[];
         server_data?: AccountServerData;
     };
 
@@ -150,14 +150,13 @@ export class AccountPage extends Page {
     account_info: AccountInfo;
     account_balance: AccountBalance;
     account_known_addr: AccountKnownAddr;
-    incoming_history_list: AccountHistoryList;
-    outgoing_history_list: AccountHistoryList;
+    account_history: AccountHistory;
     account_assets: AccountAssets;
 
     constructor() {
         super();
 
-        this.page_data = { addr: "" };
+        this.page_data = { addr: "", assets: [] };
         this.master = new Master();
         this.element.appendChild(this.master.element);
 
@@ -177,15 +176,8 @@ export class AccountPage extends Page {
         this.account_assets = new AccountAssets();
         this.master.content.appendChild(this.account_assets.container.element);
 
-        const container_2 = document.createElement(`div`);
-        container_2.classList.add(`xe-account-container-2`);
-        this.master.content.appendChild(container_2);
-
-        this.incoming_history_list = new AccountHistoryList(`INCOMING`);
-        container_2.appendChild(this.incoming_history_list.container.element);
-
-        this.outgoing_history_list = new AccountHistoryList(`OUTGOING`);
-        container_2.appendChild(this.outgoing_history_list.container.element);
+        this.account_history = new AccountHistory();
+        this.master.content.appendChild(this.account_history.container.element);
     }
 
     async load_account() {
@@ -194,7 +186,8 @@ export class AccountPage extends Page {
 
         this.page_data = {
             addr: id,
-            server_data
+            server_data,
+            assets: []
         };
 
         try {
@@ -210,31 +203,6 @@ export class AccountPage extends Page {
         }
     }
 
-    async load_history() {
-        const { addr } = this.page_data;
-        if (!addr) return;
-
-        const xelis_node = XelisNode.instance();
-
-        const incoming = await xelis_node.rpc.getAccountHistory({
-            address: addr,
-            incoming_flow: true,
-            outgoing_flow: false
-        });
-
-        const outgoing = await xelis_node.rpc.getAccountHistory({
-            address: addr,
-            incoming_flow: false,
-            outgoing_flow: true
-        });
-
-        incoming.sort((a, b) => a.block_timestamp - b.block_timestamp);
-        this.incoming_history_list.set(incoming);
-
-        outgoing.sort((a, b) => a.block_timestamp - b.block_timestamp);
-        this.outgoing_history_list.set(outgoing);
-    }
-
     async load_assets() {
         const { addr } = this.page_data;
         if (!addr) return;
@@ -245,10 +213,11 @@ export class AccountPage extends Page {
         const assets = [] as AssetWithData[];
         for (let i = 0; i < hashes.length; i++) {
             const hash = hashes[i];
-            const asset = await xelis_node.ws.methods.getAsset({ asset: hash });
-            assets.push({ asset: hash, ...asset });
+            //const asset = await xelis_node.ws.methods.getAsset({ asset: hash });
+            //assets.push({ asset: hash, ...asset });
         }
         this.account_assets.set(assets);
+        this.page_data.assets = assets;
     }
 
     on_new_block = async (new_block?: Block, err?: Error) => {
@@ -266,7 +235,7 @@ export class AccountPage extends Page {
                 });
 
                 if (balance.topoheight > server_data.balance.topoheight) {
-                    this.load_history();
+                    //this.account_history.load(addr);
                 }
             }
         }
@@ -285,22 +254,22 @@ export class AccountPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
 
-        Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
-        Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
+        // Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
+        //Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
         Box.list_loading(this.account_assets.items_element, 10, `.75rem`, `10rem`);
 
         await this.load_account();
         this.listen_node_events();
 
-        const { addr, server_data } = this.page_data;
+        const { addr, server_data, assets } = this.page_data;
         if (addr && server_data) {
             this.set_element(this.master.element);
 
             this.account_info.set(addr, server_data);
             this.account_known_addr.set(addr);
 
-            await this.load_history();
             await this.load_assets();
+            this.account_history.set(addr, server_data, assets);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }

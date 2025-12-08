@@ -1,0 +1,34 @@
+.xe-account-history-action {
+	display: flex;
+	gap: .5rem;
+	flex-direction: row;
+	align-items: center;
+}
+
+.xe-account-history-action svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.xe-account-history-action .receive {
+	rotate: 180deg;
+}
+
+.xe-account-history-account {
+	display: flex;
+	gap: .5rem;
+	flex-direction: row;
+	align-items: center;
+}
+
+.xe-account-history-amount {
+	display: flex;
+	gap: .5rem;
+	flex-direction: row;
+	align-items: center;
+}
+
+.xe-account-history-amount svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
