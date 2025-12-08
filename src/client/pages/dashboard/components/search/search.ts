@@ -11,7 +11,6 @@ export class DashboardSearch {
     container: Container;
     text_input: TextInput;
 
-
     constructor() {
         this.container = new Container();
         this.container.element.classList.add(`xe-dashboard-search`);

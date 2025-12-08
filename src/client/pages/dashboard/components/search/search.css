@@ -5,7 +5,7 @@
 
 @keyframes xe-dashboard-search-appear-animation {
     0% {
-        translate: -25% 0;
+        translate: 0 -100%;
     }
 
     100% {
@@ -15,6 +15,7 @@
 
 .xe-dashboard-search form>:nth-child(1) {
     padding-right: 3rem;
+    outline: .2rem solid rgba(44, 255, 206, 0.5);
 }
 
 .xe-dashboard-search form>:nth-child(2) {
@@ -26,17 +27,17 @@
     border-radius: 1rem;
     height: 100%;
     position: absolute;
-    top:0;
+    top: 0;
     right: 1.5rem;
     transition: translate .15s;
 }
 
-.xe-dashboard-search form >:nth-child(2):hover {
+.xe-dashboard-search form>:nth-child(2):hover {
     color: #0CFFCF;
     translate: -3% 0;
 }
 
-.xe-dashboard-search form >:nth-child(2) svg {
+.xe-dashboard-search form>:nth-child(2) svg {
     width: 1.5rem;
     height: 1.5rem;
 }
