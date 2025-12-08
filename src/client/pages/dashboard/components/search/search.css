@@ -16,6 +16,7 @@
 .xe-dashboard-search form>:nth-child(1) {
     padding-right: 3rem;
     outline: .2rem solid rgba(44, 255, 206, 0.5);
+    font-weight: bold;
 }
 
 .xe-dashboard-search form>:nth-child(2) {
