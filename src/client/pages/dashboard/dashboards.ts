@@ -64,6 +64,9 @@ export class DashboardPage extends Page {
 
         this.master.content.classList.add(`xe-dashboard`);
 
+        this.dashboard_search = new DashboardSearch();
+        this.master.content.appendChild(this.dashboard_search.container.element);
+
         this.dashboard_top_stats = new DashboardTopStats();
         this.master.content.appendChild(this.dashboard_top_stats.element);
 
@@ -73,9 +76,6 @@ export class DashboardPage extends Page {
 
         const sub_container_1 = document.createElement(`div`);
         container_1.appendChild(sub_container_1);
-
-        this.dashboard_search = new DashboardSearch();
-        sub_container_1.appendChild(this.dashboard_search.container.element);
 
         this.dashboard_chart_section_1 = new DashboardChartSection1();
         sub_container_1.appendChild(this.dashboard_chart_section_1.container.element);
