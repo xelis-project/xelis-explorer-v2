@@ -109,7 +109,7 @@ export class BlockItem {
         container.appendChild(block_box_type.element);
 
         const text = document.createElement(`div`);
-        text.innerHTML = localization.get_text(`{} BLOCK`, [block_type.toUpperCase()]);
+        text.innerHTML = block_type.toUpperCase();
         container.appendChild(text);
 
         this.element_type.replaceChildren();
