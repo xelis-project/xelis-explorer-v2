@@ -95,12 +95,17 @@
         "type": "pool"
     },
     "xel:ee48xuktxn0kxh3r6p0hw9x68adcm0dqf4c04hptu0qhegcnldusqr62y47": {
-        "name": "HeroMiners (Old)",
+        "name": "HeroMiners (1)",
         "link": "https://xelis.herominers.com/",
         "type": "pool"
     },
     "xel:4r46fyhkhltjacaaqkr3vxhldf0stwpm3a8uku2ukztk74t88gpsqdlfua7": {
-        "name": "HeroMiners",
+        "name": "HeroMiners (2)",
+        "link": "https://xelis.herominers.com/",
+        "type": "pool"
+    },
+    "xel:p692xuntphjr4uyesggnpyvd36g4xdmj5k6y5e8zjx399hs84svsqruxpza": {
+        "name": "HeroMiners (3)",
         "link": "https://xelis.herominers.com/",
         "type": "pool"
     },
