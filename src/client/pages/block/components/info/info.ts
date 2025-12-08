@@ -92,7 +92,8 @@ export class BlockInfo {
         this.height_type_element.appendChild(sub_container);
 
         const topo_element = document.createElement(`div`);
-        topo_element.innerHTML = `${topoheight ? topoheight.toLocaleString() : `????`}`;
+        // check condition with undefined otherwise genesix block with topo 0 will display ????
+        topo_element.innerHTML = `${topoheight !== undefined ? topoheight.toLocaleString() : `????`}`;
         sub_container.appendChild(topo_element);
 
         const text_element = document.createElement(`div`);
