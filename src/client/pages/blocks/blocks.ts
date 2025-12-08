@@ -55,7 +55,7 @@ export class BlocksPage extends Page {
             localization.get_text(`TX COUNT`),
             localization.get_text(`HASH`),
             localization.get_text(`REWARD`),
-            localization.get_text(`DIFF`),
+            localization.get_text(`HASHRATE`),
             localization.get_text(`AGE`),
         ];
         this.table.set_head_row(titles);
