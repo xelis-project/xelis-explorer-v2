@@ -10,7 +10,7 @@
 }
 
 .xe-text-input:focus {
-    outline: .2rem solid #2CFFCF;
+    outline: .2rem solid #2CFFCF !important;
 }
 
 .xe-text-input:-webkit-autofill,
