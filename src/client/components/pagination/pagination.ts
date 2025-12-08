@@ -42,7 +42,7 @@ export class Pagination extends EventEmitter<PaginationEventMap> {
 
         // prev btn
         if (this.show_prev_next && this.current_page > 1) {
-            this.append_page_btn(this.current_page - 1, localization.get_text('Previous'));
+            this.append_page_btn(this.current_page - 1, localization.get_text('Prev'));
         }
 
         // page btns

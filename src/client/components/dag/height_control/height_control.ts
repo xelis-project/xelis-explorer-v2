@@ -34,7 +34,7 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
         this.prev_height_element = document.createElement(`button`);
         this.prev_height_element.classList.add(`xe-dag-height-control-btn-prev`);
         this.prev_height_element.innerHTML = `${icons.caret_down()} -10`;
-        this.prev_height_element.title = localization.get_text(`Previous 10 height.`);
+        this.prev_height_element.title = localization.get_text(`Prev 10 height.`);
         inputs_container.appendChild(this.prev_height_element);
 
         this.next_height_element = document.createElement(`button`);

@@ -22,7 +22,7 @@ export class BlockNextBlockBtns {
         if (topoheight) {
             this.element.style.removeProperty(`display`);
             const previous_topo = Math.max(0, topoheight - 1);
-            this.previous_block.innerHTML = `${icons.caret_down()} Previous (${previous_topo.toLocaleString()})`;
+            this.previous_block.innerHTML = `${icons.caret_down()} Prev (${previous_topo.toLocaleString()})`;
             this.previous_block.href = `/topo/${previous_topo}`;
 
             const next_topo = topoheight + 1;
