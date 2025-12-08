@@ -38,3 +38,11 @@
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
 }
+
+.scrollbar-1-rounded::-webkit-scrollbar-thumb {
+    border-radius: 1rem;
+}
+
+.scrollbar-1-rounded::-webkit-scrollbar-track {
+    border-radius: 1rem;
+}
