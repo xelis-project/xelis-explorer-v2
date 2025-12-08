@@ -129,7 +129,7 @@ export class DashboardTopStats {
         this.box_5.element.appendChild(this.item_accounts_count.element);
     }
 
-    mapNumber(x: number, n: number): string {
+    map_number(x: number, n: number): string {
         if (!Number.isInteger(x)) {
             return x.toFixed(n);
         } else {
@@ -138,29 +138,29 @@ export class DashboardTopStats {
     }
 
     set_txs_count(count: number) {
-        this.item_txs_count.element_value.innerHTML = `${humanNumber(count, x => this.mapNumber(x, 1))}`;
+        this.item_txs_count.element_value.innerHTML = `${humanNumber(count, x => this.map_number(x, 1))}`;
     }
 
     set_accounts_count(count: number) {
-        this.item_accounts_count.element_value.innerHTML = `${humanNumber(count, x => this.mapNumber(x, 1))}`;
+        this.item_accounts_count.element_value.innerHTML = `${humanNumber(count, x => this.map_number(x, 1))}`;
     }
 
     set_contracts_count(count: number) {
-        this.item_contracts_count.element_value.innerHTML = `${humanNumber(count, x => this.mapNumber(x, 1))}`;
+        this.item_contracts_count.element_value.innerHTML = `${humanNumber(count, x => this.map_number(x, 1))}`;
     }
 
     set_assets_count(count: number) {
-        this.item_assets_count.element_value.innerHTML = `${humanNumber(count, x => this.mapNumber(x, 1))}`;
+        this.item_assets_count.element_value.innerHTML = `${humanNumber(count, x => this.map_number(x, 1))}`;
     }
 
     set_max_supply(max_supply: number) {
         const value = parse_atomic(max_supply, XELIS_DECIMALS);
-        this.item_max_supply.element_value.innerHTML = `${humanNumber(value, x => this.mapNumber(x, 2))}`;
+        this.item_max_supply.element_value.innerHTML = `${humanNumber(value, x => this.map_number(x, 2))}`;
     }
 
     set_circ_supply(circ_supply: number) {
         const value = parse_atomic(circ_supply, XELIS_DECIMALS);
-        this.item_circ_supply.element_value.innerHTML = `${humanNumber(value, x => this.mapNumber(x, 2))}`;
+        this.item_circ_supply.element_value.innerHTML = `${humanNumber(value, x => this.map_number(x, 2))}`;
     }
 
     set_mined(circ_supply: number, max_supply: number) {
@@ -254,7 +254,7 @@ export class DashboardTopStats {
         this.set_db_size(data.size.size_bytes);
         this.set_peer_count(data.p2p_status.peer_count);
         this.set_accounts_count(data.account_count);
-        this.set_assets_count(data.asset_count + 10_101);
+        this.set_assets_count(data.asset_count);
         this.set_contracts_count(data.contract_count);
         this.set_txs_count(data.tx_count);
     }
