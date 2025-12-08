@@ -11,7 +11,11 @@ export class DashboardChartSection1 {
         this.container = new Container();
         this.container.element.classList.add(`xe-dashboard-chart-section-1`);
 
+        const title_element = document.createElement(`div`);
+        title_element.innerHTML = `LAST 100 BLOCKS`;
+        this.container.element.appendChild(title_element);
+
         this.blocks_txs = new DashboardBlocksTxs();
-        this.container.element.appendChild(this.blocks_txs.box_chart.box.element)
+        this.container.element.appendChild(this.blocks_txs.box_chart.box.element);
     }
 }

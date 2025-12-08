@@ -15,7 +15,7 @@ export class DashboardBlocksTxs {
 
     constructor() {
         this.box_chart = new BoxChart();
-        this.box_chart.element_title.innerHTML = localization.get_text(`LAST 100 BLOCKS`);
+        this.box_chart.element_title.remove();
         this.blocks = [];
     }
 

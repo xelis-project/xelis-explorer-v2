@@ -19,7 +19,8 @@ export class DashboardTopStats {
     element: HTMLDivElement;
     container: Container
 
-    last_update_element: HTMLDivElement;
+    //last_update_element: HTMLDivElement;
+    title_element: HTMLDivElement;
 
     box_1: Box;
     item_max_supply: StatsItem;
@@ -53,16 +54,26 @@ export class DashboardTopStats {
         this.element = document.createElement(`div`);
         this.element.classList.add(`xe-dashboard-top-stats`);
 
+        /*
         this.last_update_element = document.createElement(`div`);
         this.last_update_element.classList.add(`xe-dashboard-top-stats-last-update`);
         this.element.appendChild(this.last_update_element);
+*/
 
         this.container = new Container();
-        this.container.element.classList.add(`xe-dashboard-top-stats-container`, `scrollbar-1`, `scrollbar-1-bottom`);
         this.element.appendChild(this.container.element);
 
+        this.title_element = document.createElement(`div`);
+        this.title_element.innerHTML = localization.get_text(`STATISTICS`);
+        //title_element.classList.add(`xe-dashboard-top-stats-title`);
+        this.container.element.appendChild(this.title_element);
+
+        const box_container = document.createElement(`div`);
+        box_container.classList.add(`xe-dashboard-top-stats-container`, `scrollbar-1`, `scrollbar-1-rounded`);
+        this.container.element.appendChild(box_container);
+
         this.box_1 = new Box();
-        this.container.element.appendChild(this.box_1.element);
+        box_container.appendChild(this.box_1.element);
 
         this.item_max_supply = new StatsItem(localization.get_text(`MAX SUPPLY`));
         this.box_1.element.appendChild(this.item_max_supply.element);
@@ -76,7 +87,7 @@ export class DashboardTopStats {
         this.box_1.element.appendChild(this.item_daily_emission.element);
 
         this.box_2 = new Box();
-        this.container.element.appendChild(this.box_2.element);
+        box_container.appendChild(this.box_2.element);
 
         this.item_topo = new StatsItem(localization.get_text(`TOPOHEIGHT`));
         this.box_2.element.appendChild(this.item_topo.element);
@@ -86,7 +97,7 @@ export class DashboardTopStats {
         //this.box_2.element.appendChild(this.item_stable.element);
 
         this.box_3 = new Box();
-        this.container.element.appendChild(this.box_3.element);
+        box_container.appendChild(this.box_3.element);
 
         this.item_diff = new StatsItem(localization.get_text(`DIFFICULTY`));
         this.box_3.element.appendChild(this.item_diff.element);
@@ -96,7 +107,7 @@ export class DashboardTopStats {
         this.box_3.element.appendChild(this.item_avg_time.element);
 
         this.box_4 = new Box();
-        this.container.element.appendChild(this.box_4.element);
+        box_container.appendChild(this.box_4.element);
 
         this.item_mempool = new StatsItem(localization.get_text(`MEMPOOL`));
         this.box_4.element.appendChild(this.item_mempool.element);
@@ -106,7 +117,7 @@ export class DashboardTopStats {
         this.box_4.element.appendChild(this.item_db_size.element);
 
         this.box_5 = new Box();
-        this.container.element.appendChild(this.box_5.element);
+        box_container.appendChild(this.box_5.element);
 
         this.item_txs_count = new StatsItem(localization.get_text(`TXS`));
         this.box_5.element.appendChild(this.item_txs_count.element);
@@ -228,7 +239,8 @@ export class DashboardTopStats {
         this.last_update_timestamp = Date.now();
 
         const set_timer = () => {
-            this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
+            const time = prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true });
+            this.title_element.innerHTML = `STATISTICS (${time})`;
         }
 
         set_timer();
