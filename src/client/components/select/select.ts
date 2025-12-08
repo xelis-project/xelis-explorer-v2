@@ -24,7 +24,7 @@ export class Select extends EventEmitter<SelectEventMap> {
         this.element.appendChild(this.btn_element);
 
         this.list_element = document.createElement(`div`);
-        this.list_element.classList.add(`xe-select-list`);
+        this.list_element.classList.add(`xe-select-list`, `scrollbar-1`, `scrollbar-1-right`);
         this.element.appendChild(this.list_element);
 
         document.addEventListener(`click`, (e) => {
