@@ -47,7 +47,7 @@ export class BlocksPage extends Page {
         this.container_table.element.appendChild(this.table.element);
 
         const titles = [
-            localization.get_text(`TOPO HEIGHT`),
+            localization.get_text(`TOPOHEIGHT`),
             localization.get_text(`HEIGHT`),
             localization.get_text(`BLOCK`),
             localization.get_text(`POOL / MINER`),
