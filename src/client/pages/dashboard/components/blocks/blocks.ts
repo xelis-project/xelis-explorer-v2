@@ -26,6 +26,7 @@ export class DashboardBlocks {
     }
 
     set(blocks: Block[]) {
+        this.block_items = [];
         this.element_content.replaceChildren();
         blocks.forEach(block => this.prepend_block(block));
     }
