@@ -4,7 +4,19 @@
     gap: 1rem;
     align-items: center;
     overflow-x: scroll;
+    animation: xe-account-assets-animation 0.65s;
 }
+
+@keyframes xe-account-assets-animation {
+    0% {
+        translate: 0 -50%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
 
 .xe-account-assets> :nth-child(2) {
     display: flex;
