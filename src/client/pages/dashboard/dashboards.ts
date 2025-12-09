@@ -114,8 +114,10 @@ export class DashboardPage extends Page {
                     new_block_item.box.element.style.setProperty(`opacity`, `1`);
                     new_block_item.animate_prepend();
                 }, 350);
-                this.dashboard_blocks.remove_last_block();
-                this.dashboard_txs.remove_block_txs(new_block.hash);
+                const last_block = this.dashboard_blocks.remove_last_block();
+                if (last_block && last_block.data) {
+                    this.dashboard_txs.remove_block_txs(last_block.data.hash);
+                }
 
                 const update_txs = async () => {
                     // we don't need to fetch txs, new_block should already have them
@@ -334,7 +336,7 @@ export class DashboardPage extends Page {
         this.dashboard_dag.load();
         this.load_peers();
 
-        await this.load_top_stats()
+        await this.load_top_stats();
 
         Box.boxes_loading(this.dashboard_top_stats.container.element, false);
 
