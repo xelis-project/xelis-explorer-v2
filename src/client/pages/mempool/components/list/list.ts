@@ -39,6 +39,7 @@ export class MempoolTxsList {
     }
 
     set(txs_block: TxBlock[]) {
+        this.tx_items = [];
         this.container.element.replaceChildren();
         txs_block.forEach((tx_block) => {
             this.prepend_tx(tx_block);

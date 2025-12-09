@@ -58,10 +58,13 @@ export class BlockHeightPage extends Page {
 
     master: Master;
     container_table: Container;
+    block_rows: BlockRow[];
     table: Table;
 
     constructor() {
         super();
+
+        this.block_rows = [];
         this.page_data = {
             blocks: []
         };
@@ -95,6 +98,7 @@ export class BlockHeightPage extends Page {
         const { server_data, consumed } = BlockHeightPage.consume_server_data<BlockHeightServerData>();
         const id = BlockHeightPage.get_pattern_id(window.location.href);
 
+        this.block_rows = [];
         this.page_data = {
             blocks: server_data ? server_data.blocks : []
         }
@@ -117,6 +121,13 @@ export class BlockHeightPage extends Page {
         }
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.block_rows.forEach(block_row => {
+            if (block_row.data) block_row.set_age(block_row.data.timestamp);
+        });
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
 
@@ -132,14 +143,18 @@ export class BlockHeightPage extends Page {
             blocks.forEach((block) => {
                 const block_row = new BlockRow();
                 block_row.set(block);
+                this.block_rows.push(block_row);
                 this.table.prepend_row(block_row.element);
             });
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
+
+        this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
     }
 
     unload() {
         super.unload();
+        window.clearInterval(this.update_interval_1000_id);
     }
 }

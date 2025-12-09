@@ -31,6 +31,7 @@ export class DashboardTxs {
     }
 
     set(txs_blocks: TxBlock[]) {
+        this.tx_items = [];
         this.element_content.replaceChildren();
         txs_blocks.forEach(tx_block => this.prepend_tx(tx_block));
         this.check_display_empty();

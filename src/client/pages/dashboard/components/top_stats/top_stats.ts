@@ -233,22 +233,19 @@ export class DashboardTopStats {
         this.set_mempool(info.mempool_size);
     }
 
-    last_update_interval_id: any;
-    last_update_timestamp: any;
+    last_update_timestamp?: number;
     set_last_update() {
-        this.last_update_timestamp = Date.now();
+        if (!this.last_update_timestamp) return;
+        const diff = Date.now() - this.last_update_timestamp;
 
-        const set_timer = () => {
-            const time = prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true });
-            this.title_element.innerHTML = `STATISTICS (${time})`;
+        this.title_element.innerHTML = `STATISTICS`; 
+        if (diff > 1000) {
+            this.title_element.innerHTML += ` (${prettyMilliseconds(diff, { compact: true })})`;
         }
-
-        set_timer();
-        if (this.last_update_interval_id) window.clearInterval(this.last_update_interval_id);
-        this.last_update_interval_id = window.setInterval(set_timer, 1000);
     }
 
     async load(data: TopStatsData) {
+        this.last_update_timestamp = Date.now();
         this.set_last_update();
         this.set_info(data.info);
         this.set_db_size(data.size.size_bytes);

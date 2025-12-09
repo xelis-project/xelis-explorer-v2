@@ -81,14 +81,7 @@ export class BlockRow extends Row {
         this.value_cells[6].appendChild(container);
     }
 
-    age_interval_id?: number;
     set_age(timestamp: number) {
-        const set_age = () => {
-            this.value_cells[7].innerHTML = prettyMilliseconds(Date.now() - timestamp, { compact: true });
-        }
-
-        set_age();
-        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
-        this.age_interval_id = window.setInterval(set_age, 1000);
+        this.value_cells[7].innerHTML = prettyMilliseconds(Date.now() - timestamp, { compact: true });
     }
 }

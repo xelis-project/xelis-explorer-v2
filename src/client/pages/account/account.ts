@@ -220,6 +220,20 @@ export class AccountPage extends Page {
         this.page_data.assets = assets;
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.account_history.history_rows.forEach(history_row => {
+            if (history_row.data) {
+                history_row.set_age(history_row.data.block_timestamp);
+            }
+        });
+
+        if (this.page_data.server_data) {
+            const { balance, last_activity_timestamp } = this.page_data.server_data;
+            this.account_info.set_last_activity(balance.topoheight, last_activity_timestamp);
+        }
+    }
+
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
@@ -270,6 +284,7 @@ export class AccountPage extends Page {
 
             await this.load_assets();
             this.account_history.set(addr, server_data, assets);
+            this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
@@ -278,5 +293,6 @@ export class AccountPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
+        window.clearInterval(this.update_interval_1000_id);
     }
 }

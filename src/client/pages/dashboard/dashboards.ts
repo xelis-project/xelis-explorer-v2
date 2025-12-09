@@ -99,6 +99,23 @@ export class DashboardPage extends Page {
         sub_container_2.appendChild(this.dashboard_txs.container.element);
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.dashboard_blocks.block_items.forEach((block_item) => {
+            if (block_item.data) {
+                block_item.set_age(block_item.data.timestamp);
+            }
+        });
+
+        this.dashboard_txs.tx_items.forEach((tx_item) => {
+            if (tx_item.data) {
+                tx_item.set_age(tx_item.data.block.timestamp);
+            }
+        });
+
+        this.dashboard_top_stats.set_last_update();
+    }
+
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
@@ -345,12 +362,14 @@ export class DashboardPage extends Page {
 
         Box.boxes_loading(this.dashboard_chart_section_1.container.element, false);
         Box.boxes_loading(this.dashboard_chart_section_2.container.element, false);
+
+        this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
     }
 
     unload() {
         super.unload();
         this.clear_node_events();
-
+        window.clearInterval(this.update_interval_1000_id);
         this.dashboard_chart_section_1.blocks_txs.unload();
         this.dashboard_chart_section_2.block_time.unload();
         this.dashboard_chart_section_2.hashrate.unload();

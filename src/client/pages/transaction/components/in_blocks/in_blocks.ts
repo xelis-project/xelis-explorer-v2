@@ -11,9 +11,12 @@ export class TransactionInBlocks {
 
     title_element: HTMLDivElement;
     legend_element: HTMLDivElement;
+
+    block_items: BlockItem[];
     blocks_element: HTMLDivElement;
 
     constructor() {
+        this.block_items = [];
         this.container = new Container();
         this.container.element.classList.add(`xe-transaction-in-blocks`);
 
@@ -46,6 +49,7 @@ export class TransactionInBlocks {
     append_block(block: Block, executed_in_block?: string) {
         const block_item = new BlockItem(`/block/${block.hash}`);
         block_item.set(block);
+        this.block_items.push(block_item);
 
         if (block.hash === executed_in_block) {
             block_item.box.element.style.border = `.2rem solid #02ffcf`;
@@ -55,6 +59,7 @@ export class TransactionInBlocks {
     }
 
     set(blocks: Block[], executed_in_block?: string) {
+        this.block_items = [];
         this.blocks_element.replaceChildren();
         blocks.forEach((block) => {
             this.append_block(block, executed_in_block);

@@ -4,9 +4,9 @@ import { Block, BlockType, GetInfoResult } from "@xelis/sdk/daemon/types";
 import prettyMilliseconds from "pretty-ms";
 import { BlockTypeBox } from "../../../../components/block_type_box/block_type_box";
 import { Box } from "../../../../components/box/box";
+import { localization } from "../../../../localization/localization";
 
 import './info.css';
-import { localization } from "../../../../localization/localization";
 
 export class BlockInfo {
     container: Container
@@ -71,6 +71,7 @@ export class BlockInfo {
     }
 
     set(block: Block, info: GetInfoResult) {
+        this.last_update_timestamp = Date.now();
         this.set_height_type(block.block_type, block.topoheight);
         this.set_age(block.timestamp);
         this.set_size(block.total_size_in_bytes);
@@ -107,15 +108,8 @@ export class BlockInfo {
         this.height_element.href = `/height/${height}`;
     }
 
-    age_interval_id?: number;
     set_age(timestamp: number) {
-        const set_age = () => {
-            this.age_element.innerHTML = `${prettyMilliseconds(Date.now() - timestamp, { compact: true })}`;
-        }
-
-        set_age();
-        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
-        this.age_interval_id = window.setInterval(set_age, 1000);
+        this.age_element.innerHTML = `${prettyMilliseconds(Date.now() - timestamp, { compact: true })}`;
     }
 
     set_confirmations(height: number, current_height: number) {
@@ -135,17 +129,9 @@ export class BlockInfo {
         this.tx_count_element.innerHTML = `${tx_count.toLocaleString()} txs`;
     }
 
-    last_update_interval_id: any;
-    last_update_timestamp: any;
+    last_update_timestamp?: number;
     set_last_update() {
-        this.last_update_timestamp = Date.now();
-
-        const set_timer = () => {
-            this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
-        }
-
-        set_timer();
-        if (this.last_update_interval_id) window.clearInterval(this.last_update_interval_id);
-        this.last_update_interval_id = window.setInterval(set_timer, 1000);
+        if (!this.last_update_timestamp) return;
+        this.last_update_element.innerHTML = `${prettyMilliseconds(Date.now() - this.last_update_timestamp, { compact: true })}`;
     }
 }

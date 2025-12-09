@@ -61,6 +61,15 @@ export class BlocksPage extends Page {
         this.table.set_head_row(titles);
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.block_rows.forEach(block_row => {
+            if (block_row.data) {
+                block_row.set_age(block_row.data.timestamp);
+            }
+        });
+    }
+
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block)
 
@@ -168,10 +177,12 @@ export class BlocksPage extends Page {
             this.table.prepend_row(block_row.element);
             this.block_rows.push(block_row);
         });
+        this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
     }
 
     unload() {
         super.unload();
         this.clear_node_events();
+        window.clearInterval(this.update_interval_1000_id);
     }
 }

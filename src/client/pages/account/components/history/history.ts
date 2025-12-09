@@ -29,7 +29,11 @@ export class AccountHistory {
     pager_max_topo?: number;
     pager_min_topo?: number;
 
+    history_rows: HistoryRow[];
+
     constructor() {
+        this.history_rows = [];
+
         this.container = new Container();
         this.container.element.classList.add(`xe-account-history`);
 
@@ -156,6 +160,7 @@ export class AccountHistory {
     async load_history() {
         if (!this.addr) return;
 
+        this.history_rows = [];
         this.table.body_element.replaceChildren();
 
         const xelis_node = XelisNode.instance();
@@ -187,6 +192,8 @@ export class AccountHistory {
         history.forEach((item) => {
             const history_row = new HistoryRow();
             history_row.set(item);
+            this.history_rows.push(history_row);
+
             this.table.prepend_row(history_row.element);
         });
 

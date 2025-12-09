@@ -13,14 +13,17 @@ import { ws_format_asset } from "../../../utils/ws_format_asset";
 import './tx_row.css';
 
 export class TxRow extends Row {
-    transaction?: Transaction;
+    block?: Block;
+    tx?: Transaction;
 
     constructor() {
         super(8);
     }
 
     set(block: Block, transaction: TransactionResponse) {
-        this.transaction = transaction;
+        this.block = block;
+        this.tx = transaction;
+        
         this.set_height(block.height);
         this.set_hash(transaction.hash);
         this.set_type(transaction.data);
@@ -91,14 +94,7 @@ export class TxRow extends Row {
         this.value_cells[6].innerHTML = executed_in_block ? format_hash(executed_in_block) : `--`;
     }
 
-    age_interval_id?: number;
     set_age(timestamp: number) {
-        const set_age = () => {
-            this.value_cells[7].innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true, secondsDecimalDigits: 0 });
-        }
-
-        set_age();
-        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
-        this.age_interval_id = window.setInterval(set_age, 1000);
+        this.value_cells[7].innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true, secondsDecimalDigits: 0 });
     }
 }

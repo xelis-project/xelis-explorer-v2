@@ -61,6 +61,15 @@ export class TransactionsPage extends Page {
         this.table.set_head_row(titles);
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.tx_rows.forEach(tx_row => {
+            if (tx_row.block) {
+                tx_row.set_age(tx_row.block.timestamp);
+            }
+        });
+    }
+
     on_transaction_executed = async (transaction_executed?: TransactionExecuted, err?: Error) => {
         console.log("transaction_executed", transaction_executed);
 
@@ -105,6 +114,7 @@ export class TransactionsPage extends Page {
         const blocks = await fetch_blocks(info.height, 100);
         await fetch_blocks_txs(blocks);
 
+        this.tx_rows = [];
         this.table.body_element.replaceChildren();
         blocks.forEach((block) => {
             if (block.transactions) {
@@ -120,10 +130,13 @@ export class TransactionsPage extends Page {
         if (this.table.body_element.children.length === 0) {
             this.table.set_empty(localization.get_text(`No recent transactions`));
         }
+
+        this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
     }
 
     unload() {
         super.unload();
         this.clear_node_events();
+        window.clearInterval(this.update_interval_1000_id);
     }
 }

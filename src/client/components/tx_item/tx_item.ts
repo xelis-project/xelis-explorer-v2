@@ -83,15 +83,8 @@ export class TxItem {
         this.element_hash.innerHTML = `${format_hash(hash)}`;
     }
 
-    age_interval_id?: number;
     set_age(timestamp: number) {
-        const set_age = () => {
-            this.element_age.innerHTML = `${prettyMilliseconds(Date.now() - timestamp, { compact: true })}`;
-        }
-
-        set_age();
-        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
-        this.age_interval_id = window.setInterval(set_age, 1000);
+        this.element_age.innerHTML = `${prettyMilliseconds(Date.now() - timestamp, { compact: true })}`;
     }
 
     set_size(size_in_bytes: number) {

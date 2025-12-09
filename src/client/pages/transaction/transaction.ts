@@ -158,6 +158,15 @@ export class TransactionPage extends Page {
         //this.transaction_in_blocks.set_loading(loading);
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.transaction_in_blocks.block_items.forEach((block_item) => {
+            if (block_item.data) {
+                block_item.set_age(block_item.data.timestamp);
+            }
+        });
+    }
+
     on_transaction_executed = async (transaction_executed?: TransactionExecuted, err?: Error) => {
         console.log("transaction_executed", transaction_executed);
 
@@ -275,6 +284,7 @@ export class TransactionPage extends Page {
             }
 
             this.set_page(transaction, in_blocks);
+            this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
@@ -283,5 +293,6 @@ export class TransactionPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
+        window.clearInterval(this.update_interval_1000_id);
     }
 }

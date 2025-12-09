@@ -1,0 +1,27 @@
+.xe-tabs {}
+
+.xe-tabs-bar {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1rem solid rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+}
+
+.xe-tabs-bar button {
+    padding: .75rem 1rem;
+    border: none;
+    border-bottom: none;
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.xe-tabs-bar button.active {}
+
+.xe-tabs-content {}
