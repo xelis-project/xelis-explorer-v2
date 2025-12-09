@@ -69,6 +69,21 @@ export class MempoolPage extends Page {
         sub_container_2.appendChild(this.mempool_txs_list.container.element);
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.mempool_txs_list.tx_items.forEach(tx_item => {
+            if (tx_item.data) {
+                tx_item.set_age(tx_item.data.block.timestamp);
+            }
+        });
+    }
+
+    update_interval_100_id?: number;
+    update_interval_100 = () => {
+        if (this.page_data.top_block) {
+            this.mempool_summary.mempool_info.set_timer(this.page_data.top_block.timestamp);
+        }
+    }
 
     on_transaction_added_in_mempool = async (new_tx?: MempoolTransactionSummary, err?: Error) => {
         if (new_tx) {
@@ -97,6 +112,7 @@ export class MempoolPage extends Page {
             this.page_data.blocks.push(new_block);
 
             this.page_data.mempool_txs = [];
+            this.page_data.top_block = new_block;
             this.mempool_txs_list.set_empty(true);
             this.mempool_chart.blocks_txs.set(this.page_data.blocks);
             this.mempool_summary.set(this.page_data.mempool_txs, new_block);
@@ -149,6 +165,8 @@ export class MempoolPage extends Page {
 
         Box.boxes_loading(this.mempool_summary.container.element, false);
         Box.boxes_loading(this.mempool_chart.container.element, false);
+        this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
+        this.update_interval_100_id = window.setInterval(this.update_interval_100, 100);
     }
 
     unload() {
@@ -156,5 +174,7 @@ export class MempoolPage extends Page {
 
         this.mempool_chart.blocks_txs.unload();
         this.clear_node_events();
+        window.clearInterval(this.update_interval_1000_id);
+        window.clearInterval(this.update_interval_100_id);
     }
 }

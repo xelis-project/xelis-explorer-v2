@@ -137,6 +137,11 @@ export class BlockPage extends Page {
         }
     }
 
+    update_interval_1000_id?: number;
+    update_interval_1000 = () => {
+        this.block_info.set_last_update();
+    }
+
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block);
 
@@ -233,6 +238,7 @@ export class BlockPage extends Page {
             this.set_element(this.master.element);
             this.set(block, info);
             this.set_dag(block, info);
+            this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
@@ -243,5 +249,6 @@ export class BlockPage extends Page {
         this.clear_node_events();
         this.block_graph.dag.clear();
         this.block_txs.tx_data_hover.hide();
+        window.clearInterval(this.update_interval_1000_id);
     }
 }

@@ -2,7 +2,7 @@ import { Container } from "../../../../components/container/container";
 import { MempoolTxTypeBars } from "./tx_type_bars";
 import { MempoolInfo } from "./info";
 import { MempoolTxSizeTreeMap } from "./tx_size_map";
-import { Block, GetMempoolResult, Transaction } from "@xelis/sdk/daemon/types";
+import { Block, Transaction } from "@xelis/sdk/daemon/types";
 
 import './summary.css';
 

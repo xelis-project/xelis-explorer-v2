@@ -50,15 +50,8 @@ export class MempoolInfo {
         this.tx_total_element.innerHTML = `${tx_count.toLocaleString()} TXS`;
     }
 
-    timer_interval_id?: number;
     set_timer(timestamp: number) {
-        const set_time = () => {
-            this.timer_element.innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true });
-        }
-
-        set_time();
-        if (this.timer_interval_id) window.clearInterval(this.timer_interval_id);
-        this.timer_interval_id = window.setInterval(set_time, 100);
+        this.timer_element.innerHTML = prettyMilliseconds(Date.now() - timestamp, { colonNotation: true });
     }
 
     set_fees(fees: number) {

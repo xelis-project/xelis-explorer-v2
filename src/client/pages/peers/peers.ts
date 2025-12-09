@@ -58,8 +58,8 @@ export class PeersPage extends Page {
     }
 
     // we use interval updated instead of websocket peer state change events otherwise it's too much
-    update_interval_id?: number;
-    async on_update() {
+    update_interval_5000_id?: number;
+    update_interval_5000 = async () => {
         const node = XelisNode.instance();
         const info = await node.ws.methods.getInfo();
         const peers_result = await node.ws.methods.getPeers();
@@ -140,7 +140,7 @@ export class PeersPage extends Page {
         this.peers_chart.nodes_by_height.set(peers);
         this.peers_chart.nodes_by_country.set(peers_locations);
 
-        this.update_interval_id = window.setInterval(() => this.on_update(), 5000);
+        this.update_interval_5000_id = window.setInterval(this.update_interval_5000, 5000);
     }
 
     unload() {
@@ -148,6 +148,6 @@ export class PeersPage extends Page {
         this.peers_chart.nodes_by_height.unload();
         this.peers_chart.nodes_by_country.unload();
         this.peers_chart.nodes_by_version.unload();
-        window.clearInterval(this.update_interval_id);
+        window.clearInterval(this.update_interval_5000_id);
     }
 }

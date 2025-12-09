@@ -13,6 +13,8 @@ import './history_row.css';
 import icons from "../../../../../assets/svg/icons";
 
 export class HistoryRow extends Row {
+    data?: AccountHistory;
+
     constructor() {
         super(6);
 
@@ -22,6 +24,7 @@ export class HistoryRow extends Row {
     }
 
     set(account_history: AccountHistory) {
+        this.data = account_history;
         this.set_topoheight(account_history.topoheight);
         this.set_hash(account_history.hash);
         this.set_type(account_history);
@@ -108,20 +111,13 @@ export class HistoryRow extends Row {
         }
     }
 
-    age_interval_id?: number;
     set_age(timestamp: number) {
         const time_ago = Date.now() - timestamp;
         if (time_ago > 60 * 1000 * 60) {
-            this.value_cells[5].innerHTML =  prettyMilliseconds(time_ago, { compact: true });
+            this.value_cells[5].innerHTML = prettyMilliseconds(time_ago, { compact: true });
             return;
         }
 
-        const set_age = () => {
-            this.value_cells[5].innerHTML = prettyMilliseconds(time_ago, { colonNotation: true, secondsDecimalDigits: 0 });
-        }
-
-        set_age();
-        if (this.age_interval_id) window.clearInterval(this.age_interval_id);
-        this.age_interval_id = window.setInterval(set_age, 1000);
+        this.value_cells[5].innerHTML = prettyMilliseconds(time_ago, { colonNotation: true, secondsDecimalDigits: 0 });
     }
 }
