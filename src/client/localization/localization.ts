@@ -1,8 +1,10 @@
 import en from './locales/en';
 import fr from './locales/fr';
 import es from './locales/es';
+import de from './locales/de';
+import id from './locales/id';
 
-export type Locale = "en" | "fr" | "es";
+export type Locale = "en" | "fr" | "es" | "de" | "id";
 
 class Localization {
     locale: Locale;
@@ -15,7 +17,9 @@ class Localization {
         this.translations = {
             "en": en,
             "fr": fr,
-            "es": es
+            "es": es,
+            "de": de,
+            "id": id
         };
     }
 
