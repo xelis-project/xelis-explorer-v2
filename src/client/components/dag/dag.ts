@@ -172,7 +172,7 @@ export class DAG {
 
         if (new_block) {
             const new_height = new_block.height;
-            if (!this.block_mesh_hashes.get(new_block.hash)) {
+            if (this.block_mesh_hashes.get(new_block.hash)) {
                 // skip if block already added
                 return;
             }
@@ -200,13 +200,14 @@ export class DAG {
 
             const height_mesh = this.height_mesh_map.get(new_height);
             const block_count = blocks_at_height ? blocks_at_height.length : 0;
+            const block_center_y = -(block_count / 2 * 5 + 2);
+            const block_x = (new_height - this.load_height) * this.block_spacing;
+
             if (height_mesh) {
-                const center_y = -(block_count / 2 * 5 + 2);
-                height_mesh.position.set(new_height * this.block_spacing, center_y, 0);
+                height_mesh.position.set(block_x, block_center_y, 0);
             } else {
                 const new_height_mesh = this.create_height_mesh(new_height);
-                const center_y = -(block_count / 2 * 5 + 2);
-                new_height_mesh.position.set(new_height * this.block_spacing, center_y, 0);
+                new_height_mesh.position.set(block_x, block_center_y, 0);
                 this.height_group.add(new_height_mesh);
                 this.height_mesh_map.set(new_height, new_height_mesh);
             }
@@ -217,7 +218,7 @@ export class DAG {
                     const block_mesh = this.block_mesh_hashes.get(block.hash);
                     if (block_mesh) {
                         const center_y = ((y * 5) - (blocks_at_height.length / 2 * 5)) + 2.5;
-                        block_mesh.position.set(new_height * this.block_spacing, center_y, 0);
+                        block_mesh.position.set(block_x, center_y, 0);
 
                         block.tips.forEach((hash) => {
                             const block_target_mesh = this.block_mesh_hashes.get(hash);
@@ -465,20 +466,18 @@ export class DAG {
             this.add_block_to_height(block);
         }
 
-        let i = 0;
         this.blocks_by_height.forEach((height_blocks, block_height) => {
             height_blocks.forEach((block, y) => {
                 const block_mesh = this.create_block_mesh(block);
                 const center_y = ((y * 5) - (height_blocks.length / 2 * 5)) + 2.5;
-                block_mesh.position.set(i * this.block_spacing, center_y, 0);
+                block_mesh.position.set((block_height - this.load_height) * this.block_spacing, center_y, 0);
                 this.block_group.add(block_mesh);
             });
 
             const height_mesh = this.create_height_mesh(block_height);
             const center_y = -(height_blocks.length / 2 * 5 + 2);
-            height_mesh.position.set(i * this.block_spacing, center_y, 0);
+            height_mesh.position.set((block_height - this.load_height) * this.block_spacing, center_y, 0);
             this.height_group.add(height_mesh);
-            i++;
         });
 
         this.block_group.children.forEach((block_mesh) => {
