@@ -44,7 +44,7 @@ export class Header {
 
         const text = document.createElement(`div`);
         text.classList.add(`xe-header-text`);
-        text.innerHTML = `Track and verify transactions on the XELIS network.`;
+        text.innerHTML = localization.get_text(`Track and verify transactions on the XELIS network.`);
         left_element.appendChild(text);
 
         const mobile_menu_button = document.createElement(`button`);

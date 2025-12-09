@@ -4,6 +4,7 @@ import { GeoLocationData } from '../../utils/fetch_geo_location';
 import { Box } from '../box/box';
 import './peer_item.css';
 import { PeerLocation } from '../peers_map/peers_map';
+import { localization } from '../../localization/localization';
 
 export class PeerItem {
     box: Box;
@@ -55,7 +56,7 @@ export class PeerItem {
     }
 
     set_peer_count(peer_count: number) {
-        this.element_peer_count.innerHTML = `${peer_count.toLocaleString()} peers`;
+        this.element_peer_count.innerHTML = `${peer_count.toLocaleString()} ${localization.get_text(`peers`)}`;
     }
 
     set_version(version: string) {
@@ -73,27 +74,27 @@ export class PeerItem {
                 <div>${geo_location.country} / ${geo_location.city}</div>
             `;
         } else {
-            this.element_location.innerHTML = `Geo location failed.`;
+            this.element_location.innerHTML = localization.get_text(`Geo location failed.`);
         }
     }
 
     set_height(height: number) {
         this.element_height.innerHTML = `
-            <div>HEIGHT</div>
+            <div>${localization.get_text(`HEIGHT`)}</div>
             <div>${height.toLocaleString()}</div>
         `;
     }
 
     set_topoheight(topoheight: number) {
         this.element_topo.innerHTML = `
-            <div>TOPOHEIGHT</div>
+            <div>${localization.get_text(`TOPOHEIGHT`)}</div>
             <div>${topoheight.toLocaleString()}</div>
         `;
     }
 
     set_pruned(pruned_height?: number) {
         this.element_pruned.innerHTML = `
-            <div>PRUNED</div>
+            <div>${localization.get_text(`PRUNED`)}</div>
             <div>${pruned_height ? pruned_height.toLocaleString() : `--`}</div>
         `;
     }

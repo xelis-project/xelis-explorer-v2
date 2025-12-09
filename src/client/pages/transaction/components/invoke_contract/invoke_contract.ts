@@ -48,7 +48,7 @@ export class TransactionInvokeContract {
             this.container.element.appendChild(container_element);
 
             const permission_title_element = document.createElement(`div`);
-            permission_title_element.innerHTML = `PERMISSION LIST`;
+            permission_title_element.innerHTML = localization.get_text(`PERMISSION LIST`);
             this.container.element.appendChild(permission_title_element);
 
             const permission_json_viewer_box = new JsonViewerBox(invoke_contract.permission.specific);
@@ -59,7 +59,7 @@ export class TransactionInvokeContract {
             this.container.element.appendChild(container_element);
 
             const permission_title_element = document.createElement(`div`);
-            permission_title_element.innerHTML = `PERMISSION LIST`;
+            permission_title_element.innerHTML = localization.get_text(`PERMISSION LIST`);
             this.container.element.appendChild(permission_title_element);
 
             const permission_json_viewer_box = new JsonViewerBox(invoke_contract.permission.exclude);
@@ -80,7 +80,7 @@ export class TransactionInvokeContract {
         }
 
         const parameters_title_element = document.createElement(`div`);
-        parameters_title_element.innerHTML = `PARAMETERS`;
+        parameters_title_element.innerHTML = localization.get_text(`PARAMETERS`);
         this.container.element.appendChild(parameters_title_element);
 
         if (invoke_contract.parameters.length > 0) {
