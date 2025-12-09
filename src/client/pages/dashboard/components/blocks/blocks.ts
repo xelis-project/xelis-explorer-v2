@@ -47,5 +47,6 @@ export class DashboardBlocks {
         if (last_block_item) {
             last_block_item.box.element.remove();
         }
+        return last_block_item;
     }
 }
