@@ -19,6 +19,7 @@ export class ContractsPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Contracts`);
+        this.description = localization.get_text(`List of all deployed smart contracts.`);
     }
 
     master: Master;

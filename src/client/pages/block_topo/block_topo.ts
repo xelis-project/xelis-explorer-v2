@@ -31,6 +31,7 @@ export class BlockTopoPage extends Page {
 
         const block_topoheight = parseInt(id);
         this.title = localization.get_text(`Block Topo {}`, [block_topoheight.toLocaleString()]);
+        this.description = localization.get_text(`Block details of {}`, [block_topoheight.toLocaleString()]);
 
         try {
             const block = await daemon.getBlockAtTopoheight({

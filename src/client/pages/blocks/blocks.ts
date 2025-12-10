@@ -17,6 +17,7 @@ export class BlocksPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Blocks`);
+        this.description = localization.get_text(`List of mined blocks.`);
     }
 
     master: Master;

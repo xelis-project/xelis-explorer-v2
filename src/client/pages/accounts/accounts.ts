@@ -17,6 +17,7 @@ export class AccountsPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Accounts`);
+        this.description = localization.get_text(`List of all the registered accounts.`);
     }
 
     master: Master;

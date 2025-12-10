@@ -16,6 +16,7 @@ export class KnownAccountsPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Known Accounts`);
+        this.description = localization.get_text(`List of popular/known accounts.`);
     }
 
     master: Master;

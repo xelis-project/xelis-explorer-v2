@@ -20,6 +20,7 @@ export class SettingsPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Settings`);
+        this.description = localization.get_text(`Set your preferences, manage connections and other controls.`);
     }
 
     master: Master;

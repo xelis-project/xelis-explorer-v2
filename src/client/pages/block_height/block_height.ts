@@ -41,6 +41,7 @@ export class BlockHeightPage extends Page {
 
         const block_height = parseInt(id);
         this.title = localization.get_text(`Block Height {}`, [block_height.toLocaleString()]);
+        this.description = localization.get_text(`List of blocks at height {}`, [block_height.toLocaleString()]);
 
         try {
             const blocks = await daemon.getBlocksAtHeight({

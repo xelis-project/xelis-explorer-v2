@@ -132,6 +132,7 @@ export class AccountPage extends Page {
 
         const addr = id;
         this.title = localization.get_text(`Account {}`, [addr]);
+        this.description = localization.get_text(`The account history of {}.`, [addr]);
 
         try {
             this.server_data = await this.load_server_data(daemon, addr);

@@ -12,6 +12,7 @@ export class NotFoundPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Page Not Found`);
+        this.description = localization.get_text(`The interface you are looking for does not exists or was deleted.`);
     }
 
     master: Master;
