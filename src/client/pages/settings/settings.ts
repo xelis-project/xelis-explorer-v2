@@ -78,8 +78,7 @@ export class SettingsPage extends Page {
 
         const http_node_connection_item = new SettingsItem();
         http_node_connection_item.title_element.innerHTML = localization.get_text(`HTTP NODE CONNECTION`);
-        http_node_connection_item.description_element.innerHTML = localization.get_text(`Specify the URL of your own node. The explorer will use it to fetch initial data and perform other requests.
-`);
+        http_node_connection_item.description_element.innerHTML = localization.get_text(`Specify the URL of your own node. The explorer will use it to fetch initial data and perform other requests.`);
         container.element.appendChild(http_node_connection_item.element);
 
         const http_connection_input = document.createElement(`input`);
