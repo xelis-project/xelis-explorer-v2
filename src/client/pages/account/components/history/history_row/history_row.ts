@@ -32,7 +32,7 @@ export class HistoryRow extends Row {
     }
 
     set_topoheight(height: number) {
-        this.value_cells[0].innerHTML = `<a href="/height/${height}">${height.toLocaleString()}</a>`;
+        this.value_cells[0].innerHTML = `<a href="/topo/${height}">${height.toLocaleString()}</a>`;
     }
 
     set_hash(hash: string) {

@@ -18,6 +18,7 @@ export class TransactionsPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Transactions`);
+        this.description = localization.get_text(`List of recent executed transactions.`);
     }
 
     master: Master;

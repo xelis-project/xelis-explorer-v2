@@ -132,6 +132,7 @@ export class AccountPage extends Page {
 
         const addr = id;
         this.title = localization.get_text(`Account {}`, [addr]);
+        this.description = localization.get_text(`The account history of {}.`, [addr]);
 
         try {
             this.server_data = await this.load_server_data(daemon, addr);
@@ -213,8 +214,8 @@ export class AccountPage extends Page {
         const assets = [] as AssetWithData[];
         for (let i = 0; i < hashes.length; i++) {
             const hash = hashes[i];
-            //const asset = await xelis_node.ws.methods.getAsset({ asset: hash });
-            //assets.push({ asset: hash, ...asset });
+            const asset = await xelis_node.ws.methods.getAsset({ asset: hash });
+            assets.push({ asset: hash, ...asset });
         }
         this.account_assets.set(assets);
         this.page_data.assets = assets;
@@ -275,7 +276,7 @@ export class AccountPage extends Page {
         await this.load_account();
         this.listen_node_events();
 
-        const { addr, server_data, assets } = this.page_data;
+        const { addr, server_data } = this.page_data;
         if (addr && server_data) {
             this.set_element(this.master.element);
 
@@ -283,7 +284,7 @@ export class AccountPage extends Page {
             this.account_known_addr.set(addr);
 
             await this.load_assets();
-            this.account_history.set(addr, server_data, assets);
+            this.account_history.set(addr, server_data, this.page_data.assets);
             this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
         } else {
             this.set_element(NotFoundPage.instance().element);

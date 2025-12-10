@@ -35,8 +35,8 @@ export class TransactionBurn {
                 ${icons.burn()}
                 <div>
                     <div>${format_hash(burn.asset)}</div>
+                    <div>${asset_amount_string}</div>
                 </div>
-                <div>${asset_amount_string}</div>
             `;
         }
 

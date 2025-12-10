@@ -7,12 +7,19 @@ import { PeersSearch } from "./components/search/search";
 import { PeersList } from "./components/list/list";
 import { PeersChart } from "./components/chart/chart";
 import { Box } from "../../components/box/box";
+import { ServerApp } from "../../../server";
+import { Context } from "hono";
+import { localization } from "../../localization/localization";
 
 import './peers.css';
 
 export class PeersPage extends Page {
     static pathname = "/peers";
-    static title = "Peers";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = localization.get_text(`Peers`);
+        this.description = localization.get_text(`Map with list of network peers. Monitor connected peers, network status and geo location.`);
+    }
 
     master: Master;
 

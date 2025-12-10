@@ -30,6 +30,7 @@ export class DashboardPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Dashboard`);
+        this.description = localization.get_text(`Dive into the XELIS Explorer. Navigate the blockchain, verify transactions, and access specific metadata.`);
     }
 
     dashboard_top_stats: DashboardTopStats;

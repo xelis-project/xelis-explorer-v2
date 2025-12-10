@@ -1,13 +1,20 @@
+import { Context } from "hono";
+import { ServerApp } from "../../../server";
 import { App } from "../../app/app";
 import icons from "../../assets/svg/icons";
 import { DAG } from "../../components/dag/dag";
 import { Page } from "../page";
+import { localization } from "../../localization/localization";
 
 import './dag.css';
 
 export class DAGPage extends Page {
     static pathname = "/dag";
-    static title = "DAG";
+
+    static async handle_server(c: Context<ServerApp>) {
+        this.title = `DAG Visualizer`;
+        this.description = localization.get_text(`Watch live blocks build the blockchain — in real time.`);
+    }
 
     dag: DAG;
 

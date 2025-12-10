@@ -15,6 +15,10 @@
     }
 }
 
+.xe-account-history-table {
+    overflow-x: auto;
+}
+
 .xe-account-history> :nth-child(1) {
     display: flex;
     gap: 1rem;

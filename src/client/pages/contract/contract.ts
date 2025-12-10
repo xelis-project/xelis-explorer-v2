@@ -79,6 +79,7 @@ export class ContractPage extends Page {
 
         const contract_hash = id;
         this.title = localization.get_text(`Contract {}`, [contract_hash]);
+        this.description = localization.get_text(`Contract details of {}`, [contract_hash]);
 
         try {
             this.server_data = await this.load_server_data(daemon, contract_hash);
@@ -144,7 +145,7 @@ export class ContractPage extends Page {
         const { server_data } = this.page_data;
         if (server_data && server_data.contract_module && server_data.transaction) {
             this.set_element(this.master.element);
-            
+
             const contract_hash = server_data.transaction.hash;
 
             /*

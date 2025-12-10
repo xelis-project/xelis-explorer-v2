@@ -6,8 +6,8 @@ import { validate_lang_key } from "../localization/supported_languages";
 export type SettingsHashFormat = "front" | "middle" | "back";
 export const hash_formats = ["front", "middle", "back"];
 
-export type SettingsMenuType = "header_menu" | "collapsed_menu";
-export const menu_types = ["header_menu", "collapsed_menu"];
+export type SettingsMenuType = "header_menu" | "collapsed_menu" | "collapsed_menu_left";
+export const menu_types = ["header_menu", "collapsed_menu", "collapsed_menu_left"];
 
 export function valid_menu_types(value: string) {
     return menu_types.indexOf(value) !== -1;

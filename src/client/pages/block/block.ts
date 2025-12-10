@@ -45,6 +45,7 @@ export class BlockPage extends Page {
 
         const daemon = new DaemonRPC(c.get(`node_endpoint`));
         this.title = localization.get_text(`Block {}`, [block_hash]);
+        this.description = localization.get_text(`Block details of {}`, [block_hash]);
 
         try {
             const block = await daemon.getBlockByHash({

@@ -1,11 +1,10 @@
-import { Block, RPCMethod, Transaction } from "@xelis/sdk/daemon/types";
+import { Block } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { Table } from "../../../../components/table/table";
-import { XelisNode } from "../../../../app/xelis_node";
 import { TxRow } from "../tx_row/tx_row";
-import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { localization } from "../../../../localization/localization";
 import { TxDataHover } from "../../../../components/tx_data_hover/tx_data_hover";
+import { fetch_block_txs } from "../../../../fetch_helpers/fetch_block_txs";
 
 import './txs.css';
 
@@ -38,30 +37,11 @@ export class BlockTxs {
     }
 
     async load(block: Block) {
-        const node = XelisNode.instance();
-        // A block with a lot of txs: e3818b9824351af0cbae4db51bd73381bb5838949a76d65d910a9bf0d48cdc2e
-        const requests = [] as RPCRequest[];
-        for (let i = 0; i < block.txs_hashes.length; i += 20) {
-            const tx_hashes = block.txs_hashes.slice(i, i + 20);
-            requests.push({
-                method: RPCMethod.GetTransactions,
-                params: { tx_hashes }
-            });
-        }
-
-        let txs = [] as Transaction[];
-        const res = await node.rpc.batchRequest(requests);
-        res.forEach((result) => {
-            if (result instanceof Error) {
-                console.log(result)
-            } else {
-                txs = [...txs, ...result as any];
-            }
-        });
+        await fetch_block_txs(block);
 
         this.table.body_element.replaceChildren();
-        if (txs.length > 0) {
-            txs.forEach((tx) => {
+        if (block.transactions && block.transactions.length > 0) {
+            block.transactions.forEach((tx) => {
                 const tx_row = new TxRow();
                 tx_row.set(tx);
 

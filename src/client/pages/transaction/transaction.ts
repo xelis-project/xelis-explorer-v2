@@ -81,6 +81,7 @@ export class TransactionPage extends Page {
 
         const tx_hash = id;
         this.title = localization.get_text(`Transaction {}`, [tx_hash]);
+        this.description = localization.get_text(`Transaction details of {}`, [tx_hash]);
 
         try {
             this.server_data = await this.load_server_data(daemon, tx_hash);

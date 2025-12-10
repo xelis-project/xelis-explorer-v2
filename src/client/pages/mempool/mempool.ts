@@ -20,6 +20,7 @@ export class MempoolPage extends Page {
 
     static async handle_server(c: Context<ServerApp>) {
         this.title = localization.get_text(`Mempool`);
+        this.description = localization.get_text(`Monitor memory pool, view pending transactions and network congestion.`);
     }
 
     master: Master;
