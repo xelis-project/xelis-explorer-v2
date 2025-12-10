@@ -7,6 +7,7 @@ import { HistoryRow } from './history_row/history_row';
 import { AssetWithData } from '@xelis/sdk/daemon/types';
 import icons from '../../../../assets/svg/icons';
 import { AccountServerData } from '../../account';
+import { format_hash } from '../../../../utils/format_hash';
 
 import './history.css';
 
@@ -76,16 +77,8 @@ export class AccountHistory {
 
         controls_container.appendChild(this.flow_filter_select.element);
 
-        const assets_filter = {
-            "": localization.get_text(`All Assets`),
-        } as Record<string, string>;
-
         this.asset_filter_select = new Select();
-        Object.keys(assets_filter).forEach((key) => {
-            this.asset_filter_select.add_item(key, assets_filter[key]);
-        });
-        this.asset_filter_select.set_value(assets_filter[`all`]);
-
+        this.asset_filter_select.set_value(localization.get_text(`All Assets`));
         this.asset_filter_select.add_listener(`change`, (key) => {
             this.filter_asset = key;
             this.load_history();
@@ -123,15 +116,21 @@ export class AccountHistory {
         this.topo_status = document.createElement(`div`);
     }
 
+    set_filter_assets(assets: AssetWithData[]) {
+        this.asset_filter_select.clear();
+
+        this.asset_filter_select.set_value(localization.get_text(`All Assets`));
+        this.asset_filter_select.add_item(``, localization.get_text(`All Assets`));
+        assets.forEach((asset) => {
+            this.asset_filter_select.add_item(asset.asset, `${asset.name} (${format_hash(asset.asset)})`);
+        });
+    }
+
     async set(addr: string, data: AccountServerData, assets: AssetWithData[]) {
         this.addr = addr;
         this.account_server_data = data;
 
-        this.asset_filter_select.clear();
-        assets.forEach((asset) => {
-            this.asset_filter_select.add_item(asset.asset, asset.name);
-        });
-
+        this.set_filter_assets(assets);
         await this.load_history();
     }
 
@@ -188,6 +187,10 @@ export class AccountHistory {
             maximum_topoheight: max_topo,
         });
         this.table.body_element.replaceChildren();
+
+        if (history.length === 0) {
+            this.table.set_empty(localization.get_text(`No history. Check whether any filtering options are applied.`));
+        }
 
         history.sort((a, b) => a.block_timestamp - b.block_timestamp);
         history.forEach((item) => {
