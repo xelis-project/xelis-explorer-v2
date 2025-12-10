@@ -2,6 +2,7 @@ import { AssetWithData } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../../components/container/container";
 import { Box } from "../../../../components/box/box";
 import { format_hash } from "../../../../utils/format_hash";
+import { localization } from "../../../../localization/localization";
 
 import './assets.css';
 
@@ -14,7 +15,7 @@ export class AccountAssets {
         this.container.element.classList.add(`xe-account-assets`, `scrollbar-1`, `scrollbar-1-bottom`);
 
         const title_element = document.createElement(`div`);
-        title_element.innerHTML = `ASSETS`;
+        title_element.innerHTML = localization.get_text(`ASSETS`);
         this.container.element.appendChild(title_element);
 
         this.items_element = document.createElement(`div`);

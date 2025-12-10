@@ -71,7 +71,7 @@ export class DashboardSearch {
                 }
 
                 if (error) {
-                    alert('Invalid or unknown transaction / block.');
+                    alert(localization.get_text(`Invalid or unknown transaction / block.`));
                     return;
                 }
             }
@@ -88,12 +88,12 @@ export class DashboardSearch {
                         return;
                     }
                 } catch {
-                    alert('Invalid or unknown account.');
+                    alert(localization.get_text(`Invalid or unknown account.`));
                     return;
                 }
             }
 
-            alert('Invalid search value. You can provide block topo, block hash, transaction hash or account address.');
+            alert(localization.get_text(`Invalid search value. You can provide block topo, block hash, transaction hash or account address.`));
         }
     }
 }

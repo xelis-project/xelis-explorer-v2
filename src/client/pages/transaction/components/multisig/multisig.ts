@@ -1,6 +1,7 @@
 import { MultiSigPayload } from "@xelis/sdk/daemon/types";
 import { Box } from "../../../../components/box/box";
 import { Container } from "../../../../components/container/container";
+import { localization } from "../../../../localization/localization";
 
 import './multisig.css';
 
@@ -12,11 +13,11 @@ export class TransactionMultiSig {
         this.container.element.classList.add(`xe-transaction-multisig`);
 
         const title_element = document.createElement(`div`);
-        title_element.innerHTML = `MULTI SIG`;
+        title_element.innerHTML = localization.get_text(`MULTI SIG`);
         this.container.element.appendChild(title_element);
 
         const threshold_title = document.createElement(`div`);
-        threshold_title.innerHTML = `THRESHOLD`;
+        threshold_title.innerHTML = localization.get_text(`THRESHOLD`);
         this.container.element.appendChild(threshold_title);
 
         const threshold_value = document.createElement(`div`);
@@ -24,7 +25,7 @@ export class TransactionMultiSig {
         this.container.element.appendChild(threshold_value);
 
         const participants_title = document.createElement(`div`);
-        participants_title.innerHTML = `PARTICIPANTS`;
+        participants_title.innerHTML = localization.get_text(`PARTICIPANTS`);
 
         this.container.element.appendChild(participants_title);
 

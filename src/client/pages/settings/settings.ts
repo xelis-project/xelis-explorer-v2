@@ -98,7 +98,7 @@ export class SettingsPage extends Page {
                 const new_endpoint = http_connection_input.value;
                 const daemon = new DaemonRPC(new_endpoint);
                 const info = await daemon.getInfo();
-                alert(`Connection successful. Node: ${info.network} - ${info.version}`);
+                alert(localization.get_text(`Connection successful. Node: {} - {}`, [info.network, info.version]));
 
                 settings.node_http_connection = new_endpoint;
                 settings.save();
@@ -113,7 +113,7 @@ export class SettingsPage extends Page {
         http_connection_reset.title = localization.get_text(`Reset to default seed node.`);
 
         http_connection_reset.addEventListener(`click`, () => {
-            const yes = window.confirm(`Are you sure you want to reset the http node connection?`);
+            const yes = window.confirm(localization.get_text(`Are you sure you want to reset the http node connection?`));
             if (!yes) return;
 
             settings.clear_node_http_connection();
@@ -151,14 +151,14 @@ export class SettingsPage extends Page {
                 const daemon = new DaemonWS(new_endpoint);
                 daemon.socket.addEventListener(`open`, async () => {
                     const info = await daemon.methods.getInfo();
-                    alert(`Connection successful. Node ${info.network} - ${info.version}`);
+                    alert(localization.get_text(`Connection successful. Node {} - {}`, [info.network, info.version]));
                     daemon.socket.close();
 
                     settings.node_ws_connection = new_endpoint;
                     settings.save();
                 });
                 daemon.socket.addEventListener(`error`, (e) => {
-                    alert(`An error occurred while trying to connect.`);
+                    alert(localization.get_text(`An error occurred while trying to connect.`));
                 });
             } catch (e) {
                 alert(e);
@@ -171,7 +171,7 @@ export class SettingsPage extends Page {
         ws_connection_reset.title = localization.get_text(`Reset to default seed node.`);
 
         ws_connection_reset.addEventListener(`click`, () => {
-            const yes = window.confirm(`Are you sure you want to reset the websocket node connection?`);
+            const yes = window.confirm(localization.get_text(`Are you sure you want to reset the websocket node connection?`));
             if (!yes) return;
 
             settings.del_storage_item(`node_ws_connection`);
