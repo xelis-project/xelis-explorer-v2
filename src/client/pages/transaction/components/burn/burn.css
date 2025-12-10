@@ -24,11 +24,11 @@
 }
 
 .xe-transaction-burn-box-1>:nth-child(2)>:first-child {
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
 
-.xe-transaction-burn-box-1>:nth-child(3) {
-    font-size: 2rem;
+.xe-transaction-burn-box-1>:nth-child(2)>:nth-child(2) {
+    font-size: 1.5rem;
     font-weight: bold;
     white-space: nowrap;
 }
