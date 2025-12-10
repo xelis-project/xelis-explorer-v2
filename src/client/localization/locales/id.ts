@@ -90,7 +90,7 @@ export default {
     "LAST 100 BLOCKS": "100 BLOK TERAKHIR",
     "BLOCK TIME": "WAKTU BLOK",
     "POOLS & MINERS": "POOL & PENAMBANG",
-    "DAG Graph Inspector": "Inspektur Grafis DAG",
+    "DAG Inspector": "Inspektur DAG",
     "Search block, transaction or account address": "Cari blok, transaksi, atau alamat akun",
     "MAX SUPPLY": "PASOKAN MAKS",
     "CIRC SUPPLY": "PASOKAN BEREDAR",
