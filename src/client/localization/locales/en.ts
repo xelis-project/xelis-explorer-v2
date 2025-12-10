@@ -90,7 +90,7 @@ export default {
     "LAST 100 BLOCKS": "LAST 100 BLOCKS",
     "BLOCK TIME": "BLOCK TIME",
     "POOLS & MINERS": "POOLS & MINERS",
-    "DAG Graph Inspector": "DAG Graph Inspector",
+    "DAG Inspector": "DAG Inspector",
     "Search block, transaction or account address": "Search block, transaction or account address",
     "MAX SUPPLY": "MAX SUPPLY",
     "CIRC SUPPLY": "CIRC SUPPLY",
