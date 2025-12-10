@@ -13,7 +13,7 @@ export class DashboardDAG {
         this.container.element.classList.add(`xe-dashboard-dag`);
 
         const title_element = document.createElement(`div`);
-        title_element.innerHTML = localization.get_text(`DAG Graph Inspector`);
+        title_element.innerHTML = localization.get_text(`DAG Inspector`);
         this.container.element.appendChild(title_element);
 
         this.dag = new DAG();
