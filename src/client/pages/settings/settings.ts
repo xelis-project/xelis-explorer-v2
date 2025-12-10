@@ -223,7 +223,8 @@ export class SettingsPage extends Page {
 
         const menu_types = {
             "header_menu": localization.get_text("HEADER MENU"),
-            "collapsed_menu": localization.get_text("COLLAPSED MENU")
+            "collapsed_menu": localization.get_text("COLLAPSED MENU (RIGHT)"),
+            "collapsed_menu_left": localization.get_text("COLLAPSED MENU (LEFT)")
         } as Record<string, string>;
 
         const menu_type_select = new Select();

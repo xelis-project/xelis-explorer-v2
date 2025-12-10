@@ -4,6 +4,8 @@ import icons from '../../assets/svg/icons';
 
 import './collapsed_menu.css';
 
+type CollapsedMenuPosition = "left" | "right";
+
 export class CollapsedMenu {
     element: HTMLElement;
     toggle_element: HTMLButtonElement;
@@ -54,5 +56,10 @@ export class CollapsedMenu {
             setTimeout(() => this.links_element.classList.remove(`close`), 250);
             //}
         });
+    }
+
+    set_position(position: CollapsedMenuPosition) {
+        if (position === `left`) this.element.classList.add(`left`);
+        else this.element.classList.remove(`left`);
     }
 }

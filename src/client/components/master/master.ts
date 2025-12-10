@@ -25,8 +25,14 @@ export class Master {
         this.element.appendChild(this.background.element);
 
         this.collapsed_menu = new CollapsedMenu();
-        if (settings.menu_type === `collapsed_menu`) {
-            this.element.appendChild(this.collapsed_menu.element);
+        switch (settings.menu_type) {
+            case "collapsed_menu":
+                this.element.appendChild(this.collapsed_menu.element);
+                break;
+            case "collapsed_menu_left":
+                this.element.appendChild(this.collapsed_menu.element);
+                this.collapsed_menu.set_position("left");
+                break;
         }
 
         this.layout = document.createElement(`div`);
