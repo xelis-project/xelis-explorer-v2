@@ -5,7 +5,8 @@ export const get_supported_languages = () => {
         { title: localization.get_text(`English`), key: "en", flag: "us" },
         { title: localization.get_text(`French`), key: "fr", flag: "fr" },
         { title: localization.get_text(`Spanish`), key: "es", flag: "es" },
-        { title: localization.get_text(`German`), key: "de", flag: "de" }
+        { title: localization.get_text(`German`), key: "de", flag: "de" },
+        { title: localization.get_text(`Indonesian`), key: "id", flag: "id" }
     ] as { title: string, key: Locale, flag: string }[];
 }
 
