@@ -86,10 +86,14 @@ export class AccountHistory {
 
         controls_container.appendChild(this.asset_filter_select.element);
 
+        const table_container = document.createElement(`div`);
+        table_container.classList.add(`xe-account-history-table`, `scrollbar-1`, `scrollbar-1-rounded`)
+        this.container.element.appendChild(table_container);
+
         this.table = new Table();
-        this.table.element.classList.add(`scrollbar-1`, `scrollbar-1-right`);
+        this.table.element.classList.add();
         this.table.set_clickable();
-        this.container.element.appendChild(this.table.element);
+        table_container.appendChild(this.table.element);
         this.table.set_head_row(titles);
 
         this.pager_container = document.createElement(`div`);
