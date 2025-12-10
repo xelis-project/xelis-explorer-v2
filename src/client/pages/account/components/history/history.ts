@@ -140,6 +140,7 @@ export class AccountHistory {
             return;
         }
 
+        this.pager_container.replaceChildren();
         const last_topo = this.account_server_data.balance.topoheight;
         const first_topo = this.account_server_data.registration_topoheight;
 
