@@ -1,6 +1,7 @@
 import { BlockType } from "@xelis/sdk/daemon/types";
 
 import './block_type_box.css';
+import { localization } from "../../localization/localization";
 
 export const block_type_colors = {
     [BlockType.Normal]: `#F4D35E`,
@@ -24,6 +25,7 @@ export class BlockTypeBox {
         this.element.style.fontSize = `${75*size}%`;
         this.element.className = ``;
         this.element.innerHTML = `${block_type.slice(0,1).toUpperCase()}`
+        this.element.title = localization.get_text(`{} block`, [block_type.toString()]);
         this.element.classList.add(`xe-block-type-box`, `xe-block-type-box-${block_type.toLowerCase()}`);
     }
 
