@@ -230,18 +230,20 @@ export class TransactionPage extends Page {
             const transaction_deploy_contract = new TransactionDeployContract(transaction.hash, transaction.data.deploy_contract);
             this.transaction_type_container.appendChild(transaction_deploy_contract.container.element);
 
-            try {
-                const node = XelisNode.instance();
-                const contract_logs = await node.rpc.getContractLogs({
-                    caller: transaction.hash
-                });
+            if (transaction.data.deploy_contract.invoke) {
+                try {
+                    const node = XelisNode.instance();
+                    const contract_logs = await node.rpc.getContractLogs({
+                        caller: transaction.hash
+                    });
 
-                const transaction_contract_logs = new TransactionContractLogs(contract_logs);
-                this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
-            } catch (e) {
-                const container = new Container();
-                container.element.innerHTML = `${e}`
-                this.transaction_type_container.appendChild(container.element);
+                    const transaction_contract_logs = new TransactionContractLogs(contract_logs);
+                    this.transaction_type_container.appendChild(transaction_contract_logs.container.element);
+                } catch (e) {
+                    const container = new Container();
+                    container.element.innerHTML = `${e}`
+                    this.transaction_type_container.appendChild(container.element);
+                }
             }
         }
 
