@@ -59,13 +59,13 @@ export class ContractInfo {
         Box.content_loading(this.hash_element, loading);
     }
 
-    set(contract_hash: string, module: GetContractModuleResult) {
+    set(contract_hash: string, result: GetContractModuleResult) {
         this.hash_element.innerHTML = contract_hash;
-
-        if (module.data) {
-            this.constant_json_viewer_box.set_data(module.data.constants);
-            this.chunks_json_viewer_box.set_data(module.data.chunks);
-            this.hook_ids_box.element.innerHTML = JSON.stringify(module.data.hook_chunk_ids || [], null, 2);
+        const { data } = result;
+        if (data.module) {
+            this.constant_json_viewer_box.set_data(data.module.constants);
+            this.chunks_json_viewer_box.set_data(data.module.chunks);
+            this.hook_ids_box.element.innerHTML = JSON.stringify(data.module.hook_chunk_ids || [], null, 2);
         }
     }
 }
