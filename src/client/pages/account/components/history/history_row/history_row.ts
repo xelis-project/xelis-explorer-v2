@@ -36,7 +36,7 @@ export class HistoryRow extends Row {
     }
 
     set_hash(hash: string) {
-        this.value_cells[1].innerHTML = `<a href="/tx/${hash}">${format_hash(hash)}</a>`;
+        this.value_cells[1].innerHTML = `<a href="/block/${hash}">${format_hash(hash)}</a>`;
     }
 
     async set_type(history: AccountHistory) {
