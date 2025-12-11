@@ -11,6 +11,7 @@ import { DAGPage } from "../pages/dag/dag";
 import { DashboardPage } from "../pages/dashboard/dashboards";
 import { KnownAccountsPage } from "../pages/known_accounts/known_accounts";
 import { MempoolPage } from "../pages/mempool/mempool";
+import { NetworkUpgradesPage } from "../pages/network_upgrades/network_upgrades";
 import { NotFoundPage } from "../pages/not_found/not_found";
 import { Page } from "../pages/page";
 import { PeersPage } from "../pages/peers/peers";
@@ -35,7 +36,8 @@ export const pages = [
     ContractPage,
     ContractsPage,
     AssetsPage,
-    SettingsPage
+    SettingsPage,
+    NetworkUpgradesPage
 ];
 
 export const match_route = (url: URL): typeof Page => {

@@ -1,0 +1,13 @@
+.xe-network-upgrades {
+    animation: xe-network-upgrades-appear-animation .4s;
+}
+
+@keyframes xe-network-upgrades-appear-animation {
+    0% {
+        translate: 0 25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
