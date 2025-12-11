@@ -116,7 +116,7 @@ export class PeersPage extends Page {
 
     async load(parent: HTMLElement) {
         super.load(parent);
-        this.set_window_title(PeersPage.title);
+        this.set_window_title(localization.get_text(`Peers`));
 
         this.peers_chart.nodes_by_height.load();
         this.peers_chart.nodes_by_country.load();
