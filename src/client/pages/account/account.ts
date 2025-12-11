@@ -250,7 +250,10 @@ export class AccountPage extends Page {
                 });
 
                 if (balance.topoheight > server_data.balance.topoheight) {
-                    //this.account_history.load(addr);
+                    // refresh history only when we're on first page
+                    if (this.account_history.pager_topos.length === 0) {
+                        this.account_history.load_history();
+                    }
                 }
             }
         }
