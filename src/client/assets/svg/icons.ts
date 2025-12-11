@@ -241,11 +241,19 @@ export const lock = () => {
     `;
 }
 
+export const upgrade = () => {
+    return `
+        <svg fill="currentColor" height="800px" width="800px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12,1C5.92,1,1,5.92,1,12s4.92,11,11,11s11-4.92,11-11S18.08,1,12,1z M16.29,12.71L13,9.41V18h-2V9.41l-3.29,3.29l-1.41-1.41L12,5.59l5.71,5.71L16.29,12.71z"/>
+        </svg>
+    `;
+}
+
 export default {
     question_mark_shield, tag, exchange,
     home, empty_box, menu, dashboard, blocks,
     contract, compute, block_graph, network,
     search, connect, user, burn, cog, menu_alt,
     reset, save, caret_down, close, tokens,
-    wallet, arrow, dual_arrow, lock
+    wallet, arrow, dual_arrow, lock, upgrade
 };
