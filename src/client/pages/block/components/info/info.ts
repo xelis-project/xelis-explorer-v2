@@ -98,7 +98,7 @@ export class BlockInfo {
         sub_container.appendChild(topo_element);
 
         const text_element = document.createElement(`div`);
-        text_element.innerHTML = localization.get_text(`{} BLOCK`, [block_type.toUpperCase()]);
+        text_element.innerHTML = localization.get_text(`TOPOHEIGHT`);
         sub_container.appendChild(text_element);
     }
 
