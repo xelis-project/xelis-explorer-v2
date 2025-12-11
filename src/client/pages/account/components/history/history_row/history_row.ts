@@ -26,7 +26,7 @@ export class HistoryRow extends Row {
     set(account_history: AccountHistory) {
         this.data = account_history;
         this.set_topoheight(account_history.topoheight);
-        this.set_hash(account_history.hash);
+        this.set_hash(account_history);
         this.set_type(account_history);
         this.set_age(account_history.block_timestamp);
     }
@@ -35,8 +35,14 @@ export class HistoryRow extends Row {
         this.value_cells[0].innerHTML = `<a href="/topo/${height}">${height.toLocaleString()}</a>`;
     }
 
-    set_hash(hash: string) {
-        this.value_cells[1].innerHTML = `<a href="/block/${hash}">${format_hash(hash)}</a>`;
+    set_hash(account_history: AccountHistory) {
+        const { hash } = account_history;
+        let link = `/tx/${hash}`;
+        if (account_history.mining || account_history.dev_fee) {
+            link = `/block/${hash}`;
+        }
+
+        this.value_cells[1].innerHTML = `<a href="${link}">${format_hash(hash)}</a>`;
     }
 
     async set_type(history: AccountHistory) {
