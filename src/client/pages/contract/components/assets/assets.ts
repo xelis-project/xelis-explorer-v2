@@ -30,13 +30,13 @@ export class ContractAssets {
         const box = new Box();
         const node = XelisNode.instance();
 
-        const asset_element = document.createElement(`div`);
-        box.element.appendChild(asset_element);
-        asset_element.innerHTML = format_hash(asset);
-
         const topo_element = document.createElement(`div`);
         box.element.appendChild(topo_element);
         topo_element.innerHTML = `${balance.topoheight.toLocaleString()} (${balance.previous_topoheight ? balance.previous_topoheight.toLocaleString() : `--`})`;
+
+        const asset_element = document.createElement(`div`);
+        box.element.appendChild(asset_element);
+        asset_element.innerHTML = format_hash(asset);
 
         const balance_element = document.createElement(`div`);
         box.element.appendChild(balance_element);
@@ -48,7 +48,7 @@ export class ContractAssets {
 
     async load(contract_hash: string) {
         this.list_element.replaceChildren();
-        Box.list_loading(this.list_element, 10, `3rem`);
+        Box.list_loading(this.list_element, 5, `1rem`);
 
         const node = XelisNode.instance();
 
