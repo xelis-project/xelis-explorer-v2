@@ -21,6 +21,7 @@ export const get_menu_links = () => {
         "/mempool": { text: localization.get_text(`MEMPOOL`), icon: icons.compute() },
         "/dag": { text: localization.get_text(`DAG`), icon: icons.block_graph() },
         "/peers": { text: localization.get_text(`PEERS`), icon: icons.network() },
+        "/network-upgrades": { text: localization.get_text(`NETWORK UPGRADES`), icon: icons.upgrade() },
         "/settings": { text: localization.get_text(`SETTINGS`), icon: icons.cog() },
     } as Record<string, LinkDef>;
 }
