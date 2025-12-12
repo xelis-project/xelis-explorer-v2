@@ -336,12 +336,17 @@ export class DashboardPage extends Page {
 
         this.set_window_title(localization.get_text(`Dashboard`));
 
+
         // the chart load ordering is important
         // loading pool chart first define the width for the others
         this.dashboard_chart_section_2.pools.load();
-        this.dashboard_chart_section_2.block_time.load();
         this.dashboard_chart_section_2.hashrate.load();
         this.dashboard_chart_section_1.blocks_txs.load();
+
+        // wait to fix the legend being hidden
+        setTimeout(() => {
+            this.dashboard_chart_section_2.block_time.load();
+        }, 500);
 
         this.listen_node_events();
 
