@@ -1,8 +1,13 @@
 .xe-network-upgrades {
-    animation: xe-network-upgrades-appear-animation .4s;
+
 }
 
-@keyframes xe-network-upgrades-appear-animation {
+.xe-network-upgrades-table {
+    animation: xe-network-upgrades-table-appear-animation .4s;
+    overflow-x: auto;
+}
+
+@keyframes xe-network-upgrades-table-appear-animation {
     0% {
         translate: 0 25%;
     }

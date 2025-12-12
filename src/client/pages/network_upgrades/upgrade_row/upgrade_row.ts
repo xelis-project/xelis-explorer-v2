@@ -9,12 +9,12 @@ export class UpgradeRow extends Row {
         super(5);
     }
 
-    set(hard_fork: HardFork) {
+    set(hard_fork: HardFork, top_block: Block) {
         this.set_changelog(hard_fork.changelog);
         this.set_height(hard_fork.height);
         this.set_version(hard_fork.version);
         this.set_version_requirement(hard_fork.version_requirement);
-        this.set_online_date(hard_fork);
+        this.set_online_date(hard_fork.height, top_block);
     }
 
     set_changelog(changelog: string) {
@@ -33,10 +33,10 @@ export class UpgradeRow extends Row {
         this.value_cells[3].innerHTML = version_requirement ? version_requirement : `--`;
     }
 
-    async set_online_date(hard_fork: HardFork) {
+    async set_online_date(height: number, top_block: Block) {
         const node = XelisNode.instance();
         const blocks = await node.ws.methods.getBlocksAtHeight({
-            height: hard_fork.height,
+            height: height,
             include_txs: false
         });
 
@@ -46,8 +46,7 @@ export class UpgradeRow extends Row {
             this.value_cells[4].innerHTML = date.toLocaleString();
         } else {
             // guess the date
-            const top_block = await node.ws.methods.getTopBlock({ include_txs: false });
-            const expected_timestamp = Date.now() + ((hard_fork.height - top_block.height) * 15000);
+            const expected_timestamp = Date.now() + ((height - top_block.height) * 15000);
             const date = new Date(expected_timestamp);
             this.value_cells[4].innerHTML = `~${date.toLocaleString()}`;
             this.value_cells[4].className = `xe-network-upgrade-guess`;

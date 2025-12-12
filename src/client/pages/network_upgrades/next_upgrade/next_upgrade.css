@@ -1,0 +1,59 @@
+.xe-next-upgrade {
+    animation: xe-next-upgrade-appear-animation .4s;
+}
+
+@keyframes xe-next-upgrade-appear-animation {
+    0% {
+        translate: 0 -25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-next-upgrade> :nth-child(1) {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+	align-items: center;
+	padding: 5rem;
+	position: relative;
+}
+
+.xe-next-upgrade> :nth-child(1)> :nth-child(1) {
+	font-size: 1.5rem;
+}
+
+.xe-next-upgrade> :nth-child(1)> :nth-child(2) {
+	color: #2cffcf;
+	font-size: 1rem;
+}
+
+.xe-next-upgrade> :nth-child(1)> :nth-child(3) {
+	display: flex;
+	gap: .25rem;
+	flex-direction: column;
+	align-items: center;
+	font-size: .9rem;
+}
+
+.xe-next-upgrade> :nth-child(1)> :nth-child(3) span {
+	color: #afafaf;
+}
+
+.xe-next-upgrade-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    filter: saturate(0.5) opacity(0.3);
+    height: 100%;
+    z-index: -1;
+    mask-image: linear-gradient(to right, black 50%, transparent 100%);
+}
+
+@media screen and (max-width: 700px) {
+	.xe-next-upgrade-img {
+		  filter: saturate(0.5) opacity(0.2) blur(2px);
+	}
+}
