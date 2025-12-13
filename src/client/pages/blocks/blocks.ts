@@ -79,12 +79,19 @@ export class BlocksPage extends Page {
 
     on_new_block = async (new_block?: Block, err?: Error) => {
         if (this.is_blocks_pager_active()) return;
-
         console.log("new_block", new_block);
 
         const { info } = this.page_data;
 
         if (new_block && info) {
+            if (this.prev_next_pager.pager_max && this.prev_next_pager.pager_next &&
+                new_block.height > this.prev_next_pager.pager_max) {
+                this.prev_next_pager.pager_max = new_block.height;
+                this.prev_next_pager.pager_current = new_block.height;
+                this.prev_next_pager.pager_next++;
+                this.prev_next_pager.render();
+            }
+
             const block_row = new BlockRow();
             block_row.set(new_block, info.block_time_target);
             this.table.prepend_row(block_row.element);
