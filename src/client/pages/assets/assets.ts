@@ -88,7 +88,7 @@ export class AssetsPage extends Page {
         const assets = await xelis_node.rpc.getAssets({ skip, maximum });
 
         const asset_rows = [] as AssetRow[];
-        for (let i = 0; i < assets.length; i += 10) {
+        for (let i = 0; i < assets.length; i++) {
             const asset_row = new AssetRow();
             asset_row.set(assets[i]);
             asset_rows.push(asset_row);
