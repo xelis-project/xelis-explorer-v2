@@ -10,6 +10,7 @@ import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 import { localization } from "../../localization/localization";
 import { Context } from "hono";
 import { ServerApp } from "../../../server";
+import { PrevNextPager } from "../../components/prev_next_pager/prev_next_pager";
 
 import './transactions.css';
 
@@ -25,6 +26,7 @@ export class TransactionsPage extends Page {
 
     container_table: Container;
     table: Table;
+    prev_next_pager: PrevNextPager;
 
     tx_rows: TxRow[];
     page_data: {
@@ -60,6 +62,10 @@ export class TransactionsPage extends Page {
             localization.get_text(`AGE`)
         ];
         this.table.set_head_row(titles);
+
+        this.prev_next_pager = new PrevNextPager();
+        this.prev_next_pager.load_func = () => this.load_transactions();
+        this.container_table.element.appendChild(this.prev_next_pager.element);
     }
 
     update_interval_1000_id?: number;
@@ -72,6 +78,7 @@ export class TransactionsPage extends Page {
     }
 
     on_transaction_executed = async (transaction_executed?: TransactionExecuted, err?: Error) => {
+        if (this.is_txs_pager_active()) return;
         console.log("transaction_executed", transaction_executed);
 
         if (transaction_executed) {
@@ -84,11 +91,27 @@ export class TransactionsPage extends Page {
             this.table.prepend_row(new_tx_row.element);
             new_tx_row.animate_prepend();
 
-            if (this.tx_rows.length > 5) {
-                this.tx_rows.pop();
-                this.table.remove_last();
+            if (this.prev_next_pager.pager_max && this.prev_next_pager.pager_next &&
+                block.height > this.prev_next_pager.pager_max) {
+                this.prev_next_pager.pager_max = block.height;
+                this.prev_next_pager.pager_current = block.height;
+                this.prev_next_pager.pager_next++;
+                this.prev_next_pager.render();
+
+                // remove txs for specific height
+                for (let i = 0; i < this.tx_rows.length; i++) {
+                    const tx_row = this.tx_rows[i];
+                    if (tx_row.block && tx_row.block.height < this.prev_next_pager.pager_next) {
+                        this.tx_rows.splice(i, 1);
+                        tx_row.element.remove();
+                    }
+                }
             }
         }
+    }
+
+    is_txs_pager_active() {
+        return this.prev_next_pager.pager_numbers.length > 0;
     }
 
     clear_node_events() {
@@ -101,18 +124,18 @@ export class TransactionsPage extends Page {
         node.ws.methods.addListener(DaemonRPCEvent.TransactionExecuted, null, this.on_transaction_executed);
     }
 
-    async load(parent: HTMLElement) {
-        super.load(parent);
-        this.set_window_title(localization.get_text(`Transactions`));
-        this.listen_node_events();
-        const node = XelisNode.instance();
+    async load_transactions() {
+        const { info } = this.page_data;
+        if (!info) return;
 
-        this.table.set_loading(100);
+        this.table.body_element.replaceChildren();
+        this.table.set_loading(20);
 
-        const info = await node.rpc.getInfo();
-        this.page_data.info = info;
+        this.prev_next_pager.pager_max = info.height;
+        this.prev_next_pager.pager_min = 0;
 
-        const blocks = await fetch_blocks(info.height, 100);
+        const end_height = this.prev_next_pager.get_next() || info.height;
+        const blocks = await fetch_blocks(end_height, 100);
         await fetch_blocks_txs(blocks);
 
         this.tx_rows = [];
@@ -128,9 +151,25 @@ export class TransactionsPage extends Page {
             }
         });
 
+        this.prev_next_pager.pager_current = blocks[blocks.length - 1].height;
+        this.prev_next_pager.pager_next = blocks[0].height - 1;
+        this.prev_next_pager.render();
+
         if (this.table.body_element.children.length === 0) {
-            this.table.set_empty(localization.get_text(`No recent transactions`));
+            this.table.set_empty(localization.get_text(`No transactions from {} to {}.`, [end_height.toLocaleString(), this.prev_next_pager.pager_next.toLocaleString()]));
         }
+    }
+
+    async load(parent: HTMLElement) {
+        super.load(parent);
+        this.set_window_title(localization.get_text(`Transactions`));
+        this.listen_node_events();
+        const node = XelisNode.instance();
+
+        const info = await node.rpc.getInfo();
+        this.page_data.info = info;
+
+        await this.load_transactions();
 
         this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
     }
