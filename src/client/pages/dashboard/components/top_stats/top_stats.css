@@ -13,7 +13,7 @@
     }
 }
 
-.xe-dashboard-top-stats > :nth-child(1) {
+.xe-dashboard-top-stats> :nth-child(1) {
     display: flex;
     gap: 1rem;
     flex-direction: column;
@@ -23,13 +23,13 @@
     display: flex;
     gap: 1rem;
     flex-direction: row;
-        overflow-x: auto;
+    overflow-x: auto;
 }
 
 @media screen and (min-width: 1100px) {
     .xe-dashboard-top-stats-container {
         flex-wrap: wrap;
-   
+
     }
 }
 
@@ -67,4 +67,21 @@
     font-size: 1rem;
     color: #afafaf;
     z-index: 1;
+}
+
+.xe-dashboard-top-stats-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    filter: saturate(0.5) opacity(0.3);
+    height: 100%;
+    z-index: -1;
+    mask-image: linear-gradient(to left, black 50%, transparent 100%);
+    border-radius: 1rem;
+}
+
+@media screen and (max-width: 1100px) {
+    .xe-dashboard-top-stats-img {
+        display: none;
+    }
 }
