@@ -21,7 +21,8 @@ export class TransactionDeployContract {
         this.title_element.innerHTML = localization.get_text(`DEPLOY CONTRACT`);
         this.container.element.appendChild(this.title_element);
 
-        const hash_element = document.createElement(`div`);
+        const hash_element = document.createElement(`a`);
+        hash_element.href = `/contract/${hash}`;
         hash_element.innerHTML = hash;
         this.container.element.appendChild(hash_element);
 
