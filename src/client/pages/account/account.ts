@@ -236,7 +236,7 @@ export class AccountPage extends Page {
     }
 
     on_new_block = async (new_block?: Block, err?: Error) => {
-        console.log("new_block", new_block)
+        console.log("new_block", new_block);
 
         if (new_block) {
             const node = XelisNode.instance();
@@ -251,12 +251,16 @@ export class AccountPage extends Page {
 
                 if (balance.topoheight > server_data.balance.topoheight) {
                     // refresh history only when we're on first page
-                    if (this.account_history.pager_topos.length === 0) {
+                    if (!this.is_history_pager_active()) {
                         this.account_history.load_history();
                     }
                 }
             }
         }
+    }
+
+    is_history_pager_active() {
+        return this.account_history.prev_next_pager.pager_numbers.length > 0;
     }
 
     clear_node_events() {
@@ -272,8 +276,6 @@ export class AccountPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
 
-        // Box.list_loading(this.incoming_history_list.list_element, 10, `3rem`);
-        //Box.list_loading(this.outgoing_history_list.list_element, 10, `3rem`);
         Box.list_loading(this.account_assets.items_element, 10, `.75rem`, `10rem`);
 
         await this.load_account();

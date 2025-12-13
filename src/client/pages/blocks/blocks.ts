@@ -9,6 +9,7 @@ import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
 import { localization } from "../../localization/localization";
 import { Context } from "hono";
 import { ServerApp } from "../../../server";
+import { PrevNextPager } from "../../components/prev_next_pager/prev_next_pager";
 
 import './blocks.css';
 
@@ -24,6 +25,7 @@ export class BlocksPage extends Page {
 
     container_table: Container;
     table: Table;
+    prev_next_pager: PrevNextPager;
 
     block_rows: BlockRow[];
     page_data: {
@@ -60,6 +62,10 @@ export class BlocksPage extends Page {
             localization.get_text(`AGE`),
         ];
         this.table.set_head_row(titles);
+
+        this.prev_next_pager = new PrevNextPager();
+        this.prev_next_pager.load_func = () => this.load_blocks();
+        this.container_table.element.appendChild(this.prev_next_pager.element);
     }
 
     update_interval_1000_id?: number;
@@ -72,7 +78,9 @@ export class BlocksPage extends Page {
     }
 
     on_new_block = async (new_block?: Block, err?: Error) => {
-        console.log("new_block", new_block)
+        if (this.is_blocks_pager_active()) return;
+
+        console.log("new_block", new_block);
 
         const { info } = this.page_data;
 
@@ -157,6 +165,40 @@ export class BlocksPage extends Page {
         node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
     }
 
+    is_blocks_pager_active() {
+        return this.prev_next_pager.pager_numbers.length > 0;
+    }
+
+    async load_blocks() {
+        const { info } = this.page_data;
+        if (!info) return;
+
+        this.prev_next_pager.pager_max = info.height;
+        this.prev_next_pager.pager_min = 0;
+
+        this.table.set_loading(20);
+        this.table.body_element.replaceChildren();
+
+        const node = XelisNode.instance();
+        const end_topo = this.prev_next_pager.get_next();
+        const blocks = await node.rpc.getBlocksRangeByHeight({
+            end_height: end_topo,
+            start_height: end_topo - 20
+        });
+        this.table.body_element.replaceChildren();
+
+        blocks.forEach((block) => {
+            const block_row = new BlockRow();
+            block_row.set(block, info.block_time_target);
+            this.table.prepend_row(block_row.element);
+            this.block_rows.push(block_row);
+        });
+
+        this.prev_next_pager.pager_current = blocks[blocks.length - 1].height;
+        this.prev_next_pager.pager_next = blocks[0].height - 1;
+        this.prev_next_pager.render();
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
         this.set_window_title(localization.get_text(`Blocks`));
@@ -169,6 +211,8 @@ export class BlocksPage extends Page {
         const info = await node.rpc.getInfo();
         this.page_data.info = info;
 
+        await this.load_blocks();
+        /*
         const blocks = await fetch_blocks(info.height, 100);
 
         this.table.body_element.replaceChildren();
@@ -177,7 +221,7 @@ export class BlocksPage extends Page {
             block_row.set(block, info.block_time_target);
             this.table.prepend_row(block_row.element);
             this.block_rows.push(block_row);
-        });
+        });*/
         this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
     }
 

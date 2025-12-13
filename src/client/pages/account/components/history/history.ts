@@ -8,6 +8,7 @@ import { AssetWithData } from '@xelis/sdk/daemon/types';
 import icons from '../../../../assets/svg/icons';
 import { AccountServerData } from '../../account';
 import { format_hash } from '../../../../utils/format_hash';
+import { PrevNextPager } from '../../../../components/prev_next_pager/prev_next_pager';
 
 import './history.css';
 
@@ -16,19 +17,12 @@ export class AccountHistory {
     table: Table;
     flow_filter_select: Select;
     asset_filter_select: Select;
-    prev_btn: HTMLButtonElement;
-    next_btn: HTMLButtonElement;
-    topo_status: HTMLDivElement;
-    pager_container: HTMLDivElement;
 
     account_server_data?: AccountServerData;
     addr?: string;
     filter_asset?: string;
     filter_direction?: string;
-
-    pager_topos: number[] = [];
-    pager_max_topo?: number;
-    pager_min_topo?: number;
+    prev_next_pager: PrevNextPager;
 
     history_rows: HistoryRow[];
 
@@ -96,28 +90,9 @@ export class AccountHistory {
         table_container.appendChild(this.table.element);
         this.table.set_head_row(titles);
 
-        this.pager_container = document.createElement(`div`);
-        this.pager_container.classList.add(`xe-account-history-pager`);
-        this.container.element.appendChild(this.pager_container);
-
-        this.prev_btn = document.createElement(`button`);
-        this.prev_btn.classList.add(`prev`);
-        this.prev_btn.innerHTML = icons.arrow() + `PREV`;
-        this.prev_btn.addEventListener(`click`, () => {
-            this.pager_topos.pop();
-            this.load_history();
-        });
-
-        this.next_btn = document.createElement(`button`);
-        this.next_btn.classList.add(`next`);
-        this.next_btn.innerHTML = `NEXT` + icons.arrow();
-        this.next_btn.addEventListener(`click`, () => {
-            if (!this.pager_min_topo) return;
-            this.pager_topos.push(this.pager_min_topo - 1); // next topo
-            this.load_history();
-        });
-
-        this.topo_status = document.createElement(`div`);
+        this.prev_next_pager = new PrevNextPager();
+        this.prev_next_pager.load_func = () => this.load_history();
+        this.container.element.appendChild(this.prev_next_pager.element);
     }
 
     set_filter_assets(assets: AssetWithData[]) {
@@ -135,30 +110,12 @@ export class AccountHistory {
         this.account_server_data = data;
 
         this.set_filter_assets(assets);
-        await this.load_history();
-    }
-
-    render_pager() {
-        if (!this.pager_max_topo || !this.pager_min_topo || !this.account_server_data) {
-            return;
-        }
-
-        this.pager_container.replaceChildren();
         const last_topo = this.account_server_data.balance.topoheight;
         const first_topo = this.account_server_data.registration_topoheight;
+        this.prev_next_pager.pager_max = last_topo;
+        this.prev_next_pager.pager_min = first_topo;
 
-        if (this.pager_max_topo < last_topo) {
-            this.pager_container.appendChild(this.prev_btn);
-        }
-
-        if (this.pager_min_topo > first_topo) {
-            this.pager_container.appendChild(this.next_btn);
-        }
-
-        const max_topo_string = this.pager_max_topo.toLocaleString();
-        const min_topo_string = this.pager_min_topo.toLocaleString();
-        this.topo_status.innerHTML = `From ${max_topo_string} to ${min_topo_string}`;
-        this.pager_container.appendChild(this.topo_status);
+        await this.load_history();
     }
 
     async load_history() {
@@ -182,7 +139,7 @@ export class AccountHistory {
 
         this.table.set_loading(20);
 
-        const max_topo = this.pager_topos[this.pager_topos.length - 1];
+        const max_topo = this.prev_next_pager.get_next();
         const history = await xelis_node.rpc.getAccountHistory({
             address: this.addr,
             asset: this.filter_asset ? this.filter_asset : undefined,
@@ -205,8 +162,8 @@ export class AccountHistory {
             this.table.prepend_row(history_row.element);
         });
 
-        this.pager_max_topo = history[history.length - 1].topoheight;
-        this.pager_min_topo = history[0].topoheight;
-        this.render_pager();
+        this.prev_next_pager.pager_current = history[history.length - 1].topoheight;
+        this.prev_next_pager.pager_next = history[0].topoheight - 1;
+        this.prev_next_pager.render();
     }
 }
