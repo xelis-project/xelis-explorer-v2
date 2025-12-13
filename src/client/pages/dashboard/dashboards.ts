@@ -118,7 +118,7 @@ export class DashboardPage extends Page {
     }
 
     on_new_block = async (new_block?: Block, err?: Error) => {
-        console.log("new_block", new_block)
+        console.log("new_block", new_block);
 
         if (new_block) {
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
