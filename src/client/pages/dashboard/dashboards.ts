@@ -342,11 +342,7 @@ export class DashboardPage extends Page {
         this.dashboard_chart_section_2.pools.load();
         this.dashboard_chart_section_2.hashrate.load();
         this.dashboard_chart_section_1.blocks_txs.load();
-
-        // wait to fix the legend being hidden
-        setTimeout(() => {
-            this.dashboard_chart_section_2.block_time.load();
-        }, 500);
+        this.dashboard_chart_section_2.block_time.load();
 
         this.listen_node_events();
 

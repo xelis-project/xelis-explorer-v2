@@ -92,7 +92,7 @@ export class DashboardBlockTime {
 
         const legend = this.chart.node
             .selectAll(`.legend`)
-            .data([{}]);
+            .data([null]);
 
         legend.exit().remove();
 
@@ -100,6 +100,7 @@ export class DashboardBlockTime {
             .enter()
             .append("g")
             .attr(`class`, `legend`)
+            .merge(legend as any)
             .call(d3.axisLeft(y_scale).tickFormat((d) => {
                 return prettyMilliseconds(d as number, { colonNotation: true });
             }).ticks(10));
