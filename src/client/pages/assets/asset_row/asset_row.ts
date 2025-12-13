@@ -1,12 +1,10 @@
-import { AssetCreator, AssetOwner, AssetWithData, GetContractBalanceResult, MaxSupplyFixed, MaxSupplyMintable } from "@xelis/sdk/daemon/types";
-import { format_xel } from "../../../utils/format_xel";
+import { AssetCreator, AssetOwner, AssetWithData, MaxSupplyFixed, MaxSupplyMintable } from "@xelis/sdk/daemon/types";
 import { Row } from "../../../components/table/row";
-import { ContractInfo } from "../../../fetch_helpers/fetch_contracts";
 import { format_hash } from "../../../utils/format_hash";
-
-import './asset_row.css';
 import { ws_format_asset } from "../../../utils/ws_format_asset";
 import { XelisNode } from "../../../app/xelis_node";
+
+import './asset_row.css';
 
 export class AssetRow extends Row {
     constructor() {
@@ -52,14 +50,16 @@ export class AssetRow extends Row {
         this.value_cells[3].innerHTML = display_value;
     }
 
-    set_owner(owner: "none" | AssetCreator | AssetOwner) {
+    set_owner(owner: "none" | { creator: AssetCreator; } | { owner: AssetOwner; }) {
         let display_value = ``;
         if (owner === `none`) {
             display_value = `None`;
-        } else if ("contract" in owner) {
-            display_value = `Contract (${format_hash(owner.contract)})`;
+        } else if ("creator" in owner) {
+            const { contract } = owner.creator;
+            display_value = `Contract (${format_hash(contract)})`;
         } else if ("owner" in owner) {
-            display_value = `Account (${format_hash(owner.owner)})`;
+            const { owner: _owner } = owner.owner;
+            display_value = `Account (${format_hash(_owner)})`;
         }
 
         this.value_cells[4].innerHTML = display_value;
