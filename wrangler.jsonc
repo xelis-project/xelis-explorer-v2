@@ -17,13 +17,25 @@
         "custom_domain": true,
         "pattern": "v2.explorer.xelis.io"
     },
+    "routes": [
+        {
+            "custom_domain": true,
+            "pattern": "explorer.xelis.io"
+        },
+        {
+            "custom_domain": true,
+            "pattern": "v2.explorer.xelis.io"
+        }
+    ],
     "env": {
         "testnet": {
             "name": "xelis-explorer-v2-testnet",
-            "route": {
-                "custom_domain": true,
-                "pattern": "testnet-v2.explorer.xelis.io"
-            }
+            "routes": [
+                {
+                    "custom_domain": true,
+                    "pattern": "testnet-explorer.xelis.io"
+                }
+            ]
         }
     }
 }
