@@ -30,7 +30,7 @@ export class DashboardHashRate {
     }
 
     set_hashrate(info: GetInfoResult) {
-        const hashrate = format_hashrate(parseInt(info.difficulty), info.block_time_target);
+        const hashrate = format_hashrate(parseInt(info.difficulty), info.height);
         this.box_chart.element_value.innerHTML = hashrate;
     }
 
@@ -125,7 +125,7 @@ export class DashboardHashRate {
         const info = this.info;
         tooltip
             .append(`text`)
-            .text(d => format_hashrate(d.y, info.block_time_target))
+            .text(d => format_hashrate(d.y, d.x))
             .each(function (d) {
                 const self = this as SVGTextElement;
 

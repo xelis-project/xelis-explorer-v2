@@ -34,16 +34,16 @@ export class BlockHashrate {
         Box.content_loading(this.cum_diff_element, loading);
     }
 
-    set(block: Block, info: GetInfoResult) {
-        this.set_hashrate(parseInt(block.difficulty), info.block_time_target);
+    set(block: Block) {
+        this.set_hashrate(block);
         this.set_diff(parseInt(block.difficulty));
         this.set_cum_diff(parseInt(block.cumulative_difficulty));
     }
 
-    set_hashrate(difficulty: number, block_time_target: number) {
+    set_hashrate(block: Block) {
         this.hashrate_element.innerHTML = `
             <div>${localization.get_text(`HASHRATE`)}</div>
-            <div>${format_hashrate(difficulty, block_time_target)}</div>
+            <div>${format_hashrate(parseInt(block.difficulty), block.height)}</div>
         `;
     }
 

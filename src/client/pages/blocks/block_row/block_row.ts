@@ -28,7 +28,7 @@ export class BlockRow extends Row {
         this.set_tx_count(block.txs_hashes.length);
         this.set_hash(block.hash);
         this.set_reward(block.reward);
-        this.set_hashrate(parseInt(block.difficulty), block_time_target);
+        this.set_hashrate(block);
         this.set_age(block.timestamp);
         this.set_link(`/block/${block.hash}`);
     }
@@ -88,8 +88,8 @@ export class BlockRow extends Row {
         this.value_cells[7].innerHTML = reward ? format_xel(reward, true) : `--`;
     }
 
-    set_hashrate(difficulty: number, block_time_target: number) {
-        this.value_cells[8].innerHTML = format_hashrate(difficulty, block_time_target);
+    set_hashrate(block: Block) {
+        this.value_cells[8].innerHTML = format_hashrate(parseInt(block.difficulty), block.height);
     }
 
     set_age(timestamp: number) {

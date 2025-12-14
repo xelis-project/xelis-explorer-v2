@@ -192,7 +192,7 @@ export class BlockPage extends Page {
     async set(block: Block, info: GetInfoResult) {
         this.block_info.set(block, info);
         this.block_miner.set(block);
-        this.block_hashrate.set(block, info);
+        this.block_hashrate.set(block);
         this.block_extra.set(block);
         this.block_txs.load(block);
         this.block_rewards.set(block);

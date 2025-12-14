@@ -200,8 +200,8 @@ export class DashboardTopStats {
         this.item_diff.element_value.innerHTML = `${format_diff(difficulty)}`;
     }
 
-    set_hashrate(difficulty: number, block_time_target: number) {
-        this.item_hashrate.element_value.innerHTML = `${format_hashrate(difficulty, block_time_target)}`;
+    set_hashrate(difficulty: number, height: number) {
+        this.item_hashrate.element_value.innerHTML = `${format_hashrate(difficulty, height)}`;
     }
 
     set_avg_time(avg_time: number) {
@@ -232,7 +232,7 @@ export class DashboardTopStats {
         //this.set_stableheight(info.stableheight);
 
         this.set_diff(parseInt(info.difficulty));
-        this.set_hashrate(parseInt(info.difficulty), info.block_time_target);
+        this.set_hashrate(parseInt(info.difficulty), info.height);
         this.set_avg_time(info.average_block_time);
 
         this.set_mempool(info.mempool_size);
@@ -243,7 +243,7 @@ export class DashboardTopStats {
         if (!this.last_update_timestamp) return;
         const diff = Date.now() - this.last_update_timestamp;
 
-        this.title_element.innerHTML = `STATISTICS`; 
+        this.title_element.innerHTML = `STATISTICS`;
         if (diff > 1000) {
             this.title_element.innerHTML += ` (${prettyMilliseconds(diff, { compact: true })})`;
         }

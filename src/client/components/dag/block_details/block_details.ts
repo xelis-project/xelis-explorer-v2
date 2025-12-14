@@ -150,7 +150,7 @@ export class DAGBlockDetails {
         this.set_size(block.total_size_in_bytes);
         this.set_nonce(block.nonce);
         this.set_diff(parseInt(block.difficulty));
-        this.set_hashrate(parseInt(block.difficulty), 15000);
+        this.set_hashrate(block);
         this.set_tips(block.tips);
         this.set_timestamp(block.timestamp);
         this.set_version(block.version);
@@ -238,8 +238,8 @@ export class DAGBlockDetails {
         this.set_item(this.element_diff, localization.get_text(`DIFF`), format_diff(difficulty));
     }
 
-    set_hashrate(difficulty: number, block_time_target: number) {
-        this.set_item(this.element_hashrate, localization.get_text(`HASHRATE`), format_hashrate(difficulty, block_time_target));
+    set_hashrate(block: Block) {
+        this.set_item(this.element_hashrate, localization.get_text(`HASHRATE`), format_hashrate(parseInt(block.difficulty), block.height));
     }
 
     set_size(size_in_bytes: number) {
