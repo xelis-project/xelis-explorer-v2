@@ -13,10 +13,6 @@
         "binding": "ASSETS",
         "directory": "./public"
     },
-    "route": {
-        "custom_domain": true,
-        "pattern": "v2.explorer.xelis.io"
-    },
     "routes": [
         {
             "custom_domain": true,
