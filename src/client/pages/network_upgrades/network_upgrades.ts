@@ -8,6 +8,7 @@ import { Container } from "../../components/container/container";
 import { Table } from "../../components/table/table";
 import { UpgradeRow } from "./upgrade_row/upgrade_row";
 import { NextUpgrade } from "./next_upgrade/next_upgrade";
+import { Block, RPCEvent as DaemonRPCEvent, HardFork } from '@xelis/sdk/daemon/types';
 
 import './network_upgrades.css';
 
@@ -22,6 +23,7 @@ export class NetworkUpgradesPage extends Page {
 	master: Master;
 	table: Table;
 	next_upgrade: NextUpgrade;
+	last_hard_fork?: HardFork;
 
 	constructor() {
 		super();
@@ -55,6 +57,24 @@ export class NetworkUpgradesPage extends Page {
 		this.next_upgrade.countdown.render();
 	}
 
+	on_new_block = async (new_block?: Block, err?: Error) => {
+		console.log("new_block", new_block);
+
+		if (new_block && this.last_hard_fork) {
+			this.next_upgrade.set(this.last_hard_fork, new_block);
+		}
+	}
+
+	clear_node_events() {
+		const node = XelisNode.instance();
+		node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+	}
+
+	async listen_node_events() {
+		const node = XelisNode.instance();
+		node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+	}
+
 	async load(parent: HTMLElement) {
 		super.load(parent);
 		this.set_window_title(localization.get_text(`Network Upgrades`));
@@ -68,10 +88,11 @@ export class NetworkUpgradesPage extends Page {
 
 		this.table.body_element.replaceChildren();
 
-		const last_hard_fork = hard_forks[hard_forks.length - 1];
-		if (top_block.height < last_hard_fork.height) {
-			this.next_upgrade.set(last_hard_fork, top_block);
+		this.last_hard_fork = hard_forks[hard_forks.length - 1];
+		if (top_block.height < this.last_hard_fork.height) {
+			this.next_upgrade.set(this.last_hard_fork, top_block);
 			this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
+			this.listen_node_events();
 		}
 
 		hard_forks.forEach(hard_fork => {
@@ -79,10 +100,12 @@ export class NetworkUpgradesPage extends Page {
 			upgrade_row.set(hard_fork, top_block);
 			this.table.prepend_row(upgrade_row.element);
 		});
+
 	}
 
 	unload() {
 		super.unload();
 		window.clearInterval(this.update_interval_1000_id);
+		this.clear_node_events();
 	}
 }
