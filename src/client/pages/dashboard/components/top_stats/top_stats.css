@@ -40,26 +40,6 @@
     justify-content: space-evenly;
 }
 
-.xe-dashboard-top-stats-container>:nth-child(1) {
-    width: 40rem;
-}
-
-.xe-dashboard-top-stats-container>:nth-child(2) {
-    width: 15rem;
-}
-
-.xe-dashboard-top-stats-container>:nth-child(3) {
-    width: 20rem;
-}
-
-.xe-dashboard-top-stats-container>:nth-child(4) {
-    width: 15rem;
-}
-
-.xe-dashboard-top-stats-container>:nth-child(5) {
-    width: 20rem;
-}
-
 .xe-dashboard-top-stats-title {
     position: absolute;
     top: .5rem;
