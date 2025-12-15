@@ -87,10 +87,11 @@ export class HistoryRow extends Row {
         }
 
         if (history.burn) {
-            const xel_amount = format_xel(history.burn.amount, true);
+            const node = XelisNode.instance();
+            const { amount, asset } = history.burn;
             this.value_cells[2].innerHTML = icons.burn() + localization.get_text(`BURN`);
             this.value_cells[3].innerHTML = localization.get_text(`COINBASE`);
-            this.value_cells[4].innerHTML = xel_amount;
+            this.value_cells[4].innerHTML = await ws_format_asset(node.ws, asset, amount);
         }
 
         // deploy contract is an empty object, we have to check condition with Reflect
