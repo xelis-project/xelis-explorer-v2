@@ -2,8 +2,9 @@ import en from './locales/en';
 import fr from './locales/fr';
 import es from './locales/es';
 import de from './locales/de';
+import id from './locales/id';
 
-export type Locale = "en" | "fr" | "es" | "de";
+export type Locale = "en" | "fr" | "es" | "de" | "id";
 
 class Localization {
     locale: Locale;
@@ -17,7 +18,8 @@ class Localization {
             "en": en,
             "fr": fr,
             "es": es,
-            "de": de
+            "de": de,
+            "id": id
         };
     }
 
