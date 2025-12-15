@@ -143,5 +143,10 @@
         "name": "LuckyPool",
         "link": "https://xelis.luckypool.io/",
         "type": "pool"
+    },
+    "xel:xfunc9m338ld2l98rvps54yyg3zgmd26kwrxjtkp7d7m7s97z4nqq5tsfx2": {
+        "name": "UnMineable",
+        "link": "https://unmineable.com/?coin=XEL&algorithm=xelishash",
+        "type": "pool"
     }
 }
