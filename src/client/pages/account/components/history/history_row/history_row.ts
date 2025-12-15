@@ -46,8 +46,6 @@ export class HistoryRow extends Row {
     }
 
     async set_type(history: AccountHistory) {
-        const node = XelisNode.instance();
-
         if (history.incoming) {
             const addr = history.incoming.from;
             this.value_cells[2].innerHTML = `<span class="receive">${icons.arrow()}</span> ${localization.get_text(`RECEIVE`)}`;
@@ -114,6 +112,14 @@ export class HistoryRow extends Row {
             this.value_cells[2].innerHTML = localization.get_text(`MULTISIG`);
             this.value_cells[3].innerHTML = state;
             this.value_cells[4].innerHTML = `--`;
+        }
+
+        if (history.from_contract) {
+            const node = XelisNode.instance();
+            const { contract, asset, amount } = history.from_contract;
+            this.value_cells[2].innerHTML = icons.contract() + localization.get_text(`FROM CONTRACT`);
+            this.value_cells[3].innerHTML = `<a href="/contract/${contract}">${format_hash(contract)}</a>`;
+            this.value_cells[4].innerHTML = await ws_format_asset(node.ws, asset, amount);
         }
     }
 
