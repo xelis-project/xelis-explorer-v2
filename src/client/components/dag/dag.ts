@@ -352,7 +352,7 @@ export class DAG {
 
     clear() {
         this.block_details.hide();
-        this.clear_node_events();
+        this.set_live(false); // clear listener and set live flag to false
     }
 
     clear_node_events() {
