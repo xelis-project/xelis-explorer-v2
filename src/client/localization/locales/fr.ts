@@ -118,8 +118,8 @@ export default {
     "NODES BY VERSION": "NŒUDS PAR VERSION",
     "SYNC": "SYNC",
     "DESYNC": "DESYNC",
-    "FULL LEDGER": "GRAND LIVRE COMPLET",
-    "PRUNED LEDGER": "GRAND LIVRE TAILLÉ",
+    "FULL LEDGER": "NOEUD COMPLET",
+    "PRUNED LEDGER": "NOEUD ALLÉGÉ",
     "Search ip, version, country, city or tag": "Rechercher ip, version, pays, ville ou tag",
     "Settings": "Paramètres",
     "LANGUAGE": "LANGUE",
@@ -232,5 +232,6 @@ export default {
     "UPGRADE VERSION": "MISE À JOUR N°",
     "NODE REQUIREMENT": "VERSION DU NOEUD REQUISE",
     "ONLINE DATE": "DATE D'ACTIVATION",
-    "OWNER": "PROPRIÉTAIRE"
+    "OWNER": "PROPRIÉTAIRE",
+    "DECIMALS": "DÉCIMALES",
 };
