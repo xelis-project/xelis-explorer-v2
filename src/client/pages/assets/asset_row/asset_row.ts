@@ -56,10 +56,10 @@ export class AssetRow extends Row {
             display_value = `None`;
         } else if ("creator" in owner) {
             const { contract } = owner.creator;
-            display_value = `Contract (${format_hash(contract)})`;
+            display_value = `Contract (<a href="/contract/${contract}">${format_hash(contract)}</a>)`;
         } else if ("owner" in owner) {
-            const { owner: _owner } = owner.owner;
-            display_value = `Account (${format_hash(_owner)})`;
+            const { owner: owner_hash } = owner.owner;
+            display_value = `Account (<a href="/contract/${owner_hash}">${format_hash(owner_hash)}</a>)`;
         }
 
         this.value_cells[4].innerHTML = display_value;
