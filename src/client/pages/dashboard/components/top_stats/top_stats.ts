@@ -30,9 +30,9 @@ export class DashboardTopStats {
     item_daily_emission: StatsItem;
 
     box_2: Box;
-    item_topo: StatsItem;
+    item_topoheight: StatsItem;
     item_height: StatsItem;
-    //item_stable: StatsItem;
+    item_stableheight: StatsItem;
 
     box_3: Box;
     item_diff: StatsItem;
@@ -89,12 +89,12 @@ export class DashboardTopStats {
         this.box_2 = new Box();
         box_container.appendChild(this.box_2.element);
 
-        this.item_topo = new StatsItem(localization.get_text(`TOPOHEIGHT`));
-        this.box_2.element.appendChild(this.item_topo.element);
+        this.item_topoheight = new StatsItem(localization.get_text(`TOPOHEIGHT`));
+        this.box_2.element.appendChild(this.item_topoheight.element);
         this.item_height = new StatsItem(localization.get_text(`HEIGHT`));
         this.box_2.element.appendChild(this.item_height.element);
-        //this.item_stable = new StatsItem(`STABLE`);
-        //this.box_2.element.appendChild(this.item_stable.element);
+        this.item_stableheight = new StatsItem(`STABLEHEIGHT`);
+        this.box_2.element.appendChild(this.item_stableheight.element);
 
         this.box_3 = new Box();
         box_container.appendChild(this.box_3.element);
@@ -185,16 +185,16 @@ export class DashboardTopStats {
     }
 
     set_topoheight(topoheight: number) {
-        this.item_topo.element_value.innerHTML = `${topoheight.toLocaleString()}`;
+        this.item_topoheight.element_value.innerHTML = `${topoheight.toLocaleString()}`;
     }
 
     set_height(height: number) {
         this.item_height.element_value.innerHTML = `${height.toLocaleString()}`;
     }
 
-    //set_stableheight(stableheight: number) {
-    //this.item_stable.element_value.innerHTML = `${stableheight.toLocaleString()}`;
-    //}
+    set_stableheight(stableheight: number) {
+        this.item_stableheight.element_value.innerHTML = `${stableheight.toLocaleString()}`;
+    }
 
     set_diff(difficulty: number) {
         this.item_diff.element_value.innerHTML = `${format_diff(difficulty)}`;
@@ -229,7 +229,7 @@ export class DashboardTopStats {
 
         this.set_topoheight(info.topoheight);
         this.set_height(info.height);
-        //this.set_stableheight(info.stableheight);
+        this.set_stableheight(info.stableheight);
 
         this.set_diff(parseInt(info.difficulty));
         this.set_hashrate(parseInt(info.difficulty), info.height);
