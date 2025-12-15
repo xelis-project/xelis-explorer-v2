@@ -21,6 +21,7 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
     live_btn_element: HTMLButtonElement;
     prev_height_element: HTMLButtonElement;
     next_height_element: HTMLButtonElement;
+    lock_cam_element: HTMLButtonElement;
 
     constructor() {
         super();
@@ -48,6 +49,11 @@ export class HeightControl extends EventEmitter<HeightControlEventMap> {
         this.live_btn_element.innerHTML = localization.get_text(`LIVE`);
         this.live_btn_element.title = localization.get_text(`Toggle LIVE mode.`);
         inputs_container.appendChild(this.live_btn_element);
+
+        this.lock_cam_element = document.createElement(`button`);
+        this.lock_cam_element.innerHTML = localization.get_text(`UNLOCK CAM`);
+        this.lock_cam_element.title = localization.get_text(`Lock camera to current height.`);
+        inputs_container.appendChild(this.lock_cam_element);
 
         const title_element = document.createElement(`label`);
         title_element.innerHTML = localization.get_text(`HEIGHT`);

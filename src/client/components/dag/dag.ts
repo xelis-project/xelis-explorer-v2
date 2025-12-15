@@ -13,6 +13,7 @@ import { HeightControl } from './height_control/height_control';
 import { Text } from 'troika-three-text';
 //@ts-ignore
 import InfiniteGridHelper from './infinite_grid_helper.js';
+import { localization } from '../../localization/localization';
 
 import './dag.css';
 
@@ -58,6 +59,7 @@ export class DAG {
     blocks_by_height: Map<number, Block[]>;
 
     is_live: boolean;
+    lock_camera_to_current_height: boolean;
     target_line: THREE.Line;
     lock_block_height?: number;
     load_height: number;
@@ -68,6 +70,7 @@ export class DAG {
         this.element = document.createElement(`div`);
 
         this.load_height = 0;
+        this.lock_camera_to_current_height = true;
 
         this.block_mesh_hashes = new Map();
         this.tip_mesh_hashes = new Map();
@@ -164,6 +167,15 @@ export class DAG {
             await this.load_blocks(this.load_height + 10);
         });
 
+        this.height_control.lock_cam_element.addEventListener(`click`, () => {
+            this.lock_camera_to_current_height = !this.lock_camera_to_current_height;
+            if (this.lock_camera_to_current_height) {
+                this.height_control.lock_cam_element.innerHTML = localization.get_text(`UNLOCK CAM`);
+            } else {
+                this.height_control.lock_cam_element.innerHTML = localization.get_text(`LOCK CAM`);
+            }
+        });
+
         this.element.appendChild(this.height_control.element);
     }
 
@@ -240,7 +252,9 @@ export class DAG {
             // this.animate_block_appear(block_mesh); applied in on_block_ordered
             this.height_control.set_height(new_height);
             this.height_control.set_max_height(new_height);
-            this.move_to_height(this.lock_block_height ? this.lock_block_height : new_block.height, true);
+            if (this.lock_camera_to_current_height) {
+                this.move_to_height(this.lock_block_height ? this.lock_block_height : new_block.height, true);
+            }
 
             const node = XelisNode.instance();
             const stable_height = await node.ws.methods.getStableHeight();
@@ -420,8 +434,9 @@ export class DAG {
         this.height_control.set_height(height);
         this.height_control.set_max_height(max_height);
 
-        const start_height = Math.max(0, height - 25);
-        const end_height = Math.min(max_height, height + 25);
+        const heigth_count = Math.round(100 / 2); // display 100 heights
+        const start_height = Math.max(0, height - heigth_count);
+        const end_height = Math.min(max_height, height + heigth_count);
 
         this.load_height = Math.max(0, Math.min(max_height, height));
 
