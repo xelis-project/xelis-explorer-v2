@@ -60,7 +60,8 @@ export class DAG {
 
     is_live: boolean;
     lock_camera_to_current_height: boolean;
-    target_line: THREE.Line;
+    target_height_line: THREE.Line;
+    stable_height_line: THREE.Line;
     lock_block_height?: number;
     load_height: number;
 
@@ -125,8 +126,11 @@ export class DAG {
         grid.position.z = -4;
         this.scene.add(grid);
 
-        this.target_line = this.create_target_line();
-        this.scene.add(this.target_line);
+        this.target_height_line = this.create_target_line(new THREE.Color(`#2cffcf`));
+        this.scene.add(this.target_height_line);
+
+        this.stable_height_line = this.create_target_line(new THREE.Color(`green`));
+        this.scene.add(this.stable_height_line);
 
         this.tip_line_group = new THREE.Group();
         this.scene.add(this.tip_line_group);
@@ -258,6 +262,8 @@ export class DAG {
 
             const node = XelisNode.instance();
             const stable_height = await node.ws.methods.getStableHeight();
+            this.move_stable_height_line(stable_height);
+
             this.blocks_by_height.forEach((blocks, height) => {
                 if (
                     blocks.length === 1 &&
@@ -430,6 +436,8 @@ export class DAG {
     async load_blocks(height: number) {
         this.canvas.classList.add(`xe-dag-load-flash`);
         this.load_height = height;
+        this.stable_height_line.visible = false;
+        this.target_height_line.visible = false;
 
         const node = XelisNode.instance();
 
@@ -468,7 +476,6 @@ export class DAG {
         this.block_mesh_hashes.clear();
         this.blocks_by_height.clear();
         this.height_group.clear();
-        this.target_line.visible = false;
 
         let blocks = [] as Block[];
         res.forEach((result, i) => {
@@ -510,9 +517,26 @@ export class DAG {
             });
         });
 
-        this.target_line.visible = true;
+        this.target_height_line.visible = true;
         this.move_to_height(this.load_height, false);
         this.canvas.classList.remove(`xe-dag-load-flash`);
+
+        const stable_height = await node.ws.methods.getStableHeight();
+        this.move_stable_height_line(stable_height);
+    }
+
+    move_stable_height_line(height: number) {
+        const block_mesh = this.block_group.children.find((b) => {
+            return b.userData.block.height === height;
+        });
+
+        if (block_mesh) {
+            const x = block_mesh.position.x;
+            this.stable_height_line.position.set(x, 0, 0);
+            this.stable_height_line.visible = true;
+        } else {
+            this.stable_height_line.visible = false;
+        }
     }
 
     move_to_height(height: number, enable_transition: boolean) {
@@ -522,7 +546,7 @@ export class DAG {
 
         if (block_mesh) {
             const x = block_mesh.position.x;
-            this.target_line.position.set(x, 0, 0);
+            this.target_height_line.position.set(x, 0, 0);
             this.controls.moveTo(x, 0, 0, enable_transition);
         }
     }
@@ -607,8 +631,8 @@ export class DAG {
         }
     }
 
-    create_target_line() {
-        const mat = new THREE.LineBasicMaterial({ color: new THREE.Color(`#2cffcf`) });
+    create_target_line(color: THREE.Color) {
+        const mat = new THREE.LineBasicMaterial({ color });
 
         const points = [
             new THREE.Vector3(0, -10000, -3),
