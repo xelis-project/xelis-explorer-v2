@@ -342,6 +342,11 @@ export class DAG {
         const node = XelisNode.instance();
 
         if (live) {
+            // Start listening for new_block events immediately, even before loading the primary block fetch.
+            // If we listen after we could miss some blocks and create gaps in the DAG display.
+            node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+            node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+
             const current_height = await node.rpc.getHeight();
             await this.load_blocks(current_height);
 
@@ -349,8 +354,6 @@ export class DAG {
                 this.move_to_height(this.lock_block_height, true);
             }
 
-            node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
-            node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
             this.height_control.live_btn_element.classList.add(`active`);
             this.height_control.next_height_element.style.display = `none`;
             this.height_control.prev_height_element.style.display = `none`;
