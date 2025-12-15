@@ -52,7 +52,6 @@ export class Table {
         this.body_element.replaceChildren();
         const empty_row = this.add_empty_row();
         empty_row.classList.add(`xe-table-empty`);
-        this.element.classList.remove(`xe-table-clickable`);
         const td = empty_row.querySelector(`td`);
         if (td) td.innerHTML = `<div>${text}</div>`;
     }
