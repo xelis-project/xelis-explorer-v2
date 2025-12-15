@@ -14,7 +14,6 @@ export class AccountInfo {
     addr_element: HTMLDivElement;
     registered_element: HTMLDivElement;
     nonce_element: HTMLDivElement;
-    last_activity_element: HTMLDivElement;
     qr_code_element: HTMLCanvasElement;
 
     constructor() {
@@ -37,25 +36,21 @@ export class AccountInfo {
         container_2.classList.add(`xe-account-info-container-2`);
         container_1.appendChild(container_2);
 
-        this.last_activity_element = document.createElement(`div`);
-        container_2.appendChild(this.last_activity_element);
+        this.registered_element = document.createElement(`div`);
+        container_2.appendChild(this.registered_element);
 
         this.nonce_element = document.createElement(`div`);
         container_2.appendChild(this.nonce_element);
-
-        this.registered_element = document.createElement(`div`);
-        container_2.appendChild(this.registered_element);
 
         this.qr_code_element = document.createElement(`canvas`);
         this.qr_code_element.classList.add(`xe-account-info-qr`);
         this.container.element.appendChild(this.qr_code_element);
     }
 
-    set(addr: string, data: AccountServerData) {
-        this.set_hashicon(addr);
-        this.set_addr(addr);
-        this.set_qrcode(addr);
-        this.set_last_activity(data.balance.topoheight, data.last_activity_timestamp);
+    set( data: AccountServerData) {
+        this.set_hashicon(data.address);
+        this.set_addr(data.address);
+        this.set_qrcode(data.address);
         this.set_nonce(data.nonce.nonce);
         this.set_registered(data.registration_topoheight, data.registration_timestamp);
     }
@@ -68,14 +63,6 @@ export class AccountInfo {
 
     set_addr(addr: string) {
         this.addr_element.innerHTML = addr;
-    }
-
-    set_last_activity(topoheight: number, timestamp: number) {
-        this.last_activity_element.innerHTML = `
-                <div>${localization.get_text(`LAST ACTIVITY`)}</div>
-                <div>${topoheight.toLocaleString()} (${prettyMilliseconds(Date.now() - timestamp, { compact: true })})</div>
-                <div>${new Date(timestamp).toLocaleString()}</div>
-            `;
     }
 
     set_nonce(nonce: number) {

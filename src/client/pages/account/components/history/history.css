@@ -16,7 +16,8 @@
 }
 
 .xe-account-history-table {
-    overflow-x: auto;
+    overflow: auto;
+    max-height: 35rem;
 }
 
 .xe-account-history> :nth-child(1) {

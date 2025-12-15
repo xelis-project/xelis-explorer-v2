@@ -17,9 +17,9 @@ export class AccountHistory {
     table: Table;
     flow_filter_select: Select;
     asset_filter_select: Select;
+    controls_container: HTMLDivElement;
 
     account_server_data?: AccountServerData;
-    addr?: string;
     filter_asset?: string;
     filter_direction?: string;
     prev_next_pager: PrevNextPager;
@@ -48,8 +48,8 @@ export class AccountHistory {
         title_element.innerHTML = localization.get_text(`HISTORY`);
         top_container.appendChild(title_element);
 
-        const controls_container = document.createElement(`div`);
-        top_container.appendChild(controls_container);
+        this.controls_container = document.createElement(`div`);
+        top_container.appendChild(this.controls_container);
 
         const flow_filters = {
             "all": `<span class="all">${icons.dual_arrow()}</span>` + localization.get_text(`All Directions`),
@@ -66,19 +66,20 @@ export class AccountHistory {
 
         this.flow_filter_select.add_listener(`change`, (key) => {
             this.filter_direction = key;
+            this.prev_next_pager.pager_numbers = [];
+            this.prev_next_pager.pager_max = undefined;
             this.load_history();
         });
 
-        controls_container.appendChild(this.flow_filter_select.element);
+        this.controls_container.appendChild(this.flow_filter_select.element);
 
         this.asset_filter_select = new Select();
-        this.asset_filter_select.set_value(localization.get_text(`All Assets`));
         this.asset_filter_select.add_listener(`change`, (key) => {
             this.filter_asset = key;
+            this.prev_next_pager.pager_numbers = [];
+            this.prev_next_pager.pager_max = undefined;
             this.load_history();
         });
-
-        controls_container.appendChild(this.asset_filter_select.element);
 
         const table_container = document.createElement(`div`);
         table_container.classList.add(`xe-account-history-table`, `scrollbar-1`, `scrollbar-1-rounded`)
@@ -96,35 +97,37 @@ export class AccountHistory {
     }
 
     set_filter_assets(assets: AssetWithData[]) {
+        this.asset_filter_select.element.remove();
         this.asset_filter_select.clear();
 
-        this.asset_filter_select.set_value(localization.get_text(`All Assets`));
-        this.asset_filter_select.add_item(``, localization.get_text(`All Assets`));
+        const asset = assets[0];
+        this.asset_filter_select.set_value(`${asset.name} (${format_hash(asset.asset)})`);
+        this.filter_asset = asset.asset;
+
         assets.forEach((asset) => {
             this.asset_filter_select.add_item(asset.asset, `${asset.name} (${format_hash(asset.asset)})`);
         });
+        this.controls_container.appendChild(this.asset_filter_select.element);
     }
 
-    async set(addr: string, data: AccountServerData, assets: AssetWithData[]) {
-        this.addr = addr;
+
+    async set(data: AccountServerData, assets: AssetWithData[]) {
         this.account_server_data = data;
 
         this.set_filter_assets(assets);
-        const last_topo = this.account_server_data.balance.topoheight;
+        //const last_topo = 0; // this.account_server_data.balance.topoheight;
         const first_topo = this.account_server_data.registration_topoheight;
-        this.prev_next_pager.pager_max = last_topo;
+        //this.prev_next_pager.pager_max = last_topo;
         this.prev_next_pager.pager_min = first_topo;
-
         await this.load_history();
     }
 
     async load_history() {
-        if (!this.addr) return;
+        if (!this.account_server_data) return;
+        if (!this.filter_asset) return;
 
         this.history_rows = [];
-        this.table.body_element.replaceChildren();
-
-        const xelis_node = XelisNode.instance();
+        const node = XelisNode.instance();
 
         let incoming = true;
         let outgoing = true;
@@ -137,12 +140,10 @@ export class AccountHistory {
                 break;
         }
 
-        this.table.set_loading(20);
-
         const max_topo = this.prev_next_pager.get_next();
-        const history = await xelis_node.rpc.getAccountHistory({
-            address: this.addr,
-            asset: this.filter_asset ? this.filter_asset : undefined,
+        const history = await node.rpc.getAccountHistory({
+            address: this.account_server_data.address,
+            asset: this.filter_asset,
             incoming_flow: incoming,
             outgoing_flow: outgoing,
             maximum_topoheight: max_topo,
@@ -162,7 +163,12 @@ export class AccountHistory {
             this.table.prepend_row(history_row.element);
         });
 
-        this.prev_next_pager.pager_current = history[history.length - 1].topoheight;
+        const first_item = history[history.length - 1];
+        if (!this.prev_next_pager.pager_max) {
+            this.prev_next_pager.pager_max = first_item.topoheight;
+        }
+
+        this.prev_next_pager.pager_current = first_item.topoheight;
         this.prev_next_pager.pager_next = history[0].topoheight - 1;
         this.prev_next_pager.render();
     }

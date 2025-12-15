@@ -6,8 +6,7 @@ import { XelisNode } from "../../app/xelis_node";
 import { Master } from "../../components/master/master";
 import { AccountInfo } from "./components/info/info";
 import { RPCRequest } from "@xelis/sdk/rpc/types";
-import { Block, RPCMethod as DaemonRPCMethod, RPCEvent as DaemonRPCEvent, GetBalanceParams, GetBalanceResult, GetNonceParams, ValidateAddressParams, ValidateAddressResult, GetNonceResult, VersionedNonce, GetBlockAtTopoheightParams, AssetWithData, AssetData } from "@xelis/sdk/daemon/types";
-import { XELIS_ASSET } from "@xelis/sdk/config";
+import { Block, RPCMethod as DaemonRPCMethod, RPCEvent as DaemonRPCEvent, GetNonceParams, ValidateAddressParams, ValidateAddressResult, VersionedNonce, AssetWithData } from "@xelis/sdk/daemon/types";
 import { AccountBalance } from "./components/balance/balance";
 import { NotFoundPage } from "../not_found/not_found";
 import { AccountKnownAddr } from "./components/known_addr/known_addr";
@@ -19,12 +18,11 @@ import { AccountHistory } from "./components/history/history";
 import "./account.css";
 
 export interface AccountServerData {
+    address: string;
     is_integrated: boolean;
     registration_topoheight: number;
     registration_timestamp: number;
     nonce: VersionedNonce;
-    last_activity_timestamp: number;
-    balance: GetBalanceResult;
 }
 
 export class AccountPage extends Page {
@@ -38,64 +36,25 @@ export class AccountPage extends Page {
         }
     }
 
-    static async load_server_data(daemon: DaemonRPC, addr: string) {
-        const server_data = {} as AccountServerData;
+    static async load_server_data(daemon: DaemonRPC, address: string) {
+        const server_data = { address } as AccountServerData;
 
         {
             const requests = [
                 {
                     method: DaemonRPCMethod.ValidateAddress,
-                    params: { address: addr, allow_integrated: true } as ValidateAddressParams
+                    params: { address, allow_integrated: true } as ValidateAddressParams
                 },
                 {
                     method: DaemonRPCMethod.GetAccountRegistrationTopoheight,
-                    params: { address: addr }
+                    params: { address }
                 },
                 {
                     method: DaemonRPCMethod.GetNonce,
-                    params: { address: addr } as GetNonceParams
-                },
-                {
-                    method: DaemonRPCMethod.GetBalance,
-                    params: { address: addr, asset: XELIS_ASSET } as GetBalanceParams
-                }
-            ] as RPCRequest[];
-
-
-            const res = await daemon.batchRequest(requests);
-            res.forEach((result, i) => {
-                if (result instanceof Error) {
-                    throw result;
-                } else {
-                    switch (i) {
-                        case 0: // ValidateAddress
-                            server_data.is_integrated = (result as ValidateAddressResult).is_integrated;
-                            break;
-                        case 1: // GetAccountRegistrationTopoheight
-                            server_data.registration_topoheight = (result as number);
-                            break;
-                        case 2: // GetNonce
-                            server_data.nonce = result as VersionedNonce;
-                            break;
-                        case 3: // GetBalance (encrypted)
-                            server_data.balance = result as GetBalanceResult;
-                            break;
-                    }
-                }
-            });
-        }
-
-        {
-            const requests = [
-                {
-                    method: DaemonRPCMethod.GetBlockAtTopoheight,
-                    params: { topoheight: server_data.balance.topoheight } as GetBlockAtTopoheightParams
-                },
-                {
-                    method: DaemonRPCMethod.GetBlockAtTopoheight,
-                    params: { topoheight: server_data.registration_topoheight } as GetBlockAtTopoheightParams
+                    params: { address } as GetNonceParams
                 },
             ] as RPCRequest[];
+
 
             const res = await daemon.batchRequest(requests);
             res.forEach((result, i) => {
@@ -104,17 +63,21 @@ export class AccountPage extends Page {
                 }
 
                 switch (i) {
-                    case 0: // getBlockAtTopoheight
-                        const last_balance_block = result as Block;
-                        server_data.last_activity_timestamp = last_balance_block.timestamp;
+                    case 0: // ValidateAddress
+                        server_data.is_integrated = (result as ValidateAddressResult).is_integrated;
                         break;
-                    case 1: // getBlockAtTopoheight
-                        const registration_block = result as Block;
-                        server_data.registration_timestamp = registration_block.timestamp;
+                    case 1: // GetAccountRegistrationTopoheight
+                        server_data.registration_topoheight = (result as number);
+                        break;
+                    case 2: // GetNonce
+                        server_data.nonce = result as VersionedNonce;
                         break;
                 }
             });
         }
+
+        const registration_block = await daemon.getBlockAtTopoheight({ topoheight: server_data.registration_topoheight })
+        server_data.registration_timestamp = registration_block.timestamp;
 
         return server_data;
     }
@@ -136,13 +99,13 @@ export class AccountPage extends Page {
 
         try {
             this.server_data = await this.load_server_data(daemon, addr);
-        } catch {
+        } catch (e) {
+            console.log(e)
             this.status = 404;
         }
     }
 
     page_data: {
-        addr?: string;
         assets: AssetWithData[];
         server_data?: AccountServerData;
     };
@@ -157,7 +120,7 @@ export class AccountPage extends Page {
     constructor() {
         super();
 
-        this.page_data = { addr: "", assets: [] };
+        this.page_data = { assets: [] };
         this.master = new Master();
         this.element.appendChild(this.master.element);
 
@@ -186,7 +149,6 @@ export class AccountPage extends Page {
         const id = AccountPage.get_pattern_id(window.location.href);
 
         this.page_data = {
-            addr: id,
             server_data,
             assets: []
         };
@@ -204,12 +166,9 @@ export class AccountPage extends Page {
         }
     }
 
-    async load_assets() {
-        const { addr } = this.page_data;
-        if (!addr) return;
-
+    async load_assets(address: string) {
         const xelis_node = XelisNode.instance();
-        const hashes = await xelis_node.rpc.getAccountAssets({ address: addr });
+        const hashes = await xelis_node.rpc.getAccountAssets({ address });
 
         const assets = [] as AssetWithData[];
         for (let i = 0; i < hashes.length; i++) {
@@ -221,41 +180,12 @@ export class AccountPage extends Page {
         this.page_data.assets = assets;
     }
 
-    update_interval_1000_id?: number;
-    update_interval_1000 = () => {
-        this.account_history.history_rows.forEach(history_row => {
-            if (history_row.data) {
-                history_row.set_age(history_row.data.block_timestamp);
-            }
-        });
-
-        if (this.page_data.server_data) {
-            const { balance, last_activity_timestamp } = this.page_data.server_data;
-            this.account_info.set_last_activity(balance.topoheight, last_activity_timestamp);
-        }
-    }
-
     on_new_block = async (new_block?: Block, err?: Error) => {
         console.log("new_block", new_block);
 
         if (new_block) {
-            const node = XelisNode.instance();
-
-            const { addr, server_data } = this.page_data;
-
-            if (addr && server_data) {
-                const balance = await node.rpc.getBalance({
-                    address: addr,
-                    asset: XELIS_ASSET
-                });
-
-                if (balance.topoheight > server_data.balance.topoheight) {
-                    // refresh history only when we're on first page
-                    if (!this.is_history_pager_active()) {
-                        this.account_history.load_history();
-                    }
-                }
-            }
+            // refresh history on new block
+            this.account_history.load_history();
         }
     }
 
@@ -279,18 +209,18 @@ export class AccountPage extends Page {
         Box.list_loading(this.account_assets.items_element, 10, `.75rem`, `10rem`);
 
         await this.load_account();
-        this.listen_node_events();
 
-        const { addr, server_data } = this.page_data;
-        if (addr && server_data) {
+        const { server_data } = this.page_data;
+        if (server_data) {
             this.set_element(this.master.element);
 
-            this.account_info.set(addr, server_data);
-            this.account_known_addr.set(addr);
+            this.account_info.set(server_data);
+            this.account_known_addr.set(server_data.address);
 
-            await this.load_assets();
-            this.account_history.set(addr, server_data, this.page_data.assets);
-            this.update_interval_1000_id = window.setInterval(this.update_interval_1000, 1000);
+            this.account_history.table.set_loading(20);
+            await this.load_assets(server_data.address);
+            await this.account_history.set(server_data, this.page_data.assets);
+            this.listen_node_events();
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
@@ -299,6 +229,5 @@ export class AccountPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
-        window.clearInterval(this.update_interval_1000_id);
     }
 }

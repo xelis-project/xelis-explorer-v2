@@ -13,9 +13,9 @@ export class AccountKnownAddr {
         this.container.element.classList.add(`xe-account-known-addr`);
     }
 
-    set(addr: string) {
+    set(address: string) {
         const addresses = get_addresses();
-        const address_details = addresses[addr];
+        const address_details = addresses[address];
 
         if (address_details) {
             this.container.element.style.removeProperty(`display`);
