@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
+import { Block, BlockType, GetInfoResult } from '@xelis/sdk/daemon/types';
 import prettyMilliseconds from 'pretty-ms';
 import { localization } from '../../../../localization/localization';
 
@@ -48,11 +48,15 @@ export class DashboardBlockTime {
 
         const data = [];
 
-        const sorted_blocks = [...this.blocks];
-        sorted_blocks.sort((a, b) => b.height - a.height);
-        for (let i = 0; i < sorted_blocks.length; i++) {
-            const prev_block = sorted_blocks[i + 1];
-            const block = sorted_blocks[i];
+        const blocks = this.blocks
+            .filter((b) => {
+                return b.block_type === BlockType.Normal || b.block_type === BlockType.Sync;
+            }).slice(0, 100);
+
+        blocks.sort((a, b) => b.height - a.height);
+        for (let i = 0; i < blocks.length; i++) {
+            const prev_block = blocks[i + 1];
+            const block = blocks[i];
             if (prev_block) {
                 const time_ms = block.timestamp - prev_block.timestamp;
                 if (prev_block.height === block.height) continue;

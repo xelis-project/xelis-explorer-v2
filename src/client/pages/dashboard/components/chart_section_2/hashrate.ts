@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import { BoxChart } from '../../../../components/box_chart/box_chart';
-import { Block, GetInfoResult } from '@xelis/sdk/daemon/types';
+import { Block, BlockType, GetInfoResult } from '@xelis/sdk/daemon/types';
 import { format_hashrate } from '../../../../utils/format_hashrate';
 import { localization } from '../../../../localization/localization';
 
@@ -58,10 +58,12 @@ export class DashboardHashRate {
         if (!this.chart || !this.info) return;
 
         const data = this.blocks
-            .filter((item, i) => this.blocks.map(x => x.height).indexOf(item.height) === i) // no duplicate height - remove side block
+            .filter((b) => {
+                return b.block_type === BlockType.Normal || b.block_type === BlockType.Sync;
+            })
             .map((block) => {
                 return { x: block.height, y: parseInt(block.difficulty) };
-            }) as DataPoint[];
+            }).slice(0, 100) as DataPoint[];
 
         const x_scale = d3.scaleLinear()
             .domain(d3.extent(data, d => d.x) as [number, number])

@@ -123,10 +123,12 @@ export class DashboardPools {
     }
 
     set(blocks: Block[]) {
+        const limit_blocks = blocks.slice(0, 100);
+
         this.miners = {};
 
-        for (let i = 0; i < blocks.length; i++) {
-            const { miner } = blocks[i];
+        for (let i = 0; i < limit_blocks.length; i++) {
+            const { miner } = limit_blocks[i];
             if (this.miners[miner]) {
                 this.miners[miner] += 1;
             } else {
