@@ -92,6 +92,9 @@ export class DashboardBlocksTxs {
         let max_timestamp = 0;
         let total_txs = 0;
         blocks.forEach((block) => {
+            // Don't count txs in Side block. They are replicated from Normal/Sync block
+            if (block.block_type === BlockType.Side || block.block_type === BlockType.Orphaned) return;
+
             total_txs += block.txs_hashes.length;
             if (min_timestamp === 0 || block.timestamp < min_timestamp) min_timestamp = block.timestamp;
             if (block.timestamp > max_timestamp) max_timestamp = block.timestamp;
