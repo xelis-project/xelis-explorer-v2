@@ -79,8 +79,7 @@ export class Settings extends Singleton {
             path: '/',
             sameSite: 'Strict',
             secure: true,
-            expires: 31536000,
-            domain: ``
+            expires: 31536000
         });
     }
 
@@ -89,8 +88,7 @@ export class Settings extends Singleton {
             path: '/',
             sameSite: 'Strict',
             secure: true,
-            expires: 31536000,
-            domain: ``
+            expires: 31536000
         });
 
         this.set_storage_item(`hash_format`, this.hash_format);
@@ -100,8 +98,7 @@ export class Settings extends Singleton {
             path: '/',
             sameSite: 'Strict',
             secure: true,
-            expires: 31536000,
-            domain: ``
+            expires: 31536000
         });
 
         this.set_storage_item(`node_ws_connection`, this.node_ws_connection);
