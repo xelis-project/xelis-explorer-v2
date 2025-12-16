@@ -64,6 +64,7 @@ export class DashboardHashRate {
             .map((block) => {
                 return { x: block.height, y: parseInt(block.difficulty) };
             }).slice(0, 100) as DataPoint[];
+        if (data.length === 0) return;
 
         const x_scale = d3.scaleLinear()
             .domain(d3.extent(data, d => d.x) as [number, number])
