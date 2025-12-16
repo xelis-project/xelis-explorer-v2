@@ -1,4 +1,4 @@
-import { AssetCreator, AssetOwner, AssetWithData, MaxSupplyFixed, MaxSupplyMintable } from "@xelis/sdk/daemon/types";
+import { AssetOwner, AssetWithData, MaxSupplyMode } from "@xelis/sdk/daemon/types";
 import { Row } from "../../../components/table/row";
 import { format_hash } from "../../../utils/format_hash";
 import { ws_format_asset } from "../../../utils/ws_format_asset";
@@ -33,7 +33,7 @@ export class AssetRow extends Row {
         this.value_cells[2].innerHTML = ticker;
     }
 
-    async set_max_supply(hash: string, max_supply: "none" | MaxSupplyFixed | MaxSupplyMintable) {
+    async set_max_supply(hash: string, max_supply: MaxSupplyMode) {
         const xelis_node = XelisNode.instance();
 
         let display_value = ``;
@@ -50,7 +50,7 @@ export class AssetRow extends Row {
         this.value_cells[3].innerHTML = display_value;
     }
 
-    set_owner(owner: "none" | { creator: AssetCreator; } | { owner: AssetOwner; }) {
+    set_owner(owner: AssetOwner) {
         let display_value = ``;
         if (owner === `none`) {
             display_value = `None`;
