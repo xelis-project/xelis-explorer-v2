@@ -14,6 +14,7 @@ import { Box } from "../../components/box/box";
 import { localization } from "../../localization/localization";
 import { AccountAssets } from "./components/assets/assets";
 import { AccountHistory } from "./components/history/history";
+import { reduce_text } from "../../utils/reduce_text";
 
 import "./account.css";
 
@@ -94,7 +95,7 @@ export class AccountPage extends Page {
         const daemon = new DaemonRPC(c.get(`node_endpoint`));
 
         const addr = id;
-        this.title = localization.get_text(`Account {}`, [addr]);
+        this.title = localization.get_text(`Account {}`, [reduce_text(addr)]);
         this.description = localization.get_text(`The account history of {}.`, [addr]);
 
         try {
@@ -156,7 +157,7 @@ export class AccountPage extends Page {
         try {
             if (!consumed && id) {
                 const addr = id;
-                this.set_window_title(`Account ${addr.toLocaleString()}`);
+                this.set_window_title(`Account ${reduce_text(addr)}`);
 
                 const node = XelisNode.instance();
                 this.page_data.server_data = await AccountPage.load_server_data(node.rpc, addr);

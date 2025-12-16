@@ -19,6 +19,7 @@ import { TransactionMultiSig } from "./components/multisig/multisig";
 import { TransactionMempoolAlert } from "./components/mempool_alert/mempool_alert";
 import { localization } from "../../localization/localization";
 import { Container } from "../../components/container/container";
+import { reduce_text } from "../../utils/reduce_text";
 
 import './transaction.css';
 
@@ -80,7 +81,7 @@ export class TransactionPage extends Page {
         const daemon = new DaemonRPC(c.get(`node_endpoint`));
 
         const tx_hash = id;
-        this.title = localization.get_text(`Transaction {}`, [tx_hash]);
+        this.title = localization.get_text(`Transaction {}`, [reduce_text(tx_hash)]);
         this.description = localization.get_text(`Transaction details of {}`, [tx_hash]);
 
         try {
@@ -143,7 +144,7 @@ export class TransactionPage extends Page {
         try {
             if (!consumed && id) {
                 const tx_hash = id;
-                this.set_window_title(`Transaction ${tx_hash}`);
+                this.set_window_title(`Transaction ${reduce_text(tx_hash)}`);
 
                 const node = XelisNode.instance();
                 this.page_data.server_data = await TransactionPage.load_server_data(node.rpc, tx_hash);

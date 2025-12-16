@@ -16,6 +16,7 @@ import { localization } from "../../localization/localization";
 import { BlockRewards } from './components/rewards/rewards';
 import { BlockFees } from "./components/fees/fees";
 import { BlockNextBlockBtns } from "./components/next_block_btns/next_block_btns";
+import { reduce_text } from "../../utils/reduce_text";
 
 import './block.css';
 
@@ -44,7 +45,7 @@ export class BlockPage extends Page {
         }
 
         const daemon = new DaemonRPC(c.get(`node_endpoint`));
-        this.title = localization.get_text(`Block {}`, [block_hash]);
+        this.title = localization.get_text(`Block {}`, [reduce_text(block_hash)]);
         this.description = localization.get_text(`Block details of {}`, [block_hash]);
 
         try {
@@ -123,7 +124,7 @@ export class BlockPage extends Page {
         try {
             if (!consumed && id) {
                 const block_hash = id;
-                this.set_window_title(`Block ${block_hash}`);
+                this.set_window_title(`Block ${reduce_text(block_hash)}`);
 
                 const node = XelisNode.instance();
 

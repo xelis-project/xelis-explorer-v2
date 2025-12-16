@@ -8,11 +8,11 @@ import { RPCMethod as DaemonRPCMethod, GetContractModuleParams, GetContractModul
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { NotFoundPage } from "../not_found/not_found";
 import { localization } from "../../localization/localization";
-import { XELIS_ASSET } from "@xelis/sdk/config";
-
-import './contract.css';
 import { ContractAssets } from "./components/assets/assets";
 import { ContractInfo } from "./components/info/info";
+import { reduce_text } from "../../utils/reduce_text";
+
+import './contract.css';
 
 interface ContractPageServerData {
     transaction?: TransactionResponse;
@@ -78,7 +78,7 @@ export class ContractPage extends Page {
         const daemon = new DaemonRPC(c.get(`node_endpoint`));
 
         const contract_hash = id;
-        this.title = localization.get_text(`Contract {}`, [contract_hash]);
+        this.title = localization.get_text(`Contract {}`, [reduce_text(contract_hash)]);
         this.description = localization.get_text(`Contract details of {}`, [contract_hash]);
 
         try {
@@ -127,7 +127,7 @@ export class ContractPage extends Page {
         try {
             if (!consumed && id) {
                 const contract_hash = id;
-                this.set_window_title(`Contract ${contract_hash}`);
+                this.set_window_title(`Contract ${reduce_text(contract_hash)}`);
 
                 const node = XelisNode.instance();
                 this.page_data.server_data = await ContractPage.load_server_data(node.rpc, contract_hash);
