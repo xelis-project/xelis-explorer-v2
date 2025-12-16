@@ -66,6 +66,7 @@ export class DAG {
     load_height: number;
 
     block_spacing = 6;
+    max_display_height = 100;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -196,7 +197,7 @@ export class DAG {
             this.add_block_to_height(new_block);
 
             const min_height = Math.min(...this.blocks_by_height.keys());
-            if (this.blocks_by_height.size >= 25) {
+            if (this.blocks_by_height.size > this.max_display_height) {
                 this.delete_height(min_height);
             }
 
@@ -445,7 +446,7 @@ export class DAG {
         this.height_control.set_height(height);
         this.height_control.set_max_height(max_height);
 
-        const heigth_count = Math.round(100 / 2); // display 100 heights
+        const heigth_count = Math.round(this.max_display_height / 2);
         const start_height = Math.max(0, height - heigth_count);
         const end_height = Math.min(max_height, height + heigth_count);
 
