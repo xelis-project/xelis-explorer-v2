@@ -54,7 +54,7 @@ export class TransactionInfo {
 
     set(tx: TransactionResponse) {
         this.set_hash(tx.hash);
-        this.set_fees(tx.fee);
+        this.set_fees(tx.fee, tx.fee_limit);
         this.set_size(tx.size);
         this.set_signer(tx.source);
     }
@@ -66,10 +66,15 @@ export class TransactionInfo {
         `;
     }
 
-    set_fees(fees: number) {
+    set_fees(min_fee: number, max_fee: number) {
+        // TODO: get the actual fee paid
         this.fees_element.innerHTML = `
             <div>FEES</div>
-            <div>${format_xel(fees, true)}</div>
+            <div>
+                <div><div>MIN</div><div>${format_xel(min_fee, true)}</div></div>
+                <div><div>PAID</div><div>--</div></div>
+                <div><div>MAX</div><div>${format_xel(max_fee, true)}</div></div>
+            </div>
         `;
     }
 

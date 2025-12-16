@@ -5,7 +5,7 @@
     animation: xe-transaction-info-appear-animation .75s;
 }
 
-@keyframes xe-transaction-info-appear-animation  {
+@keyframes xe-transaction-info-appear-animation {
     0% {
         opacity: 0;
         translate: 0 -25%;
@@ -45,7 +45,7 @@
 
 .xe-transaction-info-fees {
     display: flex;
-    gap: .25rem;
+    gap: .5rem;
     flex-direction: column;
     font-size: 1.2rem;
     flex: 1;
@@ -54,6 +54,30 @@
 .xe-transaction-info-fees>:nth-child(1) {
     color: #afafaf;
     font-size: .9rem;
+}
+
+.xe-transaction-info-fees>:nth-child(2) {
+    display: flex;
+    gap: 1rem;
+    align-self: flex-start;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: .75rem 1rem;
+    border-radius: 1rem;
+}
+
+.xe-transaction-info-fees>:nth-child(2)>div {
+    display: flex;
+    gap: .25rem;
+    flex-direction: column;
+}
+
+.xe-transaction-info-fees>:nth-child(2)>div>:nth-child(1) {
+    font-size: .8rem;
+    color: #afafaf;
+}
+
+.xe-transaction-info-fees>:nth-child(2)>div>:nth-child(2) {
+    font-size: 1rem;
 }
 
 .xe-transaction-info-size {
