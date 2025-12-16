@@ -121,6 +121,7 @@ export class DashboardPage extends Page {
         console.log("new_block", new_block);
 
         if (new_block) {
+            const node = XelisNode.instance();
             const block_item = this.dashboard_blocks.block_items.find(b => b.data && b.data.hash === new_block.hash);
             if (!block_item) {
                 this.dashboard_blocks.block_items.forEach((block_item) => {
@@ -137,17 +138,14 @@ export class DashboardPage extends Page {
                     this.dashboard_txs.remove_block_txs(last_block.data.hash);
                 }
 
-                const update_txs = async () => {
-                    // we don't need to fetch txs, new_block should already have them
-                    // await fetch_block_txs(new_block);
-                    if (new_block.transactions) {
-                        new_block.transactions.forEach((tx) => {
-                            this.dashboard_txs.prepend_tx({ block: new_block, tx });
-                        });
-                    }
+                // don't add txs from side block to avoid duplicate 
+                if (new_block.block_type === BlockType.Normal) {
+                    // using txs_hashes instead of transactions, transactions array is empty for now
+                    new_block.txs_hashes.forEach(async (tx_hash) => {
+                        const tx = await node.ws.methods.getTransaction(tx_hash);
+                        this.dashboard_txs.prepend_tx({ block: new_block, tx });
+                    });
                 }
-
-                update_txs();
 
                 this.page_data.blocks = this.dashboard_blocks.block_items.map(x => x.data!);
                 await this.load_top_stats();
@@ -163,7 +161,6 @@ export class DashboardPage extends Page {
                 block_item.animate_update();
             }
 
-            const node = XelisNode.instance();
             const stable_height = await node.ws.methods.getStableHeight();
 
             // normal blocks become sync under stableheight
