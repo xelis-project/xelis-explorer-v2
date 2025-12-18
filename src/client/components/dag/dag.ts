@@ -397,6 +397,7 @@ export class DAG {
         this.block_details.hide();
         this.set_live(false); // clear listener and set live flag to false
         this.stop_animation_loop();
+        this.dispose_objects();
     }
 
     listen_node_events() {
@@ -460,11 +461,26 @@ export class DAG {
         }
     }
 
+    dispose_objects() {
+        this.dispose_group(this.tip_line_group);
+        this.tip_line_group.clear();
+
+        this.dispose_group(this.block_group);
+        this.block_group.clear();
+
+        this.dispose_group(this.height_group);
+        this.height_group.clear();
+
+        this.block_mesh_hashes.clear();
+        this.blocks_by_height.clear();
+    }
+
     async load_blocks(height: number) {
         this.canvas.classList.add(`xe-dag-load-flash`);
         this.load_height = height;
         this.stable_height_line.visible = false;
         this.target_height_line.visible = false;
+        this.dispose_objects();
 
         const node = XelisNode.instance();
 
@@ -498,12 +514,6 @@ export class DAG {
         const res = await node.rpc.batchRequest(requests);
 
         this.controls.normalizeRotations().reset(true);
-        this.tip_line_group.clear();
-        this.block_group.clear();
-        this.block_mesh_hashes.clear();
-        this.blocks_by_height.clear();
-        this.height_group.clear();
-
         let blocks = [] as Block[];
         res.forEach((result, i) => {
             if (result instanceof Error) {
@@ -873,7 +883,9 @@ export class DAG {
     // there are some objects that needs to be dipose() manually like BufferGeometry, etc...
     dispose_group(group: THREE.Group) {
         group.children.forEach(child => {
-            if (child instanceof Text) {
+            if (child instanceof THREE.Group) {
+                this.dispose_group(child);
+            } else if (child instanceof Text) {
                 (child as any).dispose();
             } else if (child instanceof THREE.Mesh) {
                 if (child.geometry) {
