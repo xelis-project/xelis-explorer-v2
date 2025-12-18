@@ -40,7 +40,13 @@ export class NextUpgrade {
 	}
 
 	set(hard_fork: HardFork, top_block: Block) {
-		const target_timestamp = Date.now() + ((hard_fork.height - top_block.height) * 15000);
+		let block_time = 15000;
+		// HardFork v3 introduce block of 5s instead of 15s
+		if (hard_fork.version >= 3) {
+			block_time = 5000;
+		}
+
+		const target_timestamp = Date.now() + ((hard_fork.height - top_block.height) * block_time);
 		this.element.replaceChildren();
 		this.element.appendChild(this.container.element);
 		this.countdown.set(target_timestamp);
