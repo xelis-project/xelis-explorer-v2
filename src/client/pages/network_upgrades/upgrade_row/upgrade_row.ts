@@ -1,6 +1,7 @@
 import { Block, HardFork } from "@xelis/sdk/daemon/types";
 import { Row } from "../../../components/table/row";
 import { XelisNode } from "../../../app/xelis_node";
+import { get_block_time_by_height } from "../../../utils/get_block_time";
 
 import './upgrade_row.css';
 
@@ -46,7 +47,8 @@ export class UpgradeRow extends Row {
             this.value_cells[4].innerHTML = date.toLocaleString();
         } else {
             // guess the date
-            const expected_timestamp = Date.now() + ((height - top_block.height) * 15000);
+            const block_time = get_block_time_by_height(height);
+            const expected_timestamp = Date.now() + ((height - top_block.height) * block_time);
             const date = new Date(expected_timestamp);
             this.value_cells[4].innerHTML = `~${date.toLocaleString()}`;
             this.value_cells[4].className = `xe-network-upgrade-guess`;

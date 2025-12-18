@@ -2,6 +2,7 @@ import { Block, HardFork } from "@xelis/sdk/daemon/types";
 import { Container } from "../../../components/container/container";
 import { Countdown } from "../../../components/countdown/countdown";
 import { localization } from "../../../localization/localization";
+import { get_block_time_by_version } from "../../../utils/get_block_time";
 
 import './next_upgrade.css';
 
@@ -40,12 +41,7 @@ export class NextUpgrade {
 	}
 
 	set(hard_fork: HardFork, top_block: Block) {
-		let block_time = 15000;
-		// HardFork v3 introduce block of 5s instead of 15s
-		if (hard_fork.version >= 3) {
-			block_time = 5000;
-		}
-
+		let block_time = get_block_time_by_version(hard_fork.version);
 		const target_timestamp = Date.now() + ((hard_fork.height - top_block.height) * block_time);
 		this.element.replaceChildren();
 		this.element.appendChild(this.container.element);
