@@ -196,7 +196,7 @@ export class DAG {
             this.add_block_to_height(new_block);
 
             const min_height = Math.min(...this.blocks_by_height.keys());
-            if (this.blocks_by_height.size > this.max_display_height) {
+            if (this.blocks_by_height.size > 10 /*this.max_display_height*/) {
                 this.delete_height(min_height);
             }
 
@@ -281,6 +281,7 @@ export class DAG {
                             const new_block_mesh = this.create_block_mesh(single_block);
                             new_block_mesh.position.copy(block_mesh.position);
                             this.block_group.remove(block_mesh);
+                            this.dispose_group(block_mesh as THREE.Group);
                             this.block_group.add(new_block_mesh);
                         }
                     }
@@ -294,6 +295,7 @@ export class DAG {
         this.height_group.children.forEach((height_mesh) => {
             if (height_mesh.userData.height === height) {
                 this.height_group.remove(height_mesh);
+                this.dispose_group(height_mesh as THREE.Group);
             }
         });
 
@@ -303,6 +305,7 @@ export class DAG {
                 const block_mesh = this.block_mesh_hashes.get(block.hash);
                 if (block_mesh) {
                     this.block_group.remove(block_mesh);
+                    this.dispose_group(block_mesh);
                     this.block_mesh_hashes.delete(block.hash);
                 }
             });
@@ -316,6 +319,7 @@ export class DAG {
             tip_lines_to_delete.forEach((tip_line) => {
                 this.tip_mesh_hashes.delete(tip_line.userData.hash);
                 this.tip_line_group.remove(tip_line);
+                this.dispose_group(tip_line as THREE.Group);
             });
         }
     }
@@ -333,6 +337,7 @@ export class DAG {
                 const new_block_mesh = this.create_block_mesh(block);
                 new_block_mesh.position.copy(block_mesh.position);
                 this.block_group.remove(block_mesh);
+                this.dispose_group(block_mesh);
                 this.block_group.add(new_block_mesh);
                 this.animate_block_appear(new_block_mesh);
 
@@ -860,5 +865,22 @@ export class DAG {
         const delta = this.clock.getDelta();
         this.controls.update(delta);
         this.renderer.render(this.scene, this.orthographic_camera);
+    }
+
+    // there are some objects that needs to be dipose() manually like BufferGeometry, etc...
+    dispose_group(group: THREE.Group) {
+        group.children.forEach(child => {
+            if (child instanceof Text) {
+                (child as any).dispose();
+            } else if (child instanceof THREE.Mesh) {
+                if (child.geometry) {
+                    child.geometry.dispose();
+                }
+
+                if (child.material) {
+                    child.material.dispose();
+                }
+            }
+        });
     }
 }
