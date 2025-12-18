@@ -310,18 +310,21 @@ export class DAG {
                 }
             });
             this.blocks_by_height.delete(height);
-
-            const tip_lines_to_delete = this.tip_line_group.children.filter((tip_line_mesh) => {
-                const block_target_height = tip_line_mesh.userData.block_target_height;
-                return block_target_height === height;
-            });
-
-            tip_lines_to_delete.forEach((tip_line) => {
-                this.tip_mesh_hashes.delete(tip_line.userData.hash);
-                this.tip_line_group.remove(tip_line);
-                this.dispose_group(tip_line as THREE.Group);
-            });
+            this.delete_tip_lines(height);
         }
+    }
+
+    delete_tip_lines(target_height: number) {
+        const tip_lines_to_delete = this.tip_line_group.children.filter((tip_line_mesh) => {
+            const block_target_height = tip_line_mesh.userData.block_target_height;
+            return block_target_height === target_height;
+        });
+
+        tip_lines_to_delete.forEach((tip_line) => {
+            this.tip_mesh_hashes.delete(tip_line.userData.hash);
+            this.tip_line_group.remove(tip_line);
+            this.dispose_group(tip_line as THREE.Group);
+        });
     }
 
     on_block_ordered = async (block_ordered?: BlockOrdered | undefined, err?: Error) => {
