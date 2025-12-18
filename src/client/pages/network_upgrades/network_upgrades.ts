@@ -17,7 +17,7 @@ export class NetworkUpgradesPage extends Page {
 
 	static async handle_server(c: Context<ServerApp>) {
 		this.title = localization.get_text(`Network Upgrades`);
-		this.description = localization.get_text(``);
+		this.description = localization.get_text(`List of network upgrades with version histories, changelogs and countdown about upcoming release.`);
 	}
 
 	master: Master;
