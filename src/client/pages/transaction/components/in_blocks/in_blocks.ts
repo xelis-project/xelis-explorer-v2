@@ -28,11 +28,7 @@ export class TransactionInBlocks {
         this.title_element.innerHTML = localization.get_text(`IN BLOCKS`);
 
         this.legend_element = document.createElement(`div`);
-        this.legend_element.classList.add(`xe-transaction-in-blocks-legend`);
         container_1.appendChild(this.legend_element);
-        this.legend_element.innerHTML = `
-            <div></div><div>${localization.get_text(`EXECUTED IN BLOCK`)}</div>
-        `;
 
         this.blocks_element = document.createElement(`div`);
         this.container.element.appendChild(this.blocks_element);
@@ -58,11 +54,22 @@ export class TransactionInBlocks {
         this.blocks_element.appendChild(block_item.box.element);
     }
 
+    set_legend(executed_in_block?: string) {
+        if (executed_in_block) {
+            this.legend_element.className = `xe-transaction-in-blocks-legend executed`;
+            this.legend_element.innerHTML = `<div></div><div>${localization.get_text(`EXECUTED IN BLOCK`)}</div>`;
+        } else {
+            this.legend_element.className = `xe-transaction-in-blocks-legend failed`;
+            this.legend_element.innerHTML = `<div></div><div>${localization.get_text(`NOT EXECUTED`)}</div>`;
+        }
+    }
+
     set(blocks: Block[], executed_in_block?: string) {
         this.block_items = [];
         this.blocks_element.replaceChildren();
         blocks.forEach((block) => {
             this.append_block(block, executed_in_block);
         });
+        this.set_legend(executed_in_block);
     }
 }

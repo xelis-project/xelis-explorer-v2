@@ -5,7 +5,7 @@
     animation: xe-transaction-in-blocks-appear-animation .65s;
 }
 
-@keyframes xe-transaction-in-blocks-appear-animation  {
+@keyframes xe-transaction-in-blocks-appear-animation {
     0% {
         opacity: 0;
         translate: 0 25%;
@@ -37,14 +37,27 @@
     align-items: center;
 }
 
-.xe-transaction-in-blocks-legend>:nth-child(1) {
+.xe-transaction-in-blocks-legend.executed>:nth-child(1) {
     width: .5rem;
     height: .5rem;
     border-radius: 100%;
     border: .2rem solid #02ffcf;
 }
 
-.xe-transaction-in-blocks-legend>:nth-child(2) {
+.xe-transaction-in-blocks-legend.executed>:nth-child(2) {
     color: #02FFCF;
     font-size: .8rem;
+}
+
+.xe-transaction-in-blocks-legend.failed>:nth-child(1) {
+    width: .75rem;
+    height: .75rem;
+    border-radius: 100%;
+    background: #d51f1f;
+}
+
+.xe-transaction-in-blocks-legend.failed>:nth-child(2) {
+    color: #d51f1f;
+    font-size: .8rem;
+    font-weight: bold;
 }
