@@ -20,11 +20,11 @@ interface PeerMarker {
 
 export class PeersMap {
     element: HTMLDivElement;
-    map!: leaflet.Map;
     loading_element?: HTMLDivElement;
     peer_count_element: HTMLDivElement;
     overlay_loading: OverlayLoading;
 
+    map!: leaflet.Map;
     peer_markers: Record<string, PeerMarker>;
 
     constructor() {
@@ -81,6 +81,12 @@ export class PeersMap {
     }
 
     async set(peers_locations: PeerLocation[]) {
+        Object.keys(this.peer_markers).forEach(key => {
+            const { marker } = this.peer_markers[key];
+            marker.remove();
+        });
+        this.peer_markers = {};
+
         const group_markers = {} as Record<string, PeerLocation[]>;
 
         this.set_peer_count(peers_locations.length);
