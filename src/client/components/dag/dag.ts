@@ -67,6 +67,7 @@ export class DAG {
 
     block_spacing = 6;
     max_display_height = 100;
+    animation_loop_active = false;
 
     constructor() {
         this.element = document.createElement(`div`);
@@ -100,8 +101,6 @@ export class DAG {
 
         const rect = this.element.getBoundingClientRect();
         this.renderer.setSize(rect.width, rect.height);
-
-        this.renderer.setAnimationLoop(this.render);
         this.element.appendChild(this.renderer.domElement);
 
         this.orthographic_camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 2000);
@@ -346,14 +345,13 @@ export class DAG {
         if (this.is_live === live) return;
 
         this.is_live = live;
-        const node = XelisNode.instance();
 
         if (live) {
             // Start listening for new_block events immediately, even before loading the primary block fetch.
             // If we listen after we could miss some blocks and create gaps in the DAG display.
-            node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
-            node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+            this.listen_node_events();
 
+            const node = XelisNode.instance();
             const current_height = await node.rpc.getHeight();
             await this.load_blocks(current_height);
 
@@ -366,17 +364,37 @@ export class DAG {
             this.height_control.prev_height_element.style.display = `none`;
         }
         else {
-            node.ws.methods.removeListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
-            node.ws.methods.removeListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
+            this.clear_node_events();
             this.height_control.live_btn_element.classList.remove(`active`);
             this.height_control.next_height_element.style.removeProperty(`display`);
             this.height_control.prev_height_element.style.removeProperty(`display`);
         }
+
+        this.start_animation_loop();
     }
 
-    clear() {
+    start_animation_loop() {
+        if (this.animation_loop_active) return;
+        this.animation_loop_active = true;
+        this.renderer.setAnimationLoop(this.on_update);
+    }
+
+    stop_animation_loop() {
+        if (!this.animation_loop_active) return;
+        this.animation_loop_active = false;
+        this.renderer.setAnimationLoop(null);
+    }
+
+    unload() {
         this.block_details.hide();
         this.set_live(false); // clear listener and set live flag to false
+        this.stop_animation_loop();
+    }
+
+    listen_node_events() {
+        const node = XelisNode.instance();
+        node.ws.methods.addListener(DaemonRPCEvent.NewBlock, null, this.on_new_block);
+        node.ws.methods.addListener(DaemonRPCEvent.BlockOrdered, null, this.on_block_ordered);
     }
 
     clear_node_events() {
@@ -524,6 +542,8 @@ export class DAG {
 
         const stable_height = await node.ws.methods.getStableHeight();
         this.move_stable_height_line(stable_height);
+
+        this.start_animation_loop();
     }
 
     move_stable_height_line(height: number) {
@@ -833,7 +853,7 @@ export class DAG {
         return block_mesh;
     }
 
-    render = (time: number) => {
+    on_update = (time: number) => {
         this.raycaster.setFromCamera(this.pointer, this.orthographic_camera);
         this.intercept_block();
 

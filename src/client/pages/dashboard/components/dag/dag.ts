@@ -40,6 +40,6 @@ export class DashboardDAG {
 
     unload() {
         window.removeEventListener(`resize`, () => this.on_resize());
-        this.dag.clear();
+        this.dag.unload();
     }
 }

@@ -60,6 +60,6 @@ export class DAGPage extends Page {
 
     unload() {
         super.unload();
-        this.dag.clear();
+        this.dag.unload();
     }
 }

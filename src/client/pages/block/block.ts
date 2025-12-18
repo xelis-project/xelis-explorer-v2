@@ -249,7 +249,7 @@ export class BlockPage extends Page {
     unload() {
         super.unload();
         this.clear_node_events();
-        this.block_graph.dag.clear();
+        this.block_graph.dag.unload();
         this.block_txs.tx_data_hover.hide();
         window.clearInterval(this.update_interval_1000_id);
     }
