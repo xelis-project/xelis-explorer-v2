@@ -196,7 +196,7 @@ export class DAG {
             this.add_block_to_height(new_block);
 
             const min_height = Math.min(...this.blocks_by_height.keys());
-            if (this.blocks_by_height.size > 10 /*this.max_display_height*/) {
+            if (this.blocks_by_height.size > this.max_display_height) {
                 this.delete_height(min_height);
             }
 
