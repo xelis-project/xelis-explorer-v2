@@ -25,11 +25,13 @@ export class PeersMap {
     overlay_loading: OverlayLoading;
 
     map!: leaflet.Map;
-    peer_markers: Record<string, PeerMarker>;
+    peer_markers: Map<string, PeerMarker>;
+    peer_marker_keys: Map<string, string>;
 
     constructor() {
         this.element = document.createElement(`div`);
-        this.peer_markers = {};
+        this.peer_markers = new Map();
+        this.peer_marker_keys = new Map();
         this.setup_map();
 
         this.peer_count_element = document.createElement(`div`);
@@ -81,46 +83,24 @@ export class PeersMap {
     }
 
     async set(peers_locations: PeerLocation[]) {
-        Object.keys(this.peer_markers).forEach(key => {
-            const { marker } = this.peer_markers[key];
-            marker.remove();
-        });
-        this.peer_markers = {};
-
-        const group_markers = {} as Record<string, PeerLocation[]>;
-
         this.set_peer_count(peers_locations.length);
 
-        peers_locations.forEach((peer_location) => {
-            const { geo_location } = peer_location;
-            const key = `${geo_location.latitude},${geo_location.longitude}`;
-            if (group_markers[key]) {
-                group_markers[key].push(peer_location);
-            } else {
-                group_markers[key] = [peer_location];
+        // Add new peers
+        for (let i = 0; i < peers_locations.length; i++) {
+            const peer_location = peers_locations[i];
+            await this.add_peer_marker(peer_location);
+        }
+
+        // Remove disappeared peers
+        this.peer_marker_keys.forEach((_, peer_id) => {
+            const peer = peers_locations.find(p => p.peer.id === peer_id);
+            if (!peer) {
+                this.remove_peer_marker(peer_id);
             }
         });
-
-        const group_marker_keys = Object.keys(group_markers);
-        for (let i = 0; i < group_marker_keys.length; i++) {
-            const key = group_marker_keys[i];
-            const peers_locations = group_markers[key];
-            const first_peer_location = peers_locations[0];
-            const { geo_location } = first_peer_location;
-            const peers = peers_locations.map(p => p.peer);
-
-            const marker_key = this.build_marker_key(geo_location);
-            const peer_marker = await this.new_peer_marker(geo_location, peers.length);
-            if (peer_marker) {
-                const new_popup = this.build_marker_popup(geo_location, peers);
-                peer_marker.addTo(this.map);
-                peer_marker.bindPopup(new_popup, { closeButton: false });
-                this.peer_markers[marker_key] = { marker: peer_marker, geo_location, peers };
-            }
-        }
     }
 
-    build_marker_popup(geo_location: GeoLocationData, peers: Peer[]) {
+    bind_marker_popup(marker: leaflet.CircleMarker, geo_location: GeoLocationData, peers: Peer[]) {
         const popup_peers = peers.map((peer) => {
             return `<div>${peer.addr} (${peer.version})</div>`;
         }).join(``);
@@ -134,7 +114,7 @@ export class PeersMap {
             </div>
         `;
 
-        return popup;
+        marker.bindPopup(popup, { closeButton: false });
     }
 
     build_marker_key(geo_location: GeoLocationData) {
@@ -158,46 +138,54 @@ export class PeersMap {
     async add_peer_marker(peer_location: PeerLocation) {
         const { geo_location, peer } = peer_location;
         const marker_key = this.build_marker_key(geo_location);
-        const peer_marker = this.peer_markers[marker_key];
+        const peer_marker = this.peer_markers.get(marker_key);
         if (peer_marker) {
+            // skip adding peer to popup if already in there
+            if (peer_marker.peers.find(p => p.id === peer.id)) {
+                return;
+            }
+
             // add peer to marker popup
             peer_marker.peers.push(peer);
-            const new_popup = this.build_marker_popup(geo_location, peer_marker.peers);
-            peer_marker.marker.bindPopup(new_popup);
+            this.peer_marker_keys.set(peer.id, marker_key);
+            this.bind_marker_popup(peer_marker.marker, geo_location, peer_marker.peers);
             peer_marker.marker.setRadius(4 + peer_marker.peers.length); // resize marker
         } else {
             // add new marker
             const marker = await this.new_peer_marker(geo_location, 1);
             if (marker) {
                 marker.addTo(this.map);
-                this.peer_markers[marker_key] = { marker, geo_location, peers: [peer_location.peer] };
+                this.bind_marker_popup(marker, geo_location, [peer]);
+                this.peer_marker_keys.set(peer.id, marker_key);
+                this.peer_markers.set(marker_key, { marker, geo_location, peers: [peer_location.peer] });
             }
         }
     }
 
     remove_peer_marker(peer_id: string) {
-        const marker_keys = Object.keys(this.peer_markers);
-        for (let i = 0; i < marker_keys.length; i++) {
-            const marker_key = marker_keys[i];
-            const peer_marker = this.peer_markers[marker_key];
+        const marker_key = this.peer_marker_keys.get(peer_id);
+        if (marker_key) {
+            const peer_marker = this.peer_markers.get(marker_key);
+            if (peer_marker) {
+                for (let a = 0; a < peer_marker.peers.length; a++) {
+                    const peer = peer_marker.peers[a];
+                    if (peer.id === peer_id) {
+                        if (peer_marker.peers.length > 1) {
+                            // remove peer from popup
+                            peer_marker.peers.splice(a, 1);
+                            this.bind_marker_popup(peer_marker.marker, peer_marker.geo_location, peer_marker.peers);
+                        } else {
+                            // remove marker completely
+                            peer_marker.marker.remove();
+                            this.peer_markers.delete(marker_key);
+                        }
 
-            for (let a = 0; a < peer_marker.peers.length; a++) {
-                const peer = peer_marker.peers[a];
-                if (peer.id === peer_id) {
-                    if (peer_marker.peers.length > 1) {
-                        // remove peer from popup
-                        peer_marker.peers.splice(a, 1);
-                        const new_popup = this.build_marker_popup(peer_marker.geo_location, peer_marker.peers);
-                        peer_marker.marker.bindPopup(new_popup);
-                    } else {
-                        // remove marker completely
-                        peer_marker.marker.remove();
-                        Reflect.deleteProperty(this.peer_markers, marker_key);
+                        break;
                     }
-
-                    break;
                 }
             }
+
+            this.peer_marker_keys.delete(peer_id);
         }
     }
 }
