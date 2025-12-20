@@ -82,18 +82,26 @@ export class DashboardHashRate {
 
         const min_data = data.reduce((a, b) => (a.y < b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
         const max_data = data.reduce((a, b) => (a.y > b.y ? a : b), data[0] ? data[0] : { x: 0, y: 0 });
-        const defs = this.chart.node.append("defs");
+        const avg_y = d3.mean(data, d => d.y) as number;
 
-        const gradient = defs.append("linearGradient")
+
+        this.chart.node.selectAll(".grad-defs").remove();
+
+        const gradient = this.chart.node
+            .append("defs")
+            .attr("class", "grad-defs")
+            .append("linearGradient")
             .attr("id", "grad_y")
             .attr("gradientUnits", "userSpaceOnUse")
-            .attr("x1", 0).attr("x2", 0)
+            .attr("x1", 0)
+            .attr("x2", 0)
             .attr("y1", y_scale(min_data.y))
             .attr("y2", y_scale(max_data.y));
 
         gradient.append("stop")
             .attr("offset", "0%")
             .attr("stop-color", "#02ffcf");
+
         gradient.append("stop")
             .attr("offset", "100%")
             .attr("stop-color", "#ff00aa");
@@ -112,61 +120,67 @@ export class DashboardHashRate {
 
         path.exit().remove();
 
-        // update tooltip
-        const chart_rect_width = this.chart.rect.width;
-        this.chart.node
-            .selectAll(`.tooltip`)
-            .remove();
+        const add_tooltip = (prefix: string, text: string, x: number, y: number) => {
+            if (!this.chart) return;
 
-        const tooltip = this.chart.node
-            .selectAll(`.tooltip`)
-            .data<DataPoint>([min_data, max_data])
-            .enter()
-            .append(`g`)
-            .attr(`class`, `tooltip`);
+            this.chart.node
+                .selectAll(`.${prefix}-tooltip`)
+                .remove();
 
-        const info = this.info;
-        tooltip
-            .append(`text`)
-            .text(d => format_hashrate(d.y, d.x))
-            .each(function (d) {
-                const self = this as SVGTextElement;
+            const tooltip = this.chart.node
+                .selectAll(`.${prefix}-tooltip`)
+                .data([null])
+                .enter()
+                .append(`g`)
+                .attr(`class`, `${prefix}-tooltip`);
 
-                const text_box = self.getBBox();
-                const rect_margin = { top: 2, left: 10, bottom: 2, right: 10 };
+            const text_tooltip = tooltip
+                .append(`text`)
+                .attr("text-anchor", "middle")
+                .style("font-size", "1rem")
+                .style("font-weight", "bold")
+                .style("fill", "black")
+                .text(text);
+
+            const text_node = text_tooltip.node();
+            if (text_node) {
+                const text_box = text_node.getBBox();
+                const rect_margin = { top: 3, left: 10, bottom: 2, right: 10 };
                 const rect_width = text_box.width + rect_margin.left + rect_margin.right;
                 const rect_height = text_box.height + rect_margin.top + rect_margin.bottom;
 
-                const text_pos = { x: 0, y: 0 };
-                text_pos.x = Math.min(chart_rect_width - rect_width - 10, Math.max(0, x_scale(d.x) - text_box.width / 2));
-                text_pos.y = Math.max(rect_height / 2, y_scale(d.y));
-                d.text = text_pos;
+                tooltip.insert(`rect`, ":first-child")
+                    .attr("x", -rect_width / 2)
+                    .attr("y", -rect_height / 2 - rect_margin.top - rect_margin.bottom)
+                    .attr("width", d => rect_width)
+                    .attr("height", d => rect_height)
+                    .style("backdrop-filter", "blur(10px)")
+                    .style('fill', 'rgba(2, 255, 209, 1)');
 
-                const text_rect = {} as DOMRect;
-                text_rect.x = text_pos.x - rect_margin.left + 2;
-                text_rect.y = text_pos.y - (rect_height / 2) - 5;
-                text_rect.width = rect_width;
-                text_rect.height = rect_height;
+                const clamp_x = Math.max(text_box.width / 2, Math.min(this.chart.width - text_box.width / 2, x));
+                const clamp_y = Math.max(text_box.height / 2, Math.min(this.chart.height - text_box.height / 2, y));
+                tooltip.attr("transform", `translate(${clamp_x}, ${clamp_y})`);
+            }
+        }
 
-                d.text_rect = text_rect;
-            })
-            .attr("x", d => {
-                return d.text ? d.text.x : 0;
-            })
-            .attr("y", d => {
-                return d.text ? d.text.y : 0;
-            })
-            .style('font-size', '1rem')
-            //.style("text-anchor", "middle") // using js to anchor text in the middle to bound text within the canvas
-            .style('font-weight', `bold`)
-            .style('fill', 'rgba(0, 0, 0, 1)');
+        // Avg line
+        this.chart.node
+            .selectAll(".avg-line")
+            .data([avg_y])
+            .join("line")
+            .attr("class", "avg-line")
+            .attr("x1", 0)
+            .attr("x2", "100%")
+            .attr("y1", y_scale(avg_y))
+            .attr("y2", y_scale(avg_y))
+            .attr("stroke", "#2CFFCF")
+            .attr("stroke-width", 3)
+            .attr("opacity", "1")
+            .attr("stroke-dasharray", "6 4");
 
-        tooltip.insert(`rect`, ":first-child")
-            .attr("x", d => d.text_rect ? d.text_rect.x : 0)
-            .attr("y", d => d.text_rect ? d.text_rect.y : 0)
-            .attr("width", d => d.text_rect ? d.text_rect.width : 0)
-            .attr("height", d => d.text_rect ? d.text_rect.height : 0)
-            .style('fill', 'rgba(2, 255, 209)');
+        add_tooltip("avg", `AVG ${format_hashrate(avg_y, min_data.x)}`, this.chart.width / 2, y_scale(avg_y));
+        add_tooltip("min", `MIN ${format_hashrate(min_data.y, min_data.x)}`, x_scale(min_data.x), y_scale(min_data.y));
+        add_tooltip("max", `MAX ${format_hashrate(max_data.y, max_data.x)}`, x_scale(max_data.x), y_scale(max_data.y));
     }
 
     set(info: GetInfoResult, blocks: Block[]) {
