@@ -43,7 +43,7 @@ export class BlockHashrate {
     set_hashrate(block: Block) {
         this.hashrate_element.innerHTML = `
             <div>${localization.get_text(`HASHRATE`)}</div>
-            <div>${format_hashrate(parseInt(block.difficulty), block.height)}</div>
+            <div>${format_hashrate(parseInt(block.difficulty), block.version)}</div>
         `;
     }
 

@@ -239,7 +239,7 @@ export class DAGBlockDetails {
     }
 
     set_hashrate(block: Block) {
-        this.set_item(this.element_hashrate, localization.get_text(`HASHRATE`), format_hashrate(parseInt(block.difficulty), block.height));
+        this.set_item(this.element_hashrate, localization.get_text(`HASHRATE`), format_hashrate(parseInt(block.difficulty), block.version));
     }
 
     set_size(size_in_bytes: number) {

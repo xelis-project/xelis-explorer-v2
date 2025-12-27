@@ -1,7 +1,7 @@
 import { Block, HardFork } from "@xelis/sdk/daemon/types";
 import { Row } from "../../../components/table/row";
 import { XelisNode } from "../../../app/xelis_node";
-import { get_block_time_by_height } from "../../../utils/get_block_time";
+import { get_block_time_by_version } from "../../../utils/get_block_time";
 
 import './upgrade_row.css';
 
@@ -15,7 +15,7 @@ export class UpgradeRow extends Row {
         this.set_height(hard_fork.height);
         this.set_version(hard_fork.version);
         this.set_version_requirement(hard_fork.version_requirement);
-        this.set_online_date(hard_fork.height, top_block);
+        this.set_online_date(hard_fork.version, hard_fork.height, top_block);
     }
 
     set_changelog(changelog: string) {
@@ -34,7 +34,7 @@ export class UpgradeRow extends Row {
         this.value_cells[3].innerHTML = version_requirement ? version_requirement : `--`;
     }
 
-    async set_online_date(height: number, top_block: Block) {
+    async set_online_date(version: number, height: number, top_block: Block) {
         const node = XelisNode.instance();
         const blocks = await node.ws.methods.getBlocksAtHeight({
             height: height,
@@ -47,7 +47,7 @@ export class UpgradeRow extends Row {
             this.value_cells[4].innerHTML = date.toLocaleString();
         } else {
             // guess the date
-            const block_time = get_block_time_by_height(height);
+            const block_time = get_block_time_by_version(version);
             const expected_timestamp = Date.now() + ((height - top_block.height) * block_time);
             const date = new Date(expected_timestamp);
             this.value_cells[4].innerHTML = `~${date.toLocaleString()}`;

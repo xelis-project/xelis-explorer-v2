@@ -89,7 +89,7 @@ export class BlockRow extends Row {
     }
 
     set_hashrate(block: Block) {
-        this.value_cells[8].innerHTML = format_hashrate(parseInt(block.difficulty), block.height);
+        this.value_cells[8].innerHTML = format_hashrate(parseInt(block.difficulty), block.version);
     }
 
     set_age(timestamp: number) {

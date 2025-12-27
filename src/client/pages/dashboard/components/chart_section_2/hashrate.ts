@@ -30,7 +30,7 @@ export class DashboardHashRate {
     }
 
     set_hashrate(info: GetInfoResult) {
-        const hashrate = format_hashrate(parseInt(info.difficulty), info.height);
+        const hashrate = format_hashrate(parseInt(info.difficulty), info.block_version);
         this.box_chart.element_value.innerHTML = hashrate;
     }
 
@@ -178,6 +178,7 @@ export class DashboardHashRate {
             .attr("opacity", "1")
             .attr("stroke-dasharray", "6 4");
 
+        // TODO: use block version for format_hashrate
         add_tooltip("avg", `AVG ${format_hashrate(avg_y, min_data.x)}`, this.chart.width / 2, y_scale(avg_y));
         add_tooltip("min", `MIN ${format_hashrate(min_data.y, min_data.x)}`, x_scale(min_data.x), y_scale(min_data.y));
         add_tooltip("max", `MAX ${format_hashrate(max_data.y, max_data.x)}`, x_scale(max_data.x), y_scale(max_data.y));
