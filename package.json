@@ -1,6 +1,6 @@
 {
     "name": "xelis-explorer-v2",
-    "version": "0.1.769",
+    "version": "0.1.773",
     "type": "module",
     "scripts": {
         "dev": "vite dev --host",
@@ -18,7 +18,7 @@
     "dependencies": {
         "@alenaksu/json-viewer": "^2.1.2",
         "@emeraldpay/hashicon": "^0.5.2",
-        "@xelis/sdk": "^0.11.37",
+        "@xelis/sdk": "^0.11.39",
         "animejs": "^4.2.2",
         "camera-controls": "^3.1.0",
         "d3": "^7.9.0",
