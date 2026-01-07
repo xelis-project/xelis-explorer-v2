@@ -17,3 +17,15 @@
     flex-direction: column;
     flex: 1;
 }
+
+/* Mobile Responsive - Stack modals vertically */
+@media (max-width: 768px) {
+    .xe-contract {
+        flex-direction: column;
+    }
+
+    .xe-contract>:nth-child(1),
+    .xe-contract>:nth-child(2) {
+        width: 100%;
+    }
+}

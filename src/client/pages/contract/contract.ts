@@ -8,8 +8,9 @@ import { RPCMethod as DaemonRPCMethod, GetContractModuleParams, GetContractModul
 import { RPCRequest } from "@xelis/sdk/rpc/types";
 import { NotFoundPage } from "../not_found/not_found";
 import { localization } from "../../localization/localization";
-import { ContractAssets } from "./components/assets/assets";
 import { ContractInfo } from "./components/info/info";
+import { ContractAssets } from "./components/assets/assets";
+import { ContractStorageEntries } from "./components/storage/storage";
 import { reduce_text } from "../../utils/reduce_text";
 
 import './contract.css';
@@ -94,6 +95,7 @@ export class ContractPage extends Page {
     };
     contract_info: ContractInfo;
     contract_assets: ContractAssets;
+    contract_storage_entries: ContractStorageEntries;
 
     constructor() {
         super();
@@ -114,6 +116,9 @@ export class ContractPage extends Page {
 
         this.contract_assets = new ContractAssets();
         sub_container_2.appendChild(this.contract_assets.container.element);
+
+        this.contract_storage_entries = new ContractStorageEntries();
+        sub_container_2.appendChild(this.contract_storage_entries.container.element);
     }
 
     async load_contract() {
@@ -171,8 +176,17 @@ export class ContractPage extends Page {
 
             this.contract_info.set(contract_hash, server_data.contract_module);
             this.contract_assets.load(contract_hash);
+            this.contract_storage_entries.load(contract_hash);
         } else {
             this.set_element(NotFoundPage.instance().element);
+        }
+    }
+
+    unload() {
+        super.unload();
+        // Clean up storage entries component (closes modal, removes event listeners)
+        if (this.contract_storage_entries) {
+            this.contract_storage_entries.destroy();
         }
     }
 }
