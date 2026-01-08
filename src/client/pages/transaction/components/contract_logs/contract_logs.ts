@@ -64,7 +64,7 @@ export class TransactionContractLogs {
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`ASSET`)}</td>
-                                <td><a href="/tx/${burn.asset}">${format_hash(burn.asset)}</a></td>
+                                <td><a href="/asset/${burn.asset}">${format_hash(burn.asset)}</a></td>
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`CONTRACT`)}</td>
@@ -113,11 +113,11 @@ export class TransactionContractLogs {
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`ASSET`)}</td>
-                                <td><a href="/tx/${mint.asset}">${format_hash(mint.asset)}</a></td>
+                                <td><a href="/asset/${mint.asset}">${format_hash(mint.asset)}</a></td>
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`CONTRACT`)}</td>
-                                <td><a href="/tx/${mint.asset}">${format_hash(mint.contract)}</a></td>
+                                <td><a href="/tx/${mint.contract}">${format_hash(mint.contract)}</a></td>
                             <tr>
                         </table>
                     `;
@@ -135,7 +135,7 @@ export class TransactionContractLogs {
                         <table>
                             <tr>
                                 <td>${localization.get_text(`ASSET`)}</td>
-                                <td><a href="/tx/${new_asset.asset}">${format_hash(new_asset.asset)}</a></td>
+                                <td><a href="/asset/${new_asset.asset}">${format_hash(new_asset.asset)}</a></td>
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`CONTRACT`)}</td>
@@ -206,7 +206,7 @@ export class TransactionContractLogs {
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`ASSET`)}</td>
-                                <td><a href="/tx/${transfer.asset}">${format_hash(transfer.asset)}</a></td>
+                                <td><a href="/asset/${transfer.asset}">${format_hash(transfer.asset)}</a></td>
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`CONTRACT`)}</td>
@@ -237,7 +237,7 @@ export class TransactionContractLogs {
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`ASSET`)}</td>
-                                <td><a href="/tx/${transfer_contract.asset}">${format_hash(transfer_contract.asset)}</a></td>
+                                <td><a href="/asset/${transfer_contract.asset}">${format_hash(transfer_contract.asset)}</a></td>
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`CONTRACT`)}</td>
@@ -279,7 +279,7 @@ export class TransactionContractLogs {
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`ASSET`)}</td>
-                                <td><a href="/tx/${transfer_payload.asset}">${format_hash(transfer_payload.asset)}</a></td>
+                                <td><a href="/asset/${transfer_payload.asset}">${format_hash(transfer_payload.asset)}</a></td>
                             <tr>
                             <tr>
                                 <td>${localization.get_text(`CONTRACT`)}</td>
