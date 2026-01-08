@@ -118,6 +118,19 @@ export class ContractStorageEntries {
             return { display: String(value), isAddress };
         }
 
+        // Handle arrays
+        if (Array.isArray(value)) {
+            if (value.length === 0) {
+                return { display: '[]' };
+            }
+            // For arrays, show each element
+            const items = value.map((item, idx) => {
+                const extracted = this.extract_display_value(item);
+                return `[${idx}]: ${extracted.display}`;
+            });
+            return { display: items.join(', ') };
+        }
+
         // Handle nested type/value structures
         if (typeof value === 'object' && value.type) {
             // Handle Address type: { type: "opaque", value: { type: "Address", value: "xel:..." } }
@@ -134,6 +147,23 @@ export class ContractStorageEntries {
             // Handle other typed structures
             if (value.value !== undefined) {
                 return this.extract_display_value(value.value);
+            }
+        }
+
+        // Handle plain objects (nested key-value pairs)
+        if (typeof value === 'object' && value !== null) {
+            const entries = Object.entries(value);
+            if (entries.length === 0) {
+                return { display: '{}' };
+            }
+            
+            // For objects with few keys, show inline
+            if (entries.length <= 3) {
+                const pairs = entries.map(([k, v]) => {
+                    const extracted = this.extract_display_value(v);
+                    return `${k}: ${extracted.display}`;
+                });
+                return { display: `{ ${pairs.join(', ')} }` };
             }
         }
 

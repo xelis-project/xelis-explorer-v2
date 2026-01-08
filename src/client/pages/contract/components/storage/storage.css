@@ -408,6 +408,20 @@
         max-width: none;
     }
 
+    .xe-contract-storage-item-value-section {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .xe-contract-storage-item-value-section::before {
+        content: '- ';
+        position: absolute;
+        left: 0.25rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
     /* Increase font sizes for mobile readability */
     .xe-contract-storage-title {
         font-size: 1.5rem;
