@@ -13,7 +13,8 @@
         "deploy-testnet": "cross-env CLOUDFLARE_ENV=testnet npm run build-testnet && wrangler deploy",
         "cf-typegen": "wrangler types --env-interface CloudflareBindings",
         "find-txs": "npx tsx ./scripts/find_txs.ts",
-        "gen-lang": "npx tsx ./scripts/lang_dict.ts --src ./src --out ./lang.json"
+        "gen-lang": "npx tsx ./scripts/lang_dict.ts --src ./src --out ./lang.json",
+        "tauri": "tauri"
     },
     "dependencies": {
         "@alenaksu/json-viewer": "^2.1.2",
@@ -35,9 +36,12 @@
         "reset-css": "^5.0.2",
         "three": "^0.179.1",
         "troika-three-text": "^0.52.4",
-        "urlpattern-polyfill": "^10.1.0"
+        "urlpattern-polyfill": "^10.1.0",
+        "@tauri-apps/api": "^2",
+        "@tauri-apps/plugin-opener": "^2"
     },
     "devDependencies": {
+        "@tauri-apps/cli": "^2",
         "@cloudflare/vite-plugin": "^1.13.18",
         "@types/d3": "^7.4.3",
         "@types/human-number": "^1.0.2",
