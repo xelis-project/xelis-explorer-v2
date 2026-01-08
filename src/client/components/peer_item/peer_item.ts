@@ -12,6 +12,7 @@ export class PeerItem {
     element_addr: HTMLDivElement;
     element_peer_count: HTMLDivElement;
     element_version: HTMLDivElement;
+    element_tag: HTMLDivElement;
     element_location: HTMLDivElement;
     element_height: HTMLDivElement;
     element_topo: HTMLDivElement;
@@ -39,6 +40,9 @@ export class PeerItem {
         this.element_version = document.createElement(`div`);
         this.element_version.classList.add(`xe-peer-item-version`);
         sub_container_2.appendChild(this.element_version);
+        this.element_tag = document.createElement(`div`);
+        this.element_tag.classList.add(`xe-peer-item-tag`);
+        sub_container_2.appendChild(this.element_tag);
 
         this.element_location = document.createElement(`div`);
         this.element_location.classList.add(`xe-peer-item-location`);
@@ -57,10 +61,6 @@ export class PeerItem {
 
     set_peer_count(peer_count: number) {
         this.element_peer_count.innerHTML = `${peer_count.toLocaleString()} ${localization.get_text(`peers`)}`;
-    }
-
-    set_version(version: string) {
-        this.element_version.innerHTML = version;
     }
 
     set_addr(addr: string) {
@@ -98,6 +98,14 @@ export class PeerItem {
             <div>${pruned_height ? pruned_height.toLocaleString() : `--`}</div>
         `;
     }
+        
+    set_version(version: string) {
+        this.element_version.innerHTML = `Version: ${version}`;
+    }
+
+    set_tag(tag?: string) {
+        this.element_tag.innerHTML = `${tag ? localization.get_text(`Tag: {}`, [tag]) : localization.get_text(`No tag assigned`)}`;
+    }
 
     set(peer_location: PeerLocation) {
         const { peer, geo_location } = peer_location;
@@ -108,6 +116,7 @@ export class PeerItem {
         this.set_pruned(peer.pruned_topoheight);
         this.set_peer_count(Object.keys(peer.peers).length);
         this.set_version(peer.version);
+        this.set_tag(peer.tag);
         this.data = peer_location;
     }
 }

@@ -36,7 +36,14 @@
 }
 
 .xe-peer-item-version {
+    margin-top: .5rem;
+    font-size: .8rem;
+    color: #afafaf;
+}
+
+.xe-peer-item-tag {
     margin-top: .25rem;
+    font-size: .8rem;
     color: #afafaf;
 }
 
