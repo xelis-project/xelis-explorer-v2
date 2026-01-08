@@ -32,9 +32,19 @@ export class TransactionContractLogs {
 
                     const exit_code = contract_log.value;
                     if (exit_code === 0) {
-                        collapse_box.content_element.innerHTML = `<div class="exit-code"><span class="dot-success"></span>${localization.get_text(`The contract execution was successful. Exit code: {}`,[`0`])}</div>`;
+                        collapse_box.content_element.innerHTML = `
+                            <div class="exit-code">
+                            <span class="dot-success"></span>
+                            ${localization.get_text(`The contract execution was successful. Exit code: {}`, [`0`])}
+                            </div>
+                        `;
                     } else {
-                        collapse_box.content_element.innerHTML = `<div class="exit-code"><span class="dot-fail"></span>${localization.get_text(`The contract execution failed. Exit code: {}`,[`${exit_code}`])}</div>`;
+                        collapse_box.content_element.innerHTML = `
+                            <div class="exit-code">
+                            <span class="dot-fail"></span>
+                            ${localization.get_text(`The contract execution failed. Exit code: {}`, [`${exit_code}`])}
+                            </div>
+                        `;
                     }
 
                     this.container.element.appendChild(collapse_box.element);
@@ -236,6 +246,73 @@ export class TransactionContractLogs {
                             <tr>
                                 <td>${localization.get_text(`DESTINATION`)}</td>
                                 <td><a href="/tx/${transfer_contract.destination}">${format_hash(transfer_contract.destination)}</a></td>
+                            <tr>
+                        </table>
+                    `;
+
+                    collapse_box.set_collapse(true);
+                    this.container.element.appendChild(collapse_box.element);
+                }
+
+                if (contract_log.type === `exit_payload`) {
+                    const collapse_box = new CollapseBox();
+                    collapse_box.title_element.innerHTML = localization.get_text(`EXIT PAYLOAD`);
+
+                    collapse_box.content_element.innerHTML = contract_log.value.payload;
+
+                    collapse_box.set_collapse(true);
+                    this.container.element.appendChild(collapse_box.element);
+                }
+
+
+                if (contract_log.type === `transfer_payload`) {
+                    const collapse_box = new CollapseBox();
+                    collapse_box.title_element.innerHTML = localization.get_text(`TRANSFER PAYLOAD`);
+
+                    const transfer_payload = contract_log.value;
+                    const asset_amount_string = await ws_format_asset(node.ws, transfer_payload.asset, transfer_payload.amount);
+                    collapse_box.content_element.innerHTML = `
+                        <table>
+                            <tr>
+                                <td>${localization.get_text(`AMOUNT`)}</td>
+                                <td>${asset_amount_string}</td>
+                            <tr>
+                            <tr>
+                                <td>${localization.get_text(`ASSET`)}</td>
+                                <td><a href="/tx/${transfer_payload.asset}">${format_hash(transfer_payload.asset)}</a></td>
+                            <tr>
+                            <tr>
+                                <td>${localization.get_text(`CONTRACT`)}</td>
+                                <td><a href="/tx/${transfer_payload.contract}">${format_hash(transfer_payload.contract)}</a></td>
+                            <tr>
+                            <tr>
+                                <td>${localization.get_text(`DESTINATION`)}</td>
+                                <td><a href="/tx/${transfer_payload.destination}">${format_hash(transfer_payload.destination)}</a></td>
+                            <tr>
+                            <tr>
+                                <td>${localization.get_text(`PAYLOAD`)}</td>
+                                <td>${transfer_payload.payload}</td>
+                            <tr>
+                        </table>
+                    `;
+
+                    collapse_box.set_collapse(true);
+                    this.container.element.appendChild(collapse_box.element);
+                }
+
+                if (contract_log.type === `exit_error`) {
+                    const collapse_box = new CollapseBox();
+                    collapse_box.title_element.innerHTML = localization.get_text(`EXIT ERROR`);
+
+                    collapse_box.content_element.innerHTML = `
+                          <table>
+                            <tr>
+                                <td>${localization.get_text(`CODE`)}</td>
+                                <td>${contract_log.value.err.code}</td>
+                            <tr>
+                            <tr>
+                                <td>${localization.get_text(`MESSAGE`)}</td>
+                                <td>${contract_log.value.err.message}</td>
                             <tr>
                         </table>
                     `;
