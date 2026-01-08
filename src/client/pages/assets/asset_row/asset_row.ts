@@ -19,6 +19,7 @@ export class AssetRow extends Row {
         this.set_owner(asset.owner);
         this.set_topoheight(asset.topoheight);
         this.set_decimals(asset.decimals);
+        this.set_link(`/asset/${asset.asset}`);
     }
 
     set_hash(hash: string) {

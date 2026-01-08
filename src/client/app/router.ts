@@ -1,5 +1,6 @@
 import { AccountPage } from "../pages/account/account";
 import { AccountsPage } from "../pages/accounts/accounts";
+import { AssetPage } from "../pages/asset/asset";
 import { AssetsPage } from "../pages/assets/assets";
 import { BlockPage } from "../pages/block/block";
 import { BlockHeightPage } from "../pages/block_height/block_height";
@@ -35,6 +36,7 @@ export const pages = [
     AccountsPage,
     ContractPage,
     ContractsPage,
+    AssetPage,
     AssetsPage,
     SettingsPage,
     NetworkUpgradesPage

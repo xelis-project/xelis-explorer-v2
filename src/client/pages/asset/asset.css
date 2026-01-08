@@ -1,0 +1,5 @@
+.xe-asset {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
