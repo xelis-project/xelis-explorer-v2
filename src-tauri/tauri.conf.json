@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "com.g45.xelis-explorer-app",
   "build": {
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "npm run dev-mainnet",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
@@ -15,7 +15,9 @@
       {
         "title": "XELIS Explorer",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "minWidth": 400,
+        "minHeight": 300
       }
     ],
     "security": {
