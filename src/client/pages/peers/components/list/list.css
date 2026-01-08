@@ -9,6 +9,13 @@
     animation: xe-peers-list-animation .65s;
 }
 
+.xe-peers-list>:nth-child(1) {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .xe-peers-list>:nth-child(2) {
     display: flex;
     gap: 1rem;

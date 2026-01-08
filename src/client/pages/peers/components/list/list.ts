@@ -12,15 +12,22 @@ export class PeersList {
 
     element_title: HTMLDivElement;
     element_content: HTMLDivElement;
+    element_count: HTMLDivElement;
 
     constructor() {
         this.container = new Container();
         this.peer_items = [];
         this.container.element.classList.add(`xe-peers-list`, `scrollbar-1`, `scrollbar-1-right`);
 
+        const title_container = document.createElement(`div`);
+        this.container.element.appendChild(title_container);
+
         this.element_title = document.createElement(`div`);
         this.element_title.innerHTML = localization.get_text(`PEERS`);
-        this.container.element.appendChild(this.element_title);
+        title_container.appendChild(this.element_title);
+
+        this.element_count = document.createElement(`div`);
+        title_container.appendChild(this.element_count);
 
         this.element_content = document.createElement(`div`);
         this.container.element.appendChild(this.element_content);
@@ -66,6 +73,7 @@ export class PeersList {
         peers_locations.forEach((peer_location) => {
             this.prepend_peer(peer_location);
         });
+        this.update_count();
     }
 
     filter_peer_ids = undefined as string[] | undefined;
@@ -82,7 +90,17 @@ export class PeersList {
         return true;
     }
 
+    update_count() {
+        let count = this.peer_items.length;
+        if (this.filter_peer_ids) {
+            count = this.filter_peer_ids.length;
+        }
+
+        this.element_count.innerHTML = `${count}`;
+    }
+
     update_filter() {
+        this.update_count();
         this.peer_items.forEach((peer_item) => {
             const parent_element = peer_item.box.element.parentElement;
             if (!this.is_in_filter(peer_item)) {
