@@ -3,6 +3,7 @@ import { Container } from '../../../../components/container/container';
 import { Box } from '../../../../components/box/box';
 import { localization } from '../../../../localization/localization';
 import { StorageHistoryModal } from './storage_history_modal';
+import icons from '../../../../assets/svg/icons';
 
 import './storage.css';
 
@@ -156,7 +157,7 @@ export class ContractStorageEntries {
             if (entries.length === 0) {
                 return { display: '{}' };
             }
-            
+
             // For objects with few keys, show inline
             if (entries.length <= 3) {
                 const pairs = entries.map(([k, v]) => {
@@ -218,7 +219,7 @@ export class ContractStorageEntries {
     private copy_to_clipboard(text: string, button: HTMLElement) {
         navigator.clipboard.writeText(text).then(() => {
             const originalHTML = button.innerHTML;
-            button.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>`;
+            button.innerHTML = icons.checkmark();
             button.style.color = 'rgba(34, 197, 94, 1)';
             setTimeout(() => {
                 button.innerHTML = originalHTML;
@@ -249,7 +250,7 @@ export class ContractStorageEntries {
 
         const key_copy_btn = document.createElement(`button`);
         key_copy_btn.classList.add(`xe-contract-storage-copy-btn`);
-        key_copy_btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>`;
+        key_copy_btn.innerHTML = icons.copy();
         key_copy_btn.title = localization.get_text(`Copy key`);
         key_copy_btn.onclick = (e) => {
             e.stopPropagation();
@@ -270,11 +271,7 @@ export class ContractStorageEntries {
 
             const address_icon = document.createElement(`span`);
             address_icon.classList.add(`xe-contract-storage-address-icon`);
-            address_icon.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                </svg>
-            `;
+            address_icon.innerHTML = icons.user();
             address_container.appendChild(address_icon);
 
             const address_link = document.createElement(`a`);
@@ -289,7 +286,7 @@ export class ContractStorageEntries {
 
             const address_copy_btn = document.createElement(`button`);
             address_copy_btn.classList.add(`xe-contract-storage-copy-btn`);
-            address_copy_btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>`;
+            address_copy_btn.innerHTML = icons.copy();
             address_copy_btn.title = localization.get_text(`Copy address`);
             address_copy_btn.onclick = (e) => {
                 e.stopPropagation();
@@ -314,7 +311,7 @@ export class ContractStorageEntries {
 
             const value_copy_btn = document.createElement(`button`);
             value_copy_btn.classList.add(`xe-contract-storage-copy-btn`);
-            value_copy_btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>`;
+            value_copy_btn.innerHTML = icons.copy();
             value_copy_btn.title = localization.get_text(`Copy value`);
             value_copy_btn.onclick = (e) => {
                 e.stopPropagation();
@@ -326,13 +323,7 @@ export class ContractStorageEntries {
         // History button
         const history_button = document.createElement(`button`);
         history_button.classList.add(`xe-contract-storage-history-btn`);
-        history_button.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
-                <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
-                <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
-            </svg>
-        `;
+        history_button.innerHTML = icons.history();
         history_button.title = localization.get_text(`View History`) + (entry.topoheight !== undefined ? ` (${localization.get_text(`Topoheight`)} ${entry.topoheight.toLocaleString()})` : '');
         history_button.onclick = (e) => {
             e.stopPropagation();
@@ -359,7 +350,7 @@ export class ContractStorageEntries {
         // First page button
         const first_button = document.createElement(`button`);
         first_button.classList.add(`xe-contract-storage-pagination-btn`, `xe-contract-storage-pagination-first`);
-        first_button.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z"/></svg>`;
+        first_button.innerHTML = icons.page_end();
         first_button.title = localization.get_text(`First page`);
         first_button.disabled = this.current_page === 0;
         first_button.onclick = () => this.goto_page(0);
@@ -368,7 +359,7 @@ export class ContractStorageEntries {
         // Previous page button
         const previous_button = document.createElement(`button`);
         previous_button.classList.add(`xe-contract-storage-pagination-btn`, `xe-contract-storage-pagination-prev`);
-        previous_button.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>`;
+        previous_button.innerHTML = icons.page_next();
         previous_button.title = localization.get_text(`Previous page`);
         previous_button.disabled = this.current_page === 0;
         previous_button.onclick = () => {
@@ -387,7 +378,8 @@ export class ContractStorageEntries {
         // Next page button
         const next_button = document.createElement(`button`);
         next_button.classList.add(`xe-contract-storage-pagination-btn`, `xe-contract-storage-pagination-next`);
-        next_button.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
+        next_button.innerHTML = icons.page_next();
+        next_button.style.rotate = `180deg`;
         next_button.title = localization.get_text(`Next page`);
         next_button.disabled = !this.has_next_page;
         next_button.onclick = () => {
@@ -442,7 +434,7 @@ export class ContractStorageEntries {
 
             // Debug: log the response to understand the format
             console.log(`Storage entries response for contract ${contract_hash}:`, entries);
-            
+
             this.total_entries_shown = Array.isArray(entries) ? entries.length : 0;
             this.has_next_page = this.total_entries_shown === maximum;
             this.render_pagination();
@@ -452,10 +444,7 @@ export class ContractStorageEntries {
                 const empty_element = document.createElement(`div`);
                 empty_element.classList.add(`xe-contract-storage-empty`);
                 empty_element.innerHTML = `
-                    <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor" style="opacity: 0.3; margin-bottom: 1rem;">
-                        <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2z"/>
-                        <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0z"/>
-                    </svg>
+                    ${icons.book()}
                     <div>${localization.get_text(`No storage entries found`)}</div>
                     <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem;">${localization.get_text(`This contract has no storage entries yet`)}</div>
                 `;
@@ -473,7 +462,7 @@ export class ContractStorageEntries {
                     console.error(`Error adding storage entry:`, entryError, entry);
                 }
             });
-            
+
             // Turn off loading after entries are added
             this.set_loading(false);
         } catch (e) {
@@ -483,9 +472,7 @@ export class ContractStorageEntries {
             error_element.classList.add(`xe-contract-storage-error`);
             const error_message = e instanceof Error ? e.message : String(e);
             error_element.innerHTML = `
-                <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor" style="opacity: 0.3; margin-bottom: 1rem; color: #ff6b6b;">
-                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                </svg>
+                ${icons.error()}
                 <div>${localization.get_text(`Unable to load storage entries`)}</div>
                 <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem;">${error_message}</div>
             `;
