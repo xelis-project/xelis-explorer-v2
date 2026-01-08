@@ -148,5 +148,10 @@
         "name": "UnMineable",
         "link": "https://unmineable.com/?coin=XEL&algorithm=xelishash",
         "type": "pool"
+    },
+    "xel:nsyjvd5an385m30d9cea8mm235ft5euq2mu4rms8z2f43y9kvsfsqtpzln8": {
+        "name": "1MINER.NET",
+        "link": "https://1miner.net/#xel1",
+        "type": "pool"
     }
 }
