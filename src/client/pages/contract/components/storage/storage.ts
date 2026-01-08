@@ -4,6 +4,7 @@ import { Box } from '../../../../components/box/box';
 import { localization } from '../../../../localization/localization';
 import { StorageHistoryModal } from './storage_history_modal';
 import icons from '../../../../assets/svg/icons';
+import { reduce_text } from '../../../../utils/reduce_text';
 
 import './storage.css';
 
@@ -207,15 +208,6 @@ export class ContractStorageEntries {
         }
     }
 
-    private truncate_middle(text: string, maxLength: number = 40): string {
-        if (text.length <= maxLength) {
-            return text;
-        }
-        const frontChars = Math.ceil(maxLength / 2) - 2;
-        const backChars = Math.floor(maxLength / 2) - 2;
-        return `${text.slice(0, frontChars)}...${text.slice(-backChars)}`;
-    }
-
     private copy_to_clipboard(text: string, button: HTMLElement) {
         navigator.clipboard.writeText(text).then(() => {
             const originalHTML = button.innerHTML;
@@ -244,7 +236,7 @@ export class ContractStorageEntries {
 
         const key_element = document.createElement(`div`);
         key_element.classList.add(`xe-contract-storage-key`);
-        key_element.textContent = this.truncate_middle(key_str, 30);
+        key_element.textContent = reduce_text(key_str, 15, 15);
         key_element.title = key_str;
         key_container.appendChild(key_element);
 
@@ -277,7 +269,7 @@ export class ContractStorageEntries {
             const address_link = document.createElement(`a`);
             address_link.classList.add(`xe-contract-storage-address-link`);
             address_link.href = `/account/${extracted.display}`;
-            address_link.textContent = this.truncate_middle(extracted.display, 35);
+            address_link.textContent = reduce_text(extracted.display, 15, 15);
             address_link.title = extracted.display;
             address_link.onclick = (e) => {
                 e.stopPropagation();
@@ -304,7 +296,7 @@ export class ContractStorageEntries {
             value_text.style.overflow = 'hidden';
             value_text.style.textOverflow = 'ellipsis';
             value_text.style.whiteSpace = 'nowrap';
-            const displayText = extracted.display.length > 100 ? this.truncate_middle(extracted.display, 100) : extracted.display;
+            const displayText = extracted.display.length > 100 ? reduce_text(extracted.display, 50, 50) : extracted.display;
             value_text.textContent = displayText;
             value_text.title = extracted.display;
             value_element.appendChild(value_text);
