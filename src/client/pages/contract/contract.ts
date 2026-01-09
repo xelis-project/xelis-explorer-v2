@@ -145,35 +145,16 @@ export class ContractPage extends Page {
     async load(parent: HTMLElement) {
         super.load(parent);
 
+        this.contract_info.set_loading(true);
+        this.contract_assets.set_loading();
         await this.load_contract();
+        this.contract_info.set_loading(false);
 
         const { server_data } = this.page_data;
         if (server_data && server_data.contract_module && server_data.transaction) {
             this.set_element(this.master.element);
 
             const contract_hash = server_data.transaction.hash;
-
-            /*
-            TODO
-            const node = XelisNode.instance();
-
-            node.rpc.getContractData({
-                contract: "",
-                key: ""
-            });
-
-            node.rpc.getContractLogs({
-                caller: ""
-            });
-
-            node.rpc.getContractOutputs({
-                address: "",
-                topoheight: 0
-            });
-
-            node.rpc.getContractScheduledExecutionsAtTopoheight({})
-            */
-
             this.contract_info.set(contract_hash, server_data.contract_module);
             this.contract_assets.load(contract_hash);
             this.contract_storage_entries.load(contract_hash);
@@ -184,9 +165,5 @@ export class ContractPage extends Page {
 
     unload() {
         super.unload();
-        // Clean up storage entries component (closes modal, removes event listeners)
-        if (this.contract_storage_entries) {
-            this.contract_storage_entries.destroy();
-        }
     }
 }
