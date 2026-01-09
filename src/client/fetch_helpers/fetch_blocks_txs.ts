@@ -6,12 +6,19 @@ export const fetch_blocks_txs = async (blocks: Block[]) => {
     const node = XelisNode.instance();
 
     const txs_hashes = [] as string[];
-    const tx_block_map = new Map<string, string>();
+
+    // the same transaction can happear in side block (we have to account for this usecase)
+    const tx_blocks_map = new Map<string, string[]>();
 
     blocks.map(block => {
         block.txs_hashes.forEach(tx_hash => {
-            txs_hashes.push(tx_hash);
-            tx_block_map.set(tx_hash, block.hash);
+            const block_hashes = tx_blocks_map.get(tx_hash);
+            if (block_hashes) {
+                tx_blocks_map.set(tx_hash, [...block_hashes, block.hash]);
+            } else {
+                txs_hashes.push(tx_hash);
+                tx_blocks_map.set(tx_hash, [block.hash]);
+            }
         });
     });
 
@@ -31,12 +38,16 @@ export const fetch_blocks_txs = async (blocks: Block[]) => {
         } else {
             const txs = result as Transaction[];
             txs.forEach((tx) => {
-                const block_hash = tx_block_map.get(tx.hash);
-                const block = blocks.find(b => b.hash === block_hash);
+                const block_hashes = tx_blocks_map.get(tx.hash);
+                if (block_hashes) {
+                    block_hashes.forEach((block_hash) => {
+                        const block = blocks.find(b => b.hash === block_hash);
 
-                if (block) {
-                    if (!block.transactions) block.transactions = [];
-                    block.transactions.push(tx);
+                        if (block) {
+                            if (!block.transactions) block.transactions = [];
+                            block.transactions.push(tx);
+                        }
+                    });
                 }
             });
         }
