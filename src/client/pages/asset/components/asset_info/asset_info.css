@@ -44,3 +44,9 @@
 .xe-asset-info-msg {
 	color: #afafaf;
 }
+
+.xe-asset-info-details {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+}

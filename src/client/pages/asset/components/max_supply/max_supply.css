@@ -7,7 +7,7 @@
 
 @keyframes xe-asset-max-supply-appear-animation {
     0% {
-        translate: 0 -25%;
+        translate: 25% 0;
     }
 
     100% {

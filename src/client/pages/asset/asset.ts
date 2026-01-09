@@ -4,7 +4,7 @@ import { ServerApp } from "../../../server";
 import { XelisNode } from "../../app/xelis_node";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { Master } from "../../components/master/master";
-import { AssetWithData, Block } from "@xelis/sdk/daemon/types";
+import { AssetWithData, Block, GetAssetSupplyResult } from "@xelis/sdk/daemon/types";
 import { NotFoundPage } from "../not_found/not_found";
 import { localization } from "../../localization/localization";
 import { reduce_text } from "../../utils/reduce_text";
@@ -13,10 +13,12 @@ import { AssetInfo } from "./components/asset_info/asset_info";
 import { AssetOwner } from "./components/asset_owner/asset_owner";
 
 import './asset.css';
+import { AssetSupply } from "./components/supply/supply";
 
 interface AssetPageServerData {
-    asset: AssetWithData
+    asset: AssetWithData;
     block: Block;
+    supply: GetAssetSupplyResult;
 }
 
 export class AssetPage extends Page {
@@ -35,6 +37,9 @@ export class AssetPage extends Page {
 
         const asset = await daemon.getAsset({ asset: asset_hash });
         server_data.asset = asset as AssetWithData;
+
+        const asset_supply = await daemon.getAssetSupply({ asset: asset_hash });
+        server_data.supply = asset_supply;
 
         const block = await daemon.getBlockAtTopoheight({ topoheight: asset.topoheight });
         server_data.block = block;
@@ -66,6 +71,7 @@ export class AssetPage extends Page {
 
     master: Master;
     asset_info: AssetInfo;
+    asset_supply: AssetSupply;
     asset_max_supply: AssetMaxSupply;
     asset_owner: AssetOwner;
 
@@ -89,6 +95,9 @@ export class AssetPage extends Page {
 
         const sub_container_2 = document.createElement(`div`);
         this.master.content.appendChild(sub_container_2);
+
+        this.asset_supply = new AssetSupply();
+        sub_container_2.appendChild(this.asset_supply.container.element);
 
         this.asset_max_supply = new AssetMaxSupply();
         sub_container_2.appendChild(this.asset_max_supply.container.element);
@@ -118,16 +127,26 @@ export class AssetPage extends Page {
         }
     }
 
+    set_loading(loading: boolean) {
+        this.asset_info.set_loading(loading);
+        this.asset_supply.set_loading(loading);
+        this.asset_max_supply.set_loading(loading);
+        this.asset_owner.set_loading(loading);
+    }
+
     async load(parent: HTMLElement) {
         super.load(parent);
 
+        this.set_loading(true);
         await this.load_asset();
+        this.set_loading(false);
 
         const { server_data } = this.page_data;
         if (server_data) {
             this.set_element(this.master.element);
 
             this.asset_info.set(server_data.asset, server_data.block);
+            this.asset_supply.set(server_data.asset, server_data.supply);
             this.asset_max_supply.set(server_data.asset);
             this.asset_owner.set(server_data.asset);
         } else {

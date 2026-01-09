@@ -1,8 +1,8 @@
 import { AssetWithData } from '@xelis/sdk/daemon/types';
 import { Container } from '../../../../components/container/container';
 import { localization } from '../../../../localization/localization';
-import { XelisNode } from '../../../../app/xelis_node';
 import { format_asset } from '../../../../utils/format_asset';
+import { Box } from '../../../../components/box/box';
 
 import './max_supply.css';
 
@@ -10,7 +10,7 @@ export class AssetMaxSupply {
 	container: Container;
 
 	title_element: HTMLDivElement;
-	content_element: HTMLDivElement;
+	content_box: Box;
 
 	constructor() {
 		this.container = new Container();
@@ -20,9 +20,12 @@ export class AssetMaxSupply {
 		this.title_element.innerHTML = localization.get_text(`MAX SUPPLY`);
 		this.container.element.appendChild(this.title_element);
 
+		this.content_box = new Box();
+		this.container.element.appendChild(this.content_box.element);
+	}
 
-		this.content_element = document.createElement(`div`);
-		this.container.element.appendChild(this.content_element);
+	set_loading(loading: boolean) {
+		this.content_box.set_loading(loading);
 	}
 
 	set(asset_data: AssetWithData) {
@@ -38,17 +41,17 @@ export class AssetMaxSupply {
 		}
 
 		if (max_supply === `none`) {
-			this.content_element.innerHTML = `
-				${item(`AMOUNT`, `--`)}
-				${item(`TYPE`, localization.get_text(`NONE`))}
+			this.content_box.element.innerHTML = `
+				${item(localization.get_text(`CAP`), `--`)}
+				${item(localization.get_text(`TYPE`), localization.get_text(`NONE`))}
 				<div class="xe-asset-max-supply-msg">${localization.get_text(`No max supply was set.`)}</div>
 			`;
 		} else if ("fixed" in max_supply) {
 			const amount_string = format_asset(max_supply.fixed, asset_data.decimals, asset_data.ticker);
 
-			this.content_element.innerHTML = `
-				${item(`AMOUNT`, amount_string)}
-				${item(`TYPE`, localization.get_text(`FIXED`))}
+			this.content_box.element.innerHTML = `
+				${item(localization.get_text(`CAP`), amount_string)}
+				${item(localization.get_text(`TYPE`), localization.get_text(`FIXED`))}
 				<div class="xe-asset-max-supply-msg">
 					${localization.get_text(`The supply is fixed, emitted one time and managed by the contract.`)}
 				</div>
@@ -56,9 +59,9 @@ export class AssetMaxSupply {
 		} else if ("mintable" in max_supply) {
 			const amount_string = format_asset(max_supply.mintable, asset_data.decimals, asset_data.ticker);
 
-			this.content_element.innerHTML = `
-				${item(`AMOUNT`, amount_string)}
-				${item(`TYPE`, localization.get_text(`MINTABLE`))}
+			this.content_box.element.innerHTML = `
+				${item(localization.get_text(`CAP`), amount_string)}
+				${item(localization.get_text(`TYPE`), localization.get_text(`MINTABLE`))}
 				<div class="xe-asset-max-supply-msg">
 					${localization.get_text(`For as long as the circulating supply is below the max supply, mint is possible.`)}
 				</div>
