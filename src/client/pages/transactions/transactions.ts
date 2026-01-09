@@ -4,7 +4,7 @@ import { XelisNode } from "../../app/xelis_node";
 import { Table } from "../../components/table/table";
 import { Container } from "../../components/container/container";
 import { TxRow } from "./tx_row/tx_row";
-import { RPCEvent as DaemonRPCEvent, GetInfoResult, TransactionExecuted, TransactionResponse } from "@xelis/sdk/daemon/types";
+import { BlockType, RPCEvent as DaemonRPCEvent, GetInfoResult, TransactionExecuted, TransactionResponse } from "@xelis/sdk/daemon/types";
 import { fetch_blocks } from "../../fetch_helpers/fetch_blocks";
 import { fetch_blocks_txs } from "../../fetch_helpers/fetch_blocks_txs";
 import { localization } from "../../localization/localization";
@@ -135,7 +135,9 @@ export class TransactionsPage extends Page {
         this.prev_next_pager.pager_min = 0;
 
         const end_height = this.prev_next_pager.get_next() || info.height;
-        const blocks = await fetch_blocks(end_height, 100);
+        let blocks = await fetch_blocks(end_height, 100);
+        // filter side block out (they might contain a duplicated tx)
+        blocks = blocks.filter(b => b.block_type !== BlockType.Side);
         await fetch_blocks_txs(blocks);
 
         this.tx_rows = [];
