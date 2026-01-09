@@ -19,15 +19,12 @@ export class ContractInfo {
         this.container = new Container();
         this.container.element.classList.add(`xe-contract-info`);
 
-        const container_1 = document.createElement(`div`);
-        this.container.element.appendChild(container_1);
+        const title_element = document.createElement(`div`);
+        title_element.innerHTML = localization.get_text(`CONTRACT`);
+        this.container.element.appendChild(title_element);
 
         this.hash_element = document.createElement(`div`);
-        container_1.appendChild(this.hash_element);
-
-        const contract_icon = document.createElement(`div`);
-        contract_icon.innerHTML = icons.contract();
-        container_1.appendChild(contract_icon);
+        this.container.element.appendChild(this.hash_element);
 
         const constants_title_element = document.createElement(`div`);
         constants_title_element.innerHTML = localization.get_text(`CONSTANTS`);
@@ -46,21 +43,22 @@ export class ContractInfo {
         const hook_ids_title_element = document.createElement(`div`);
         hook_ids_title_element.innerHTML = localization.get_text(`HOOK CHUNK IDS`);
         this.container.element.appendChild(hook_ids_title_element);
-        
+
         this.hook_ids_box = new Box();
         //hook_ids_box.element.innerHTML = JSON.stringify(deploy_contract.module.hook_chunk_ids || [], null, 2);
         this.container.element.appendChild(this.hook_ids_box.element);
     }
 
     set_loading(loading: boolean) {
-        Box.content_loading(this.constant_json_viewer_box.box.element, loading);
-        Box.content_loading(this.chunks_json_viewer_box.box.element, loading);
-        Box.content_loading(this.hook_ids_box.element, loading);
-        Box.content_loading(this.hash_element, loading);
+        this.constant_json_viewer_box.box.set_loading(loading);
+        this.chunks_json_viewer_box.box.set_loading(loading);
+        this.hook_ids_box.set_loading(loading);
+        //Box.content_loading(this.hash_element, loading);
     }
 
     set(contract_hash: string, result: GetContractModuleResult) {
-        this.hash_element.innerHTML = contract_hash;
+        this.hash_element.innerHTML = `<a href="/tx/${contract_hash}">${contract_hash}</a></div>`;
+
         const { data } = result;
         if (data.module) {
             this.constant_json_viewer_box.set_data(data.module.constants);
