@@ -1,4 +1,3 @@
-import { Box } from '../box/box';
 import './container.css';
 
 export class Container {
