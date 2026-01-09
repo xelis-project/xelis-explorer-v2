@@ -26,11 +26,11 @@ export class AccountAssets {
         this.items_element.replaceChildren();
         assets_data.forEach((asset_data) => {
             const box = new Box();
-
-            const value_element = document.createElement(`div`);
-            value_element.innerHTML = `${asset_data.name} (${asset_data.ticker}) - ${format_hash(asset_data.asset)}`;
-
-            box.element.appendChild(value_element);
+            box.element.classList.add(`xe-account-assets-item`);
+            box.element.innerHTML = `
+                <div>${asset_data.name} (${asset_data.ticker})</div>
+                <a href="/asset/${asset_data.asset}">${format_hash(asset_data.asset)}</a>
+            `;
             this.items_element.appendChild(box.element);
         });
     }
