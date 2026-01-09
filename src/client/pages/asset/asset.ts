@@ -4,17 +4,19 @@ import { ServerApp } from "../../../server";
 import { XelisNode } from "../../app/xelis_node";
 import DaemonRPC from '@xelis/sdk/daemon/rpc';
 import { Master } from "../../components/master/master";
-import { AssetWithData, RPCMethod as DaemonRPCMethod, GetAssetParams, GetAssetSupplyResult } from "@xelis/sdk/daemon/types";
-import { RPCRequest } from "@xelis/sdk/rpc/types";
+import { AssetWithData, Block } from "@xelis/sdk/daemon/types";
 import { NotFoundPage } from "../not_found/not_found";
 import { localization } from "../../localization/localization";
 import { reduce_text } from "../../utils/reduce_text";
+import { AssetMaxSupply } from "./components/max_supply/max_supply";
+import { AssetInfo } from "./components/asset_info/asset_info";
+import { AssetOwner } from "./components/asset_owner/asset_owner";
 
 import './asset.css';
 
 interface AssetPageServerData {
     asset: AssetWithData
-    supply: GetAssetSupplyResult
+    block: Block;
 }
 
 export class AssetPage extends Page {
@@ -29,37 +31,13 @@ export class AssetPage extends Page {
     }
 
     static async load_server_data(daemon: DaemonRPC, asset_hash: string) {
-        const server_data = { } as AssetPageServerData;
+        const server_data = {} as AssetPageServerData;
 
-        {
-            const requests = [
-                {
-                    method: DaemonRPCMethod.GetAsset,
-                    params: { asset: asset_hash } as GetAssetParams
-                },
-                {
-                    method: DaemonRPCMethod.GetAssetSupply,
-                    params: { asset: asset_hash } as GetAssetParams
-                },
-            ] as RPCRequest[];
+        const asset = await daemon.getAsset({ asset: asset_hash });
+        server_data.asset = asset as AssetWithData;
 
-
-            const res = await daemon.batchRequest(requests);
-            res.forEach((result, i) => {
-                if (result instanceof Error) {
-                    throw result;
-                } else {
-                    switch (i) {
-                        case 0: // GetAsset
-                            server_data.asset = (result as AssetWithData);
-                            break;
-                        case 1: // GetAssetSupply
-                            server_data.supply = (result as GetAssetSupplyResult);
-                            break;
-                    }
-                }
-            });
-        }
+        const block = await daemon.getBlockAtTopoheight({ topoheight: asset.topoheight });
+        server_data.block = block;
 
         return server_data;
     }
@@ -87,6 +65,10 @@ export class AssetPage extends Page {
     }
 
     master: Master;
+    asset_info: AssetInfo;
+    asset_max_supply: AssetMaxSupply;
+    asset_owner: AssetOwner;
+
     page_data: {
         server_data?: AssetPageServerData;
     };
@@ -101,6 +83,18 @@ export class AssetPage extends Page {
 
         const sub_container_1 = document.createElement(`div`);
         this.master.content.appendChild(sub_container_1);
+
+        this.asset_info = new AssetInfo();
+        sub_container_1.appendChild(this.asset_info.container.element);
+
+        const sub_container_2 = document.createElement(`div`);
+        this.master.content.appendChild(sub_container_2);
+
+        this.asset_max_supply = new AssetMaxSupply();
+        sub_container_2.appendChild(this.asset_max_supply.container.element);
+
+        this.asset_owner = new AssetOwner();
+        sub_container_2.appendChild(this.asset_owner.container.element);
     }
 
     async load_asset() {
@@ -132,6 +126,10 @@ export class AssetPage extends Page {
         const { server_data } = this.page_data;
         if (server_data) {
             this.set_element(this.master.element);
+
+            this.asset_info.set(server_data.asset, server_data.block);
+            this.asset_max_supply.set(server_data.asset);
+            this.asset_owner.set(server_data.asset);
         } else {
             this.set_element(NotFoundPage.instance().element);
         }

@@ -1,0 +1,45 @@
+.xe-asset-max-supply {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+    animation: xe-asset-max-supply-appear-animation .4s;
+}
+
+@keyframes xe-asset-max-supply-appear-animation {
+    0% {
+        translate: 0 -25%;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-asset-max-supply>:nth-child(1) {
+	font-size: 1.5rem;
+}
+
+.xe-asset-max-supply>:nth-child(2) {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+}
+
+.xe-asset-max-supply-item {
+	display: flex;
+	gap: .25rem;
+	flex-direction: column;
+}
+
+.xe-asset-max-supply-item>:nth-child(1) {
+	font-size: .9rem;
+	color: #afafaf;
+}
+
+.xe-asset-max-supply-item>:nth-child(2) {
+	font-size: 1.4rem;
+}
+
+.xe-asset-max-supply-msg {
+	color: #afafaf;
+}

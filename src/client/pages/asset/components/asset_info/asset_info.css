@@ -1,0 +1,46 @@
+.xe-asset-info {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+    animation: xe-asset-asset-info-appear-animation .5s;
+}
+
+@keyframes xe-asset-asset-info-appear-animation {
+    0% {
+        translate: -25% 0;
+    }
+
+    100% {
+        translate: 0 0;
+    }
+}
+
+.xe-asset-info>:nth-child(1) {
+	font-size: 1.5rem;
+}
+
+.xe-asset-info>:nth-child(2) {
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
+}
+
+.xe-asset-info-item {
+	display: flex;
+	gap: .25rem;
+	flex-direction: column;
+}
+
+.xe-asset-info-item>:nth-child(1) {
+	font-size: .9rem;
+	color: #afafaf;
+}
+
+.xe-asset-info-item>:nth-child(2) {
+	font-size: 1.4rem;
+		word-break: break-all;
+}
+
+.xe-asset-info-msg {
+	color: #afafaf;
+}
