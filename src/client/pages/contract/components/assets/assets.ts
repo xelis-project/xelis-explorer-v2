@@ -22,7 +22,7 @@ export class ContractAssets {
         this.container.element.appendChild(title_element);
 
         this.list_element = document.createElement(`div`);
-        this.list_element.classList.add(`xe-contract-assets-list`);
+        this.list_element.classList.add(`xe-contract-assets-list`, `scrollbar-1`, `scrollbar-1-right`);
         this.container.element.appendChild(this.list_element);
     }
 
@@ -30,13 +30,16 @@ export class ContractAssets {
         const box = new Box();
         const node = XelisNode.instance();
 
-        const topo_element = document.createElement(`div`);
-        box.element.appendChild(topo_element);
-        topo_element.innerHTML = `${balance.topoheight.toLocaleString()} (${balance.previous_topoheight ? balance.previous_topoheight.toLocaleString() : `--`})`;
+        const container = document.createElement(`div`);
+        box.element.appendChild(container);
 
         const asset_element = document.createElement(`div`);
-        box.element.appendChild(asset_element);
-        asset_element.innerHTML = format_hash(asset);
+        container.appendChild(asset_element);
+        asset_element.innerHTML = `<a href="/asset/${asset}">${format_hash(asset)}</a>`;
+
+        const topo_element = document.createElement(`div`);
+        container.appendChild(topo_element);
+        topo_element.innerHTML = `${balance.topoheight.toLocaleString()} (${balance.previous_topoheight ? balance.previous_topoheight.toLocaleString() : `--`})`;
 
         const balance_element = document.createElement(`div`);
         box.element.appendChild(balance_element);
@@ -46,10 +49,12 @@ export class ContractAssets {
         this.list_element.appendChild(box.element);
     }
 
-    async load(contract_hash: string) {
+    set_loading() {
         this.list_element.replaceChildren();
         Box.list_loading(this.list_element, 5, `1rem`);
+    }
 
+    async load(contract_hash: string) {
         const node = XelisNode.instance();
 
         const assets = await node.rpc.getContractAssets({
