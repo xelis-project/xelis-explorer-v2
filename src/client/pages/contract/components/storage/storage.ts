@@ -212,7 +212,7 @@ export class ContractStorageEntries {
         navigator.clipboard.writeText(text).then(() => {
             const originalHTML = button.innerHTML;
             button.innerHTML = icons.checkmark();
-            button.style.color = 'rgba(34, 197, 94, 1)';
+            button.style.color = '#2CFFCF';
             setTimeout(() => {
                 button.innerHTML = originalHTML;
                 button.style.color = '';
@@ -441,6 +441,7 @@ export class ContractStorageEntries {
                     <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 0.5rem;">${localization.get_text(`This contract has no storage entries yet`)}</div>
                 `;
                 this.list_element.appendChild(empty_element);
+                this.set_loading(false);
                 return;
             }
 
@@ -479,10 +480,6 @@ export class ContractStorageEntries {
         this.has_next_page = false;
         this.render_pagination();
         await this.load_entries(contract_hash, this.current_page);
-    }
-
-    destroy() {
-        this.history_modal.destroy();
     }
 }
 
