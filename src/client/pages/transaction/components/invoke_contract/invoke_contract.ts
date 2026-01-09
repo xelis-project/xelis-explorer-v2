@@ -5,6 +5,7 @@ import { format_xel } from "../../../../utils/format_xel";
 import { DepositsBox } from "../deploy_contract/deposits_box";
 import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
 import { localization } from "../../../../localization/localization";
+import { format_hash } from "../../../../utils/format_hash";
 
 import './invoke_contract.css';
 
@@ -23,7 +24,7 @@ export class TransactionInvokeContract {
 
         const hash_element = document.createElement(`a`);
         hash_element.href = `/tx/${invoke_contract.contract}`;
-        hash_element.innerHTML = invoke_contract.contract;
+        hash_element.innerHTML = format_hash(invoke_contract.contract);
         this.container.element.appendChild(hash_element);
 
         const container_element = document.createElement(`div`);

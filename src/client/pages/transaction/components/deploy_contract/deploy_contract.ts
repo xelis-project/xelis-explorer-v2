@@ -5,6 +5,7 @@ import { DepositsBox } from "./deposits_box";
 import { format_xel } from "../../../../utils/format_xel";
 import { JsonViewerBox } from "../json_viewer_box/json_viewer_box";
 import { localization } from "../../../../localization/localization";
+import { format_hash } from "../../../../utils/format_hash";
 
 import './deploy_contract.css';
 
@@ -23,7 +24,7 @@ export class TransactionDeployContract {
 
         const hash_element = document.createElement(`a`);
         hash_element.href = `/contract/${hash}`;
-        hash_element.innerHTML = hash;
+        hash_element.innerHTML = format_hash(hash);
         this.container.element.appendChild(hash_element);
 
         const constants_title_element = document.createElement(`div`);
