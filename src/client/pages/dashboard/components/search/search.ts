@@ -19,7 +19,7 @@ export class DashboardSearch {
         this.container.element.appendChild(form_element);
         this.text_input = new TextInput();
         this.text_input.element.name = `dashboard_search_input`;
-        this.text_input.element.placeholder = localization.get_text(`Search block topo, transaction hash, block hash or account address.`);
+        this.text_input.element.placeholder = localization.get_text(`Search block topo, transaction hash, block hash, asset hash or account address.`);
         form_element.appendChild(this.text_input.element);
 
         const search_button = document.createElement(`button`);
@@ -70,8 +70,18 @@ export class DashboardSearch {
                     error = true;
                 }
 
+                try {
+                    const asset = await node.rpc.getAsset({ asset: search_value });
+                    if (asset) {
+                        app.go_to(`/asset/${search_value}`);
+                        return;
+                    }
+                } catch {
+                    error = true;
+                }
+
                 if (error) {
-                    alert(localization.get_text(`Invalid or unknown transaction / block.`));
+                    alert(localization.get_text(`Invalid or unknown transaction / block / asset.`));
                     return;
                 }
             }
