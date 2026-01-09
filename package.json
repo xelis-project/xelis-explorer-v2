@@ -1,6 +1,6 @@
 {
     "name": "xelis-explorer-v2",
-    "version": "0.1.773",
+    "version": "0.1.796",
     "type": "module",
     "scripts": {
         "dev": "vite dev --host",
