@@ -153,5 +153,10 @@
         "name": "1MINER.NET",
         "link": "https://1miner.net/#xel1",
         "type": "pool"
+    },
+    "xel:ygfe6wyse6ndyger994xfwztcl342p8hxlkuq7sp2lqy03smxsmsqqs2nf5": {
+        "name": "Grand Pool",
+        "link": "https://grandpool.io/pools/xelis",
+        "type": "pool"
     }
 }
