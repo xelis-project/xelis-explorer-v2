@@ -157,7 +157,12 @@ export class ContractPage extends Page {
             const contract_hash = server_data.transaction.hash;
             this.contract_info.set(contract_hash, server_data.contract_module);
             this.contract_assets.load(contract_hash);
-            this.contract_storage_entries.load(contract_hash);
+            await this.contract_storage_entries.load(contract_hash);
+
+            const storage_key_param = new URLSearchParams(window.location.search).get(`storageKey`);
+            if (storage_key_param) {
+                this.contract_storage_entries.show_history_for_param(storage_key_param);
+            }
         } else {
             this.set_element(NotFoundPage.instance().element);
         }
